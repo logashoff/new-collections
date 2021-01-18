@@ -1,0 +1,7 @@
+$icon-size: 1.5rem;
+
+:host, img {
+  display: block;
+  width: $icon-size;
+  height: $icon-size;
+}

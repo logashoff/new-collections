@@ -1,0 +1,83 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$scrollbar-width: 0.5rem;
+
+// Override element styles not handled by material theme
+@mixin custom-elements($config-or-theme) {
+  $config: mat-get-color-config($config-or-theme);
+  $foreground: map-get($config, foreground);
+  $background: map-get($config, background);
+  $primary: map-get($config, primary);
+  $accent: map-get($config, accent);
+  $warn: map-get($config, warn);
+
+  ::-webkit-scrollbar {
+    width: $scrollbar-width;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: mat-color($background, background);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: mat-color($foreground, divider);
+  }
+
+  a {
+    &:link,
+    &:visited,
+    &:hover,
+    &:active {
+      color: mat-color($accent);
+      text-decoration: none;
+    }
+  }
+
+  // TODO: Access theme directly in component using mixin
+  app-empty {
+    color: mat-color($foreground, disabled-text);
+  }
+}
+
+@mixin theme() {
+}
+
+// Light Theme
+$light-primary: mat-palette($mat-indigo);
+$light-accent: mat-palette($mat-indigo, 400);
+$light-warn: mat-palette($mat-red);
+$light-theme: mat-light-theme(
+  (
+    color: (
+      primary: $light-primary,
+      accent: $light-accent,
+      warn: $light-warn,
+    ),
+  )
+);
+
+// Dark Theme
+$dark-primary: mat-palette($mat-blue-gray, 400);
+$dark-accent: mat-palette($mat-blue-gray, 200);
+$dark-warn: mat-palette($mat-red);
+$dark-theme: mat-dark-theme(
+  (
+    color: (
+      primary: $dark-primary,
+      accent: $dark-accent,
+      warn: $dark-warn,
+    ),
+  )
+);
+
+@media (prefers-color-scheme: light) {
+  @include custom-elements($light-theme);
+  @include angular-material-theme($light-theme);
+}
+
+@media (prefers-color-scheme: dark) {
+  @include custom-elements($dark-theme);
+  @include angular-material-color($dark-theme);
+}

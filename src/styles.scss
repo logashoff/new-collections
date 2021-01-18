@@ -1,0 +1,21 @@
+@import '~@angular/material/theming';
+@import './assets/styles/fonts';
+@import './assets/styles/material-icons';
+
+$popup-width: 500px;
+$popup-height: 600px;
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+body {
+  min-width: $popup-width;
+  max-width: $popup-width;
+  min-height: $popup-height;
+}

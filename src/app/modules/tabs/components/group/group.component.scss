@@ -1,0 +1,10 @@
+$padding: 0.5rem;
+
+:host {
+  display: block;
+  padding: $padding;
+}
+
+mat-card-actions {
+  text-align: right;
+}

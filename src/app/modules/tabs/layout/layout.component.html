@@ -1,0 +1,18 @@
+<mat-sidenav-container>
+  <mat-sidenav-content>
+    <app-groups *ngIf="groups$ | async as groups; else empty"
+    [groups]="groups">
+  </app-groups>
+</mat-sidenav-content>
+</mat-sidenav-container>
+<mat-fab-menu class="menu"
+  color="primary"
+  direction="bottom"
+  (onFabMenuItemSelected)="handleMenuSelection($event)"
+  [fabButtons]="menuItems">
+</mat-fab-menu>
+<ng-template #empty>
+  <app-empty></app-empty>
+</ng-template>
+
+
