@@ -9,14 +9,14 @@
     "128": "assets/icons/icon_128.png"
   },
   "browser_action": {
-    "default_popup": "index.html"
+    "default_popup": "index.html#/popup"
   },
   "background": {
     "scripts": [
       "background.js",
       "runtime.js"
     ],
-    "persistent": true
+    "persistent": false
   },
   "permissions": [
     "activeTab",

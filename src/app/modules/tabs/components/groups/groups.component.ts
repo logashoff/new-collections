@@ -1,6 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { TabGroup } from 'src/app/services';
+import { TabGroup } from 'lib';
 
+/**
+ * @description
+ *
+ * Displays list of tab groups.
+ */
 @Component({
   selector: 'app-groups',
   templateUrl: './groups.component.html',
@@ -8,5 +13,8 @@ import { TabGroup } from 'src/app/services';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GroupsComponent {
+  /**
+   * List of tab groups to render.
+   */
   @Input() groups: TabGroup[];
 }

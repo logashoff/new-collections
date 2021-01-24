@@ -1,11 +1,16 @@
 import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { TabGroup } from 'lib';
 import { Observable } from 'rxjs';
-import { MenuAction, menuItems } from 'src/app/models';
-import { TabGroup, TabService } from 'src/app/services';
+import { TabService } from 'src/app/services';
 
-import { MenuService } from '../services';
+import { MenuAction, menuItems, MenuService } from '../services';
 
+/**
+ * @description
+ *
+ * Root component for extension popup that renders stored tab groups data.
+ */
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
@@ -13,12 +18,21 @@ import { MenuService } from '../services';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayoutComponent {
+  /**
+   * Data source for stored tab groups.
+   */
   readonly groups$: Observable<TabGroup[]> = this.tabsService.tabGroups$;
 
+  /**
+   * Fab button menu items.
+   */
   menuItems: MatFabMenu[] = menuItems;
 
   constructor(private tabsService: TabService, private menuService: MenuService) {}
 
+  /**
+   * Handles fab menu items action.
+   */
   handleMenuSelection(menuAction: MenuAction) {
     this.menuService.handleMenuAction(menuAction);
   }
