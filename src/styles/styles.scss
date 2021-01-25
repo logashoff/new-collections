@@ -1,6 +1,6 @@
-@import '~@angular/material/theming';
 @import 'fonts';
 @import 'material-icons';
+@import 'theme';
 
 $popup-width: 500px;
 $popup-height: 600px;
@@ -18,4 +18,28 @@ body {
   min-width: $popup-width;
   max-width: $popup-width;
   min-height: $popup-height;
+}
+
+@include theme() using($theme) {
+  ::-webkit-scrollbar {
+    width: $scrollbar-width;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: mat-color(getBackground($theme), background);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: mat-color(getForeground($theme), divider);
+  }
+
+  a {
+    &:link,
+    &:visited,
+    &:hover,
+    &:active {
+      color: mat-color(getAccent($theme));
+      text-decoration: none;
+    }
+  }
 }

@@ -4,46 +4,6 @@
 
 $scrollbar-width: 0.5rem;
 
-// Override element styles not handled by material theme
-@mixin custom-elements($config-or-theme) {
-  $config: mat-get-color-config($config-or-theme);
-  $foreground: map-get($config, foreground);
-  $background: map-get($config, background);
-  $primary: map-get($config, primary);
-  $accent: map-get($config, accent);
-  $warn: map-get($config, warn);
-
-  ::-webkit-scrollbar {
-    width: $scrollbar-width;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: mat-color($background, background);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: mat-color($foreground, divider);
-  }
-
-  a {
-    &:link,
-    &:visited,
-    &:hover,
-    &:active {
-      color: mat-color($accent);
-      text-decoration: none;
-    }
-  }
-
-  // TODO: Access theme directly in component using mixin
-  app-empty {
-    color: mat-color($foreground, disabled-text);
-  }
-}
-
-@mixin theme() {
-}
-
 // Light Theme
 $light-primary: mat-palette($mat-indigo);
 $light-accent: mat-palette($mat-indigo, 400);
@@ -72,12 +32,40 @@ $dark-theme: mat-dark-theme(
   )
 );
 
-@media (prefers-color-scheme: light) {
-  @include custom-elements($light-theme);
-  @include angular-material-theme($light-theme);
+$themes: (
+  light: $light-theme,
+  dark: $dark-theme,
+);
+
+@mixin theme() {
+  @each $type, $theme in $themes {
+    @media (prefers-color-scheme: #{$type}) {
+      @content ($theme);
+    }
+  }
 }
 
-@media (prefers-color-scheme: dark) {
-  @include custom-elements($dark-theme);
-  @include angular-material-color($dark-theme);
+@function getForeground($config-or-theme) {
+  $config: mat-get-color-config($config-or-theme);
+  $foreground: map-get($config, foreground);
+
+  @return $foreground;
+}
+
+@function getBackground($config-or-theme) {
+  $config: mat-get-color-config($config-or-theme);
+  $background: map-get($config, background);
+
+  @return $background;
+}
+
+@function getAccent($config-or-theme) {
+  $config: mat-get-color-config($config-or-theme);
+  $accent: map-get($config, accent);
+
+  @return $accent;
+}
+
+@include theme() using($theme) {
+  @include angular-material-theme($theme);
 }
