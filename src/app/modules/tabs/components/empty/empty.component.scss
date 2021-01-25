@@ -1,8 +1,8 @@
 @import 'src/styles/theme';
 
-app-empty {
-  $icon-size: 5rem;
+$icon-size: 5rem;
 
+:host {
   display: flex;
   position: absolute;
   align-items: center;
@@ -13,17 +13,17 @@ app-empty {
   left: 0;
   right: 0;
   top: 0;
+}
 
-  .icon {
-    width: $icon-size;
-    height: $icon-size;
-    font-size: $icon-size;
-    line-height: $icon-size;
-  }
+.icon {
+  width: $icon-size;
+  height: $icon-size;
+  font-size: $icon-size;
+  line-height: $icon-size;
 }
 
 @include theme using($theme) {
-  app-empty {
+  :host {
     color: mat-color(getForeground($theme), disabled-text);
   }
 }
