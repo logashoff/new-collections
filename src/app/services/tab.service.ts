@@ -61,7 +61,11 @@ export class TabService {
    */
   async saveTabGroups(tabGroups: TabGroup[]) {
     if (Array.isArray(tabGroups) && tabGroups.length) {
-      const savedTabGroups: TabGroup[] = await getSavedTabs();
+      let savedTabGroups: TabGroup[] = await getSavedTabs();
+
+      if (!Array.isArray(saveTabGroups)) {
+        savedTabGroups = [];
+      }
 
       const allTabs: TabGroup[] = [...tabGroups, ...savedTabGroups].map((tabGroup) => {
         tabGroup.id = uuidv4();
