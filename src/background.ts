@@ -6,7 +6,7 @@ import { getSavedTabs, setIcon, usesDarkMode } from 'lib';
 export async function updateGroupCount() {
   const groups = await getSavedTabs();
 
-  if (Array.isArray(groups)) {
+  if (groups?.length > 0) {
     chrome.browserAction.setBadgeText({ text: groups.length.toString() });
   }
 }
