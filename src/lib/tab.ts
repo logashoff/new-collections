@@ -1,3 +1,7 @@
+import { saveAs } from 'file-saver';
+import selectFiles from 'select-files';
+import { v4 as uuidv4 } from 'uuid';
+
 /**
  * Storage key used to store tab groups in local storage.
  */
@@ -40,4 +44,32 @@ export function restoreTabs(tabGroup: TabGroup) {
       active: false,
     })
   );
+}
+
+/**
+ * Writes provided tab groups to JSON file.
+ */
+export function exportTabs(tabGroup: TabGroup[]) {
+  const blob = new Blob([JSON.stringify(tabGroup, null, 2)], { type: 'text/json;charset=utf-8' });
+  saveAs(blob, `save-tabs-${uuidv4()}.json`);
+}
+
+/**
+ * Import tab groups JSON file from file system.
+ */
+export async function importTabs(): Promise<TabGroup[]> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const files = await selectFiles({ accept: '.json', multiple: false });
+
+      const reader = new FileReader();
+      reader.readAsText(files[0], 'utf-8');
+
+      reader.onload = ({ target: { result } }) => {
+        resolve(JSON.parse(result as string));
+      };
+    } catch (e) {
+      reject(e);
+    }
+  });
 }

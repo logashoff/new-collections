@@ -1,6 +1,7 @@
 import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { Injectable } from '@angular/core';
 import { TooltipPosition } from '@angular/material/tooltip';
+import { exportTabs, getSavedTabs, importTabs } from 'lib';
 import { TabService } from 'src/app/services';
 
 /**
@@ -70,8 +71,11 @@ export class MenuService {
         await this.tabsService.saveCurrentWindowTabs();
         break;
       case MenuAction.Export:
+        exportTabs(await getSavedTabs());
         break;
       case MenuAction.Import:
+        const tabGroups = await importTabs();
+        await this.tabsService.saveTabGroups(tabGroups);
         break;
     }
   }

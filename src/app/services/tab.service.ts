@@ -57,6 +57,24 @@ export class TabService {
   }
 
   /**
+   * Saves provided tab groups to local storage.
+   */
+  async saveTabGroups(tabGroups: TabGroup[]) {
+    if (Array.isArray(tabGroups) && tabGroups.length) {
+      const savedTabGroups: TabGroup[] = await getSavedTabs();
+
+      const allTabs: TabGroup[] = [...tabGroups, ...savedTabGroups].map((tabGroup) => {
+        tabGroup.id = uuidv4();
+        return tabGroup;
+      });
+
+      await saveTabGroups(allTabs);
+
+      this.tabGroupsSource$.next(allTabs);
+    }
+  }
+
+  /**
    * Saves specified tab group to local storage.
    */
   async saveTabGroup(tabGroup: TabGroup) {
