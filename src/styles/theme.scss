@@ -37,6 +37,10 @@ $themes: (
   dark: $dark-theme,
 );
 
+// theme mixin should only be used to include color related CSS properties (color, background-color, etc.)
+// all other CSS properties (display, width, height, etc.) should be defined outside
+// otherwise all CSS properties will be duplicated
+// if CSS property doesn't use $theme variable, it should not be included
 @mixin theme() {
   @each $type, $theme in $themes {
     @media (prefers-color-scheme: #{$type}) {
@@ -64,8 +68,4 @@ $themes: (
   $accent: map-get($config, accent);
 
   @return $accent;
-}
-
-@include theme using($theme) {
-  @include angular-material-theme($theme);
 }

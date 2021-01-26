@@ -20,11 +20,28 @@ body {
   min-height: $popup-height;
 }
 
-@include theme() using($theme) {
-  ::-webkit-scrollbar {
-    width: $scrollbar-width;
-  }
+::-webkit-scrollbar {
+  width: $scrollbar-width;
+}
 
+a {
+  &:link,
+  &:visited,
+  &:hover,
+  &:active {
+    text-decoration: none;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  @include angular-material-theme($light-theme);
+}
+
+@media (prefers-color-scheme: dark) {
+  @include angular-material-color($dark-theme);
+}
+
+@include theme using($theme) {
   ::-webkit-scrollbar-track {
     background: mat-color(getBackground($theme), background);
   }
@@ -39,7 +56,6 @@ body {
     &:hover,
     &:active {
       color: mat-color(getAccent($theme));
-      text-decoration: none;
     }
   }
 }
