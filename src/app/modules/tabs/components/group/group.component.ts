@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { restoreTabs, TabGroup } from 'lib';
+import { restoreTabs, TabGroup } from '@lib';
 import { BehaviorSubject } from 'rxjs';
 import { TabService } from 'src/app/services';
 

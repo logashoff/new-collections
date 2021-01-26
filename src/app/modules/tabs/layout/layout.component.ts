@@ -1,6 +1,6 @@
 import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { TabGroup } from 'lib';
+import { TabGroup } from '@lib';
 import { Observable } from 'rxjs';
 import { TabService } from 'src/app/services';
 

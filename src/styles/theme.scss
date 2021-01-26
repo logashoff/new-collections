@@ -66,6 +66,6 @@ $themes: (
   @return $accent;
 }
 
-@include theme() using($theme) {
+@include theme using($theme) {
   @include angular-material-theme($theme);
 }

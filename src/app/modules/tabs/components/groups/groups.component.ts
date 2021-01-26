@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { TabGroup } from 'lib';
+import { TabGroup } from '@lib';
 
 /**
  * @description

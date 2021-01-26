@@ -1,4 +1,4 @@
-import { getSavedTabs, setIcon, usesDarkMode } from 'lib';
+import { getSavedTabs, setIcon, usesDarkMode } from '@lib';
 
 /**
  * Updates extension badge icon text to display how many groups are stored in local storage.

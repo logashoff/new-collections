@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { getActiveTab, getSavedTabs, queryTabs, removeTab, saveTabGroups, TabGroup } from 'lib';
+import { getActiveTab, getSavedTabs, queryTabs, removeTab, saveTabGroups, TabGroup } from '@lib';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';

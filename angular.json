@@ -17,6 +17,9 @@
         "build": {
           "builder": "@angular-builders/custom-webpack:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "file-saver"
+            ],
             "customWebpackConfig": {
               "path": "./custom-webpack.config.js"
             },
@@ -34,6 +37,11 @@
               "src/styles/theme.scss",
               "src/styles/styles.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles"
+              ]
+            },
             "scripts": []
           },
           "configurations": {

@@ -19,9 +19,7 @@
       "dom"
     ],
     "paths": {
-      "lib": [
-        "src/lib"
-      ]
+      "@lib": [ "src/lib/index.ts" ]
     }
   },
   "angularCompilerOptions": {
