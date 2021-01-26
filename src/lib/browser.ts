@@ -14,7 +14,7 @@ export function queryTabs(config: QueryInfo): Promise<Tab[]> {
  */
 export function getActiveTab(): Promise<Tab> {
   return new Promise(async (resolve) => {
-    const [activeTab] = await this.queryTabs({ active: true, currentWindow: true });
+    const [activeTab] = await queryTabs({ active: true, currentWindow: true });
     resolve(activeTab);
   });
 }
