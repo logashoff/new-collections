@@ -1,4 +1,35 @@
 import { ChangeDetectionStrategy, Component, Directive, ElementRef, HostListener, Input } from '@angular/core';
+import { usesDarkMode } from '@lib';
+
+/**
+ * Default dark theme tab icon.
+ */
+const darkIcon = 'icon_32_dark.png';
+
+/**
+ * Default light theme tab icon.
+ */
+const lightIcon = 'icon_32.png';
+
+/**
+ * Icons directory.
+ */
+const iconsDir = 'assets/icons';
+
+/**
+ * Dark icon full path.
+ */
+const darkIconPath = `${iconsDir}/${darkIcon}`;
+
+/**
+ * Light icon full path.
+ */
+const lightIconPath = `${iconsDir}/${lightIcon}`;
+
+/**
+ * Icon path depends on browser dark theme.
+ */
+const iconPath = usesDarkMode() ? darkIconPath : lightIconPath;
 
 /**
  * @description
@@ -10,8 +41,11 @@ import { ChangeDetectionStrategy, Component, Directive, ElementRef, HostListener
   selector: '[appImage]',
 })
 export class ImageDirective {
+  /**
+   * Handles img element src loading error.
+   */
   @HostListener('error') error() {
-    this.el.nativeElement.src = 'favicon.ico';
+    this.el.nativeElement.src = iconPath;
   }
 
   constructor(private el: ElementRef) {}
@@ -29,5 +63,8 @@ export class ImageDirective {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImageIconComponent {
+  /**
+   * Image source path.
+   */
   @Input() source: string;
 }
