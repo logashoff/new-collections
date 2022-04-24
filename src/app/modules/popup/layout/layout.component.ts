@@ -1,10 +1,7 @@
-import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TabGroup } from '@lib';
 import { Observable } from 'rxjs';
 import { TabService } from 'src/app/services';
-
-import { MenuAction, menuItems, MenuService } from '../services';
 
 /**
  * @description
@@ -23,17 +20,12 @@ export class LayoutComponent {
    */
   readonly groups$: Observable<TabGroup[]> = this.tabsService.tabGroups$;
 
-  /**
-   * Fab button menu items.
-   */
-  menuItems: MatFabMenu[] = menuItems;
-
-  constructor(private tabsService: TabService, private menuService: MenuService) {}
+  constructor(private tabsService: TabService) {}
 
   /**
    * Handles fab menu items action.
    */
-  handleMenuSelection(menuAction: MenuAction) {
-    this.menuService.handleMenuAction(menuAction);
+   handleSave() {
+    this.tabsService.saveCurrentWindowTabs();
   }
 }

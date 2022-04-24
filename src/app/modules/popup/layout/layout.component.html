@@ -1,0 +1,15 @@
+<mat-sidenav-container>
+  <mat-sidenav-content>
+    <app-groups *ngIf="groups$ | async as groups; else empty"
+      [groups]="groups">
+    </app-groups>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+<button class="save-btn" mat-fab color="primary" (click)="handleSave()">
+  <mat-icon>save_alt</mat-icon>
+</button>
+<ng-template #empty>
+  <app-empty></app-empty>
+</ng-template>
+
+

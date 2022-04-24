@@ -43,17 +43,22 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
+import {
+  EmptyComponent,
+  GroupComponent,
+  GroupsComponent,
+  ImageDirective,
+  ImageIconComponent
+} from './components/index';
 
-import { ImageDirective, ImageIconComponent } from './components';
-
-const components = [ImageIconComponent];
+const components = [ImageIconComponent, EmptyComponent, GroupComponent, GroupsComponent, ImageDirective];
 
 const materialModules = [
   A11yModule,
-  ClipboardModule,
   CdkStepperModule,
   CdkTableModule,
   CdkTreeModule,
+  ClipboardModule,
   DragDropModule,
   MatAutocompleteModule,
   MatBadgeModule,
@@ -63,7 +68,6 @@ const materialModules = [
   MatCardModule,
   MatCheckboxModule,
   MatChipsModule,
-  MatStepperModule,
   MatDatepickerModule,
   MatDialogModule,
   MatDividerModule,
@@ -85,6 +89,7 @@ const materialModules = [
   MatSlideToggleModule,
   MatSnackBarModule,
   MatSortModule,
+  MatStepperModule,
   MatTableModule,
   MatTabsModule,
   MatToolbarModule,
@@ -96,8 +101,8 @@ const materialModules = [
 ];
 
 @NgModule({
-  declarations: [...components, ImageIconComponent, ImageDirective],
-  imports: [CommonModule],
-  exports: [...materialModules, ...components]
+  declarations: [...components],
+  imports: [CommonModule, ...materialModules],
+  exports: [...materialModules, ...components],
 })
 export class SharedModule {}

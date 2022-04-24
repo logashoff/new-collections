@@ -18,6 +18,10 @@
       "128": "assets/icons/icon_128.png"
     }
   },
+  "options_page": "index.html#/options",
+  "options_ui": {
+    "page": "index.html#/options"
+  },
   "background": {
     "service_worker": "assets/workers/background.js"
   },
