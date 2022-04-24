@@ -20,9 +20,6 @@
             "allowedCommonJsDependencies": [
               "file-saver"
             ],
-            "customWebpackConfig": {
-              "path": "./custom-webpack.config.js"
-            },
             "outputPath": "dist/save-tabs",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -31,6 +28,7 @@
             "aot": true,
             "assets": [
               "src/assets/icons",
+              "src/assets/workers",
               "src/manifest.json"
             ],
             "styles": [

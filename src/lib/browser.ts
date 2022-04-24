@@ -39,5 +39,5 @@ export function usesDarkMode(): boolean {
  * Replaces extension icon with specified details.
  */
 export function setIcon(details: TabIconDetails): Promise<void> {
-  return new Promise((resolve) => chrome.browserAction.setIcon(details, () => resolve()));
+  return new Promise((resolve) => chrome.action.setIcon(details, () => resolve()));
 }
