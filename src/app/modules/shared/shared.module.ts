@@ -45,13 +45,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import {
   EmptyComponent,
-  GroupComponent,
   GroupsComponent,
   ImageDirective,
   ImageIconComponent
 } from './components/index';
 
-const components = [ImageIconComponent, EmptyComponent, GroupComponent, GroupsComponent, ImageDirective];
+const components = [ImageIconComponent, EmptyComponent, GroupsComponent, ImageDirective];
 
 const materialModules = [
   A11yModule,

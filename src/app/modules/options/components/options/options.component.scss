@@ -1,0 +1,31 @@
+@import 'theme';
+
+:host {
+  display: block;
+  min-height: 350px;
+}
+
+mat-sidenav-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+
+.content {
+  margin: 2rem auto;
+  max-width: 80vw;
+}
+
+.controls {
+  margin-bottom: 2rem;
+
+  button {
+    margin-right: 1rem;
+  }
+}
+
+app-empty {
+  z-index: -1;
+}

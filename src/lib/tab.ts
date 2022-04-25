@@ -7,12 +7,32 @@ import selectFiles from 'select-files';
 export const storageKey = 'tabs';
 
 /**
+ * Matches domain name.
+ */
+export const domainRegExp = new RegExp('([^.]*).([^.]*)$');
+
+/**
+ * Tab type.
+ */
+export type BrowserTab = Pick<chrome.tabs.Tab, 'id' | 'url' | 'favIconUrl' | 'title'>;
+
+/**
+ * Unique domains in tab group.
+ */
+export interface Domain {
+  name: string;
+  icon: string;
+  count: number;
+}
+
+/**
  * Group that contains tabs and is saved to local storage.
  */
 export interface TabGroup {
   id: string;
   timestamp: number;
-  tabs: Pick<chrome.tabs.Tab, 'id' | 'url' | 'favIconUrl' | 'title'>[];
+  tabs: BrowserTab[];
+  domains: Domain[];
 }
 
 /**
@@ -71,4 +91,31 @@ export async function importTabs(): Promise<TabGroup[]> {
       reject(e);
     }
   });
+}
+
+/**
+ * Returns domain list from tabs.
+ * @param tabs Tabs list.
+ * @returns Domains list.
+ */
+export function getDomainsFromTabs(tabs: BrowserTab[]): Domain[] {
+  const domainsMap: { [hostname in string]: Domain } = {};
+
+  tabs
+    .filter((tab) => tab.favIconUrl)
+    .forEach((tab) => {
+      const hostname = new URL(tab.url).hostname;
+
+      if (hostname in domainsMap) {
+        domainsMap[hostname].count++;
+      } else {
+        domainsMap[hostname] = {
+          name: hostname,
+          icon: tab.favIconUrl,
+          count: 1,
+        };
+      }
+    });
+
+  return Object.values(domainsMap);
 }

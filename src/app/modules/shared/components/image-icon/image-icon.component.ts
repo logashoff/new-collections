@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Directive, ElementRef, HostListener, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Directive, ElementRef, HostBinding, HostListener, Input } from '@angular/core';
 import { usesDarkMode } from '@lib';
 
 /**
@@ -67,4 +67,17 @@ export class ImageIconComponent {
    * Image source path.
    */
   @Input() source: string;
+
+  /**
+   * Icon size.
+   */
+  @Input() size: 'medium' | 'small' = 'medium';
+
+  @HostBinding('class.medium') get medium(): boolean {
+    return this.size === 'medium';
+  };
+
+  @HostBinding('class.small') get small(): boolean {
+    return this.size === 'small';
+  };
 }

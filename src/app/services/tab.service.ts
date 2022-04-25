@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { getActiveTab, getSavedTabs, queryTabs, removeTab, saveTabGroups, TabGroup } from '@lib';
+import { getDomainsFromTabs, getSavedTabs, queryTabs, removeTab, saveTabGroups, TabGroup } from '@lib';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 /**
  * URLs to ignore when saving tabs.
  */
-export const ignoreUrlsRegExp = new RegExp('^(about:|chrome:|file:|wss:|ws:)');
+export const ignoreUrlsRegExp = new RegExp('^(about:|chrome:|file:|wss:|ws:|chrome-extension:)');
 
 /**
  * @description
@@ -47,10 +47,14 @@ export class TabService {
    */
   async saveCurrentWindowTabs(): Promise<void> {
     const tabs = await queryTabs({ currentWindow: true });
-    const tabGroup = {
+
+    const filteredTabs = tabs.filter((tab) => !ignoreUrlsRegExp.test(tab.url))
+
+    const tabGroup: TabGroup = {
       id: uuidv4(),
       timestamp: new Date().getTime(),
-      tabs,
+      tabs: filteredTabs,
+      domains: getDomainsFromTabs(filteredTabs),
     };
 
     return this.saveTabGroup(tabGroup);
@@ -91,7 +95,6 @@ export class TabService {
 
     // filter out invalid URLs
     tabGroup.tabs = tabGroup.tabs
-      .filter((tab) => !ignoreUrlsRegExp.test(tab.url))
       .map(({ id, url, title, favIconUrl }) => ({
         favIconUrl,
         id,
@@ -100,10 +103,8 @@ export class TabService {
       }));
 
     if (tabGroup.tabs.length > 0) {
-      const { id: activeTabId } = await getActiveTab();
-
-      // close all saved tabs except current one
-      tabGroup.tabs.filter(({ id }) => id !== activeTabId).forEach(({ id }) => removeTab(id));
+      // close all saved tabs
+      tabGroup.tabs.forEach(({ id }) => removeTab(id));
 
       // merge saved and new tabs
       savedTabGroups = [tabGroup, ...savedTabGroups];

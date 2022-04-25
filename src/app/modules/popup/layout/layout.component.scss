@@ -1,5 +1,7 @@
 @import 'theme';
 
+$padding: 1rem;
+
 :host {
   display: block;
   min-height: 350px;
@@ -11,12 +13,16 @@ mat-sidenav-container {
   left: 0;
   right: 0;
   top: 0;
+
+  app-groups {
+    margin: $padding;
+  }
 }
 
 .save-btn {
-  $padding: 1rem;
+  $padding: $padding;
   position: fixed;
   right: $padding + $scrollbar-width;
-  top: $padding;
+  bottom: $padding;
   z-index: 1;
 }

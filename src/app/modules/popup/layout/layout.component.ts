@@ -25,7 +25,8 @@ export class LayoutComponent {
   /**
    * Handles fab menu items action.
    */
-   handleSave() {
-    this.tabsService.saveCurrentWindowTabs();
+  async handleSave() {
+    await this.tabsService.saveCurrentWindowTabs();
+    chrome.runtime.openOptionsPage();
   }
 }

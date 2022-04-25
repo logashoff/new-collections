@@ -1,0 +1,75 @@
+@import 'theme';
+
+app-groups {
+  display: block;
+
+  .accordion-align {
+    .mat-expansion-panel-header {
+      padding: 0;
+    }
+
+    .mat-expansion-panel-header-title {
+      align-items: center;
+    }
+
+    .header-icons {
+      display: flex;
+      align-items: center;
+      margin-left: 1rem;
+
+      app-image-icon:not(:last-child) {
+        margin-right: 1rem;
+      }
+    }
+
+    .mat-expansion-panel-header-title,
+    .mat-expansion-panel-header-description {
+      margin-right: 0;
+    }
+
+    .mat-expansion-panel-header-description {
+      justify-content: flex-end;
+      align-items: center;
+      margin-right: 1rem;
+    }
+
+    .mat-content {
+      align-items: center;
+      overflow: visible;
+    }
+
+    .mat-list-base .mat-list-item {
+      .mat-list-icon {
+        width: 2rem;
+        height: 2rem;
+      }
+
+      .mat-list-item-content {
+        padding: 0;
+      }
+    }
+
+    .mat-expansion-panel .controls {
+      position: absolute;
+      margin-top: 0;
+      right: 0;
+
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 1s linear;
+    }
+
+    .mat-expansion-panel.mat-expanded {
+      @include mat-elevation(8);
+
+      margin-top: 4rem;
+      overflow: visible;
+
+      .controls {
+        margin-top: -7rem;
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+  }
+}

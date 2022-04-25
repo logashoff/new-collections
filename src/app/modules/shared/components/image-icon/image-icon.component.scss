@@ -1,7 +1,16 @@
-$icon-size: 1.5rem;
+$size-small: 1.5rem;
+$size-medium: 2rem;
 
 :host, img {
   display: block;
-  width: $icon-size;
-  height: $icon-size;
+
+  &.small {
+    width: $size-small;
+    height: $size-small;
+  }
+
+  &.medium {
+    width: $size-medium;
+    height: $size-medium;
+  }
 }
