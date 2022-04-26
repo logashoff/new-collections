@@ -1,7 +1,8 @@
-function updateGroupCount() {
-  var groups = chrome.storage.local.get('tabs', (res) => res.tabs);
-  chrome.action.setBadgeText({ text: groups?.length > 0 ? groups.length.toString() : '' });
-}
+const updateGroupCount = () => {
+  chrome.storage.local.get('tabs', (res) => {
+    chrome.action.setBadgeText({ text: res?.tabs?.length > 0 ? res.tabs.length.toString() : '' });
+  });
+};
 
 chrome.runtime.onInstalled.addListener(() => updateGroupCount());
 chrome.storage.onChanged.addListener(() => updateGroupCount());
