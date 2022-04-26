@@ -1,0 +1,15 @@
+.icons {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .icon:not(:first-child) {
+    margin-left: -0.75rem;
+  }
+
+  @for $i from 1 through 20 {
+    .icon:nth-child(#{$i}) {
+      z-index: #{20 - $i};
+    }
+  }
+}

@@ -6,20 +6,12 @@ app-groups {
   .accordion-align {
     .mat-expansion-panel-header {
       padding: 0;
+      height: 3rem;
     }
 
     .mat-expansion-panel-header-title {
       align-items: center;
-    }
-
-    .header-icons {
-      display: flex;
-      align-items: center;
       margin-left: 1rem;
-
-      app-image-icon:not(:last-child) {
-        margin-right: 1rem;
-      }
     }
 
     .mat-expansion-panel-header-title,

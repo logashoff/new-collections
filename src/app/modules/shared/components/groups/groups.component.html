@@ -16,16 +16,7 @@
     <mat-expansion-panel hideToggle>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          <div class="header-icons">
-            <app-image-icon *ngFor="let domain of group.domains"
-              mat-list-icon 
-              [source]="domain.icon" 
-              [matBadge]="domain.count"
-              matBadgeSize="small"
-              [matTooltip]="domain.name"
-              size="small">
-            </app-image-icon>
-          </div>
+          <app-tab-icons [group]="group"></app-tab-icons>
         </mat-panel-title>
         <mat-panel-description>
           {{ group.tabs.length }} Tabs

@@ -1,0 +1,12 @@
+@import 'theme';
+
+.icon-container {
+  padding: 0.5rem;
+  border-radius: 100%;
+}
+
+@include theme using($theme) {
+  :host .icon-container {
+    background: mat-color(getBackground($theme), background);
+  }
+}

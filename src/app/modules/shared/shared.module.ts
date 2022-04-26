@@ -47,10 +47,19 @@ import {
   EmptyComponent,
   GroupsComponent,
   ImageDirective,
-  ImageIconComponent
+  ImageIconComponent,
+  TabIconComponent,
+  TabIconsComponent
 } from './components/index';
 
-const components = [ImageIconComponent, EmptyComponent, GroupsComponent, ImageDirective];
+const components = [
+  EmptyComponent,
+  GroupsComponent,
+  ImageDirective,
+  ImageIconComponent,
+  TabIconComponent,
+  TabIconsComponent,
+];
 
 const materialModules = [
   A11yModule,
