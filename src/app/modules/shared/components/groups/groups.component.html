@@ -1,36 +1,43 @@
 <mat-accordion class="accordion-align">
-  <mat-expansion-panel *ngFor="let group of groups" hideToggle>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <div class="header-icons">
-          <app-image-icon *ngFor="let domain of group.domains"
-            mat-list-icon 
-            [source]="domain.icon" 
-            [matBadge]="domain.count"
-            matBadgeSize="small"
-            [matTooltip]="domain.name"
-            size="small">
-          </app-image-icon>
-        </div>
-      </mat-panel-title>
-      <mat-panel-description>
-        {{ group.tabs.length }} Tabs
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    <div class="controls">
-      <button mat-icon-button (click)="restoreTabs(group)" matTooltip="Restore">
-        <mat-icon>launch</mat-icon>
-      </button>
-      <button mat-icon-button (click)="removeTabs(group)" matTooltip="Delete">
-        <mat-icon>delete_outline</mat-icon>
-      </button>
+  <ng-container *ngFor="let group of groups; let i = index">
+    <div class="panel-controls" [class.visible]="currentPanelIndex === i">
+      <div class="timestamp" matTooltip="{{ group.timestamp | date: 'medium' }}">
+        {{ group.timestamp | date: 'mediumDate' }}
+      </div>
+      <div class="controls">
+        <button mat-icon-button (click)="restoreTabs(group)" matTooltip="Restore">
+          <mat-icon>restore</mat-icon>
+        </button>
+        <button mat-icon-button (click)="removeTabs(group)" matTooltip="Delete">
+          <mat-icon>done_all</mat-icon>
+        </button>
+      </div>
     </div>
-    <mat-list>
-      <mat-list-item *ngFor="let tab of group.tabs">
-        <app-image-icon mat-list-icon [source]="tab.favIconUrl"></app-image-icon>
-        <div mat-line>{{ tab.title }}</div>
-        <a href="{{ tab.url }}" target="_blank" mat-line> {{ tab.url }} </a>
-      </mat-list-item>
-    </mat-list>
-  </mat-expansion-panel>
+    <mat-expansion-panel hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <div class="header-icons">
+            <app-image-icon *ngFor="let domain of group.domains"
+              mat-list-icon 
+              [source]="domain.icon" 
+              [matBadge]="domain.count"
+              matBadgeSize="small"
+              [matTooltip]="domain.name"
+              size="small">
+            </app-image-icon>
+          </div>
+        </mat-panel-title>
+        <mat-panel-description>
+          {{ group.tabs.length }} Tabs
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <mat-list>
+        <mat-list-item *ngFor="let tab of group.tabs">
+          <app-image-icon mat-list-icon [source]="tab.favIconUrl"></app-image-icon>
+          <div mat-line>{{ tab.title }}</div>
+          <a href="{{ tab.url }}" target="_blank" mat-line> {{ tab.url }} </a>
+        </mat-list-item>
+      </mat-list>
+    </mat-expansion-panel>
+  </ng-container>
 </mat-accordion>
