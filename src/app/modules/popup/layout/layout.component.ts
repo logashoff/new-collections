@@ -1,7 +1,30 @@
+import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { TooltipPosition } from '@angular/material/tooltip';
 import { TabGroup } from '@lib';
 import { Observable } from 'rxjs';
 import { TabService } from 'src/app/services';
+
+/**
+ * Icons used by main menu.
+ */
+export enum MenuIcons {
+  Options = 'settings',
+  Save = 'star',
+}
+
+/**
+ * Main menu action IDs.
+ */
+export enum MenuAction {
+  Options = 1,
+  Save = 2,
+}
+
+/**
+ * Tooltip position for menu items.
+ */
+export const tooltipPosition: TooltipPosition = 'left';
 
 /**
  * @description
@@ -20,13 +43,45 @@ export class LayoutComponent {
    */
   readonly groups$: Observable<TabGroup[]> = this.tabsService.tabGroups$;
 
+  /**
+   * Main menu items.
+   */
+  readonly menuItems: MatFabMenu[] = [
+    {
+      id: MenuAction.Save,
+      icon: MenuIcons.Save,
+      tooltip: 'Save',
+      tooltipPosition,
+    },
+    {
+      id: MenuAction.Options,
+      icon: MenuIcons.Options,
+      tooltip: 'Options',
+      tooltipPosition,
+    },
+  ];
+
   constructor(private tabsService: TabService) {}
 
   /**
-   * Handles fab menu items action.
+   * Navigates to options page.
    */
-  async handleSave() {
-    await this.tabsService.saveCurrentWindowTabs();
+  private openOptions() {
     chrome.runtime.openOptionsPage();
+  }
+
+  /**
+   * Handles main menu items actions.
+   */
+  async handleMenuAction(menuAction: MenuAction) {
+    switch (menuAction) {
+      case MenuAction.Save:
+        await this.tabsService.saveCurrentWindowTabs();
+        this.openOptions();
+        break;
+      case MenuAction.Options:
+        this.openOptions();
+        break;
+    }
   }
 }

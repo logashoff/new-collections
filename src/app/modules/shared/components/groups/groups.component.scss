@@ -38,14 +38,18 @@ app-groups {
       overflow: visible;
     }
 
-    .mat-list-base .mat-list-item {
-      .mat-list-icon {
-        width: 2rem;
-        height: 2rem;
-      }
+    .mat-list-base {
+      padding-bottom: 1rem;
 
-      .mat-list-item-content {
-        padding: 0;
+      .mat-list-item {
+        .mat-list-icon {
+          width: 2rem;
+          height: 2rem;
+        }
+
+        .mat-list-item-content {
+          padding: 0;
+        }
       }
     }
 

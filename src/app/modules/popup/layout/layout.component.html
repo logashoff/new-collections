@@ -5,9 +5,11 @@
     </app-groups>
   </mat-sidenav-content>
 </mat-sidenav-container>
-<button class="save-btn" mat-fab color="primary" (click)="handleSave()" matTooltip="Save tabs">
-  <mat-icon>add</mat-icon>
-</button>
+<mat-fab-menu class="fab-menu"
+  color="primary"
+  (onFabMenuItemSelected)="handleMenuAction($event)"
+  [fabButtons]="menuItems">
+</mat-fab-menu>
 <ng-template #empty>
   <app-empty></app-empty>
 </ng-template>
