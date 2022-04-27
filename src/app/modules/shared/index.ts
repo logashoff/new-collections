@@ -1,4 +1,2 @@
-export * from './components/empty/empty.component';
-export * from './components/groups/groups.component';
-export * from './components/image-icon/image-icon.component';
+export * from './components/index';
 export * from './shared.module';

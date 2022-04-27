@@ -1,12 +1,25 @@
 @import 'theme';
 
+:host {
+  display: block;
+  position: relative;
+}
+
 .icon-container {
   padding: 0.5rem;
-  border-radius: 100%;
+  border-radius: 50%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.badge-position {
+  position: absolute;
+  right: 0.15rem;
+  top: 0.15rem;
 }
 
 @include theme using($theme) {
   :host .icon-container {
-    background: mat-color(getBackground($theme), background);
+    background-color: mat-color(getBackground($theme), unselected-chip);
   }
 }

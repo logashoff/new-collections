@@ -5,7 +5,7 @@
 $scrollbar-width: 0.5rem;
 
 // Light Theme
-$light-primary: mat-palette($mat-indigo);
+$light-primary: mat-palette($mat-indigo, 500);
 $light-accent: mat-palette($mat-indigo, 400);
 $light-warn: mat-palette($mat-red);
 $light-theme: mat-light-theme(
@@ -68,4 +68,11 @@ $themes: (
   $accent: map-get($config, accent);
 
   @return $accent;
+}
+
+@function getPrimary($config-or-theme) {
+  $config: mat-get-color-config($config-or-theme);
+  $primary: map-get($config, primary);
+
+  @return $primary;
 }

@@ -1,3 +1,8 @@
+<span class="badge-position"
+  [matBadge]="domain.count"
+  [matBadgeHidden]="domain.count <= 1"
+  matBadgeSize="small">
+</span>
 <div class="icon-container">
-  <app-image-icon mat-list-icon [source]="domain.icon" size="small"> </app-image-icon>
+  <app-image-icon mat-list-icon [source]="domain.icon" size="small"></app-image-icon>
 </div>

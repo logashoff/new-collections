@@ -28,7 +28,8 @@ export class OptionsComponent {
   async import() {
     const importedTabs = await importTabs();
     const savedTabs = await getSavedTabs();
-    await this.tabsService.saveTabGroups([...importedTabs, ...savedTabs]);
+
+    await this.tabsService.saveTabGroups([...(importedTabs || []), ...(savedTabs || [])]);
   }
 
   /**
