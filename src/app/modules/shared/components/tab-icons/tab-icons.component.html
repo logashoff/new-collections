@@ -1,3 +1,13 @@
-<div class="icons">
-  <app-tab-icon class="icon" *ngFor="let domain of group.domains" [domain]="domain"> </app-tab-icon>
+<div class="container">
+  <div class="icons">
+    <ng-container *ngFor="let domain of group.domains; let i = index; let last = last">
+      <app-tab-icon
+        class="icon"
+        *ngIf="i < 7"
+        [domain]="domain"
+        [showDomainName]="group.domains.length < 5 && last">
+      </app-tab-icon>
+    </ng-container>
+  </div>
+  <span class="overflow" *ngIf="group.domains.length > 5">+{{ group.domains.length - 5 }}</span>
 </div>

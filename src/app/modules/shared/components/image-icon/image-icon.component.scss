@@ -1,7 +1,8 @@
 $size-small: 1rem;
-$size-medium: 2rem;
+$size-medium: 1.5rem;
 
-:host, img {
+:host,
+img {
   display: block;
 
   &.small {

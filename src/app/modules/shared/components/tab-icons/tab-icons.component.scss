@@ -1,3 +1,18 @@
+@import 'theme';
+
+.container {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.overflow {
+  margin-left: 1rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 .icons {
   display: flex;
   align-items: center;
@@ -11,5 +26,11 @@
     .icon:nth-child(#{$i}) {
       z-index: #{20 - $i};
     }
+  }
+}
+
+@include theme using($theme) {
+  :host .overflow {
+    color: mat-color(getForeground($theme), disabled-text);
   }
 }

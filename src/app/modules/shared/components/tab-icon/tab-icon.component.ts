@@ -3,20 +3,23 @@ import { Domain } from '@lib';
 
 /**
  * @description
- * 
+ *
  * Tab icon displayed in panel header.
  */
 @Component({
   selector: 'app-tab-icon',
   templateUrl: './tab-icon.component.html',
   styleUrls: ['./tab-icon.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TabIconComponent  {
-
+export class TabIconComponent {
   /**
    * Domain data.
    */
   @Input() domain: Domain;
 
+  /**
+   * Displays domain name next to icon.
+   */
+  @Input() showDomainName = false;
 }

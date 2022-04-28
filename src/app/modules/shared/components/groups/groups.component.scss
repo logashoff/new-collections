@@ -1,9 +1,15 @@
 @import 'theme';
 
+$config: mat-typography-config();
+
 app-groups {
   display: block;
 
   .accordion-align {
+    .mat-expansion-panel-body {
+      padding: 0;
+    }
+
     .mat-expansion-panel-header {
       padding: 0;
       height: 3rem;
@@ -17,6 +23,7 @@ app-groups {
     .mat-expansion-panel-header-title,
     .mat-expansion-panel-header-description {
       margin-right: 0;
+      white-space: nowrap;
     }
 
     .mat-expansion-panel-header-description {
@@ -31,17 +38,26 @@ app-groups {
     }
 
     .mat-list-base {
-      padding-bottom: 1rem;
+      padding: 0;
 
-      .mat-list-item {
-        .mat-list-icon {
-          width: 2rem;
-          height: 2rem;
-        }
+      .mat-list-item .mat-list-item-content {
+        padding: 0 2rem 0 1rem;
+      }
 
-        .mat-list-item-content {
-          padding: 0;
-        }
+      .heading {
+        font-size: mat-font-size($config, body-1);
+      }
+
+      .subheading {
+        font-size: mat-font-size($config, caption);
+      }
+
+      .icon-container {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem;
+        border-radius: 1.5rem;
+        overflow: hidden;
       }
     }
 
@@ -69,7 +85,17 @@ app-groups {
 }
 
 @include theme using($theme) {
-  app-groups .panel-controls {
-    color: mat-color(getForeground($theme), disabled-text);
+  app-groups {
+    .panel-controls {
+      color: mat-color(getForeground($theme), disabled-text);
+    }
+
+    .mat-list-base .mat-list-item-content:hover {
+      background-color: mat-color(getBackground($theme), hover);
+    }
+
+    .icon-container {
+      background-color: mat-color(getBackground($theme), unselected-chip);
+    }
   }
 }

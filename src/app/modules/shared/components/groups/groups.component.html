@@ -23,11 +23,16 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
       <mat-list>
-        <mat-list-item *ngFor="let tab of group.tabs">
-          <app-image-icon mat-list-icon [source]="tab.favIconUrl"></app-image-icon>
-          <div mat-line>{{ tab.title }}</div>
-          <a href="{{ tab.url }}" target="_blank" mat-line> {{ tab.url }} </a>
-        </mat-list-item>
+        <ng-container *ngFor="let tab of group.tabs">
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <div class="icon-container" mat-list-icon>
+              <app-image-icon [source]="tab.favIconUrl"></app-image-icon>
+            </div>
+            <div mat-line class="heading">{{ tab.title }}</div>
+            <a class="subheading" href="{{ tab.url }}" target="_blank" mat-line> {{ tab.url }} </a>
+          </mat-list-item>
+        </ng-container>
       </mat-list>
     </mat-expansion-panel>
   </ng-container>
