@@ -1,4 +1,4 @@
-<mat-accordion class="accordion-align">
+<mat-accordion>
   <ng-container *ngFor="let group of groups; let i = index">
     <div class="panel-controls" [class.visible]="currentPanelIndex === i">
       <div class="timestamp" matTooltip="{{ group.timestamp | date: 'medium' }}">

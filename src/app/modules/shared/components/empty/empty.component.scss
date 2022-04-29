@@ -1,4 +1,4 @@
-@import 'theme';
+@import 'common';
 
 $icon-size: 5rem;
 
@@ -24,6 +24,6 @@ $icon-size: 5rem;
 
 @include theme using($theme) {
   :host {
-    color: mat-color(getForeground($theme), disabled-text);
+    color: getPaletteColor(getForegroundPalette($theme), disabled-text);
   }
 }

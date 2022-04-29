@@ -33,6 +33,7 @@
             ],
             "styles": [
               "src/styles/theme.scss",
+              "src/styles/common.scss",
               "src/styles/styles.scss"
             ],
             "stylePreprocessorOptions": {

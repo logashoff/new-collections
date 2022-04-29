@@ -1,70 +1,70 @@
-@import 'theme';
+@use '@angular/material' as mat;
 
-$config: mat-typography-config();
+@import 'common';
+
+$typography: mat.define-typography-config();
 
 app-groups {
   display: block;
 
-  .accordion-align {
-    .mat-expansion-panel-body {
-      padding: 0;
+  .mat-expansion-panel-body {
+    padding: 0;
+  }
+
+  .mat-expansion-panel-header {
+    padding: 0;
+    height: 3rem;
+  }
+
+  .mat-expansion-panel-header-title {
+    align-items: center;
+    margin-left: 1rem;
+  }
+
+  .mat-expansion-panel-header-title,
+  .mat-expansion-panel-header-description {
+    margin-right: 0;
+    white-space: nowrap;
+  }
+
+  .mat-expansion-panel-header-description {
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 1rem;
+  }
+
+  .mat-content {
+    align-items: center;
+    overflow: visible;
+  }
+
+  .mat-list-base {
+    padding: 0;
+
+    .mat-list-item .mat-list-item-content {
+      padding: 0 2rem 0 1rem;
     }
 
-    .mat-expansion-panel-header {
-      padding: 0;
-      height: 3rem;
+    .heading {
+      @include mat.typography-level($typography, body-1);
     }
 
-    .mat-expansion-panel-header-title {
+    .subheading {
+      @include mat.typography-level($typography, caption);
+    }
+
+    .mat-list-icon.icon-container {
+      display: flex;
       align-items: center;
-      margin-left: 1rem;
+      padding: 0.5rem;
+      border-radius: 1.5rem;
+      overflow: hidden;
     }
+  }
 
-    .mat-expansion-panel-header-title,
-    .mat-expansion-panel-header-description {
-      margin-right: 0;
-      white-space: nowrap;
-    }
-
-    .mat-expansion-panel-header-description {
-      justify-content: flex-end;
-      align-items: center;
-      margin-right: 1rem;
-    }
-
-    .mat-content {
-      align-items: center;
-      overflow: visible;
-    }
-
-    .mat-list-base {
-      padding: 0;
-
-      .mat-list-item .mat-list-item-content {
-        padding: 0 2rem 0 1rem;
-      }
-
-      .heading {
-        font-size: mat-font-size($config, body-1);
-      }
-
-      .subheading {
-        font-size: mat-font-size($config, caption);
-      }
-
-      .icon-container {
-        display: flex;
-        align-items: center;
-        padding: 0.5rem;
-        border-radius: 1.5rem;
-        overflow: hidden;
-      }
-    }
-
-    .mat-expansion-panel.mat-expanded {
-      @include mat-elevation(8);
-      margin-top: 0;
-    }
+  .mat-expansion-panel.mat-expanded {
+    @include mat.elevation(8);
+    margin: 0 0 2rem;
   }
 
   .panel-controls {
@@ -87,15 +87,15 @@ app-groups {
 @include theme using($theme) {
   app-groups {
     .panel-controls {
-      color: mat-color(getForeground($theme), disabled-text);
+      color: getPaletteColor(getForegroundPalette($theme), disabled-text);
     }
 
     .mat-list-base .mat-list-item-content:hover {
-      background-color: mat-color(getBackground($theme), hover);
+      background-color: getPaletteColor(getBackgroundPalette($theme), hover);
     }
 
     .icon-container {
-      background-color: mat-color(getBackground($theme), unselected-chip);
+      background-color: getPaletteColor(getBackgroundPalette($theme), unselected-chip);
     }
   }
 }

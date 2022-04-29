@@ -1,4 +1,4 @@
-@import 'theme';
+@import 'common';
 
 :host {
   display: block;
@@ -28,11 +28,11 @@
 @include theme using($theme) {
   :host {
     .icon-container {
-      background-color: mat-color(getBackground($theme), unselected-chip);
+      background-color: getPaletteColor(getBackgroundPalette($theme), unselected-chip);
     }
 
     .domain-name {
-      color: mat-color(getForeground($theme), text);
+      color: getPaletteColor(getForegroundPalette($theme), text);
     }
   }
 }

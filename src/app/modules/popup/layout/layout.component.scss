@@ -1,4 +1,4 @@
-@import 'theme';
+@import 'common';
 
 $padding: 1rem;
 
@@ -20,9 +20,8 @@ mat-sidenav-container {
 }
 
 .fab-menu {
-  $padding: $padding;
   position: fixed;
-  right: $padding + $scrollbar-width;
-  bottom: $padding;
+  right: $scrollbar-width + $padding;
+  bottom: 0;
   z-index: 1;
 }

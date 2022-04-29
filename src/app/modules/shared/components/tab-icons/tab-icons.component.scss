@@ -1,4 +1,4 @@
-@import 'theme';
+@import 'common';
 
 .container {
   display: flex;
@@ -31,6 +31,6 @@
 
 @include theme using($theme) {
   :host .overflow {
-    color: mat-color(getForeground($theme), disabled-text);
+    color: getPaletteColor(getForegroundPalette($theme), disabled-text);
   }
 }

@@ -1,0 +1,38 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@import 'theme';
+
+$scrollbar-width: 0.5rem;
+
+@function getForegroundPalette($config-or-theme) {
+  $config: mat.get-color-config($config-or-theme);
+  $foreground: map.get($config, foreground);
+
+  @return $foreground;
+}
+
+@function getBackgroundPalette($config-or-theme) {
+  $config: mat.get-color-config($config-or-theme);
+  $background: map.get($config, background);
+
+  @return $background;
+}
+
+@function getAccentPalette($config-or-theme) {
+  $config: mat.get-color-config($config-or-theme);
+  $accent: map.get($config, accent);
+
+  @return $accent;
+}
+
+@function getPrimaryPalette($config-or-theme) {
+  $config: mat.get-color-config($config-or-theme);
+  $primary: map.get($config, primary);
+
+  @return $primary;
+}
+
+@function getPaletteColor($palette, $hue: default) {
+  @return mat.get-color-from-palette($palette, $hue);
+}

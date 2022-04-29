@@ -1,6 +1,4 @@
-@import 'fonts';
-@import 'material-icons';
-@import 'theme';
+@import 'common';
 
 $popup-width: 500px;
 $popup-height: 600px;
@@ -33,19 +31,13 @@ a {
   }
 }
 
-@include angular-material-theme($light-theme);
-
-@media (prefers-color-scheme: dark) {
-  @include angular-material-color($dark-theme);
-}
-
 @include theme using($theme) {
   ::-webkit-scrollbar-track {
-    background: mat-color(getBackground($theme), background);
+    background: getPaletteColor(getBackgroundPalette($theme), background);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: mat-color(getForeground($theme), divider);
+    background: getPaletteColor(getForegroundPalette($theme), divider);
   }
 
   a {
@@ -53,7 +45,7 @@ a {
     &:visited,
     &:hover,
     &:active {
-      color: mat-color(getAccent($theme));
+      color: getPaletteColor(getAccentPalette($theme));
     }
   }
 }
