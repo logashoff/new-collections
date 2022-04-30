@@ -10,7 +10,7 @@ import { TabService } from 'src/app/services';
  */
 export enum MenuIcons {
   Options = 'settings',
-  Save = 'star',
+  Save = 'bookmark',
 }
 
 /**

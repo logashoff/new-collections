@@ -4,12 +4,12 @@ import { usesDarkMode } from '@lib';
 /**
  * Default dark theme tab icon.
  */
-const darkIcon = 'icon_32_dark.png';
+const darkIcon = 'broken-dark.png';
 
 /**
  * Default light theme tab icon.
  */
-const lightIcon = 'icon_32.png';
+const lightIcon = 'broken.png';
 
 /**
  * Icons directory.
@@ -29,7 +29,7 @@ const lightIconPath = `${iconsDir}/${lightIcon}`;
 /**
  * Icon path depends on browser dark theme.
  */
-const iconPath = usesDarkMode() ? darkIconPath : lightIconPath;
+const iconPath = usesDarkMode() ? lightIconPath : darkIconPath;
 
 /**
  * @description
