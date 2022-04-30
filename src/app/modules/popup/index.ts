@@ -1,2 +1,2 @@
-export * from './layout/layout.component';
+export * from './components/index';
 export * from './popup.module';

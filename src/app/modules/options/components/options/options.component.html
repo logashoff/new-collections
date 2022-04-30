@@ -1,16 +1,9 @@
 <mat-sidenav-container>
   <mat-sidenav-content>
     <div class="content">
-      <div class="controls">
-        <button mat-flat-button matTooltip="Export" (click)="export()" color="primary">
-          Export
-        </button>
-        <button mat-stroked-button matTooltip="Import" (click)="import()">
-          Import
-        </button>
-      </div>
       <app-groups *ngIf="groups$ | async as groups; else empty" [groups]="groups"> </app-groups>
     </div>
+    <app-menu [menuItems]="menuItems$ | async"></app-menu>
   </mat-sidenav-content>
 </mat-sidenav-container>
 <ng-template #empty>
