@@ -33,7 +33,7 @@ $fontConfig: (
   title: mat.define-typography-level(20px, 32px, 500, 'Roboto', 0.0075em),
 );
 
-$dark-text: #000000;
+$dark-text: black;
 $dark-primary-text: rgba($dark-text, 0.87);
 $dark-accent-text: rgba($dark-primary-text, 0.54);
 $dark-disabled-text: rgba($dark-primary-text, 0.38);
@@ -41,48 +41,48 @@ $dark-dividers: rgba($dark-primary-text, 0.12);
 $dark-focused: rgba($dark-primary-text, 0.12);
 
 $mat-light-theme-foreground: (
+  accent-text: $dark-accent-text,
   base: black,
-  divider: $dark-dividers,
-  dividers: $dark-dividers,
-  disabled: $dark-disabled-text,
   disabled-button: rgba($dark-text, 0.26),
   disabled-text: $dark-disabled-text,
+  disabled: $dark-disabled-text,
+  divider: $dark-dividers,
+  dividers: $dark-dividers,
   elevation: black,
-  secondary-text: $dark-accent-text,
   hint-text: $dark-disabled-text,
-  accent-text: $dark-accent-text,
   icon: $dark-accent-text,
   icons: $dark-accent-text,
-  text: $dark-primary-text,
+  secondary-text: $dark-accent-text,
   slider-min: $dark-primary-text,
-  slider-off: rgba($dark-text, 0.26),
   slider-off-active: $dark-disabled-text,
+  slider-off: rgba($dark-text, 0.26),
+  text: $dark-primary-text,
 );
 
-$light-text: #fff;
-$light-primary-text: #c9cccf;
+$light-text: white;
+$light-primary-text: #9aa0a6;
 $light-accent-text: rgba($light-primary-text, 0.7);
 $light-disabled-text: rgba($light-primary-text, 0.5);
 $light-dividers: rgba($light-primary-text, 0.12);
 $light-focused: rgba($light-primary-text, 0.12);
 
 $mat-dark-theme-foreground: (
+  accent-text: $light-accent-text,
   base: $light-text,
-  divider: $light-dividers,
-  dividers: $light-dividers,
-  disabled: $light-disabled-text,
   disabled-button: rgba($light-text, 0.3),
   disabled-text: $light-disabled-text,
+  disabled: $light-disabled-text,
+  divider: $light-dividers,
+  dividers: $light-dividers,
   elevation: black,
   hint-text: $light-disabled-text,
-  secondary-text: $light-accent-text,
-  accent-text: $light-accent-text,
   icon: $light-text,
   icons: $light-text,
-  text: $light-text,
+  secondary-text: $light-accent-text,
   slider-min: $light-text,
-  slider-off: rgba($light-text, 0.3),
   slider-off-active: rgba($light-text, 0.3),
+  slider-off: rgba($light-text, 0.3),
+  text: $light-text,
 );
 
 $light-background: #ffffff;
@@ -151,6 +151,7 @@ body {
   --text-primary-lighter-color: #{$dark-primary-text};
   --text-primary-darker-color: #{$dark-primary-text};
 }
+
 $dark-primary-palette: (
   main: #8ab4f8,
   lighter: #dbe9fd,
@@ -176,6 +177,7 @@ $light-primary-palette: (
     darker: $light-primary-text,
   ),
 );
+
 $light-theme-primary: mat.define-palette($light-primary-palette, main, lighter, darker);
 
 body {
@@ -186,6 +188,7 @@ body {
   --text-accent-lighter-color: #{$dark-primary-text};
   --text-accent-darker-color: #{$dark-primary-text};
 }
+
 $dark-accent-palette: (
   main: #86b6f9,
   lighter: #dbe9fd,
@@ -211,6 +214,7 @@ $light-accent-palette: (
     darker: $light-primary-text,
   ),
 );
+
 $light-theme-accent: mat.define-palette($light-accent-palette, main, lighter, darker);
 
 body {
@@ -221,6 +225,7 @@ body {
   --text-warn-lighter-color: #{$dark-primary-text};
   --text-warn-darker-color: #{$light-primary-text};
 }
+
 $dark-warn-palette: (
   main: #f53d07,
   lighter: #fcc5b5,
@@ -232,6 +237,7 @@ $dark-warn-palette: (
     darker: $light-primary-text,
   ),
 );
+
 $dark-theme-warn: mat.define-palette($dark-warn-palette, main, lighter, darker);
 
 $dark-theme: (
@@ -242,6 +248,7 @@ $dark-theme: (
   foreground: $mat-dark-theme-foreground,
   background: $mat-dark-theme-background,
 );
+
 $light-theme: (
   primary: $light-theme-primary,
   accent: $light-theme-accent,
