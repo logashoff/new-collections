@@ -1,3 +1,4 @@
+import { MatFabMenuModule } from '@angular-material-extensions/fab-menu';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -48,8 +49,9 @@ import {
   GroupsComponent,
   ImageDirective,
   ImageIconComponent,
+  MenuComponent,
   TabIconComponent,
-  TabIconsComponent
+  TabIconsComponent,
 } from './components/index';
 
 const components = [
@@ -57,6 +59,7 @@ const components = [
   GroupsComponent,
   ImageDirective,
   ImageIconComponent,
+  MenuComponent,
   TabIconComponent,
   TabIconsComponent,
 ];
@@ -80,6 +83,7 @@ const materialModules = [
   MatDialogModule,
   MatDividerModule,
   MatExpansionModule,
+  MatFabMenuModule,
   MatGridListModule,
   MatIconModule,
   MatInputModule,

@@ -1,3 +1,5 @@
+@import 'common';
+
 :host {
   display: block;
   min-height: 350px;
@@ -16,14 +18,15 @@ mat-sidenav-container {
   max-width: 80vw;
 }
 
-.controls {
-  margin-bottom: 2rem;
-
-  button {
-    margin-right: 1rem;
-  }
-}
-
 app-empty {
   z-index: -1;
+}
+
+app-menu {
+  $padding: 1rem;
+
+  position: fixed;
+  right: $scrollbar-width + $padding;
+  bottom: $padding;
+  z-index: 1;
 }
