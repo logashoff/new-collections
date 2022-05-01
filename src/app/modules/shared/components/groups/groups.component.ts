@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, QueryList, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
-import { restoreTabs, TabGroup } from '@lib';
 import { TabService } from 'src/app/services';
+import { restoreTabs, TabGroup } from 'src/app/utils';
 
 /**
  * @description
@@ -43,7 +43,6 @@ export class GroupsComponent {
 
     return -1;
   }
-
 
   constructor(private tabService: TabService) {}
 

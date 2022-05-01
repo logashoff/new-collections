@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Domain } from '@lib';
+import { Domain } from 'src/app/utils';
 
 /**
  * @description
