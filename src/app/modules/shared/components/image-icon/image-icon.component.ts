@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Directive, ElementRef, HostBinding, HostListener, Input } from '@angular/core';
-import { usesDarkMode } from '@lib';
+import { usesDarkMode } from 'src/app/utils';
 
 /**
  * Default dark theme tab icon.

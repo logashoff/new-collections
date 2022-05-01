@@ -1,8 +1,8 @@
 import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { Injectable } from '@angular/core';
 import { TooltipPosition } from '@angular/material/tooltip';
-import { exportTabs, getSavedTabs, importTabs } from '@lib';
 import { BehaviorSubject } from 'rxjs';
+import { exportTabs, getSavedTabs, importTabs } from 'src/app/utils';
 import { TabService } from './tab.service';
 
 /**

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { getDomainsFromTabs, getSavedTabs, queryTabs, removeTab, saveTabGroups, TabGroup } from '@lib';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { getDomainsFromTabs, getSavedTabs, queryTabs, removeTab, saveTabGroups, TabGroup } from 'src/app/utils';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
@@ -37,7 +37,7 @@ export class TabService {
   /**
    * Initialize service and load stored tab groups.
    */
-  async initService() {
+  private async initService() {
     const tabGroups = await getSavedTabs();
     this.tabGroupsSource$.next(tabGroups);
   }
@@ -48,7 +48,7 @@ export class TabService {
   async saveCurrentWindowTabs(): Promise<void> {
     const tabs = await queryTabs({ currentWindow: true });
 
-    const filteredTabs = tabs.filter((tab) => !ignoreUrlsRegExp.test(tab.url))
+    const filteredTabs = tabs.filter((tab) => !ignoreUrlsRegExp.test(tab.url));
 
     const tabGroup: TabGroup = {
       id: uuidv4(),
@@ -94,13 +94,12 @@ export class TabService {
     }
 
     // filter out invalid URLs
-    tabGroup.tabs = tabGroup.tabs
-      .map(({ id, url, title, favIconUrl }) => ({
-        favIconUrl,
-        id,
-        title,
-        url,
-      }));
+    tabGroup.tabs = tabGroup.tabs.map(({ id, url, title, favIconUrl }) => ({
+      favIconUrl,
+      id,
+      title,
+      url,
+    }));
 
     if (tabGroup.tabs.length > 0) {
       // close all saved tabs
