@@ -20,7 +20,7 @@
   },
   "options_page": "index.html#/options",
   "background": {
-    "service_worker": "assets/workers/background.js"
+    "service_worker": "background.js"
   },
   "permissions": [
     "activeTab",
