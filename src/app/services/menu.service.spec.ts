@@ -40,6 +40,7 @@ describe('MenuService', () => {
             icon: 'bookmark',
             tooltip: 'Save',
             tooltipPosition: 'left',
+            color: 'accent',
           },
           {
             id: 1,
