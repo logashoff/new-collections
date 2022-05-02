@@ -40,6 +40,7 @@ export class MenuService {
       icon: ActionIcons.Save,
       tooltip: 'Save',
       tooltipPosition,
+      color: 'accent',
     },
     {
       id: Action.Export,
