@@ -9,6 +9,11 @@ export const storageKey = 'tabs';
 export const domainRegExp = new RegExp('([^.]*).([^.]*)$');
 
 /**
+ * URLs to ignore when saving tabs.
+ */
+export const ignoreUrlsRegExp = new RegExp('^(about:|chrome:|file:|wss:|ws:|chrome-extension:)');
+
+/**
  * Tab type.
  */
 export type BrowserTab = Pick<chrome.tabs.Tab, 'id' | 'url' | 'favIconUrl' | 'title'>;

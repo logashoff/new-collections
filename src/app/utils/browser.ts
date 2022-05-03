@@ -10,6 +10,13 @@ export function queryTabs(config: QueryInfo): Promise<Tab[]> {
 }
 
 /**
+ * Returns tab list from current window.
+ */
+export function queryCurrentWindow(): Promise<Tab[]> {
+  return queryTabs({ currentWindow: true });
+}
+
+/**
  * Returns active tab in current window.
  */
 export function getActiveTab(): Promise<Tab> {

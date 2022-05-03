@@ -65,7 +65,6 @@ $mat-light-theme-foreground: (
   text: $dark-primary-text,
 );
 
-
 $mat-dark-theme-foreground: (
   base: white,
   disabled-button: rgba($light-text, 0.3),
@@ -274,38 +273,4 @@ $themes: (
 
 @media (prefers-color-scheme: dark) {
   @include mat.all-component-themes($dark-theme);
-}
-
-.mat-raised-button,
-.mat-stroked-button,
-.mat-flat-button {
-  padding: 0 1.15em;
-  margin: 0 0.65em;
-  min-width: 3em;
-  line-height: 36.4px;
-}
-
-.mat-standard-chip {
-  padding: 0.5em 0.85em;
-  min-height: 2.5em;
-}
-
-.material-icons {
-  font-family: 'Material Icons';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  -webkit-font-feature-settings: 'liga';
-  -webkit-font-smoothing: antialiased;
-
-  .mat-badge-content {
-    font-family: 'Roboto';
-  }
 }
