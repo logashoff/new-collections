@@ -2,7 +2,7 @@ import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { Injectable } from '@angular/core';
 import { TooltipPosition } from '@angular/material/tooltip';
 import { BehaviorSubject } from 'rxjs';
-import { exportTabs, getSavedTabs, importTabs } from 'src/app/utils';
+import { exportTabs, getSavedTabs, importTabs, queryCurrentWindow } from 'src/app/utils';
 import { TabService } from './tab.service';
 
 /**
@@ -76,14 +76,25 @@ export class MenuService {
   async handleMenuAction(menuAction: Action) {
     switch (menuAction) {
       case Action.Save:
-        await this.tabsService.saveCurrentWindowTabs();
-        this.openOptions();
+        try {
+          const tabs = await queryCurrentWindow();
+          const tabGroup = await this.tabsService.getTabGroup(tabs);
+          await this.tabsService.saveTabGroup(tabGroup);
+          this.openOptions();
+        } catch (e) {
+          this.tabsService.displayMessage(e);
+        }
         break;
       case Action.Options:
         this.openOptions();
         break;
       case Action.Export:
-        exportTabs(await getSavedTabs());
+        const tabGroups = await getSavedTabs();
+        if (tabGroups?.length > 0) {
+          exportTabs(tabGroups);
+        } else {
+          this.tabsService.displayMessage('Empty list cannot be saved');
+        }
         break;
       case Action.Import:
         const importedTabs = await importTabs();

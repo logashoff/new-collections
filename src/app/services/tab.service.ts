@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { getDomainsFromTabs, getSavedTabs, queryTabs, removeTab, saveTabGroups, TabGroup } from 'src/app/utils';
+import {
+  getDomainsFromTabs,
+  getSavedTabs,
+  ignoreUrlsRegExp,
+  removeTab,
+  saveTabGroups,
+  Tab,
+  TabGroup,
+} from 'src/app/utils';
 import { v4 as uuidv4 } from 'uuid';
-
-/**
- * URLs to ignore when saving tabs.
- */
-export const ignoreUrlsRegExp = new RegExp('^(about:|chrome:|file:|wss:|ws:|chrome-extension:)');
 
 /**
  * @description
@@ -30,7 +34,7 @@ export class TabService {
     .asObservable()
     .pipe(map((res) => (!Array.isArray(res) || res.length === 0 ? null : res)));
 
-  constructor() {
+  constructor(private snackBar: MatSnackBar) {
     this.initService();
   }
 
@@ -42,22 +46,30 @@ export class TabService {
     this.tabGroupsSource$.next(tabGroups);
   }
 
-  /**
-   * Saves all tabs from current window.
-   */
-  async saveCurrentWindowTabs(): Promise<void> {
-    const tabs = await queryTabs({ currentWindow: true });
+  async getTabGroup(tabs: Tab[]): Promise<TabGroup> {
+    const filteredTabs = tabs
+      .filter((tab) => !ignoreUrlsRegExp.test(tab.url))
+      .map(({ id, url, title, favIconUrl }) => ({
+        favIconUrl,
+        id,
+        title,
+        url,
+      }));
 
-    const filteredTabs = tabs.filter((tab) => !ignoreUrlsRegExp.test(tab.url));
+    return new Promise((resolve, reject) => {
+      if (filteredTabs?.length > 0) {
+        const tabGroup: TabGroup = {
+          id: uuidv4(),
+          timestamp: new Date().getTime(),
+          tabs: filteredTabs,
+          domains: getDomainsFromTabs(filteredTabs),
+        };
 
-    const tabGroup: TabGroup = {
-      id: uuidv4(),
-      timestamp: new Date().getTime(),
-      tabs: filteredTabs,
-      domains: getDomainsFromTabs(filteredTabs),
-    };
-
-    return this.saveTabGroup(tabGroup);
+        resolve(tabGroup);
+      } else {
+        reject('Opened tabs cannot be saved');
+      }
+    });
   }
 
   /**
@@ -89,29 +101,15 @@ export class TabService {
     // get current tabs
     let savedTabGroups = await getSavedTabs();
 
-    if (!Array.isArray(savedTabGroups)) {
-      savedTabGroups = [];
-    }
+    // close all browser tabs from tab group
+    tabGroup.tabs.forEach(({ id }) => removeTab(id));
 
-    // filter out invalid URLs
-    tabGroup.tabs = tabGroup.tabs.map(({ id, url, title, favIconUrl }) => ({
-      favIconUrl,
-      id,
-      title,
-      url,
-    }));
+    // merge saved and new tabs
+    savedTabGroups = [tabGroup, ...(savedTabGroups || [])];
 
-    if (tabGroup.tabs.length > 0) {
-      // close all saved tabs
-      tabGroup.tabs.forEach(({ id }) => removeTab(id));
+    await saveTabGroups(savedTabGroups);
 
-      // merge saved and new tabs
-      savedTabGroups = [tabGroup, ...savedTabGroups];
-
-      await saveTabGroups(savedTabGroups);
-
-      this.tabGroupsSource$.next(savedTabGroups);
-    }
+    this.tabGroupsSource$.next(savedTabGroups);
   }
 
   /**
@@ -138,5 +136,15 @@ export class TabService {
       await saveTabGroups(savedTabGroups);
       this.tabGroupsSource$.next(savedTabGroups);
     }
+  }
+
+  /**
+   * Displays snackbar message.
+   */
+  displayMessage(message: string) {
+    this.snackBar.open(message, 'Dismiss', {
+      verticalPosition: 'top',
+      politeness: 'assertive',
+    });
   }
 }

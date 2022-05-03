@@ -1,6 +1,8 @@
 import { waitForAsync } from '@angular/core/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { lastValueFrom } from 'rxjs';
+import { ignoreUrlsRegExp } from '../utils/models';
 import { TabService } from './tab.service';
 
 const tabGroupsJson = [
@@ -239,13 +241,18 @@ jest.mock('src/app/utils', () => ({
   getDomainsFromTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   getSavedTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(tabGroupsJson))),
   queryTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(windowTabs))),
+  queryCurrentWindow: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(windowTabs))),
   removeTab: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   saveTabGroups: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
+  ignoreUrlsRegExp: ignoreUrlsRegExp,
 }));
 
 describe('TabService', () => {
   let spectator: SpectatorService<TabService>;
-  const createService = createServiceFactory(TabService);
+  const createService = createServiceFactory({
+    service: TabService,
+    imports: [MatSnackBarModule],
+  });
 
   beforeEach(() => {
     spectator = createService();
@@ -255,27 +262,42 @@ describe('TabService', () => {
     expect(spectator.service).toBeTruthy();
   });
 
-  it(
-    'should initialize tabs',
-    waitForAsync(async () => {
-      const tabs = await lastValueFrom(spectator.service.tabGroups$);
+  it('should initialize tabs', waitForAsync(async () => {
+    const tabs = await lastValueFrom(spectator.service.tabGroups$);
 
-      expect(tabs.length).toBe(3);
-      expect(tabs[0].tabs.length).toBe(4);
-      expect(tabs[1].tabs.length).toBe(2);
-      expect(tabs[2].tabs.length).toBe(4);
-    })
-  );
+    expect(tabs.length).toBe(3);
+    expect(tabs[0].tabs.length).toBe(4);
+    expect(tabs[1].tabs.length).toBe(2);
+    expect(tabs[2].tabs.length).toBe(4);
+  }));
 
-  it(
-    'should save current window',
-    waitForAsync(async () => {
-      await spectator.service.saveCurrentWindowTabs();
+  it('should generate tab group', async () => {
+    const tabGroup = await spectator.service.getTabGroup(windowTabs);
 
-      const tabs = await lastValueFrom(spectator.service.tabGroups$);
+    expect(tabGroup.tabs.length).toBe(3);
+  });
 
-      expect(tabs.length).toBe(4);
-      expect(tabs[3].tabs.length).toBe(3);
-    })
-  );
+  it('should save tab group', async () => {
+    const tabGroup = await spectator.service.getTabGroup(windowTabs);
+    await spectator.service.saveTabGroup(tabGroup);
+
+    const tabGroups = spectator.service['tabGroupsSource$'].value;
+
+    expect(tabGroups.length).toBe(4);
+    expect(tabGroups[0].tabs.length).toBe(3);
+
+    const [tab1, tab2, tab3] = tabGroups[0].tabs;
+
+    expect(tab1.id).toBe(48);
+    expect(tab1.title).toBe('GitLab - The One DevOps Platform');
+    expect(tab1.url).toBe('https://about.gitlab.com/');
+    
+    expect(tab2.id).toBe(49);
+    expect(tab2.title).toBe('GitHub: Where the world builds software · GitHub');
+    expect(tab2.url).toBe('https://github.com/');
+    
+    expect(tab3.id).toBe(50);
+    expect(tab3.title).toBe('Fedora');
+    expect(tab3.url).toBe('https://getfedora.org/');
+  });
 });
