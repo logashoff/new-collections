@@ -1,5 +1,12 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { TabGroup } from 'src/app/utils';
+import { BehaviorSubject, map, Observable, shareReplay } from 'rxjs';
+import { Domain, TabGroup } from 'src/app/utils';
+
+
+/**
+ * Max number of icons should be displayed in panel header.
+ */
+export const maxIconsLength = 7;
 
 /**
  * @description
@@ -13,8 +20,37 @@ import { TabGroup } from 'src/app/utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TabIconsComponent {
+  private readonly group$ = new BehaviorSubject<TabGroup>(null);
+
   /**
    * Tab group.
    */
-  @Input() group: TabGroup;
+  @Input() set group(value: TabGroup) {
+    this.group$.next(value);
+  }
+
+  get group(): TabGroup {
+    return this.group$.value;
+  }
+
+  /**
+   * Display number when max icon length is exceeded.
+   */
+  readonly overflowCount$: Observable<number> = this.group$.pipe(
+    map((group) => (group.domains.length > maxIconsLength ? group.domains.length - maxIconsLength : 0)),
+    shareReplay(1)
+  );
+  
+  /**
+   * Domain list with grouped domains displayed first.
+   */
+  readonly domainsList$: Observable<Domain[]> = this.group$.pipe(
+    map((group) => {
+      const groupedDomains = group.domains.filter((domain) => domain.count > 1);
+      const singleDomains = group.domains.filter((domain) => domain.count <= 1);
+
+      return [...groupedDomains, ...singleDomains].slice(0, maxIconsLength);
+    }),
+    shareReplay(1)
+  );
 }

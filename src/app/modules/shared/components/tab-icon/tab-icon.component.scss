@@ -1,8 +1,17 @@
 @import 'common';
 
+@media (max-width: $popup-width) {
+  .domain-name {
+    display: none;
+  }
+}
+
 :host {
   display: block;
   position: relative;
+  overflow: hidden;
+  max-width: 12rem;
+  min-width: 2rem;
 }
 
 .icon-container {
@@ -12,11 +21,14 @@
   border-radius: 1rem;
   box-sizing: border-box;
   overflow: hidden;
+  gap: 0.5rem;
 }
 
 .domain-name {
-  margin-left: 0.5rem;
   line-height: 1rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .badge-position {

@@ -1,26 +1,9 @@
 <mat-accordion>
   <ng-container *ngFor="let group of groups; let i = index">
-    <div class="panel-controls" [class.visible]="currentPanelIndex === i">
-      <div class="timestamp" matTooltip="{{ group.timestamp | date: 'medium' }}">
-        {{ group.timestamp | date: 'mediumDate' }}
-      </div>
-      <div class="controls">
-        <button mat-icon-button (click)="restoreTabs(group)" matTooltip="Restore">
-          <mat-icon>restore</mat-icon>
-        </button>
-        <button mat-icon-button (click)="removeTabs(group)" matTooltip="Delete">
-          <mat-icon>done_all</mat-icon>
-        </button>
-      </div>
-    </div>
     <mat-expansion-panel hideToggle>
       <mat-expansion-panel-header>
-        <mat-panel-title>
-          <app-tab-icons [group]="group"></app-tab-icons>
-        </mat-panel-title>
-        <mat-panel-description>
-          {{ group.tabs.length }} Tabs
-        </mat-panel-description>
+        <app-panel-header [group]="group"></app-panel-header>
+        <app-group-controls [group]="group"></app-group-controls>
       </mat-expansion-panel-header>
       <mat-list>
         <ng-container *ngFor="let tab of group.tabs">

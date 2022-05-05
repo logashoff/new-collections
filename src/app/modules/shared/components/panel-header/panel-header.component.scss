@@ -1,0 +1,26 @@
+@import 'common';
+
+:host {
+  display: block;
+  height: inherit;
+}
+
+.container {
+  display: flex;
+  height: inherit;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 1rem;
+  overflow: hidden;
+  gap: 1rem;
+}
+
+.description {
+  white-space: nowrap;
+}
+
+@include theme using($theme) {
+  :host .description {
+    color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+  }
+}
