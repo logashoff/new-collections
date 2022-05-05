@@ -1,9 +1,4 @@
-<span class="badge-position"
-  [matBadge]="domain.count"
-  [matBadgeHidden]="domain.count <= 1"
-  matBadgeSize="small">
-</span>
 <div class="icon-container">
   <app-image-icon mat-list-icon [source]="domain.icon" size="small"></app-image-icon>
-  <span class="domain-name" *ngIf="showDomainName">{{ domain.name }}</span>
+  <span class="domain-name" *ngIf="showLabel">{{ label$ | async }}</span>
 </div>

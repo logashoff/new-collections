@@ -61,6 +61,13 @@ export async function importTabs(): Promise<TabGroup[]> {
 }
 
 /**
+ * Returns hostname from tab's url
+ */
+export function getHostname(tab: BrowserTab): string {
+  return new URL(tab.url).hostname;
+}
+
+/**
  * Returns domain list from tabs.
  * @param tabs Tabs list.
  * @returns Domains list.
@@ -71,7 +78,7 @@ export function getDomainsFromTabs(tabs: BrowserTab[]): Domain[] {
   tabs
     .filter((tab) => tab.favIconUrl)
     .forEach((tab) => {
-      const hostname = new URL(tab.url).hostname;
+      const hostname = getHostname(tab);
 
       if (hostname in domainsMap) {
         domainsMap[hostname].count++;

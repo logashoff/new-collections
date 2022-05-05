@@ -46,20 +46,26 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import {
   EmptyComponent,
+  GroupControlsComponent,
   GroupsComponent,
   ImageDirective,
   ImageIconComponent,
   MenuComponent,
+  PanelHeaderComponent,
   TabIconComponent,
   TabIconsComponent,
 } from './components/index';
+import { StopPropagationDirective } from './directives/index';
 
 const components = [
   EmptyComponent,
+  GroupControlsComponent,
   GroupsComponent,
   ImageDirective,
   ImageIconComponent,
   MenuComponent,
+  PanelHeaderComponent,
+  StopPropagationDirective,
   TabIconComponent,
   TabIconsComponent,
 ];

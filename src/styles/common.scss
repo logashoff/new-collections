@@ -4,6 +4,8 @@
 @import 'theme';
 
 $scrollbar-width: 0.5rem;
+$popup-width: 500px;
+$popup-height: 600px;
 
 @function getForegroundPalette($config-or-theme) {
   $config: mat.get-color-config($config-or-theme);

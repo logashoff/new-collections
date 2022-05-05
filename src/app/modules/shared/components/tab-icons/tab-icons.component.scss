@@ -1,31 +1,31 @@
 @import 'common';
 
+:host {
+  display: block;
+  overflow: hidden;
+  height: inherit;
+  width: 100%;
+}
+
 .container {
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
-}
+  height: inherit;
+  width: 100%;
+  gap: 0.5rem;
+  min-height: 3rem;
 
-.overflow {
-  margin-left: 1rem;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
+  .badged-icon {
+    min-width: 2rem;
 
-.icons {
-  display: flex;
-  align-items: center;
-  flex-wrap: nowrap;
-
-  .icon:not(:first-child) {
-    margin-left: 0.5rem;
+    .mat-badge-hidden {
+      overflow: hidden;
+    }
   }
 
-  @for $i from 1 through 20 {
-    .icon:nth-child(#{$i}) {
-      z-index: #{20 - $i};
-    }
+  .overflow {
+    margin-left: 0.5rem;
   }
 }
 

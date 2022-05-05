@@ -1,13 +1,17 @@
 <div class="container">
-  <div class="icons">
-    <ng-container *ngFor="let domain of group.domains; let i = index; let last = last">
+  <span *ngFor="let domain of domainsList$ | async"
+    class="badged-icon"
+    matBadgeSize="small"
+    [matBadge]="domain.count"
+    [matBadgeHidden]="domain.count <= 1">
       <app-tab-icon
         class="icon"
-        *ngIf="i < 7"
         [domain]="domain"
-        [showDomainName]="group.domains.length < 5 && last">
+        [tabs]="group.tabs"
+        [showLabel]="domain.count <= 1">
       </app-tab-icon>
-    </ng-container>
-  </div>
-  <span class="overflow" *ngIf="group.domains.length > 7">+{{ group.domains.length - 7 }}</span>
+  </span>
+  <span class="overflow" *ngIf="(overflowCount$ | async) > 0">
+    +{{ overflowCount$ | async }}
+  </span>
 </div>

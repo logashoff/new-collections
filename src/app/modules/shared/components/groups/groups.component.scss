@@ -13,7 +13,24 @@ app-groups {
 
   .mat-expansion-panel-header {
     padding: 0;
-    height: 3rem;
+    height: auto;
+
+    app-group-controls {
+      display: none;
+    }
+
+    &.mat-expanded {
+      height: auto;
+      padding: 0.5rem 0;
+
+      app-group-controls {
+        display: block;
+      }
+
+      app-panel-header {
+        display: none;
+      }
+    }
   }
 
   .mat-expansion-panel-header-title {
@@ -34,8 +51,11 @@ app-groups {
   }
 
   .mat-content {
+    display: block;
     align-items: center;
-    overflow: visible;
+    overflow: hidden;
+    height: inherit;
+    flex: 1;
   }
 
   .mat-list-base {
@@ -64,32 +84,12 @@ app-groups {
 
   .mat-expansion-panel.mat-expanded {
     @include mat.elevation(8);
-    margin: 0 0 2rem;
-  }
-
-  .panel-controls {
-    display: none;
-    position: relative;
-    justify-content: space-between;
-    align-items: center;
-    margin: 1rem 0;
-
-    &.visible {
-      display: flex;
-    }
-
-    .timestamp {
-      margin-left: 0.5rem;
-    }
+    margin: 2rem 0;
   }
 }
 
 @include theme using($theme) {
   app-groups {
-    .panel-controls {
-      color: getPaletteColor(getForegroundPalette($theme), disabled-text);
-    }
-
     .mat-list-base .mat-list-item-content:hover {
       background-color: getPaletteColor(getBackgroundPalette($theme), hover);
     }
