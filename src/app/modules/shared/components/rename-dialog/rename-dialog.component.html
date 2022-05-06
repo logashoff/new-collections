@@ -1,0 +1,13 @@
+<form [formGroup]="formGroup" (ngSubmit)="save()">
+  <h1 mat-dialog-title>Rename</h1>
+  <div mat-dialog-content>
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input formControlName="name" matInput>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button type="button" mat-stroked-button [mat-dialog-close] cdkFocusInitial>Close</button>
+    <button type="submit" mat-flat-button color="primary" [disabled]="!formGroup.valid">Save</button>
+  </div>
+</form>
