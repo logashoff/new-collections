@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
+  BrowserTab,
   getDomainsFromTabs,
   getSavedTabs,
   ignoreUrlsRegExp,
@@ -82,12 +83,14 @@ export class TabService {
    */
   async saveTabGroups(tabGroups: TabGroup[]) {
     if (tabGroups?.length > 0) {
-      this.tabGroups.unshift(...tabGroups.map((tabGroup) => {
-        tabGroup.id = uuidv4();
-        return tabGroup;
-      }));
+      this.tabGroups.unshift(
+        ...tabGroups.map((tabGroup) => {
+          tabGroup.id = uuidv4();
+          return tabGroup;
+        })
+      );
 
-      await saveTabGroups(this.tabGroups);
+      this.saveTabs();
     }
   }
 
@@ -101,27 +104,29 @@ export class TabService {
     // merge saved and new tabs
     this.tabGroups.unshift(tabGroup);
 
-    await saveTabGroups(this.tabGroups);
+    this.saveTabs();
   }
 
   /**
    * Removes tab from specified tab group.
    */
-  async removeTab(groupId: string, tab: Tab) {
-    const groupIndex = this.tabGroups.findIndex(group => group.id === groupId);
+  async removeTab(groupId: string, tab: BrowserTab) {
+    const groupIndex = this.tabGroups.findIndex((group) => group.id === groupId);
 
     if (groupIndex > -1) {
-      const group =  this.tabGroups[groupIndex];
+      const group = this.tabGroups[groupIndex];
       const tabIndex = group.tabs.findIndex(({ id }) => id === tab.id);
-      
+
       if (tabIndex > -1) {
         group.tabs.splice(tabIndex, 1);
-        
+
         if (group.tabs.length === 0) {
           this.tabGroups.splice(groupIndex, 1);
+        } else {
+          group.domains = getDomainsFromTabs(group.tabs);
         }
 
-        await saveTabGroups(this.tabGroups);
+        this.saveTabs();
       }
     }
   }
@@ -135,8 +140,15 @@ export class TabService {
     if (groupIndex > -1) {
       this.tabGroups.splice(groupIndex, 1);
 
-      await saveTabGroups(this.tabGroups);
+      this.saveTabs();
     }
+  }
+
+  /**
+   * Save current tabs state to local storage.
+   */
+  async saveTabs(): Promise<void> {
+    return await saveTabGroups(this.tabGroups);
   }
 
   /**

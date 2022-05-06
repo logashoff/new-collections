@@ -1,0 +1,15 @@
+:host {
+  min-width: 20rem;
+  display: block;
+  position: relative;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-dialog-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}

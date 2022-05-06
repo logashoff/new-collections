@@ -10,6 +10,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
@@ -52,6 +53,7 @@ import {
   ImageIconComponent,
   MenuComponent,
   PanelHeaderComponent,
+  RenameDialogComponent,
   TabIconComponent,
   TabIconsComponent,
   TabListComponent,
@@ -66,6 +68,7 @@ const components = [
   ImageIconComponent,
   MenuComponent,
   PanelHeaderComponent,
+  RenameDialogComponent,
   StopPropagationDirective,
   TabIconComponent,
   TabIconsComponent,
@@ -122,7 +125,7 @@ const materialModules = [
 
 @NgModule({
   declarations: [...components],
-  imports: [CommonModule, ...materialModules],
+  imports: [CommonModule, ReactiveFormsModule, ...materialModules],
   exports: [...materialModules, ...components],
 })
 export class SharedModule {}
