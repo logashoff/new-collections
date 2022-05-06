@@ -92,5 +92,5 @@ export function getDomainsFromTabs(tabs: BrowserTab[]): Domain[] {
       }
     });
 
-  return Object.values(domainsMap);
+  return Object.values(domainsMap).sort((a, b) => b.count - a.count);
 }

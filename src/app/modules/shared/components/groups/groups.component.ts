@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { TabGroup } from 'src/app/utils';
 
 /**
@@ -10,12 +10,12 @@ import { TabGroup } from 'src/app/utils';
   selector: 'app-groups',
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
 export class GroupsComponent {
   /**
    * List of tab groups to render.
    */
-  @Input() groups: TabGroup[];
+   @Input() groups: TabGroup[];
 }
+ 

@@ -1,6 +1,6 @@
 import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { map, Observable, shareReplay } from 'rxjs';
 import { Action, MenuService, TabService } from 'src/app/services';
 import { TabGroup } from 'src/app/utils';
 
@@ -25,9 +25,8 @@ export class OptionsComponent {
    * Main menu items.
    */
   readonly menuItems$: Observable<MatFabMenu[]> = this.menuService.menuItems$.pipe(
-    map((menuItems) =>
-      menuItems.filter((item) => ![Action.Options, Action.Save].includes(item.id as Action))
-    )
+    map((menuItems) => menuItems.filter((item) => ![Action.Options, Action.Save].includes(item.id as Action))),
+    shareReplay(1)
   );
 
   constructor(private tabsService: TabService, private menuService: MenuService) {}

@@ -1,11 +1,9 @@
 <mat-accordion>
-  <ng-container *ngFor="let group of groups; let i = index">
-    <mat-expansion-panel hideToggle>
-      <mat-expansion-panel-header>
-        <app-panel-header [group]="group"></app-panel-header>
-        <app-group-controls [group]="group"></app-group-controls>
-      </mat-expansion-panel-header>
-      <app-tab-list [groupId]="group.id" [tabs]="group.tabs"></app-tab-list>
-    </mat-expansion-panel>
-  </ng-container>
+  <mat-expansion-panel *ngFor="let group of groups" hideToggle>
+    <mat-expansion-panel-header>
+      <app-panel-header [group]="group"></app-panel-header>
+      <app-group-controls [group]="group"></app-group-controls>
+    </mat-expansion-panel-header>
+    <app-tab-list [groupId]="group.id" [tabs]="group.tabs"></app-tab-list>
+  </mat-expansion-panel>
 </mat-accordion>

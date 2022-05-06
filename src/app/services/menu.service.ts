@@ -78,9 +78,9 @@ export class MenuService {
       switch (menuAction) {
         case Action.Save:
           const tabs = await queryCurrentWindow();
-          const tabGroup = await this.tabsService.getTabGroup(tabs);
+          const tabGroup = await this.tabsService.createTabGroup(tabs);
 
-          if (tabGroup.tabs.length > 0) {
+          if (tabGroup?.tabs?.length > 0) {
             await this.tabsService.saveTabGroup(tabGroup);
             this.openOptions();
           } else {
@@ -100,8 +100,7 @@ export class MenuService {
           break;
         case Action.Import:
           const importedTabs = await importTabs();
-          const savedTabs = await getSavedTabs();
-          await this.tabsService.saveTabGroups([...(importedTabs || []), ...(savedTabs || [])]);
+          await this.tabsService.saveTabGroups(importedTabs);
           break;
       }
     } catch (e) {

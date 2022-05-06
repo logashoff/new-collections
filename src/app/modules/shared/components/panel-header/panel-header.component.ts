@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TabGroup } from 'src/app/utils';
 
 /**
@@ -8,7 +8,6 @@ import { TabGroup } from 'src/app/utils';
   selector: 'app-panel-header',
   templateUrl: './panel-header.component.html',
   styleUrls: ['./panel-header.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PanelHeaderComponent {
   /**
