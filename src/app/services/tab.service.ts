@@ -34,6 +34,11 @@ export class TabService {
     .asObservable()
     .pipe(map((res) => (!Array.isArray(res) || res.length === 0 ? null : res)));
 
+  /**
+   * Loaded tab list.
+   */
+  private tabGroups: TabGroup[] = [];
+
   constructor(private snackBar: MatSnackBar) {
     this.initService();
   }
@@ -42,8 +47,8 @@ export class TabService {
    * Initialize service and load stored tab groups.
    */
   private async initService() {
-    const tabGroups = await getSavedTabs();
-    this.tabGroupsSource$.next(tabGroups);
+    this.tabGroups = await getSavedTabs();
+    this.tabGroupsSource$.next(this.tabGroups);
   }
 
   async getTabGroup(tabs: Tab[]): Promise<TabGroup> {
@@ -58,7 +63,7 @@ export class TabService {
         url,
       }));
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       if (filteredTabs?.length > 0) {
         const tabGroup: TabGroup = {
           id: uuidv4(),
@@ -68,8 +73,6 @@ export class TabService {
         };
 
         resolve(tabGroup);
-      } else {
-        reject('Opened tabs cannot be saved');
       }
     });
   }
@@ -78,21 +81,13 @@ export class TabService {
    * Saves provided tab groups to local storage.
    */
   async saveTabGroups(tabGroups: TabGroup[]) {
-    if (Array.isArray(tabGroups) && tabGroups.length) {
-      let savedTabGroups: TabGroup[] = await getSavedTabs();
-
-      if (!Array.isArray(saveTabGroups)) {
-        savedTabGroups = [];
-      }
-
-      const allTabs: TabGroup[] = [...tabGroups, ...savedTabGroups].map((tabGroup) => {
+    if (tabGroups?.length > 0) {
+      this.tabGroups.unshift(...tabGroups.map((tabGroup) => {
         tabGroup.id = uuidv4();
         return tabGroup;
-      });
+      }));
 
-      await saveTabGroups(allTabs);
-
-      this.tabGroupsSource$.next(allTabs);
+      await saveTabGroups(this.tabGroups);
     }
   }
 
@@ -100,43 +95,47 @@ export class TabService {
    * Saves specified tab group to local storage.
    */
   async saveTabGroup(tabGroup: TabGroup) {
-    // get current tabs
-    let savedTabGroups = await getSavedTabs();
-
     // close all browser tabs from tab group
     tabGroup.tabs.forEach(({ id }) => removeTab(id));
 
     // merge saved and new tabs
-    savedTabGroups = [tabGroup, ...(savedTabGroups || [])];
+    this.tabGroups.unshift(tabGroup);
 
-    await saveTabGroups(savedTabGroups);
+    await saveTabGroups(this.tabGroups);
+  }
 
-    this.tabGroupsSource$.next(savedTabGroups);
+  /**
+   * Removes tab from specified tab group.
+   */
+  async removeTab(groupId: string, tab: Tab) {
+    const groupIndex = this.tabGroups.findIndex(group => group.id === groupId);
+
+    if (groupIndex > -1) {
+      const group =  this.tabGroups[groupIndex];
+      const tabIndex = group.tabs.findIndex(({ id }) => id === tab.id);
+      
+      if (tabIndex > -1) {
+        group.tabs.splice(tabIndex, 1);
+        
+        if (group.tabs.length === 0) {
+          this.tabGroups.splice(groupIndex, 1);
+        }
+
+        await saveTabGroups(this.tabGroups);
+      }
+    }
   }
 
   /**
    * Removed specified tab group from local storage.
    */
   async removeTabGroup(tabGroup: TabGroup) {
-    let savedTabGroups = await getSavedTabs();
+    const groupIndex = this.tabGroups.findIndex(({ id }) => id === tabGroup.id);
 
-    if (!Array.isArray(savedTabGroups)) {
-      savedTabGroups = [];
-    }
+    if (groupIndex > -1) {
+      this.tabGroups.splice(groupIndex, 1);
 
-    const { id } = tabGroup;
-    let index = -1;
-    for (let i = 0; i < savedTabGroups.length; i++) {
-      if (savedTabGroups[i].id === id) {
-        index = i;
-        break;
-      }
-    }
-
-    if (index > -1) {
-      savedTabGroups.splice(index, 1);
-      await saveTabGroups(savedTabGroups);
-      this.tabGroupsSource$.next(savedTabGroups);
+      await saveTabGroups(this.tabGroups);
     }
   }
 
