@@ -24,10 +24,11 @@ export function getSavedTabs(): Promise<TabGroup[]> {
  * Restores all tabs from specified tab group.
  */
 export function restoreTabs(tabGroup: TabGroup) {
-  tabGroup.tabs.forEach((tab) =>
+  tabGroup.tabs.forEach(({ url, active, pinned }) =>
     chrome.tabs.create({
-      url: tab.url,
-      active: false,
+      active,
+      pinned,
+      url,
     })
   );
 }

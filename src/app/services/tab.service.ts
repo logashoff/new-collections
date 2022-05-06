@@ -49,9 +49,11 @@ export class TabService {
   async getTabGroup(tabs: Tab[]): Promise<TabGroup> {
     const filteredTabs = tabs
       .filter((tab) => !ignoreUrlsRegExp.test(tab.url))
-      .map(({ id, url, title, favIconUrl }) => ({
+      .map(({ id, url, title, favIconUrl, active, pinned }) => ({
+        active,
         favIconUrl,
         id,
+        pinned,
         title,
         url,
       }));

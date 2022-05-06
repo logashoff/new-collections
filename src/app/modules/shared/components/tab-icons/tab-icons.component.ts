@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BehaviorSubject, map, Observable, shareReplay } from 'rxjs';
 import { Domain, TabGroup } from 'src/app/utils';
 
-
 /**
  * Max number of icons should be displayed in panel header.
  */
@@ -40,17 +39,12 @@ export class TabIconsComponent {
     map((group) => (group.domains.length > maxIconsLength ? group.domains.length - maxIconsLength : 0)),
     shareReplay(1)
   );
-  
+
   /**
    * Domain list with grouped domains displayed first.
    */
   readonly domainsList$: Observable<Domain[]> = this.group$.pipe(
-    map((group) => {
-      const groupedDomains = group.domains.filter((domain) => domain.count > 1);
-      const singleDomains = group.domains.filter((domain) => domain.count <= 1);
-
-      return [...groupedDomains, ...singleDomains].slice(0, maxIconsLength);
-    }),
+    map((group) => group.domains.sort((a, b) => b.count - a.count).slice(0, maxIconsLength)),
     shareReplay(1)
   );
 }
