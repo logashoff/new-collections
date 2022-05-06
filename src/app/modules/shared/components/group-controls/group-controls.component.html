@@ -3,10 +3,10 @@
     {{ group.timestamp | date: 'mediumDate' }}
   </div>
   <div class="controls" [appStopPropagation]>
-    <button mat-icon-button (click)="removeTabs(group)" matTooltip="Delete">
+    <button mat-icon-button (click)="removeTabs(group)" matTooltip="Delete" matTooltipShowDelay="1000">
       <mat-icon>delete</mat-icon>
     </button>
-    <button mat-icon-button (click)="restoreTabs(group)" matTooltip="Restore">
+    <button mat-icon-button (click)="restoreTabs(group)" matTooltip="Restore" matTooltipShowDelay="1000">
       <mat-icon>restore</mat-icon>
     </button>
   </div>

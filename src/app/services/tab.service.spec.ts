@@ -272,13 +272,13 @@ describe('TabService', () => {
   }));
 
   it('should generate tab group', async () => {
-    const tabGroup = await spectator.service.getTabGroup(windowTabs);
+    const tabGroup = await spectator.service.createTabGroup(windowTabs);
 
     expect(tabGroup.tabs.length).toBe(3);
   });
 
   it('should save tab group', async () => {
-    const tabGroup = await spectator.service.getTabGroup(windowTabs);
+    const tabGroup = await spectator.service.createTabGroup(windowTabs);
     await spectator.service.saveTabGroup(tabGroup);
 
     const tabGroups = spectator.service['tabGroupsSource$'].value;

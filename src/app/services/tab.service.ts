@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import {
   BrowserTab,
   getDomainsFromTabs,
+  getHostname,
   getSavedTabs,
   ignoreUrlsRegExp,
   removeTab,
@@ -31,9 +32,7 @@ export class TabService {
   /**
    * Observable used by components to listen for tabs data changes.
    */
-  readonly tabGroups$ = this.tabGroupsSource$
-    .asObservable()
-    .pipe(map((res) => (!Array.isArray(res) || res.length === 0 ? null : res)));
+  readonly tabGroups$ = this.tabGroupsSource$.pipe(map((res) => (res?.length > 0 ? res : null)));
 
   /**
    * Loaded tab list.
@@ -49,10 +48,10 @@ export class TabService {
    */
   private async initService() {
     this.tabGroups = await getSavedTabs();
-    this.tabGroupsSource$.next(this.tabGroups);
+    this.refresh();
   }
 
-  async getTabGroup(tabs: Tab[]): Promise<TabGroup> {
+  async createTabGroup(tabs: Tab[]): Promise<TabGroup> {
     const filteredTabs = tabs
       .filter((tab) => !ignoreUrlsRegExp.test(tab.url))
       .map(({ id, url, title, favIconUrl, active, pinned }) => ({
@@ -74,8 +73,17 @@ export class TabService {
         };
 
         resolve(tabGroup);
+      } else {
+        resolve(null);
       }
     });
+  }
+
+  /**
+   * Updates tab groups observable.
+   */
+  refresh() {
+    this.tabGroupsSource$.next(this.tabGroups);
   }
 
   /**
@@ -91,6 +99,7 @@ export class TabService {
       );
 
       this.saveTabs();
+      this.refresh();
     }
   }
 
@@ -118,12 +127,21 @@ export class TabService {
       const tabIndex = group.tabs.findIndex(({ id }) => id === tab.id);
 
       if (tabIndex > -1) {
-        group.tabs.splice(tabIndex, 1);
+        const removedTab = group.tabs.splice(tabIndex, 1)[0];
 
         if (group.tabs.length === 0) {
           this.tabGroups.splice(groupIndex, 1);
         } else {
-          group.domains = getDomainsFromTabs(group.tabs);
+          const domainIndex = group.domains.findIndex((domain) => domain.name === getHostname(removedTab));
+
+          if (domainIndex > -1) {
+            const domain = group.domains[domainIndex];
+            if (domain.count > 1) {
+              group.domains[domainIndex].count--;
+            } else {
+              group.domains.splice(domainIndex, 1);
+            }
+          }
         }
 
         this.saveTabs();
