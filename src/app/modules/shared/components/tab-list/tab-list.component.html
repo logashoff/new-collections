@@ -1,0 +1,20 @@
+<mat-list>
+  <ng-container *ngFor="let tab of tabs">
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <div class="icon-container" mat-list-icon>
+        <app-image-icon [source]="tab.favIconUrl"></app-image-icon>
+      </div>
+      <div mat-line class="heading">{{ tab.title }}</div>
+      <a mat-line class="subheading" href="{{ tab.url }}" target="_blank"> {{ tab.url }}</a>
+      <button mat-icon-button [matMenuTriggerFor]="tabMenu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #tabMenu="matMenu">
+        <button mat-menu-item (click)="removeTab(tab)">
+          Remove
+        </button>
+      </mat-menu>
+    </mat-list-item>
+  </ng-container>
+</mat-list>

@@ -74,33 +74,38 @@ export class MenuService {
   }
 
   async handleMenuAction(menuAction: Action) {
-    switch (menuAction) {
-      case Action.Save:
-        try {
+    try {
+      switch (menuAction) {
+        case Action.Save:
           const tabs = await queryCurrentWindow();
           const tabGroup = await this.tabsService.getTabGroup(tabs);
-          await this.tabsService.saveTabGroup(tabGroup);
+
+          if (tabGroup.tabs.length > 0) {
+            await this.tabsService.saveTabGroup(tabGroup);
+            this.openOptions();
+          } else {
+            this.tabsService.displayMessage('Opened tabs cannot be saved');
+          }
+          break;
+        case Action.Options:
           this.openOptions();
-        } catch (e) {
-          this.tabsService.displayMessage(e);
-        }
-        break;
-      case Action.Options:
-        this.openOptions();
-        break;
-      case Action.Export:
-        const tabGroups = await getSavedTabs();
-        if (tabGroups?.length > 0) {
-          exportTabs(tabGroups);
-        } else {
-          this.tabsService.displayMessage('Empty list cannot be saved');
-        }
-        break;
-      case Action.Import:
-        const importedTabs = await importTabs();
-        const savedTabs = await getSavedTabs();
-        await this.tabsService.saveTabGroups([...(importedTabs || []), ...(savedTabs || [])]);
-        break;
+          break;
+        case Action.Export:
+          const tabGroups = await getSavedTabs();
+          if (tabGroups?.length > 0) {
+            exportTabs(tabGroups);
+          } else {
+            this.tabsService.displayMessage('Empty list cannot be saved');
+          }
+          break;
+        case Action.Import:
+          const importedTabs = await importTabs();
+          const savedTabs = await getSavedTabs();
+          await this.tabsService.saveTabGroups([...(importedTabs || []), ...(savedTabs || [])]);
+          break;
+      }
+    } catch (e) {
+      this.tabsService.displayMessage(e);
     }
   }
 }

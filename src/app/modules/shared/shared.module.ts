@@ -54,6 +54,7 @@ import {
   PanelHeaderComponent,
   TabIconComponent,
   TabIconsComponent,
+  TabListComponent,
 } from './components/index';
 import { StopPropagationDirective } from './directives/index';
 
@@ -68,6 +69,7 @@ const components = [
   StopPropagationDirective,
   TabIconComponent,
   TabIconsComponent,
+  TabListComponent,
 ];
 
 const materialModules = [

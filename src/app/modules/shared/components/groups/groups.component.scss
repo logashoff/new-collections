@@ -1,8 +1,5 @@
 @use '@angular/material' as mat;
-
 @import 'common';
-
-$typography: mat.define-typography-config();
 
 app-groups {
   display: block;
@@ -58,44 +55,8 @@ app-groups {
     flex: 1;
   }
 
-  .mat-list-base {
-    padding: 0;
-
-    .mat-list-item .mat-list-item-content {
-      padding: 0 2rem 0 1rem;
-    }
-
-    .heading {
-      @include mat.typography-level($typography, body-1);
-    }
-
-    .subheading {
-      @include mat.typography-level($typography, caption);
-    }
-
-    .mat-list-icon.icon-container {
-      display: flex;
-      align-items: center;
-      padding: 0.5rem;
-      border-radius: 1.5rem;
-      overflow: hidden;
-    }
-  }
-
   .mat-expansion-panel.mat-expanded {
     @include mat.elevation(8);
     margin: 2rem 0;
-  }
-}
-
-@include theme using($theme) {
-  app-groups {
-    .mat-list-base .mat-list-item-content:hover {
-      background-color: getPaletteColor(getBackgroundPalette($theme), hover);
-    }
-
-    .icon-container {
-      background-color: getPaletteColor(getBackgroundPalette($theme), unselected-chip);
-    }
   }
 }

@@ -5,18 +5,7 @@
         <app-panel-header [group]="group"></app-panel-header>
         <app-group-controls [group]="group"></app-group-controls>
       </mat-expansion-panel-header>
-      <mat-list>
-        <ng-container *ngFor="let tab of group.tabs">
-          <mat-divider></mat-divider>
-          <mat-list-item>
-            <div class="icon-container" mat-list-icon>
-              <app-image-icon [source]="tab.favIconUrl"></app-image-icon>
-            </div>
-            <div mat-line class="heading">{{ tab.title }}</div>
-            <a class="subheading" href="{{ tab.url }}" target="_blank" mat-line> {{ tab.url }} </a>
-          </mat-list-item>
-        </ng-container>
-      </mat-list>
+      <app-tab-list [groupId]="group.id" [tabs]="group.tabs"></app-tab-list>
     </mat-expansion-panel>
   </ng-container>
 </mat-accordion>
