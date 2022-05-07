@@ -1,5 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { TabGroup } from 'src/app/utils';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
+import { TabService } from 'src/app/services';
+import { IconsGroup, TabGroup } from 'src/app/utils';
 
 /**
  * Expansion panel header layout container.
@@ -10,8 +12,30 @@ import { TabGroup } from 'src/app/utils';
   styleUrls: ['./panel-header.component.scss'],
 })
 export class PanelHeaderComponent {
+  private readonly group$ = new BehaviorSubject<TabGroup>(null);
+  
   /**
-   * Tab group.
+   * Tabs list used to calculate tabs count label.
    */
-  @Input() group: TabGroup;
+  @Input() set group(value: TabGroup) {
+    this.group$.next(value);
+  }
+
+  get group(): TabGroup {
+    return this.group$.value;
+  }
+
+  /**
+   * Grouped icons.
+   */
+  readonly icons$: Observable<IconsGroup> = this.group$.pipe(
+    switchMap((group) => of(this.tabService.iconGroupsMap.get(group)))
+  );
+
+  /**
+   * Max number of icons should be displayed in panel header.
+   */
+  readonly maxIconsLength = 7;
+
+  constructor(private tabService: TabService) {}
 }

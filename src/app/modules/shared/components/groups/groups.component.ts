@@ -16,6 +16,5 @@ export class GroupsComponent {
   /**
    * List of tab groups to render.
    */
-   @Input() groups: TabGroup[];
+  @Input() groups: TabGroup[];
 }
- 

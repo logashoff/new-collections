@@ -1,6 +1,19 @@
-<div class="container">
-  <app-tab-icons [group]="group"></app-tab-icons>
-  <div class="description">
-    {{ group.tabs.length }} Tabs
+<div class="header-container">
+  <div class="icons-container" *ngIf="icons$ | async as icons">
+    <ng-container *ngFor="let tabs of icons; let i = index">
+      <span
+        *ngIf="i < maxIconsLength"
+        class="badged-icon"
+        matBadgeSize="small"
+        [matBadge]="tabs.length"
+        [matBadgeHidden]="tabs.length <= 1">
+        <div class="icon-container">
+          <app-image-icon mat-list-icon [source]="tabs[0].favIconUrl" size="small"></app-image-icon>
+          <span class="icon-label" *ngIf="tabs.length === 1">{{ tabs[0].title }}</span>
+        </div>
+      </span>
+    </ng-container>
+    <span class="overflow" *ngIf="icons.length > maxIconsLength"> +{{ icons.length - maxIconsLength }} </span>
   </div>
+  <div class="description">{{ group.tabs.length }} Tabs</div>
 </div>

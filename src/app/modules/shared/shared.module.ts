@@ -54,8 +54,6 @@ import {
   MenuComponent,
   PanelHeaderComponent,
   RenameDialogComponent,
-  TabIconComponent,
-  TabIconsComponent,
   TabListComponent,
 } from './components/index';
 import { StopPropagationDirective } from './directives/index';
@@ -70,8 +68,6 @@ const components = [
   PanelHeaderComponent,
   RenameDialogComponent,
   StopPropagationDirective,
-  TabIconComponent,
-  TabIconsComponent,
   TabListComponent,
 ];
 

@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { groupBy } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
   BrowserTab,
-  getDomainsFromTabs,
   getHostname,
   getSavedTabs,
+  IconsGroup,
   ignoreUrlsRegExp,
   removeTab,
   saveTabGroups,
@@ -39,6 +40,11 @@ export class TabService {
    */
   private tabGroups: TabGroup[] = [];
 
+  /**
+   * Group icons by hostname and map each icons group to their `TabGroup`.
+   */
+  readonly iconGroupsMap = new WeakMap<TabGroup, IconsGroup>();
+
   constructor(private snackBar: MatSnackBar) {
     this.initService();
   }
@@ -48,6 +54,14 @@ export class TabService {
    */
   private async initService() {
     this.tabGroups = await getSavedTabs();
+
+    this.tabGroups.forEach((group) =>
+      this.iconGroupsMap.set(
+        group,
+        Object.values(groupBy(group.tabs, getHostname)).sort((a, b) => b.length - a.length)
+      )
+    );
+
     this.refresh();
   }
 
@@ -72,7 +86,6 @@ export class TabService {
           id: uuidv4(),
           timestamp: new Date().getTime(),
           tabs: filteredTabs,
-          domains: getDomainsFromTabs(filteredTabs),
         };
 
         resolve(tabGroup);
@@ -94,12 +107,15 @@ export class TabService {
    */
   async saveTabGroups(tabGroups: TabGroup[]) {
     if (tabGroups?.length > 0) {
-      this.tabGroups.unshift(
+      this.tabGroups.push(
         ...tabGroups.map((tabGroup) => {
           tabGroup.id = uuidv4();
           return tabGroup;
         })
       );
+
+      // sort by time
+      this.tabGroups.sort((a, b) => b.timestamp - a.timestamp);
 
       this.saveTabs();
       this.refresh();
@@ -133,17 +149,21 @@ export class TabService {
         const removedTab = group.tabs.splice(tabIndex, 1)[0];
 
         if (group.tabs.length === 0) {
+          this.iconGroupsMap.delete(this.tabGroups[groupIndex]);
           this.tabGroups.splice(groupIndex, 1);
         } else {
-          const domainIndex = group.domains.findIndex((domain) => domain.name === getHostname(removedTab));
+          const iconGroups = this.iconGroupsMap.get(group);
+          const iconIndex = iconGroups?.findIndex((iconsGroup) => {
+            const index = iconsGroup.findIndex((tab) => tab === removedTab);
 
-          if (domainIndex > -1) {
-            const domain = group.domains[domainIndex];
-            if (domain.count > 1) {
-              group.domains[domainIndex].count--;
-            } else {
-              group.domains.splice(domainIndex, 1);
+            if (index > -1) {
+              iconsGroup.splice(index, 1);
+              return true;
             }
+          });
+
+          if (iconIndex > -1 && iconGroups[iconIndex].length === 0) {
+            iconGroups.splice(iconIndex, 1);
           }
         }
 

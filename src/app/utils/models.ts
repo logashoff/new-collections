@@ -19,20 +19,12 @@ export const ignoreUrlsRegExp = new RegExp('^(about:|chrome:|file:|wss:|ws:|chro
 export type BrowserTab = Pick<chrome.tabs.Tab, 'id' | 'url' | 'favIconUrl' | 'title' | 'pinned' | 'active'>;
 
 /**
- * Unique domains in tab group.
- */
-export interface Domain {
-  name: string;
-  icon: string;
-  count: number;
-}
-
-/**
  * Group that contains tabs and is saved to local storage.
  */
 export interface TabGroup {
   id: string;
   timestamp: number;
   tabs: BrowserTab[];
-  domains: Domain[];
 }
+
+export type IconsGroup = BrowserTab[][];

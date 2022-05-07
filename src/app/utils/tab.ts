@@ -1,6 +1,6 @@
 import { saveAs } from 'file-saver';
 import selectFiles from 'select-files';
-import { BrowserTab, Domain, storageKey, TabGroup } from './models';
+import { BrowserTab, storageKey, TabGroup } from './models';
 
 /**
  * Saves specified tab groups to local storage.
@@ -66,31 +66,4 @@ export async function importTabs(): Promise<TabGroup[]> {
  */
 export function getHostname(tab: BrowserTab): string {
   return new URL(tab.url).hostname;
-}
-
-/**
- * Returns domain list from tabs.
- * @param tabs Tabs list.
- * @returns Domains list.
- */
-export function getDomainsFromTabs(tabs: BrowserTab[]): Domain[] {
-  const domainsMap: { [hostname in string]: Domain } = {};
-
-  tabs
-    .filter((tab) => tab.favIconUrl)
-    .forEach((tab) => {
-      const hostname = getHostname(tab);
-
-      if (hostname in domainsMap) {
-        domainsMap[hostname].count++;
-      } else {
-        domainsMap[hostname] = {
-          name: hostname,
-          icon: tab.favIconUrl,
-          count: 1,
-        };
-      }
-    });
-
-  return Object.values(domainsMap).sort((a, b) => b.count - a.count);
 }
