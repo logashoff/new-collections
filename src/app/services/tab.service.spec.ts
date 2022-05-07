@@ -1,39 +1,22 @@
-import { waitForAsync } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
-import { lastValueFrom } from 'rxjs';
 import { ignoreUrlsRegExp } from '../utils/models';
+import { getHostname } from '../utils/tab';
 import { TabService } from './tab.service';
 
 const tabGroupsJson = [
   {
-    domains: [
-      {
-        count: 1,
-        icon: 'https://assets.ubuntu.com/v1/49a1a858-favicon-32x32.png',
-        name: 'ubuntu.com',
-      },
-      {
-        count: 1,
-        icon: 'https://linuxmint.com/web/img/favicon.ico',
-        name: 'linuxmint.com',
-      },
-      {
-        count: 1,
-        icon: 'https://c.s-microsoft.com/favicon.ico',
-        name: 'www.microsoft.com',
-      },
-      {
-        count: 1,
-        icon: 'https://www.apple.com/favicon.ico',
-        name: 'www.apple.com',
-      },
-    ],
     id: '7dd29b1c-dfab-44d4-8d29-76d402d24038',
     tabs: [
       {
         favIconUrl: 'https://assets.ubuntu.com/v1/49a1a858-favicon-32x32.png',
         id: 57,
+        title: 'Enterprise Open Source and Linux | Ubuntu',
+        url: 'https://ubuntu.com/',
+      },
+      {
+        favIconUrl: 'https://assets.ubuntu.com/v1/49a1a858-favicon-32x32.png',
+        id: 58,
         title: 'Enterprise Open Source and Linux | Ubuntu',
         url: 'https://ubuntu.com/',
       },
@@ -59,18 +42,6 @@ const tabGroupsJson = [
     timestamp: 1650858932558,
   },
   {
-    domains: [
-      {
-        count: 1,
-        icon: 'https://github.githubassets.com/favicons/favicon.svg',
-        name: 'github.com',
-      },
-      {
-        count: 1,
-        icon: 'https://duckduckgo.com/favicon.ico',
-        name: 'duckduckgo.com',
-      },
-    ],
     id: 'e200698d-d053-45f7-b917-e03b104ae127',
     tabs: [
       {
@@ -89,28 +60,6 @@ const tabGroupsJson = [
     timestamp: 1650858875455,
   },
   {
-    domains: [
-      {
-        count: 1,
-        icon: 'https://getfedora.org/static/images/favicon.ico',
-        name: 'getfedora.org',
-      },
-      {
-        count: 1,
-        icon: 'https://assets.ubuntu.com/v1/49a1a858-favicon-32x32.png',
-        name: 'ubuntu.com',
-      },
-      {
-        count: 1,
-        icon: 'https://c.s-microsoft.com/favicon.ico?v2',
-        name: 'www.microsoft.com',
-      },
-      {
-        count: 1,
-        icon: 'https://www.google.com/favicon.ico',
-        name: 'www.google.com',
-      },
-    ],
     id: '6ab9c99e-8942-4236-ad6e-7e38c51da810',
     tabs: [
       {
@@ -238,13 +187,13 @@ const windowTabs = [
 ];
 
 jest.mock('src/app/utils', () => ({
-  getDomainsFromTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
-  getSavedTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(tabGroupsJson))),
-  queryTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(windowTabs))),
-  queryCurrentWindow: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(windowTabs))),
+  getSavedTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(tabGroupsJson.concat()))),
+  queryTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(windowTabs.concat()))),
+  queryCurrentWindow: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(windowTabs.concat()))),
   removeTab: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   saveTabGroups: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
-  ignoreUrlsRegExp: ignoreUrlsRegExp,
+  ignoreUrlsRegExp,
+  getHostname,
 }));
 
 describe('TabService', () => {
@@ -262,14 +211,14 @@ describe('TabService', () => {
     expect(spectator.service).toBeTruthy();
   });
 
-  it('should initialize tabs', waitForAsync(async () => {
-    const tabs = await lastValueFrom(spectator.service.tabGroups$);
+  it('should initialize tabs', () => {
+    const tabGroups = spectator.service['tabGroups'];
 
-    expect(tabs.length).toBe(3);
-    expect(tabs[0].tabs.length).toBe(4);
-    expect(tabs[1].tabs.length).toBe(2);
-    expect(tabs[2].tabs.length).toBe(4);
-  }));
+    expect(tabGroups.length).toBe(3);
+    expect(tabGroups[0].tabs.length).toBe(5);
+    expect(tabGroups[1].tabs.length).toBe(2);
+    expect(tabGroups[2].tabs.length).toBe(4);
+  });
 
   it('should generate tab group', async () => {
     const tabGroup = await spectator.service.createTabGroup(windowTabs);
@@ -291,13 +240,45 @@ describe('TabService', () => {
     expect(tab1.id).toBe(48);
     expect(tab1.title).toBe('GitLab - The One DevOps Platform');
     expect(tab1.url).toBe('https://about.gitlab.com/');
-    
+
     expect(tab2.id).toBe(49);
     expect(tab2.title).toBe('GitHub: Where the world builds software · GitHub');
     expect(tab2.url).toBe('https://github.com/');
-    
+
     expect(tab3.id).toBe(50);
     expect(tab3.title).toBe('Fedora');
     expect(tab3.url).toBe('https://getfedora.org/');
+  });
+
+  it('should generate icon groups', () => {
+    const tabGroups = spectator.service['tabGroups'];
+
+    expect(tabGroups.length).toBe(3);
+
+    const { iconGroupsMap } = spectator.service;
+
+    expect(iconGroupsMap.get(tabGroups[0]).length).toBe(4);
+    expect(iconGroupsMap.get(tabGroups[1]).length).toBe(2);
+    expect(iconGroupsMap.get(tabGroups[2]).length).toBe(4);
+  });
+
+  it('should update tab and icon groups list when tab is removed', () => {
+    const [group1] = spectator.service['tabGroups'];
+    const [tab1, tab2, tab3] = group1.tabs;
+    const { iconGroupsMap } = spectator.service;
+
+    expect(iconGroupsMap.get(group1).length).toBe(4);
+
+    spectator.service.removeTab(group1.id, tab1);
+    expect(iconGroupsMap.get(group1).length).toBe(4);
+    expect(group1.tabs.length).toBe(4);
+
+    spectator.service.removeTab(group1.id, tab2);
+    expect(iconGroupsMap.get(group1).length).toBe(3);
+    expect(group1.tabs.length).toBe(3);
+
+    spectator.service.removeTab(group1.id, tab3);
+    expect(iconGroupsMap.get(group1).length).toBe(2);
+    expect(group1.tabs.length).toBe(2);
   });
 });
