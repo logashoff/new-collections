@@ -51,6 +51,9 @@ export class TabService {
     this.refresh();
   }
 
+  /**
+   * Generates tab group from browser tab list.
+   */
   async createTabGroup(tabs: Tab[]): Promise<TabGroup> {
     const filteredTabs = tabs
       .filter((tab) => !ignoreUrlsRegExp.test(tab.url))
