@@ -1,11 +1,17 @@
 @import 'common';
 
+@media (max-width: $popup-width) {
+  .icon-container .icon-label {
+    display: none;
+  }
+}
+
 :host {
   display: block;
   height: inherit;
 }
 
-.container {
+.header-container {
   display: flex;
   height: inherit;
   align-items: center;
@@ -19,8 +25,70 @@
   white-space: nowrap;
 }
 
+.icons-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  height: inherit;
+  overflow: hidden;
+  width: 100%;
+  min-height: 3rem;
+  gap: 0.5rem;
+
+  .badged-icon {
+    min-width: 2rem;
+
+    .mat-badge-hidden {
+      overflow: hidden;
+    }
+  }
+
+  .overflow {
+    margin-left: 0.5rem;
+  }
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 1rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  gap: 0.5rem;
+  max-width: 12rem;
+  min-width: 2rem;
+
+  .icon-label {
+    line-height: 1rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .badge-position {
+    position: absolute;
+    right: 0.15rem;
+    top: 0.15rem;
+  }
+}
+
 @include theme using($theme) {
-  :host .description {
-    color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+  :host {
+    .description {
+      color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+    }
+
+    .icons-container .overflow {
+      color: getPaletteColor(getForegroundPalette($theme), disabled-text);
+    }
+
+    .icon-container {
+      background-color: getPaletteColor(getBackgroundPalette($theme), unselected-chip);
+
+      .icon-label {
+        color: getPaletteColor(getForegroundPalette($theme), text);
+      }
+    }
   }
 }
