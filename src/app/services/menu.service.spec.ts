@@ -40,39 +40,37 @@ jest.mock('src/app/utils', () => ({
 }));
 
 describe('MenuService', () => {
-  const tabGroup = [
-    {
-      domains: [
-        {
-          count: 1,
-          icon: 'https://github.githubassets.com/favicons/favicon.svg',
-          name: 'github.com',
-        },
-        {
-          count: 1,
-          icon: 'https://duckduckgo.com/favicon.ico',
-          name: 'duckduckgo.com',
-        },
-      ],
-      id: 'e200698d-d053-45f7-b917-e03b104ae127',
-      tabs: [
-        {
-          favIconUrl: 'https://github.githubassets.com/favicons/favicon.svg',
-          id: 51,
-          title: 'GitHub: Where the world builds software · GitHub',
-          url: 'https://github.com/',
-        },
-        {
-          favIconUrl: 'https://duckduckgo.com/favicon.ico',
-          id: 52,
-          title: 'DuckDuckGo — Privacy, simplified.',
-          url: 'https://duckduckgo.com/',
-        },
-      ],
-      timestamp: 1650858875455,
-    },
-  ];
-
+  const tabGroup = {
+    domains: [
+      {
+        count: 1,
+        icon: 'https://github.githubassets.com/favicons/favicon.svg',
+        name: 'github.com',
+      },
+      {
+        count: 1,
+        icon: 'https://duckduckgo.com/favicon.ico',
+        name: 'duckduckgo.com',
+      },
+    ],
+    id: 'e200698d-d053-45f7-b917-e03b104ae127',
+    tabs: [
+      {
+        favIconUrl: 'https://github.githubassets.com/favicons/favicon.svg',
+        id: 51,
+        title: 'GitHub: Where the world builds software · GitHub',
+        url: 'https://github.com/',
+      },
+      {
+        favIconUrl: 'https://duckduckgo.com/favicon.ico',
+        id: 52,
+        title: 'DuckDuckGo — Privacy, simplified.',
+        url: 'https://duckduckgo.com/',
+      },
+    ],
+    timestamp: 1650858875455,
+  };
+  
   let spectator: SpectatorService<MenuService>;
   const createService = createServiceFactory({
     service: MenuService,
@@ -80,9 +78,9 @@ describe('MenuService', () => {
       {
         provide: TabService,
         useValue: {
+          createTabGroup: () => new Promise((resolve) => resolve(tabGroup)),
           displayMessage() {},
           saveTabGroup: () => new Promise((resolve) => resolve(0)),
-          getTabGroup: () => new Promise((resolve) => resolve(tabGroup)),
           saveTabGroups() {},
         },
       },
@@ -131,16 +129,30 @@ describe('MenuService', () => {
   }));
 
   it('should handle actions', async () => {
-    jest.spyOn(chrome.runtime, 'openOptionsPage').mockImplementation();
-    jest.spyOn(spectator.service['tabsService'], 'saveTabGroup').mockImplementation();
-    jest.spyOn(spectator.service['tabsService'], 'saveTabGroups').mockImplementation();
+    const service = spectator.service['tabsService'];
+
+    const openOptionsPageSpy = jest.spyOn(chrome.runtime, 'openOptionsPage');
+    const createTabGroupSpy = jest.spyOn(service, 'createTabGroup');
+    const saveTabGroupsSpy = jest.spyOn(service, 'saveTabGroups');
+    const saveTabGroupSpy = jest.spyOn(service, 'saveTabGroup');
 
     await spectator.service.handleMenuAction(Action.Save);
-    await spectator.service.handleMenuAction(Action.Options);
-    await spectator.service.handleMenuAction(Action.Import);
+    expect(service.createTabGroup).toHaveBeenCalledTimes(1);
+    expect(service.saveTabGroup).toHaveBeenCalledTimes(1);
+    expect(chrome.runtime.openOptionsPage).toHaveBeenCalledTimes(1);
 
-    expect(chrome.runtime.openOptionsPage).toHaveBeenCalledTimes(2);
-    expect(spectator.service['tabsService'].saveTabGroup).toHaveBeenCalledTimes(1);
-    expect(spectator.service['tabsService'].saveTabGroups).toHaveBeenCalledTimes(1);
+    openOptionsPageSpy.mockClear();
+    saveTabGroupSpy.mockClear();
+    createTabGroupSpy.mockClear();
+
+    await spectator.service.handleMenuAction(Action.Options);
+    expect(chrome.runtime.openOptionsPage).toHaveBeenCalledTimes(1);
+
+    openOptionsPageSpy.mockClear();
+
+    await spectator.service.handleMenuAction(Action.Import);
+    expect(service.saveTabGroups).toHaveBeenCalledTimes(1);
+
+    saveTabGroupsSpy.mockClear();
   });
 });
