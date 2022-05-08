@@ -28,3 +28,23 @@ export interface TabGroup {
 }
 
 export type IconsGroup = BrowserTab[][];
+
+/**
+ * Icons used by main menu.
+ */
+ export enum ActionIcons {
+  Export = 'download',
+  Import = 'file_upload',
+  Options = 'settings',
+  Save = 'collections_bookmark',
+}
+
+/**
+ * Main menu action IDs.
+ */
+export enum Action {
+  Export = 1,
+  Import = 2,
+  Options = 3,
+  Save = 4,
+}

@@ -1,10 +1,13 @@
 import { waitForAsync } from '@angular/core/testing';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { take } from 'rxjs/operators';
-import { Action, MenuService } from './menu.service';
+import { Action, ActionIcons } from '../utils/models';
+import { MenuService } from './menu.service';
 import { TabService } from './tab.service';
 
 jest.mock('src/app/utils', () => ({
+  Action,
+  ActionIcons,
   importTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   getSavedTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   queryCurrentWindow: jest.fn().mockImplementation(
@@ -70,7 +73,7 @@ describe('MenuService', () => {
     ],
     timestamp: 1650858875455,
   };
-  
+
   let spectator: SpectatorService<MenuService>;
   const createService = createServiceFactory({
     service: MenuService,
@@ -101,7 +104,7 @@ describe('MenuService', () => {
       expect(actions).toEqual([
         {
           id: 4,
-          icon: 'bookmark',
+          icon: 'collections_bookmark',
           tooltip: 'Save',
           tooltipPosition: 'left',
           color: 'accent',

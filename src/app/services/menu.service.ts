@@ -2,28 +2,8 @@ import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { Injectable } from '@angular/core';
 import { TooltipPosition } from '@angular/material/tooltip';
 import { BehaviorSubject } from 'rxjs';
-import { exportTabs, getSavedTabs, importTabs, queryCurrentWindow } from 'src/app/utils';
+import { Action, ActionIcons, exportTabs, getSavedTabs, importTabs, queryCurrentWindow } from 'src/app/utils';
 import { TabService } from './tab.service';
-
-/**
- * Icons used by main menu.
- */
-export enum ActionIcons {
-  Export = 'download',
-  Import = 'file_upload',
-  Options = 'settings',
-  Save = 'bookmark',
-}
-
-/**
- * Main menu action IDs.
- */
-export enum Action {
-  Export = 1,
-  Import = 2,
-  Options = 3,
-  Save = 4,
-}
 
 /**
  * Tooltip position for menu items.
