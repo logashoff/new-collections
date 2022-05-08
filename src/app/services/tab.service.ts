@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarRef, TextOnlySnackBar } from '@angular/material/snack-bar';
 import { groupBy } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -43,7 +43,7 @@ export class TabService {
   /**
    * Group icons by hostname and map each icons group to their `TabGroup`.
    */
-  readonly iconGroupsMap = new WeakMap<TabGroup, IconsGroup>();
+  private readonly iconGroupsMap: { [groupId in string]: IconsGroup } = {};
 
   constructor(private snackBar: MatSnackBar) {
     this.initService();
@@ -64,10 +64,16 @@ export class TabService {
    * Generates icon group based on tab group specified.
    */
   private addIconsGroup(tabGroup: TabGroup) {
-    this.iconGroupsMap.set(
-      tabGroup,
-      Object.values(groupBy(tabGroup.tabs, getHostname)).sort((a, b) => b.length - a.length)
-    );
+    const groupByHostname = groupBy(tabGroup.tabs, getHostname);
+    const values = Object.values(groupByHostname);
+    this.iconGroupsMap[tabGroup.id] = values.sort((a, b) => b.length - a.length);
+  }
+
+  /**
+   * Returns icons group by group specified.
+   */
+  getIconGroups(group: TabGroup): IconsGroup {
+    return this.iconGroupsMap[group.id];
   }
 
   /**
@@ -166,14 +172,14 @@ export class TabService {
         const removedTab = group.tabs.splice(tabIndex, 1)[0];
 
         if (group.tabs.length === 0) {
-          this.iconGroupsMap.delete(this.tabGroups[groupIndex]);
+          delete this.iconGroupsMap[group.id];
           this.tabGroups.splice(groupIndex, 1);
 
           if (this.tabGroups.length === 0) {
             this.tabGroupsSource$.next(null);
           }
         } else {
-          const iconGroups = this.iconGroupsMap.get(group);
+          const iconGroups = this.getIconGroups(group);
           const iconIndex = iconGroups?.findIndex((iconsGroup) => {
             const index = iconsGroup.findIndex((tab) => tab === removedTab);
 
@@ -220,8 +226,8 @@ export class TabService {
   /**
    * Displays snackbar message.
    */
-  displayMessage(message: string) {
-    this.snackBar.open(message, 'Dismiss', {
+  displayMessage(message: string): MatSnackBarRef<TextOnlySnackBar> {
+    return this.snackBar.open(message, 'Dismiss', {
       verticalPosition: 'top',
       politeness: 'assertive',
     });
