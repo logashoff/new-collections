@@ -80,29 +80,25 @@ export class TabService {
    * Generates tab group from browser tab list.
    */
   async createTabGroup(tabs: Tab[]): Promise<TabGroup> {
-    const filteredTabs = tabs
-      .filter((tab) => !ignoreUrlsRegExp.test(tab.url))
-      .map(({ id, url, title, favIconUrl, active, pinned }) => ({
-        active,
-        favIconUrl,
-        id,
-        pinned,
-        title,
-        url,
-      }));
-
     return new Promise((resolve) => {
-      if (filteredTabs?.length > 0) {
-        const tabGroup: TabGroup = {
-          id: uuidv4(),
-          timestamp: new Date().getTime(),
-          tabs: filteredTabs,
-        };
+      const filteredTabs = tabs
+        .filter((tab) => !ignoreUrlsRegExp.test(tab.url))
+        .map(({ id, url, title, favIconUrl, active, pinned }) => ({
+          active,
+          favIconUrl,
+          id,
+          pinned,
+          title,
+          url,
+        }));
 
-        resolve(tabGroup);
-      } else {
-        resolve(null);
-      }
+      const tabGroup: TabGroup = {
+        id: uuidv4(),
+        timestamp: new Date().getTime(),
+        tabs: filteredTabs,
+      };
+
+      resolve(tabGroup);
     });
   }
 
