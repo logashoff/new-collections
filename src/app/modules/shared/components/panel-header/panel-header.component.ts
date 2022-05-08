@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
 import { TabService } from 'src/app/services';
 import { IconsGroup, TabGroup } from 'src/app/utils';
@@ -13,7 +13,7 @@ import { IconsGroup, TabGroup } from 'src/app/utils';
 })
 export class PanelHeaderComponent {
   private readonly group$ = new BehaviorSubject<TabGroup>(null);
-  
+
   /**
    * Tabs list used to calculate tabs count label.
    */
@@ -29,7 +29,7 @@ export class PanelHeaderComponent {
    * Grouped icons.
    */
   readonly icons$: Observable<IconsGroup> = this.group$.pipe(
-    switchMap((group) => of(this.tabService.iconGroupsMap.get(group)))
+    switchMap((group) => of(this.tabService.getIconGroups(group)))
   );
 
   /**
