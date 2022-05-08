@@ -1,0 +1,42 @@
+@import 'common';
+
+@media (max-width: $popup-width) {
+  .icon-container .icon-label {
+    display: none;
+  }
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 2rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  gap: 0.5rem;
+  max-width: 12rem;
+  min-width: 2rem;
+
+  .icon-label {
+    line-height: 1rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
+
+@include theme using($theme) {
+  :host {
+    .icons-container .overflow {
+      color: getPaletteColor(getForegroundPalette($theme), disabled-text);
+    }
+
+    .icon-container {
+      background-color: getPaletteColor(getBackgroundPalette($theme), unselected-chip);
+
+      .icon-label {
+        color: getPaletteColor(getForegroundPalette($theme), text);
+      }
+    }
+  }
+}

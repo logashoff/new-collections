@@ -1,5 +1,13 @@
-import { ChangeDetectionStrategy, Component, Directive, ElementRef, HostBinding, HostListener, Input } from '@angular/core';
-import { usesDarkMode } from 'src/app/utils';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Directive,
+  ElementRef,
+  HostBinding,
+  HostListener,
+  Input,
+} from '@angular/core';
+import { IconSize, usesDarkMode } from 'src/app/utils';
 
 /**
  * Default dark theme tab icon.
@@ -71,13 +79,13 @@ export class ImageIconComponent {
   /**
    * Icon size.
    */
-  @Input() size: 'medium' | 'small' = 'medium';
+  @Input() size: IconSize = 'medium';
 
   @HostBinding('class.medium') get medium(): boolean {
     return this.size === 'medium';
-  };
+  }
 
   @HostBinding('class.small') get small(): boolean {
     return this.size === 'small';
-  };
+  }
 }

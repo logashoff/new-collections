@@ -7,10 +7,11 @@
         matBadgeSize="small"
         [matBadge]="tabs.length"
         [matBadgeHidden]="tabs.length <= 1">
-        <div class="icon-container">
-          <app-image-icon mat-list-icon [source]="tabs[0].favIconUrl" size="small"></app-image-icon>
-          <span class="icon-label" *ngIf="tabs.length === 1">{{ tabs[0].title }}</span>
-        </div>
+        <app-icon-chip [source]="tabs[0].favIconUrl"  
+          [label]="tabs[0].title" 
+          [labelHidden]="tabs.length > 1"
+          size="small">
+        </app-icon-chip>
       </span>
     </ng-container>
     <span class="overflow" *ngIf="icons.length > maxIconsLength"> +{{ icons.length - maxIconsLength }} </span>
