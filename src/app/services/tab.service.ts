@@ -55,14 +55,19 @@ export class TabService {
   private async initService() {
     this.tabGroups = await getSavedTabs();
 
-    this.tabGroups.forEach((group) =>
-      this.iconGroupsMap.set(
-        group,
-        Object.values(groupBy(group.tabs, getHostname)).sort((a, b) => b.length - a.length)
-      )
-    );
+    this.tabGroups.forEach((group) => this.addIconsGroup(group));
 
     this.refresh();
+  }
+
+  /**
+   * Generates icon group based on tab group specified.
+   */
+  private addIconsGroup(tabGroup: TabGroup) {
+    this.iconGroupsMap.set(
+      tabGroup,
+      Object.values(groupBy(tabGroup.tabs, getHostname)).sort((a, b) => b.length - a.length)
+    );
   }
 
   /**
@@ -107,12 +112,18 @@ export class TabService {
    */
   async saveTabGroups(tabGroups: TabGroup[]) {
     if (tabGroups?.length > 0) {
-      this.tabGroups.push(
-        ...tabGroups.map((tabGroup) => {
-          tabGroup.id = uuidv4();
-          return tabGroup;
-        })
-      );
+      if (!this.tabGroups) {
+        this.tabGroups = tabGroups;
+      } else {
+        this.tabGroups.push(
+          ...tabGroups.map((tabGroup) => {
+            tabGroup.id = uuidv4();
+            return tabGroup;
+          })
+        );
+      }
+
+      tabGroups.forEach((tabGroup) => this.addIconsGroup(tabGroup));
 
       // sort by time
       this.tabGroups.sort((a, b) => b.timestamp - a.timestamp);
@@ -129,8 +140,14 @@ export class TabService {
     // close all browser tabs from tab group
     tabGroup.tabs.forEach(({ id }) => removeTab(id));
 
+    if (!this.tabGroups) {
+      this.tabGroups = [];
+    }
+
     // merge saved and new tabs
     this.tabGroups.unshift(tabGroup);
+
+    this.addIconsGroup(tabGroup);
 
     this.saveTabs();
   }
@@ -151,6 +168,10 @@ export class TabService {
         if (group.tabs.length === 0) {
           this.iconGroupsMap.delete(this.tabGroups[groupIndex]);
           this.tabGroups.splice(groupIndex, 1);
+
+          if (this.tabGroups.length === 0) {
+            this.tabGroupsSource$.next(null);
+          }
         } else {
           const iconGroups = this.iconGroupsMap.get(group);
           const iconIndex = iconGroups?.findIndex((iconsGroup) => {
@@ -182,6 +203,10 @@ export class TabService {
       this.tabGroups.splice(groupIndex, 1);
 
       this.saveTabs();
+    }
+
+    if (this.tabGroups.length === 0) {
+      this.tabGroupsSource$.next(null);
     }
   }
 
