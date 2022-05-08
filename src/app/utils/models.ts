@@ -48,3 +48,8 @@ export enum Action {
   Options = 3,
   Save = 4,
 }
+
+/**
+ * Common icon sizes.
+ */
+export type IconSize = 'small' | 'medium';

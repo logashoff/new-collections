@@ -1,11 +1,5 @@
 @import 'common';
 
-@media (max-width: $popup-width) {
-  .icon-container .icon-label {
-    display: none;
-  }
-}
-
 :host {
   display: block;
   height: inherit;
@@ -44,25 +38,6 @@
   }
 }
 
-.icon-container {
-  display: flex;
-  align-items: center;
-  padding: 0.5rem;
-  border-radius: 1rem;
-  box-sizing: border-box;
-  overflow: hidden;
-  gap: 0.5rem;
-  max-width: 12rem;
-  min-width: 2rem;
-
-  .icon-label {
-    line-height: 1rem;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-}
-
 @include theme using($theme) {
   :host {
     .description {
@@ -71,14 +46,6 @@
 
     .icons-container .overflow {
       color: getPaletteColor(getForegroundPalette($theme), disabled-text);
-    }
-
-    .icon-container {
-      background-color: getPaletteColor(getBackgroundPalette($theme), unselected-chip);
-
-      .icon-label {
-        color: getPaletteColor(getForegroundPalette($theme), text);
-      }
     }
   }
 }

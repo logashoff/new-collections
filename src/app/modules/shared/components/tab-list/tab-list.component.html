@@ -2,11 +2,11 @@
   <ng-container *ngFor="let tab of tabs">
     <mat-divider></mat-divider>
     <mat-list-item>
-      <div class="icon-container" mat-list-icon>
-        <app-image-icon [source]="tab.favIconUrl"></app-image-icon>
+      <app-icon-chip [source]="tab.favIconUrl"></app-icon-chip>
+      <div class="text-container">
+        <div class="title">{{ tab.title }}</div>
+        <a class="link" href="{{ tab.url }}" target="_blank"> {{ tab.url }}</a>
       </div>
-      <div mat-line>{{ tab.title }}</div>
-      <a mat-line href="{{ tab.url }}" target="_blank"> {{ tab.url }}</a>
       <button mat-icon-button [matMenuTriggerFor]="tabMenu">
         <mat-icon>more_vert</mat-icon>
       </button>
