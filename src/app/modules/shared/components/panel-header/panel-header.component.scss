@@ -19,6 +19,7 @@
   margin: 0 1rem;
   overflow: hidden;
   gap: 1rem;
+  min-height: 3rem;
 }
 
 .description {
@@ -29,22 +30,17 @@
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
-  height: inherit;
   overflow: hidden;
   width: 100%;
-  min-height: 3rem;
+  min-height: inherit;
   gap: 0.5rem;
 
   .badged-icon {
     min-width: 2rem;
 
-    .mat-badge-hidden {
+    &.mat-badge-hidden {
       overflow: hidden;
     }
-  }
-
-  .overflow {
-    margin-left: 0.5rem;
   }
 }
 
@@ -64,12 +60,6 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-  }
-
-  .badge-position {
-    position: absolute;
-    right: 0.15rem;
-    top: 0.15rem;
   }
 }
 
