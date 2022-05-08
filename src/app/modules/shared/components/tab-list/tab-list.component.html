@@ -11,8 +11,14 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #tabMenu="matMenu">
-        <button mat-menu-item (click)="renameTab(tab)">Rename</button>
-        <button mat-menu-item (click)="removeTab(tab)">Remove</button>
+        <button mat-menu-item (click)="renameTab(tab)">
+          <mat-icon>edit_note</mat-icon>
+          <span>Rename</span>
+        </button>
+        <button mat-menu-item (click)="removeTab(tab)">
+          <mat-icon>playlist_remove</mat-icon>
+          <span>Remove</span>
+        </button>
       </mat-menu>
     </mat-list-item>
   </ng-container>

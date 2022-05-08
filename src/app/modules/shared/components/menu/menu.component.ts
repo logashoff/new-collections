@@ -1,6 +1,7 @@
 import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Action, MenuService } from 'src/app/services';
+import { MenuService } from 'src/app/services';
+import { Action } from 'src/app/utils';
 
 /**
  * @description
