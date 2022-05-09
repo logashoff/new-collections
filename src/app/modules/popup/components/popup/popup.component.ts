@@ -1,8 +1,8 @@
 import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { map, Observable, shareReplay } from 'rxjs';
 import { MenuService, TabService } from 'src/app/services';
-import { Action, TabGroup } from 'src/app/utils';
+import { Action, GroupByTime } from 'src/app/utils';
 
 /**
  * @description
@@ -17,9 +17,14 @@ import { Action, TabGroup } from 'src/app/utils';
 })
 export class PopupComponent {
   /**
-   * Data source for stored tab groups.
+   * Time labels
    */
-  readonly groups$: Observable<TabGroup[]> = this.tabsService.tabGroups$;
+  readonly timeGroupLabels$: Observable<string[]> = this.tabsService.timeGroupLabels$;
+
+  /**
+   * Tab groups grouped by time
+   */
+  readonly groupsByTime$: Observable<GroupByTime> = this.tabsService.groupsByTime$;
 
   /**
    * Main menu items.

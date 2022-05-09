@@ -1,6 +1,6 @@
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
-import { ignoreUrlsRegExp } from '../utils/models';
+import { ignoreUrlsRegExp, Time } from '../utils/models';
 import { getHostname } from '../utils/tab';
 import { TabService } from './tab.service';
 
@@ -194,6 +194,7 @@ jest.mock('src/app/utils', () => ({
   saveTabGroups: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   ignoreUrlsRegExp,
   getHostname,
+  Time
 }));
 
 describe('TabService', () => {
@@ -255,27 +256,27 @@ describe('TabService', () => {
 
     expect(tabGroups.length).toBe(3);
 
-    expect(spectator.service.getIconGroups(tabGroups[0]).length).toBe(4);
-    expect(spectator.service.getIconGroups(tabGroups[1]).length).toBe(2);
-    expect(spectator.service.getIconGroups(tabGroups[2]).length).toBe(4);
+    expect(spectator.service.getTabsGroupedByHostname(tabGroups[0]).length).toBe(4);
+    expect(spectator.service.getTabsGroupedByHostname(tabGroups[1]).length).toBe(2);
+    expect(spectator.service.getTabsGroupedByHostname(tabGroups[2]).length).toBe(4);
   });
 
   it('should update tab and icon groups list when tab is removed', () => {
     const [group1] = spectator.service['tabGroups'];
     const [tab1, tab2, tab3] = group1.tabs;
 
-    expect(spectator.service.getIconGroups(group1).length).toBe(4);
+    expect(spectator.service.getTabsGroupedByHostname(group1).length).toBe(4);
 
     spectator.service.removeTab(group1.id, tab1);
-    expect(spectator.service.getIconGroups(group1).length).toBe(4);
+    expect(spectator.service.getTabsGroupedByHostname(group1).length).toBe(4);
     expect(group1.tabs.length).toBe(4);
 
     spectator.service.removeTab(group1.id, tab2);
-    expect(spectator.service.getIconGroups(group1).length).toBe(3);
+    expect(spectator.service.getTabsGroupedByHostname(group1).length).toBe(3);
     expect(group1.tabs.length).toBe(3);
 
     spectator.service.removeTab(group1.id, tab3);
-    expect(spectator.service.getIconGroups(group1).length).toBe(2);
+    expect(spectator.service.getTabsGroupedByHostname(group1).length).toBe(2);
     expect(group1.tabs.length).toBe(2);
   });
 });

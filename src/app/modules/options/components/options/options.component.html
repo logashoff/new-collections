@@ -1,7 +1,9 @@
 <mat-sidenav-container>
   <mat-sidenav-content>
     <div class="content">
-      <app-groups *ngIf="groups$ | async as groups; else empty" [groups]="groups"> </app-groups>
+      <app-groups-by-time [timeGroupLabels]="timeGroupLabels$ | async" 
+        [groupsByTime]="groupsByTime$ | async">
+      </app-groups-by-time>
     </div>
     <app-menu [menuItems]="menuItems$ | async"></app-menu>
   </mat-sidenav-content>

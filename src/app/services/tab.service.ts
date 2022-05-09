@@ -1,18 +1,21 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarRef, TextOnlySnackBar } from '@angular/material/snack-bar';
 import { groupBy } from 'lodash';
+import * as moment from 'moment';
 import { BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import {
   BrowserTab,
   getHostname,
   getSavedTabs,
-  IconsGroup,
+  GroupByTime,
+  HostnameGroup,
   ignoreUrlsRegExp,
   removeTab,
   saveTabGroups,
   Tab,
   TabGroup,
+  Time,
 } from 'src/app/utils';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -33,7 +36,10 @@ export class TabService {
   /**
    * Observable used by components to listen for tabs data changes.
    */
-  readonly tabGroups$ = this.tabGroupsSource$.pipe(map((res) => (res?.length > 0 ? res : null)));
+  readonly tabGroups$ = this.tabGroupsSource$.pipe(
+    map((res) => (res?.length > 0 ? res : null)),
+    shareReplay(1)
+  );
 
   /**
    * Loaded tab list.
@@ -43,7 +49,30 @@ export class TabService {
   /**
    * Group icons by hostname and map each icons group to their `TabGroup`.
    */
-  private readonly iconGroupsMap: { [groupId in string]: IconsGroup } = {};
+  private readonly groupTabsByHostnameMap: { [groupId in string]: HostnameGroup } = {};
+
+  /**
+   * Behavior subject will be used to populate tabs data when managing tabs.
+   */
+  private readonly timeGroupLabelsSource$ = new BehaviorSubject<string[]>(null);
+
+  /**
+   * Observable used by components to listen for tabs data changes.
+   */
+  readonly timeGroupLabels$ = this.timeGroupLabelsSource$.pipe(
+    map((labels) => (labels?.length > 0 ? labels : null)),
+    shareReplay(1)
+  );
+
+  /**
+   * Behavior subject will be used to populate tabs data when managing tabs.
+   */
+  private readonly groupsByTimeSource$ = new BehaviorSubject<GroupByTime>(null);
+
+  /**
+   * Observable used by components to listen for tabs data changes.
+   */
+  readonly groupsByTime$ = this.groupsByTimeSource$.pipe(shareReplay(1));
 
   constructor(private snackBar: MatSnackBar) {
     this.initService();
@@ -55,7 +84,8 @@ export class TabService {
   private async initService() {
     this.tabGroups = await getSavedTabs();
 
-    this.tabGroups.forEach((group) => this.addIconsGroup(group));
+    this.tabGroups.forEach((group) => this.groupTabsByHostName(group));
+    this.createTimeGroups(this.tabGroups);
 
     this.refresh();
   }
@@ -63,17 +93,54 @@ export class TabService {
   /**
    * Generates icon group based on tab group specified.
    */
-  private addIconsGroup(tabGroup: TabGroup) {
+  private groupTabsByHostName(tabGroup: TabGroup) {
     const groupByHostname = groupBy(tabGroup.tabs, getHostname);
     const values = Object.values(groupByHostname);
-    this.iconGroupsMap[tabGroup.id] = values.sort((a, b) => b.length - a.length);
+    this.groupTabsByHostnameMap[tabGroup.id] = values.sort((a, b) => b.length - a.length);
+  }
+
+  private createTimeGroups(tabGroups: TabGroup[]) {
+    const groupsByTime: GroupByTime = {};
+    const timeGroupLabels = [];
+
+    tabGroups.forEach((tabGroup) => {
+      const timeLabel = this.getTimeLabel(tabGroup);
+      if (!groupsByTime[timeLabel]) {
+        timeGroupLabels.push(timeLabel);
+        groupsByTime[timeLabel] = [];
+      }
+
+      groupsByTime[timeLabel].push(tabGroup);
+    });
+
+    this.groupsByTimeSource$.next(groupsByTime);
+    this.timeGroupLabelsSource$.next(timeGroupLabels);
+  }
+
+  private getTimeLabel(tabGroup: TabGroup): string {
+    const { timestamp } = tabGroup;
+    const now = new Date().getTime();
+    const diff = now - timestamp;
+
+    switch (true) {
+      case diff < Time.Today:
+        return 'Today';
+      case diff > Time.Today && diff < Time.Day:
+        return 'Yesterday';
+      case diff > Time.Day && diff < Time.Week:
+        return 'Week';
+      case diff > Time.Week && diff < Time.Year:
+        return moment(timestamp).format('MMMM');
+      case diff > Time.Year:
+        return moment(timestamp).format('MMMM YYYY');
+    }
   }
 
   /**
    * Returns icons group by group specified.
    */
-  getIconGroups(group: TabGroup): IconsGroup {
-    return this.iconGroupsMap[group.id];
+  getTabsGroupedByHostname(group: TabGroup): HostnameGroup {
+    return this.groupTabsByHostnameMap[group.id];
   }
 
   /**
@@ -125,10 +192,11 @@ export class TabService {
         );
       }
 
-      tabGroups.forEach((tabGroup) => this.addIconsGroup(tabGroup));
-
       // sort by time
       this.tabGroups.sort((a, b) => b.timestamp - a.timestamp);
+      this.createTimeGroups(this.tabGroups);
+
+      tabGroups.forEach((tabGroup) => this.groupTabsByHostName(tabGroup));
 
       this.saveTabs();
       this.refresh();
@@ -149,7 +217,7 @@ export class TabService {
     // merge saved and new tabs
     this.tabGroups.unshift(tabGroup);
 
-    this.addIconsGroup(tabGroup);
+    this.groupTabsByHostName(tabGroup);
 
     this.saveTabs();
   }
@@ -168,25 +236,20 @@ export class TabService {
         const removedTab = group.tabs.splice(tabIndex, 1)[0];
 
         if (group.tabs.length === 0) {
-          delete this.iconGroupsMap[group.id];
-          this.tabGroups.splice(groupIndex, 1);
-
-          if (this.tabGroups.length === 0) {
-            this.tabGroupsSource$.next(null);
-          }
+          this.removeTabGroup(group);
         } else {
-          const iconGroups = this.getIconGroups(group);
-          const iconIndex = iconGroups?.findIndex((iconsGroup) => {
-            const index = iconsGroup.findIndex((tab) => tab === removedTab);
+          const hostnameGroups = this.getTabsGroupedByHostname(group);
+          const hostnameGroupIndex = hostnameGroups?.findIndex((hostnameGroup) => {
+            const index = hostnameGroup.findIndex((tab) => tab === removedTab);
 
             if (index > -1) {
-              iconsGroup.splice(index, 1);
+              hostnameGroup.splice(index, 1);
               return true;
             }
           });
 
-          if (iconIndex > -1 && iconGroups[iconIndex].length === 0) {
-            iconGroups.splice(iconIndex, 1);
+          if (hostnameGroupIndex > -1 && hostnameGroups[hostnameGroupIndex].length === 0) {
+            hostnameGroups.splice(hostnameGroupIndex, 1);
           }
         }
 
@@ -199,10 +262,29 @@ export class TabService {
    * Removed specified tab group from local storage.
    */
   async removeTabGroup(tabGroup: TabGroup) {
+    delete this.groupTabsByHostnameMap[tabGroup.id];
+
     const groupIndex = this.tabGroups.findIndex(({ id }) => id === tabGroup.id);
 
     if (groupIndex > -1) {
       this.tabGroups.splice(groupIndex, 1);
+
+      const timeLabels = this.timeGroupLabelsSource$.value;
+      const groupsByTime = this.groupsByTimeSource$.value;
+      const timeLabel = timeLabels.find((label) => {
+        const groups = groupsByTime[label];
+        const i = groups.findIndex((group) => group === tabGroup);
+
+        if (i > -1) {
+          return groups.splice(i, 1).length > 0;
+        }
+      });
+
+      // remove time label if all groups are removed
+      if (groupsByTime[timeLabel]?.length === 0) {
+        const i = timeLabels.findIndex((label) => label === timeLabel);
+        timeLabels.splice(i, 1);
+      }
 
       this.saveTabs();
     }

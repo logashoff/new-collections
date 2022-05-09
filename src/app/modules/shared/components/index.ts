@@ -1,5 +1,6 @@
 export * from './empty/empty.component';
 export * from './group-controls/group-controls.component';
+export * from './groups-by-time/groups-by-time.component';
 export * from './groups/groups.component';
 export * from './icon-chip/icon-chip.component';
 export * from './image-icon/image-icon.component';
