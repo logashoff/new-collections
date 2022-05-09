@@ -48,20 +48,22 @@ import { MatTreeModule } from '@angular/material/tree';
 import {
   EmptyComponent,
   GroupControlsComponent,
+  GroupsByTimeComponent,
   GroupsComponent,
+  IconChipComponent,
   ImageDirective,
   ImageIconComponent,
   MenuComponent,
   PanelHeaderComponent,
   RenameDialogComponent,
   TabListComponent,
-  IconChipComponent,
 } from './components/index';
 import { StopPropagationDirective } from './directives/index';
 
 const components = [
   EmptyComponent,
   GroupControlsComponent,
+  GroupsByTimeComponent,
   GroupsComponent,
   IconChipComponent,
   ImageDirective,

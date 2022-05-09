@@ -1,0 +1,13 @@
+@import 'common';
+
+h3.time-label {
+  margin: 1rem 0;
+}
+
+@include theme using($theme) {
+  :host {
+    h3.time-label {
+      color: getPaletteColor(getForegroundPalette($theme), hint-text);
+    }
+  }
+}

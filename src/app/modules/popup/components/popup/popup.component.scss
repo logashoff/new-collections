@@ -13,13 +13,13 @@ mat-sidenav-container {
   left: 0;
   right: 0;
   top: 0;
-
-  app-groups {
-    margin: $padding;
-  }
 }
 
-app-menu {
+.content {
+  padding: 0 $padding $padding;
+}
+
+.menu {
   position: fixed;
   right: $scrollbar-width + $padding;
   bottom: 0;

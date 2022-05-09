@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
 import { TabService } from 'src/app/services';
-import { IconsGroup, TabGroup } from 'src/app/utils';
+import { HostnameGroup, TabGroup } from 'src/app/utils';
 
 /**
  * Expansion panel header layout container.
@@ -28,8 +28,8 @@ export class PanelHeaderComponent {
   /**
    * Grouped icons.
    */
-  readonly icons$: Observable<IconsGroup> = this.group$.pipe(
-    switchMap((group) => of(this.tabService.getIconGroups(group)))
+  readonly icons$: Observable<HostnameGroup> = this.group$.pipe(
+    switchMap((group) => of(this.tabService.getTabsGroupedByHostname(group)))
   );
 
   /**
