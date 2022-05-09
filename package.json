@@ -1,7 +1,7 @@
 {
   "name": "save-tabs",
   "description": "Browser extension to save and restore tabs",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
