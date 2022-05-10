@@ -7,12 +7,12 @@ import { IconSize } from 'src/app/utils';
  * Icon with background and label.
  */
 @Component({
-  selector: 'app-icon-chip',
-  templateUrl: './icon-chip.component.html',
-  styleUrls: ['./icon-chip.component.scss'],
+  selector: 'app-chip',
+  templateUrl: './chip.component.html',
+  styleUrls: ['./chip.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class IconChipComponent {
+export class ChipComponent {
   /**
    * Image source URL
    */

@@ -1,13 +1,14 @@
 <mat-sidenav-container>
   <mat-sidenav-content>
     <div class="content">
-      <app-groups-by-time [timeGroupLabels]="timeGroupLabels$ | async" 
-        [groupsByTime]="groupsByTime$ | async">
-      </app-groups-by-time>
+      <app-timeline
+        *ngIf="groupsTimeline$ | async as groupsTimeline; else empty"
+        [timeline]="groupsTimeline">
+      </app-timeline>
     </div>
-    <app-menu [menuItems]="menuItems$ | async"></app-menu>
   </mat-sidenav-content>
 </mat-sidenav-container>
+<app-menu [menuItems]="menuItems$ | async"></app-menu>
 <ng-template #empty>
   <app-empty></app-empty>
 </ng-template>

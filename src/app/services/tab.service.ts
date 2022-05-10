@@ -8,12 +8,13 @@ import {
   BrowserTab,
   getHostname,
   getSavedTabs,
-  GroupByTime,
   HostnameGroup,
   ignoreUrlsRegExp,
   saveTabGroups,
   Tab,
   TabGroup,
+  Timeline,
+  TimelineItem,
 } from 'src/app/utils';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -50,27 +51,14 @@ export class TabService {
   private readonly groupTabsByHostnameMap: { [groupId in string]: HostnameGroup } = {};
 
   /**
-   * Behavior subject will be used to populate tabs data when managing tabs.
+   * Groups timeline source.
    */
-  private readonly timeGroupLabelsSource$ = new BehaviorSubject<string[]>(null);
+  private readonly groupsTimelineSource$ = new BehaviorSubject<Timeline>(null);
 
   /**
-   * Observable used by components to listen for tabs data changes.
+   * Groups timeline.
    */
-  readonly timeGroupLabels$ = this.timeGroupLabelsSource$.pipe(
-    map((labels) => (labels?.length > 0 ? labels : null)),
-    shareReplay(1)
-  );
-
-  /**
-   * Behavior subject will be used to populate tabs data when managing tabs.
-   */
-  private readonly groupsByTimeSource$ = new BehaviorSubject<GroupByTime>(null);
-
-  /**
-   * Observable used by components to listen for tabs data changes.
-   */
-  readonly groupsByTime$ = this.groupsByTimeSource$.pipe(shareReplay(1));
+  readonly groupsTimeline$ = this.groupsTimelineSource$.pipe(shareReplay(1));
 
   constructor(private snackBar: MatSnackBar) {
     this.initService();
@@ -83,7 +71,7 @@ export class TabService {
     this.tabGroups = await getSavedTabs();
 
     this.tabGroups.forEach((group) => this.groupTabsByHostName(group));
-    this.createTimeGroups(this.tabGroups);
+    this.updateGroupsTimeline();
 
     this.refresh();
   }
@@ -98,50 +86,50 @@ export class TabService {
   }
 
   /**
+   * Updates tab groups timeline.
+   */
+  private updateGroupsTimeline() {
+    const timeline = this.createTimeline(this.tabGroups);
+    this.groupsTimelineSource$.next(timeline);
+  }
+
+  /**
    * Creates timeline array and hashmap that maps each timeline item to groups by their timestamp.
    */
-  private createTimeGroups(tabGroups: TabGroup[]) {
-    const groupsByTime: GroupByTime = {};
-    const timeGroupLabels = [];
+  private createTimeline(timelineItems: TimelineItem[]): Timeline {
+    const timeline: Timeline = new Map();
 
-    tabGroups.forEach((tabGroup) => {
-      const timeLabel = this.getTimeLabel(tabGroup);
-      if (!groupsByTime[timeLabel]) {
-        timeGroupLabels.push(timeLabel);
-        groupsByTime[timeLabel] = [];
+    timelineItems.forEach((timelineItem) => {
+      const timeLabel = this.getTimelineLabel(timelineItem);
+      if (!timeline.has(timeLabel)) {
+        timeline.set(timeLabel, []);
       }
 
-      groupsByTime[timeLabel].push(tabGroup);
+      timeline.get(timeLabel).push(timelineItem);
     });
 
-    this.groupsByTimeSource$.next(groupsByTime);
-    this.timeGroupLabelsSource$.next(timeGroupLabels);
+    return timeline;
   }
 
   /**
    * Returns timeline label based on group timestamp.
    */
-  private getTimeLabel(tabGroup: TabGroup): string {
-    const { timestamp } = tabGroup;
-    const isToday = moment(timestamp).isAfter(moment().startOf('d'));
-    const isYesterday =
-      moment(timestamp).isAfter(moment().subtract(1, 'd').startOf('d')) &&
-      moment(timestamp).isBefore(moment().subtract(1, 'd').endOf('d'));
-    const lastWeek =
-      moment(timestamp).isAfter(moment().subtract(1, 'w').startOf('w')) &&
-      moment(timestamp).isBefore(moment().subtract(1, 'w').endOf('w'));
+  private getTimelineLabel(timelineItem: TimelineItem): string {
+    const { timestamp } = timelineItem;
+    const date = moment(timestamp);
+    const now = moment();
 
     switch (true) {
-      case isToday:
+      case date.isSame(now, 'd'):
         return 'Today';
-      case isYesterday:
+      case date.isSame(now.subtract(1, 'd'), 'd'):
         return 'Yesterday';
-      case lastWeek:
+      case date.isSame(now.subtract(1, 'w'), 'w'):
         return 'Week';
-      case moment(timestamp).year() === moment().year():
-        return moment(timestamp).format('MMMM');
+      case date.isSame(now, 'y'):
+        return date.format('MMMM');
       default:
-        return moment(timestamp).format('MMMM YYYY');
+        return date.format('MMMM YYYY');
     }
   }
 
@@ -203,7 +191,7 @@ export class TabService {
 
       // sort by time
       this.tabGroups.sort((a, b) => b.timestamp - a.timestamp);
-      this.createTimeGroups(this.tabGroups);
+      this.updateGroupsTimeline();
 
       tabGroups.forEach((tabGroup) => this.groupTabsByHostName(tabGroup));
 
@@ -231,37 +219,43 @@ export class TabService {
   /**
    * Removes tab from specified tab group.
    */
-  async removeTab(groupId: string, tab: BrowserTab) {
-    const groupIndex = this.tabGroups.findIndex((group) => group.id === groupId);
+  async removeTab(tab: BrowserTab): Promise<boolean> {
+    return new Promise((resolve) => {
+      const groupIndex = this.tabGroups.findIndex((group) => group.tabs.includes(tab));
 
-    if (groupIndex > -1) {
-      const group = this.tabGroups[groupIndex];
-      const tabIndex = group.tabs.findIndex(({ id }) => id === tab.id);
+      if (groupIndex > -1) {
+        const group = this.tabGroups[groupIndex];
+        const tabIndex = group.tabs.findIndex(({ id }) => id === tab.id);
 
-      if (tabIndex > -1) {
-        const removedTab = group.tabs.splice(tabIndex, 1)[0];
+        if (tabIndex > -1) {
+          const removedTab = group.tabs.splice(tabIndex, 1)[0];
 
-        if (group.tabs.length === 0) {
-          this.removeTabGroup(group);
-        } else {
-          const hostnameGroups = this.getTabsGroupedByHostname(group);
-          const hostnameGroupIndex = hostnameGroups?.findIndex((hostnameGroup) => {
-            const index = hostnameGroup.findIndex((tab) => tab === removedTab);
+          if (group.tabs.length === 0) {
+            this.removeTabGroup(group);
+          } else {
+            const hostnameGroups = this.getTabsGroupedByHostname(group);
+            const hostnameGroupIndex = hostnameGroups?.findIndex((hostnameGroup) => {
+              const index = hostnameGroup.findIndex((tab) => tab === removedTab);
 
-            if (index > -1) {
-              hostnameGroup.splice(index, 1);
-              return true;
+              if (index > -1) {
+                hostnameGroup.splice(index, 1);
+                return true;
+              }
+            });
+
+            if (hostnameGroupIndex > -1 && hostnameGroups[hostnameGroupIndex].length === 0) {
+              hostnameGroups.splice(hostnameGroupIndex, 1);
             }
-          });
-
-          if (hostnameGroupIndex > -1 && hostnameGroups[hostnameGroupIndex].length === 0) {
-            hostnameGroups.splice(hostnameGroupIndex, 1);
           }
-        }
 
-        this.saveTabs();
+          this.saveTabs();
+
+          resolve(true);
+        }
       }
-    }
+
+      resolve(false);
+    });
   }
 
   /**
@@ -275,21 +269,20 @@ export class TabService {
     if (groupIndex > -1) {
       this.tabGroups.splice(groupIndex, 1);
 
-      const timeLabels = this.timeGroupLabelsSource$.value;
-      const groupsByTime = this.groupsByTimeSource$.value;
-      const timeLabel = timeLabels.find((label) => {
-        const groups = groupsByTime[label];
-        const i = groups.findIndex((group) => group === tabGroup);
+      const timeline = this.groupsTimelineSource$.value;
+      for (const timelineItem of timeline) {
+        const [timelineLabel, timelineItems] = timelineItem;
+        const i = timelineItems.findIndex((item) => item === tabGroup);
 
         if (i > -1) {
-          return groups.splice(i, 1).length > 0;
-        }
-      });
+          timelineItems.splice(i, 1);
 
-      // remove time label if all groups are removed
-      if (groupsByTime[timeLabel]?.length === 0) {
-        const i = timeLabels.findIndex((label) => label === timeLabel);
-        timeLabels.splice(i, 1);
+          if (timelineItems.length === 0) {
+            timeline.delete(timelineLabel);
+          }
+
+          break;
+        }
       }
 
       this.saveTabs();

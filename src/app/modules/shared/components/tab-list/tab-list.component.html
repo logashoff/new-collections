@@ -2,7 +2,7 @@
   <ng-container *ngFor="let tab of tabs">
     <mat-divider></mat-divider>
     <mat-list-item>
-      <app-icon-chip [source]="tab.favIconUrl"></app-icon-chip>
+      <app-chip [source]="tab.favIconUrl"></app-chip>
       <div class="text-container">
         <div class="title">{{ tab.title }}</div>
         <a class="link" href="{{ tab.url }}" target="_blank"> {{ tab.url }}</a>
