@@ -14,7 +14,6 @@ import {
   saveTabGroups,
   Tab,
   TabGroup,
-  Time,
 } from 'src/app/utils';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -124,17 +123,22 @@ export class TabService {
    */
   private getTimeLabel(tabGroup: TabGroup): string {
     const { timestamp } = tabGroup;
-    const now = new Date().getTime();
-    const diff = now - timestamp;
+    const isToday = moment(timestamp).isAfter(moment().startOf('d'));
+    const isYesterday =
+      moment(timestamp).isAfter(moment().subtract(1, 'd').startOf('d')) &&
+      moment(timestamp).isBefore(moment().subtract(1, 'd').endOf('d'));
+    const lastWeek =
+      moment(timestamp).isAfter(moment().subtract(1, 'w').startOf('w')) &&
+      moment(timestamp).isBefore(moment().subtract(1, 'w').endOf('w'));
 
     switch (true) {
-      case diff < Time.Today:
+      case isToday:
         return 'Today';
-      case diff > Time.Today && diff < Time.Day:
+      case isYesterday:
         return 'Yesterday';
-      case diff > Time.Day && diff < Time.Week:
+      case lastWeek:
         return 'Week';
-      case diff > Time.Week && diff < Time.Year:
+      case moment(timestamp).year() === moment().year():
         return moment(timestamp).format('MMMM');
       default:
         return moment(timestamp).format('MMMM YYYY');
