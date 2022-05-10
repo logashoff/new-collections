@@ -1,8 +1,5 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
-import { groupBy } from 'lodash';
-import { BehaviorSubject, map, Observable, tap } from 'rxjs';
-import { TabGroup, Time } from 'src/app/utils';
-import * as moment from 'moment';
+import { TabGroup } from 'src/app/utils';
 
 /**
  * @description

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar, MatSnackBarRef, TextOnlySnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef, TextOnlySnackBar } from '@angular/material/snack-bar';
 import { groupBy } from 'lodash';
 import * as moment from 'moment';
 import { BehaviorSubject } from 'rxjs';
@@ -11,7 +11,6 @@ import {
   GroupByTime,
   HostnameGroup,
   ignoreUrlsRegExp,
-  removeTab,
   saveTabGroups,
   Tab,
   TabGroup,
@@ -99,6 +98,9 @@ export class TabService {
     this.groupTabsByHostnameMap[tabGroup.id] = values.sort((a, b) => b.length - a.length);
   }
 
+  /**
+   * Creates timeline array and hashmap that maps each timeline item to groups by their timestamp.
+   */
   private createTimeGroups(tabGroups: TabGroup[]) {
     const groupsByTime: GroupByTime = {};
     const timeGroupLabels = [];
@@ -117,6 +119,9 @@ export class TabService {
     this.timeGroupLabelsSource$.next(timeGroupLabels);
   }
 
+  /**
+   * Returns timeline label based on group timestamp.
+   */
   private getTimeLabel(tabGroup: TabGroup): string {
     const { timestamp } = tabGroup;
     const now = new Date().getTime();
@@ -131,7 +136,7 @@ export class TabService {
         return 'Week';
       case diff > Time.Week && diff < Time.Year:
         return moment(timestamp).format('MMMM');
-      case diff > Time.Year:
+      default:
         return moment(timestamp).format('MMMM YYYY');
     }
   }
@@ -207,9 +212,6 @@ export class TabService {
    * Saves specified tab group to local storage.
    */
   async saveTabGroup(tabGroup: TabGroup) {
-    // close all browser tabs from tab group
-    tabGroup.tabs.forEach(({ id }) => removeTab(id));
-
     if (!this.tabGroups) {
       this.tabGroups = [];
     }
@@ -304,8 +306,13 @@ export class TabService {
   /**
    * Displays snackbar message.
    */
-  displayMessage(message: string): MatSnackBarRef<TextOnlySnackBar> {
-    return this.snackBar.open(message, 'Dismiss', {
+  displayMessage(
+    message: string,
+    action = 'Dismiss',
+    config: MatSnackBarConfig = {}
+  ): MatSnackBarRef<TextOnlySnackBar> {
+    return this.snackBar.open(message, action, {
+      ...config,
       verticalPosition: 'top',
       politeness: 'assertive',
     });

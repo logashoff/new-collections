@@ -1,6 +1,6 @@
 import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { map, Observable, shareReplay } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { MenuService, TabService } from 'src/app/services';
 import { Action, GroupByTime } from 'src/app/utils';
 
