@@ -1,14 +1,14 @@
 import { saveAs } from 'file-saver';
 import selectFiles from 'select-files';
 import { Tab } from './browser';
-import { storageKey, TabGroup } from './models';
+import { tabsStorageKey, TabGroup } from './models';
 
 /**
  * Saves specified tab groups to local storage.
  */
 export function saveTabGroups(tabGroups: TabGroup[]): Promise<void> {
   return new Promise((resolve) => {
-    chrome.storage.local.set({ [storageKey]: tabGroups }, () => resolve());
+    chrome.storage.local.set({ [tabsStorageKey]: tabGroups }, () => resolve());
   });
 }
 
@@ -17,7 +17,7 @@ export function saveTabGroups(tabGroups: TabGroup[]): Promise<void> {
  */
 export function getSavedTabs(): Promise<TabGroup[]> {
   return new Promise((resolve) => {
-    chrome.storage.local.get(storageKey, ({ tabs }) => resolve(tabs));
+    chrome.storage.local.get(tabsStorageKey, ({ tabs }) => resolve(tabs));
   });
 }
 

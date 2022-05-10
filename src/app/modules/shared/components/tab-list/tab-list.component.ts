@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewEncapsulation,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { lastValueFrom } from 'rxjs';
 import { TabService } from 'src/app/services';
@@ -24,9 +32,9 @@ export class TabListComponent {
   @Input() tabs: BrowserTab[];
 
   /**
-   * Group ID tab list belongs to.
+   * Emits event when tab is removed.
    */
-  @Input() groupId: string;
+  @Output() readonly tabRemoved = new EventEmitter<BrowserTab>();
 
   constructor(private tabService: TabService, private dialog: MatDialog, private cdr: ChangeDetectorRef) {}
 
@@ -42,12 +50,16 @@ export class TabListComponent {
       this.tabService.saveTabs();
       this.cdr.markForCheck();
     }
-  }
+  } 
 
   /**
    * Removes specified tab from tab list.
    */
   async removeTab(tab: BrowserTab) {
-    this.tabService.removeTab(this.groupId, tab);
+    const result = await this.tabService.removeTab(tab);
+
+    if (result) {
+      this.tabRemoved.emit(tab);
+    }
   }
 }

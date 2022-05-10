@@ -1,6 +1,0 @@
-<ng-container *ngFor="let time of timeGroupLabels">
-  <ng-container *ngIf="groupsByTime[time]?.length > 0">
-    <h3 class="time-label">{{ time }}</h3>
-    <app-groups [groups]="groupsByTime[time]"></app-groups>
-  </ng-container>
-</ng-container>

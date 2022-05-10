@@ -7,11 +7,11 @@
         matBadgeSize="small"
         [matBadge]="tabs.length"
         [matBadgeHidden]="tabs.length <= 1">
-        <app-icon-chip [source]="tabs[0].favIconUrl"  
+        <app-chip [source]="tabs[0].favIconUrl"  
           [label]="tabs[0].title" 
           [labelHidden]="tabs.length > 1"
           size="small">
-        </app-icon-chip>
+        </app-chip>
       </span>
     </ng-container>
     <span class="overflow" *ngIf="icons.length > maxIconsLength"> +{{ icons.length - maxIconsLength }} </span>

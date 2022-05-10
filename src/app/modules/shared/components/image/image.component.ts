@@ -65,12 +65,12 @@ export class ImageDirective {
  * Displays images as small icons.
  */
 @Component({
-  selector: 'app-image-icon',
-  templateUrl: './image-icon.component.html',
-  styleUrls: ['./image-icon.component.scss'],
+  selector: 'app-image',
+  templateUrl: './image.component.html',
+  styleUrls: ['./image.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ImageIconComponent {
+export class ImageComponent {
   /**
    * Image source path.
    */

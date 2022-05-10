@@ -1,7 +1,7 @@
 /**
  * Storage key used to store tab groups in local storage.
  */
-export const storageKey = 'tabs';
+export const tabsStorageKey = 'tabs';
 
 /**
  * Matches domain name.
@@ -30,7 +30,7 @@ export interface TabGroup {
 export type HostnameGroup = BrowserTab[][];
 
 /**
- * Icons used by main menu.
+ * Action icons.
  */
 export enum ActionIcons {
   Export = 'download',
@@ -40,7 +40,7 @@ export enum ActionIcons {
 }
 
 /**
- * Main menu action IDs.
+ * Available actions within application.
  */
 export enum Action {
   Export = 1,
@@ -54,7 +54,11 @@ export enum Action {
  */
 export type IconSize = 'small' | 'medium';
 
+export interface TimelineItem {
+  timestamp: number;
+}
+
 /**
  * Group tab groups by time label in hashmap.
  */
-export type GroupByTime = { [timeLabel in string]: TabGroup[] };
+export type Timeline = Map<string, TimelineItem[]>;

@@ -266,15 +266,15 @@ describe('TabService', () => {
 
     expect(spectator.service.getTabsGroupedByHostname(group1).length).toBe(4);
 
-    spectator.service.removeTab(group1.id, tab1);
+    spectator.service.removeTab(tab1);
     expect(spectator.service.getTabsGroupedByHostname(group1).length).toBe(4);
     expect(group1.tabs.length).toBe(4);
 
-    spectator.service.removeTab(group1.id, tab2);
+    spectator.service.removeTab(tab2);
     expect(spectator.service.getTabsGroupedByHostname(group1).length).toBe(3);
     expect(group1.tabs.length).toBe(3);
 
-    spectator.service.removeTab(group1.id, tab3);
+    spectator.service.removeTab(tab3);
     expect(spectator.service.getTabsGroupedByHostname(group1).length).toBe(2);
     expect(group1.tabs.length).toBe(2);
   });
