@@ -1,6 +1,6 @@
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
-import { ignoreUrlsRegExp, Time } from '../utils/models';
+import { ignoreUrlsRegExp } from '../utils/models';
 import { getHostname } from '../utils/tab';
 import { TabService } from './tab.service';
 
@@ -194,7 +194,6 @@ jest.mock('src/app/utils', () => ({
   saveTabGroups: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   ignoreUrlsRegExp,
   getHostname,
-  Time
 }));
 
 describe('TabService', () => {
