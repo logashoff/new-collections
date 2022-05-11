@@ -5,7 +5,7 @@ import { BrowserTab } from 'src/app/utils';
 
 /**
  * @description
- * 
+ *
  * Popup modal dialog for renaming tab title.
  */
 @Component({
@@ -24,11 +24,16 @@ export class RenameDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.formGroup = new FormGroup({
-      name: new FormControl(this.tab.title, Validators.required),
+      title: new FormControl(this.tab.title, Validators.required),
+      url: new FormControl(this.tab.url, Validators.required),
     });
   }
 
   save(): void {
-    this.dialogRef.close(this.formGroup.value.name);
+    const { title, url } = this.formGroup.value;
+    this.dialogRef.close({
+      title,
+      url,
+    });
   }
 }
