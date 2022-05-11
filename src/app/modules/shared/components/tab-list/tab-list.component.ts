@@ -39,18 +39,20 @@ export class TabListComponent {
   constructor(private tabService: TabService, private dialog: MatDialog, private cdr: ChangeDetectorRef) {}
 
   /**
-   * Opens dialog to rename specified tab.
+   * Opens dialog to edit specified tab.
    */
-  async renameTab(tab: BrowserTab) {
+  async editTab(tab: BrowserTab) {
     const dialogRef = this.dialog.open(RenameDialogComponent, { data: tab, disableClose: true });
-    const updatedTitle = await lastValueFrom(dialogRef.afterClosed());
+    const update: Pick<BrowserTab, 'title' | 'url'> = await lastValueFrom(dialogRef.afterClosed());
 
-    if (updatedTitle && tab.title !== updatedTitle) {
-      tab.title = updatedTitle;
+    if (update && (tab.title !== update.title || tab.url !== update.url)) {
+      tab.title = update.title;
+      tab.url = update.url;
+
       this.tabService.saveTabs();
       this.cdr.markForCheck();
     }
-  } 
+  }
 
   /**
    * Removes specified tab from tab list.
