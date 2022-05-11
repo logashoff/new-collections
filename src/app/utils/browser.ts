@@ -17,16 +17,6 @@ export function queryCurrentWindow(): Promise<Tab[]> {
 }
 
 /**
- * Returns active tab in current window.
- */
-export function getActiveTab(): Promise<Tab> {
-  return new Promise(async (resolve) => {
-    const [activeTab] = await queryTabs({ active: true, currentWindow: true });
-    resolve(activeTab);
-  });
-}
-
-/**
  * Removes opened tab by specified tab ID.
  */
 export function removeTab(tabId: number): Promise<void> {
