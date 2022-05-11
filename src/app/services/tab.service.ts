@@ -124,7 +124,7 @@ export class TabService {
         return 'Today';
       case date.isSame(now.subtract(1, 'd'), 'd'):
         return 'Yesterday';
-      case date.isSame(now.subtract(1, 'w'), 'w'):
+      case date.isSame(now, 'w'):
         return 'Week';
       case date.isSame(now, 'y'):
         return date.format('MMMM');
