@@ -1,0 +1,43 @@
+@import 'common';
+
+app-search {
+  .search-field {
+    width: 100%;
+    font-size: 1.15rem;
+
+    .mat-form-field-wrapper {
+      padding: 0;
+      margin: 0;
+    }
+
+    .mat-form-field-prefix {
+      top: 0.5rem;
+      left: 0.5rem;
+    }
+
+    .mat-form-field-flex {
+      padding: 0;
+      border-radius: 4rem;
+    }
+
+    .mat-form-field-infix {
+      border: none;
+      margin-left: 1.5rem;
+      padding-bottom: 0.75rem;
+    }
+
+    .mat-form-field-underline {
+      display: none;
+    }
+  }
+}
+
+@include theme using($theme) {
+  app-search {
+    color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+
+    .mat-form-field-prefix {
+      color: getPaletteColor(getForegroundPalette($theme), disabled-text);
+    }
+  }
+}

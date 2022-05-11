@@ -30,3 +30,13 @@ app-menu {
   bottom: $padding;
   z-index: 1;
 }
+
+.search {
+  margin-bottom: 2rem;
+  display: block;
+  position: relative;
+}
+
+.search-container {
+  padding: 0;
+}
