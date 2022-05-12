@@ -11,22 +11,37 @@ app-search {
     }
 
     .mat-form-field-prefix {
-      top: 0.5rem;
-      left: 0.5rem;
+      top: -0.2rem;
+      left: 0.75rem;
     }
 
     .mat-form-field-flex {
       padding: 0;
       border-radius: 4rem;
+      height: 3rem;
+      align-items: center;
+      background-color: transparent;
+      border-width: 2px;
+      border-style: solid;
+      transition: border-color 0.25s ease;
+    }
+
+    .mat-input-element {
+      height: 3rem;
     }
 
     .mat-form-field-infix {
       border: none;
       margin-left: 1.5rem;
-      padding-bottom: 0.75rem;
+      padding: 0;
     }
 
-    .mat-form-field-underline {
+    .mat-form-field-suffix {
+      right: 0.5rem;
+    }
+
+    .mat-form-field-underline,
+    .mat-form-field-subscript-wrapper {
       display: none;
     }
   }
@@ -35,8 +50,18 @@ app-search {
 @include theme using($theme) {
   app-search {
     color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+    background-color: getPaletteColor(getBackgroundPalette($theme), background);
 
-    .mat-form-field-prefix {
+    .mat-form-field-flex {
+      border-color: getPaletteColor(getForegroundPalette($theme), divider);
+    }
+
+    .search-field.mat-focused .mat-form-field-flex {
+      border-color: getPaletteColor(getForegroundPalette($theme), disabled-text);
+    }
+
+    .mat-form-field-prefix,
+    .mat-form-field-suffix {
       color: getPaletteColor(getForegroundPalette($theme), disabled-text);
     }
   }

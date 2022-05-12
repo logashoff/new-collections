@@ -1,6 +1,7 @@
 import { waitForAsync } from '@angular/core/testing';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { take } from 'rxjs/operators';
+import { browserTabMock, tabGroupMock } from 'src/mocks';
 import { Action, ActionIcons } from '../utils/models';
 import { MenuService } from './menu.service';
 import { TabService } from './tab.service';
@@ -10,70 +11,10 @@ jest.mock('src/app/utils', () => ({
   ActionIcons,
   importTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   getSavedTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
-  queryCurrentWindow: jest.fn().mockImplementation(
-    () =>
-      new Promise((resolve) =>
-        resolve([
-          {
-            active: false,
-            audible: false,
-            autoDiscardable: true,
-            discarded: false,
-            favIconUrl: 'https://getfedora.org/static/images/favicon.ico',
-            groupId: -1,
-            height: 698,
-            highlighted: false,
-            id: 50,
-            incognito: false,
-            index: 3,
-            mutedInfo: {
-              muted: false,
-            },
-            pinned: false,
-            selected: false,
-            status: 'complete',
-            title: 'Fedora',
-            url: 'https://getfedora.org/',
-            width: 1188,
-            windowId: 1,
-          },
-        ])
-      )
-  ),
+  queryCurrentWindow: jest.fn().mockImplementation(() => new Promise((resolve) => resolve([browserTabMock]))),
 }));
 
 describe('MenuService', () => {
-  const tabGroup = {
-    domains: [
-      {
-        count: 1,
-        icon: 'https://github.githubassets.com/favicons/favicon.svg',
-        name: 'github.com',
-      },
-      {
-        count: 1,
-        icon: 'https://duckduckgo.com/favicon.ico',
-        name: 'duckduckgo.com',
-      },
-    ],
-    id: 'e200698d-d053-45f7-b917-e03b104ae127',
-    tabs: [
-      {
-        favIconUrl: 'https://github.githubassets.com/favicons/favicon.svg',
-        id: 51,
-        title: 'GitHub: Where the world builds software · GitHub',
-        url: 'https://github.com/',
-      },
-      {
-        favIconUrl: 'https://duckduckgo.com/favicon.ico',
-        id: 52,
-        title: 'DuckDuckGo — Privacy, simplified.',
-        url: 'https://duckduckgo.com/',
-      },
-    ],
-    timestamp: 1650858875455,
-  };
-
   let spectator: SpectatorService<MenuService>;
   const createService = createServiceFactory({
     service: MenuService,
@@ -81,7 +22,7 @@ describe('MenuService', () => {
       {
         provide: TabService,
         useValue: {
-          createTabGroup: () => new Promise((resolve) => resolve(tabGroup)),
+          createTabGroup: () => new Promise((resolve) => resolve(tabGroupMock)),
           displayMessage() {},
           saveTabGroup: () => new Promise((resolve) => resolve(0)),
           saveTabGroups() {},

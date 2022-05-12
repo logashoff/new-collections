@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { isNil } from 'lodash';
-import { BehaviorSubject, filter, map, Observable } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable, shareReplay } from 'rxjs';
 import { Timeline } from 'src/app/utils';
 
 /**
@@ -38,6 +38,7 @@ export class TimelineComponent {
       }
 
       return timelineLabels;
-    })
+    }),
+    shareReplay(1)
   );
 }

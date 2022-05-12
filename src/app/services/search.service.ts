@@ -25,18 +25,30 @@ export class SearchService {
   private readonly searchValue$ = new BehaviorSubject<string>('');
 
   /**
-   * Returns search results from search component.
+   * Returns Fuse search instance.
    */
-  readonly searchResults$: Observable<BrowserTab[]> = combineLatest([
-    this.searchValue$,
-    this.tabService.tabGroups$,
-  ]).pipe(
-    map(([searchValue, tabGroups]) => {
-      const tabs: BrowserTab[] = flatMap(tabGroups, (tabGroup) => tabGroup.tabs);
-      const fuse = new Fuse(tabs, fuseOptions);
-      const searchResults: BrowserTab[] = fuse.search(searchValue).map((res) => res.item);
+  private readonly fuseSearch$: Observable<Fuse<BrowserTab>> = this.tabService.tabGroups$.pipe(
+    map(
+      (tabGroups) =>
+        new Fuse(
+          flatMap(tabGroups, (tabGroup) => tabGroup.tabs),
+          fuseOptions
+        )
+    ),
+    shareReplay(1)
+  );
 
-      return searchResults?.length > 0 ? searchResults : searchValue?.length ? [] : null;
+  /**
+   * Returns search results based on search component input.
+   */
+  readonly searchResults$: Observable<BrowserTab[]> = combineLatest([this.searchValue$, this.fuseSearch$]).pipe(
+    map(([searchValue, fuseSearch]) => {
+      if (searchValue?.length > 0) {
+        const searchResults: BrowserTab[] = fuseSearch.search(searchValue).map((res) => res.item);
+        return searchResults;
+      }
+
+      return null;
     }),
     shareReplay(1)
   );

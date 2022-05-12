@@ -1,18 +1,17 @@
 <mat-sidenav-container>
   <mat-sidenav-content>
     <div class="content">
-      <app-search class="search"></app-search>
-      <ng-container [ngSwitch]="(searchResults$ | async) !== null">
-        <ng-container *ngSwitchCase="true">
-          <ng-container *ngIf="searchResults$ | async as searchResults">
-            <mat-card class="search-container" *ngIf="searchResults.length > 0; else empty">
-              <app-tab-list (tabRemoved)="tabRemoved()" [tabs]="searchResults"></app-tab-list>
-            </mat-card>
+      <ng-container *ngIf="groupsTimeline$ | async as groupsTimeline; else empty">
+        <app-search class="search"></app-search>
+        <ng-container [ngSwitch]="(searchResults$ | async) !== null">
+          <ng-container *ngSwitchCase="true">
+            <ng-container *ngIf="searchResults$ | async as searchResults">
+              <mat-card class="search-container" *ngIf="searchResults.length > 0; else empty">
+                <app-tab-list (tabRemoved)="tabRemoved()" [tabs]="searchResults"></app-tab-list>
+              </mat-card>
+            </ng-container>
           </ng-container>
-        </ng-container>
-        <ng-container *ngSwitchCase="false">
-          <app-timeline *ngIf="groupsTimeline$ | async as groupsTimeline; else empty" [timeline]="groupsTimeline">
-          </app-timeline>
+          <app-timeline *ngSwitchCase="false" [timeline]="groupsTimeline"></app-timeline>
         </ng-container>
       </ng-container>
     </div>

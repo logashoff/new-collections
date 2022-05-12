@@ -19,7 +19,7 @@ export class OptionsComponent {
   /**
    * Tab groups grouped by time
    */
-  readonly groupsTimeline$: Observable<Timeline> = this.tabsService.groupsTimeline$;
+  readonly groupsTimeline$: Observable<Timeline> = this.tabsService.groupsTimeline$.pipe(shareReplay(1));
 
   /**
    * Main menu items.
