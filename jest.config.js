@@ -5,6 +5,7 @@ module.exports = {
   moduleNameMapper: {
     'src/app/utils': '<rootDir>/src/app/utils/index.ts',
     'src/app/services': '<rootDir>/src/app/services/index.ts',
+    'src/mocks': '<rootDir>/src/mocks/index.ts',
   },
   setupFiles: ['<rootDir>/setupJestMocks.js'],
 };
