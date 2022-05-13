@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { BehaviorSubject, map, Observable, switchMap } from 'rxjs';
+import { isNil } from 'lodash';
+import { BehaviorSubject, filter, map, Observable, shareReplay, withLatestFrom } from 'rxjs';
 import { TabService } from 'src/app/services';
 import { HostnameGroup, TabGroup } from 'src/app/utils';
 
@@ -28,9 +29,17 @@ export class PanelHeaderComponent {
   /**
    * Grouped icons.
    */
-  readonly icons$: Observable<HostnameGroup> = this.group$.pipe(
-    switchMap((group) => this.tabService.tabsByHostname$.pipe(map((hostGroups) => hostGroups?.[group.id])))
+  readonly icons$: Observable<HostnameGroup> = this.tabService.tabsByHostname$.pipe(
+    filter((tabsByHostname) => !isNil(tabsByHostname)),
+    withLatestFrom(this.group$),
+    map(([tabsByHostname, group]) => tabsByHostname[group.id]),
+    shareReplay(1)
   );
+
+  /**
+   * Track icons by icon count.
+   */
+  readonly trackByIcons = (_, icons: HostnameGroup): number => icons.length;
 
   /**
    * Max number of icons should be displayed in panel header.
