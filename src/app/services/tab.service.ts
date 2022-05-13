@@ -44,7 +44,7 @@ export class TabService {
    * Group icons by hostname and map each icons group to their `TabGroup`.
    */
   readonly tabsByHostname$: Observable<TabsByHostname> = this.tabGroups$.pipe(
-    map((tabGroups) => this.createHostnameGroups(tabGroups)),
+    map((tabGroups) => (tabGroups?.length > 0 ? this.createHostnameGroups(tabGroups) : null)),
     shareReplay(1)
   );
 
@@ -64,8 +64,7 @@ export class TabService {
    * Initialize service and load stored tab groups.
    */
   private async initService() {
-    const tabGroups = await getSavedTabs();
-    this.tabGroupsSource$.next(tabGroups);
+    this.tabGroupsSource$.next(await getSavedTabs());
   }
 
   /**
@@ -156,17 +155,18 @@ export class TabService {
     if (tabGroups?.length > 0) {
       const currentTabGroups = await firstValueFrom(this.tabGroups$);
 
-      currentTabGroups.push(
+      const newTabGroups: TabGroup[] = [
+        ...currentTabGroups,
         ...tabGroups.map((tabGroup) => {
           tabGroup.id = uuidv4();
           return tabGroup;
-        })
-      );
+        }),
+      ];
 
       // sort by time
-      currentTabGroups.sort((a, b) => b.timestamp - a.timestamp);
+      newTabGroups.sort((a, b) => b.timestamp - a.timestamp);
 
-      this.tabGroupsSource$.next(currentTabGroups);
+      this.tabGroupsSource$.next(newTabGroups);
 
       this.saveTabs();
     }
@@ -189,9 +189,9 @@ export class TabService {
    */
   async removeTab(tab: BrowserTab): Promise<boolean> {
     return new Promise(async (resolve) => {
-      const currentTabGroups = await firstValueFrom(this.tabGroups$);
+      const tabGroups = await firstValueFrom(this.tabGroups$);
 
-      const group = currentTabGroups.find((group) => group.tabs.includes(tab));
+      const group = tabGroups.find((group) => group.tabs.includes(tab));
 
       if (group) {
         const removedTabs = remove(group.tabs, (t) => t === tab);
@@ -199,21 +199,8 @@ export class TabService {
         if (group.tabs.length === 0) {
           this.removeTabGroup(group);
         } else if (removedTabs?.length > 0) {
-          const [removedTab] = removedTabs;
-
-          const tabsByHostname = await firstValueFrom(this.tabsByHostname$);
-
-          const hostnameGroupedTabs = tabsByHostname[group.id];
-          const hostnameGroup = hostnameGroupedTabs.find((groups) => groups.includes(removedTab));
-
-          remove(hostnameGroup, (tab) => tab === removedTab);
-
-          if (hostnameGroup?.length === 0) {
-            remove(hostnameGroupedTabs, (groupedTabs) => groupedTabs === hostnameGroup);
-          }
+          this.tabGroupsSource$.next(tabGroups);
         }
-
-        this.saveTabs();
 
         resolve(true);
       }
@@ -226,34 +213,12 @@ export class TabService {
    * Removed specified tab group from local storage.
    */
   async removeTabGroup(tabGroup: TabGroup) {
-    const tabsByHostname = await firstValueFrom(this.tabsByHostname$);
+    const tabGroups = await firstValueFrom(this.tabGroups$);
 
-    delete tabsByHostname[tabGroup.id];
+    remove(tabGroups, (tg) => tg === tabGroup);
+    this.saveTabs();
 
-    const currentTabGroups = await firstValueFrom(this.tabGroups$);
-
-    const groupIndex = currentTabGroups.findIndex(({ id }) => id === tabGroup.id);
-
-    if (groupIndex > -1) {
-      currentTabGroups.splice(groupIndex, 1);
-
-      const timeline = await firstValueFrom(this.groupsTimeline$);
-
-      for (const timelineLabel in timeline) {
-        const timelineItems = timeline[timelineLabel];
-        const removedItems = remove(timelineItems, (item) => item === tabGroup);
-
-        if (removedItems?.length > 0) {
-          if (timelineItems.length === 0) {
-            delete timeline[timelineLabel];
-          }
-
-          break;
-        }
-      }
-
-      this.saveTabs();
-    }
+    this.tabGroupsSource$.next(tabGroups);
   }
 
   /**

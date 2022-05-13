@@ -29,7 +29,7 @@ export class PanelHeaderComponent {
    * Grouped icons.
    */
   readonly icons$: Observable<HostnameGroup> = this.group$.pipe(
-    switchMap((group) => this.tabService.tabsByHostname$.pipe(map((hostGroups) => hostGroups[group.id])))
+    switchMap((group) => this.tabService.tabsByHostname$.pipe(map((hostGroups) => hostGroups?.[group.id])))
   );
 
   /**

@@ -1,5 +1,5 @@
 <mat-accordion>
-  <mat-expansion-panel *ngFor="let group of groups" hideToggle>
+  <mat-expansion-panel *ngFor="let group of groups; trackBy: trackByGroupId" hideToggle>
     <mat-expansion-panel-header>
       <app-panel-header [group]="group"></app-panel-header>
       <app-group-controls [group]="group"></app-group-controls>
