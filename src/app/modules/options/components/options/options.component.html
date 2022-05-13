@@ -1,23 +1,13 @@
 <mat-sidenav-container>
   <mat-sidenav-content>
     <div class="content">
-      <ng-container *ngIf="groupsTimeline$ | async as groupsTimeline; else empty">
-        <app-search class="search"></app-search>
-        <ng-container [ngSwitch]="(searchResults$ | async) !== null">
-          <ng-container *ngSwitchCase="true">
-            <ng-container *ngIf="searchResults$ | async as searchResults">
-              <mat-card class="search-container" *ngIf="searchResults.length > 0; else empty">
-                <app-tab-list (tabRemoved)="tabRemoved()" [tabs]="searchResults"></app-tab-list>
-              </mat-card>
-            </ng-container>
-          </ng-container>
-          <app-timeline *ngSwitchCase="false" [timeline]="groupsTimeline"></app-timeline>
-        </ng-container>
-      </ng-container>
+      <app-search *ngIf="groupsTimeline$ | async as groupsTimeline; else empty">
+        <app-timeline [timeline]="groupsTimeline"></app-timeline>
+      </app-search>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
 <app-menu [menuItems]="menuItems$ | async"></app-menu>
 <ng-template #empty>
-  <app-empty></app-empty>
+  <app-empty>tab_unselected</app-empty>
 </ng-template>

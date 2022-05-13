@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef, TextOnlySnackBar } from '@angular/material/snack-bar';
-import { groupBy } from 'lodash';
+import { groupBy, remove } from 'lodash';
 import moment from 'moment';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import {
   BrowserTab,
   getHostname,
   getSavedTabs,
-  HostnameGroup,
   ignoreUrlsRegExp,
   saveTabGroups,
   Tab,
   TabGroup,
+  TabsByHostname,
   Timeline,
-  TimelineItem,
+  TimelineElement,
 } from 'src/app/utils';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -41,24 +41,20 @@ export class TabService {
   );
 
   /**
-   * Loaded tab list.
-   */
-  private tabGroups: TabGroup[] = [];
-
-  /**
    * Group icons by hostname and map each icons group to their `TabGroup`.
    */
-  private readonly groupTabsByHostnameMap: { [groupId in string]: HostnameGroup } = {};
-
-  /**
-   * Groups timeline source.
-   */
-  private readonly groupsTimelineSource$ = new BehaviorSubject<Timeline>(null);
+  readonly tabsByHostname$: Observable<TabsByHostname> = this.tabGroups$.pipe(
+    map((tabGroups) => this.createHostnameGroups(tabGroups)),
+    shareReplay(1)
+  );
 
   /**
    * Groups timeline.
    */
-  readonly groupsTimeline$ = this.groupsTimelineSource$.pipe(shareReplay(1));
+  readonly groupsTimeline$: Observable<Timeline> = this.tabGroups$.pipe(
+    map((tabGroups) => (tabGroups?.length > 0 ? this.createTimeline(tabGroups) : null)),
+    shareReplay(1)
+  );
 
   constructor(private snackBar: MatSnackBar) {
     this.initService();
@@ -68,44 +64,38 @@ export class TabService {
    * Initialize service and load stored tab groups.
    */
   private async initService() {
-    this.tabGroups = await getSavedTabs();
-
-    this.tabGroups.forEach((group) => this.groupTabsByHostName(group));
-    this.updateGroupsTimeline();
-
-    this.refresh();
+    const tabGroups = await getSavedTabs();
+    this.tabGroupsSource$.next(tabGroups);
   }
 
   /**
    * Generates icon group based on tab group specified.
    */
-  private groupTabsByHostName(tabGroup: TabGroup) {
-    const groupByHostname = groupBy(tabGroup.tabs, getHostname);
-    const values = Object.values(groupByHostname);
-    this.groupTabsByHostnameMap[tabGroup.id] = values.sort((a, b) => b.length - a.length);
-  }
+  private createHostnameGroups(tabGroups: TabGroup[]): TabsByHostname {
+    const ret: TabsByHostname = {};
 
-  /**
-   * Updates tab groups timeline.
-   */
-  private updateGroupsTimeline() {
-    const timeline = this.createTimeline(this.tabGroups);
-    this.groupsTimelineSource$.next(timeline);
+    tabGroups.forEach((tabGroup) => {
+      const groupByHostname = groupBy(tabGroup.tabs, getHostname);
+      const values = Object.values(groupByHostname);
+      ret[tabGroup.id] = values.sort((a, b) => b.length - a.length);
+    });
+
+    return ret;
   }
 
   /**
    * Creates timeline array and hashmap that maps each timeline item to groups by their timestamp.
    */
-  private createTimeline(timelineItems: TimelineItem[]): Timeline {
-    const timeline: Timeline = new Map();
+  private createTimeline(timelineItems: TimelineElement[]): Timeline {
+    const timeline: Timeline = {};
 
     timelineItems.forEach((timelineItem) => {
       const timeLabel = this.getTimelineLabel(timelineItem);
-      if (!timeline.has(timeLabel)) {
-        timeline.set(timeLabel, []);
+      if (!timeline[timeLabel]) {
+        timeline[timeLabel] = [];
       }
 
-      timeline.get(timeLabel).push(timelineItem);
+      timeline[timeLabel].push(timelineItem);
     });
 
     return timeline;
@@ -114,7 +104,7 @@ export class TabService {
   /**
    * Returns timeline label based on group timestamp.
    */
-  private getTimelineLabel(timelineItem: TimelineItem): string {
+  private getTimelineLabel(timelineItem: TimelineElement): string {
     const { timestamp } = timelineItem;
     const date = moment(timestamp);
     const now = moment();
@@ -131,13 +121,6 @@ export class TabService {
       default:
         return date.format('MMMM YYYY');
     }
-  }
-
-  /**
-   * Returns icons group by group specified.
-   */
-  getTabsGroupedByHostname(group: TabGroup): HostnameGroup {
-    return this.groupTabsByHostnameMap[group.id];
   }
 
   /**
@@ -167,36 +150,25 @@ export class TabService {
   }
 
   /**
-   * Updates tab groups observable.
-   */
-  refresh() {
-    this.tabGroupsSource$.next(this.tabGroups);
-  }
-
-  /**
    * Saves provided tab groups to local storage.
    */
   async saveTabGroups(tabGroups: TabGroup[]) {
     if (tabGroups?.length > 0) {
-      if (!this.tabGroups) {
-        this.tabGroups = tabGroups;
-      } else {
-        this.tabGroups.push(
-          ...tabGroups.map((tabGroup) => {
-            tabGroup.id = uuidv4();
-            return tabGroup;
-          })
-        );
-      }
+      const currentTabGroups = await firstValueFrom(this.tabGroups$);
+
+      currentTabGroups.push(
+        ...tabGroups.map((tabGroup) => {
+          tabGroup.id = uuidv4();
+          return tabGroup;
+        })
+      );
 
       // sort by time
-      this.tabGroups.sort((a, b) => b.timestamp - a.timestamp);
-      this.updateGroupsTimeline();
+      currentTabGroups.sort((a, b) => b.timestamp - a.timestamp);
 
-      tabGroups.forEach((tabGroup) => this.groupTabsByHostName(tabGroup));
+      this.tabGroupsSource$.next(currentTabGroups);
 
       this.saveTabs();
-      this.refresh();
     }
   }
 
@@ -204,14 +176,10 @@ export class TabService {
    * Saves specified tab group to local storage.
    */
   async saveTabGroup(tabGroup: TabGroup) {
-    if (!this.tabGroups) {
-      this.tabGroups = [];
-    }
+    const currentTabGroups = await firstValueFrom(this.tabGroups$);
 
     // merge saved and new tabs
-    this.tabGroups.unshift(tabGroup);
-
-    this.groupTabsByHostName(tabGroup);
+    currentTabGroups.unshift(tabGroup);
 
     this.saveTabs();
   }
@@ -220,38 +188,34 @@ export class TabService {
    * Removes tab from specified tab group.
    */
   async removeTab(tab: BrowserTab): Promise<boolean> {
-    return new Promise((resolve) => {
-      const groupIndex = this.tabGroups.findIndex((group) => group.tabs.includes(tab));
+    return new Promise(async (resolve) => {
+      const currentTabGroups = await firstValueFrom(this.tabGroups$);
 
-      if (groupIndex > -1) {
-        const group = this.tabGroups[groupIndex];
-        const tabIndex = group.tabs.findIndex(({ id }) => id === tab.id);
+      const group = currentTabGroups.find((group) => group.tabs.includes(tab));
 
-        if (tabIndex > -1) {
-          const removedTab = group.tabs.splice(tabIndex, 1)[0];
+      if (group) {
+        const removedTabs = remove(group.tabs, (t) => t === tab);
 
-          if (group.tabs.length === 0) {
-            this.removeTabGroup(group);
-          } else {
-            const hostnameGroups = this.getTabsGroupedByHostname(group);
-            const hostnameGroupIndex = hostnameGroups?.findIndex((hostnameGroup) => {
-              const index = hostnameGroup.findIndex((tab) => tab === removedTab);
+        if (group.tabs.length === 0) {
+          this.removeTabGroup(group);
+        } else if (removedTabs?.length > 0) {
+          const [removedTab] = removedTabs;
 
-              if (index > -1) {
-                hostnameGroup.splice(index, 1);
-                return true;
-              }
-            });
+          const tabsByHostname = await firstValueFrom(this.tabsByHostname$);
 
-            if (hostnameGroupIndex > -1 && hostnameGroups[hostnameGroupIndex].length === 0) {
-              hostnameGroups.splice(hostnameGroupIndex, 1);
-            }
+          const hostnameGroupedTabs = tabsByHostname[group.id];
+          const hostnameGroup = hostnameGroupedTabs.find((groups) => groups.includes(removedTab));
+
+          remove(hostnameGroup, (tab) => tab === removedTab);
+
+          if (hostnameGroup?.length === 0) {
+            remove(hostnameGroupedTabs, (groupedTabs) => groupedTabs === hostnameGroup);
           }
-
-          this.saveTabs();
-
-          resolve(true);
         }
+
+        this.saveTabs();
+
+        resolve(true);
       }
 
       resolve(false);
@@ -262,23 +226,26 @@ export class TabService {
    * Removed specified tab group from local storage.
    */
   async removeTabGroup(tabGroup: TabGroup) {
-    delete this.groupTabsByHostnameMap[tabGroup.id];
+    const tabsByHostname = await firstValueFrom(this.tabsByHostname$);
 
-    const groupIndex = this.tabGroups.findIndex(({ id }) => id === tabGroup.id);
+    delete tabsByHostname[tabGroup.id];
+
+    const currentTabGroups = await firstValueFrom(this.tabGroups$);
+
+    const groupIndex = currentTabGroups.findIndex(({ id }) => id === tabGroup.id);
 
     if (groupIndex > -1) {
-      this.tabGroups.splice(groupIndex, 1);
+      currentTabGroups.splice(groupIndex, 1);
 
-      const timeline = this.groupsTimelineSource$.value;
-      for (const timelineItem of timeline) {
-        const [timelineLabel, timelineItems] = timelineItem;
-        const i = timelineItems.findIndex((item) => item === tabGroup);
+      const timeline = await firstValueFrom(this.groupsTimeline$);
 
-        if (i > -1) {
-          timelineItems.splice(i, 1);
+      for (const timelineLabel in timeline) {
+        const timelineItems = timeline[timelineLabel];
+        const removedItems = remove(timelineItems, (item) => item === tabGroup);
 
+        if (removedItems?.length > 0) {
           if (timelineItems.length === 0) {
-            timeline.delete(timelineLabel);
+            delete timeline[timelineLabel];
           }
 
           break;
@@ -287,17 +254,13 @@ export class TabService {
 
       this.saveTabs();
     }
-
-    if (this.tabGroups.length === 0) {
-      this.tabGroupsSource$.next(null);
-    }
   }
 
   /**
    * Save current tabs state to local storage.
    */
   async saveTabs(): Promise<void> {
-    return await saveTabGroups(this.tabGroups);
+    return await saveTabGroups(await firstValueFrom(this.tabGroups$));
   }
 
   /**

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import Fuse from 'fuse.js';
 import { flatMap } from 'lodash';
-import { BehaviorSubject, combineLatest, map, Observable, shareReplay } from 'rxjs';
+import { BehaviorSubject, map, Observable, withLatestFrom } from 'rxjs';
 import { BrowserTab } from '../utils';
 import { TabService } from './tab.service';
 
@@ -10,7 +10,7 @@ import { TabService } from './tab.service';
  */
 const fuseOptions: Fuse.IFuseOptions<BrowserTab> = {
   keys: ['title', 'url'],
-  threshold: 0.55,
+  threshold: 0.5,
 };
 
 /**
@@ -24,33 +24,24 @@ const fuseOptions: Fuse.IFuseOptions<BrowserTab> = {
 export class SearchService {
   private readonly searchValue$ = new BehaviorSubject<string>('');
 
+  private readonly tabs$: Observable<BrowserTab[]> = this.tabService.tabGroups$.pipe(
+    map((tabGroups) => flatMap(tabGroups, (tabGroup) => tabGroup.tabs))
+  );
+
   /**
    * Returns Fuse search instance.
    */
-  private readonly fuseSearch$: Observable<Fuse<BrowserTab>> = this.tabService.tabGroups$.pipe(
-    map(
-      (tabGroups) =>
-        new Fuse(
-          flatMap(tabGroups, (tabGroup) => tabGroup.tabs),
-          fuseOptions
-        )
-    ),
-    shareReplay(1)
+  private readonly fuseSearch$: Observable<Fuse<BrowserTab>> = this.tabs$.pipe(
+    map((tabs) => new Fuse(tabs, fuseOptions))
   );
 
   /**
    * Returns search results based on search component input.
    */
-  readonly searchResults$: Observable<BrowserTab[]> = combineLatest([this.searchValue$, this.fuseSearch$]).pipe(
-    map(([searchValue, fuseSearch]) => {
-      if (searchValue?.length > 0) {
-        const searchResults: BrowserTab[] = fuseSearch.search(searchValue).map((res) => res.item);
-        return searchResults;
-      }
-
-      return null;
-    }),
-    shareReplay(1)
+  readonly searchResults$: Observable<BrowserTab[]> = this.searchValue$.pipe(
+    withLatestFrom(this.fuseSearch$),
+    map(([searchValue, fuseSearch]) => (searchValue?.length > 0 ? fuseSearch.search(searchValue) : null)),
+    map((results) => results?.map(({ item }) => item) ?? null)
   );
 
   constructor(private tabService: TabService) {}

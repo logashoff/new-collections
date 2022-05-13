@@ -13,3 +13,18 @@
     </button>
   </mat-form-field>
 </form>
+<ng-container [ngSwitch]="(searchResults$ | async) !== null">
+  <ng-container *ngSwitchCase="true">
+    <ng-container *ngIf="searchResults$ | async as searchResults">
+      <mat-card class="search-container" *ngIf="searchResults.length > 0; else empty">
+        <app-tab-list [tabs]="searchResults"></app-tab-list>
+      </mat-card>
+    </ng-container>
+  </ng-container>
+  <ng-container *ngSwitchCase="false">
+    <ng-content></ng-content>
+  </ng-container>
+</ng-container>
+<ng-template #empty>
+  <app-empty>search_off</app-empty>
+</ng-template>

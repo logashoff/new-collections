@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { isNil } from 'lodash';
 import { BehaviorSubject, filter, map, Observable, shareReplay } from 'rxjs';
 import { Timeline } from 'src/app/utils';
@@ -12,7 +12,6 @@ import { Timeline } from 'src/app/utils';
   selector: 'app-timeline',
   templateUrl: './timeline.component.html',
   styleUrls: ['./timeline.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimelineComponent {
   private readonly timeline$ = new BehaviorSubject<Timeline>(null);
@@ -30,15 +29,7 @@ export class TimelineComponent {
 
   readonly timelineLabels$: Observable<string[]> = this.timeline$.pipe(
     filter((timeline) => !isNil(timeline)),
-    map((timeline) => {
-      const timelineLabels: string[] = [];
-
-      for (const key of timeline.keys()) {
-        timelineLabels.push(key);
-      }
-
-      return timelineLabels;
-    }),
+    map((timeline) => Object.keys(timeline)),
     shareReplay(1)
   );
 }

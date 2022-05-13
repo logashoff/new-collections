@@ -1,7 +1,7 @@
 import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { map, Observable, shareReplay } from 'rxjs';
-import { MenuService, SearchService, TabService } from 'src/app/services';
+import { MenuService, TabService } from 'src/app/services';
 import { Action, Timeline } from 'src/app/utils';
 
 /**
@@ -19,7 +19,7 @@ export class OptionsComponent {
   /**
    * Tab groups grouped by time
    */
-  readonly groupsTimeline$: Observable<Timeline> = this.tabsService.groupsTimeline$.pipe(shareReplay(1));
+  readonly groupsTimeline$: Observable<Timeline> = this.tabsService.groupsTimeline$;
 
   /**
    * Main menu items.
@@ -29,21 +29,5 @@ export class OptionsComponent {
     shareReplay(1)
   );
 
-  /**
-   * Source for search results.
-   */
-  readonly searchResults$ = this.searchService.searchResults$;
-
-  constructor(
-    private menuService: MenuService,
-    private searchService: SearchService,
-    private tabsService: TabService
-  ) {}
-
-  /**
-   * Handles tab removal event.
-   */
-  tabRemoved() {
-    this.tabsService.refresh();
-  }
+  constructor(private menuService: MenuService, private tabsService: TabService) {}
 }

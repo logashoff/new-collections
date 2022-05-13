@@ -21,9 +21,14 @@ export class SearchComponent implements OnInit {
   });
 
   /**
+   * Source for search results.
+   */
+   readonly searchResults$ = this.searchService.searchResults$;
+
+  /**
    * Indicates search results state
    */
-  readonly hasSearchValue$: Observable<boolean> = this.searchService.searchResults$.pipe(
+  readonly hasSearchValue$: Observable<boolean> = this.searchResults$.pipe(
     map((searchResult) => !!searchResult),
     shareReplay(1)
   );
