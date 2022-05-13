@@ -1,5 +1,5 @@
 <mat-list>
-  <ng-container *ngFor="let tab of tabs; let first = first">
+  <ng-container *ngFor="let tab of tabs; let first = first; trackBy: trackByTabId">
     <mat-divider *ngIf="!first"></mat-divider>
     <mat-list-item>
       <app-chip [source]="tab.favIconUrl"></app-chip>

@@ -17,4 +17,6 @@ export class GroupsComponent {
    * List of tab groups to render.
    */
   @Input() groups: TabGroup[];
+
+  readonly trackByGroupId = (_, group: TabGroup): string => group.id;
 }

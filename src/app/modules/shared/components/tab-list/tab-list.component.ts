@@ -51,4 +51,6 @@ export class TabListComponent {
       remove(this.tabs, (t) => t === tab);
     }
   }
+
+  readonly trackByTabId = (_, tab: BrowserTab): number => tab.id;
 }
