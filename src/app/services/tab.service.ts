@@ -36,7 +36,7 @@ export class TabService {
    * Observable used by components to listen for tabs data changes.
    */
   readonly tabGroups$ = this.tabGroupsSource$.pipe(
-    map((res) => (res?.length > 0 ? res : null)),
+    map((res) => (res?.length > 0 ? res.sort((a, b) => b.timestamp - a.timestamp) : null)),
     shareReplay(1)
   );
 
@@ -151,7 +151,7 @@ export class TabService {
   /**
    * Saves provided tab groups to local storage.
    */
-  async saveTabGroups(tabGroups: TabGroup[]) {
+  async addTabGroups(tabGroups: TabGroup[]) {
     if (tabGroups?.length > 0) {
       const currentTabGroups = await firstValueFrom(this.tabGroups$);
 
@@ -163,25 +163,22 @@ export class TabService {
         }),
       ];
 
-      // sort by time
-      newTabGroups.sort((a, b) => b.timestamp - a.timestamp);
-
       this.tabGroupsSource$.next(newTabGroups);
 
-      this.saveTabs();
+      this.save();
     }
   }
 
   /**
    * Saves specified tab group to local storage.
    */
-  async saveTabGroup(tabGroup: TabGroup) {
-    const currentTabGroups = await firstValueFrom(this.tabGroups$);
+  async addTabGroup(tabGroup: TabGroup) {
+    const tabGroups = await firstValueFrom(this.tabGroups$);
 
     // merge saved and new tabs
-    currentTabGroups.unshift(tabGroup);
+    tabGroups.unshift(tabGroup);
 
-    this.saveTabs();
+    this.save();
   }
 
   /**
@@ -191,18 +188,21 @@ export class TabService {
     return new Promise(async (resolve) => {
       const tabGroups = await firstValueFrom(this.tabGroups$);
 
-      const group = tabGroups.find((group) => group.tabs.includes(tab));
+      const tabGroup = tabGroups.find((group) => group.tabs.includes(tab));
 
-      if (group) {
-        const removedTabs = remove(group.tabs, (t) => t === tab);
+      if (tabGroup) {
+        const removedTabs = remove(tabGroup.tabs, (t) => t === tab);
+        let removedGroups = [];
 
-        if (group.tabs.length === 0) {
-          this.removeTabGroup(group);
-        } else if (removedTabs?.length > 0) {
-          this.tabGroupsSource$.next(tabGroups);
+        if (tabGroup.tabs.length === 0) {
+          removedGroups = remove(tabGroups, (tg) => tg === tabGroup);
         }
 
-        resolve(true);
+        if (removedTabs?.length > 0 || removedGroups?.length > 0) {
+          this.tabGroupsSource$.next(tabGroups);
+          this.save();
+          resolve(true);
+        }
       }
 
       resolve(false);
@@ -216,15 +216,15 @@ export class TabService {
     const tabGroups = await firstValueFrom(this.tabGroups$);
 
     remove(tabGroups, (tg) => tg === tabGroup);
-    this.saveTabs();
 
     this.tabGroupsSource$.next(tabGroups);
+    this.save();
   }
 
   /**
    * Save current tabs state to local storage.
    */
-  async saveTabs(): Promise<void> {
+  async save(): Promise<void> {
     return await saveTabGroups(await firstValueFrom(this.tabGroups$));
   }
 

@@ -22,10 +22,10 @@ describe('MenuService', () => {
       {
         provide: TabService,
         useValue: {
+          addTabGroup: () => new Promise((resolve) => resolve(0)),
+          addTabGroups() {},
           createTabGroup: () => new Promise((resolve) => resolve(tabGroupMock)),
           displayMessage() {},
-          saveTabGroup: () => new Promise((resolve) => resolve(0)),
-          saveTabGroups() {},
         },
       },
     ],
@@ -77,12 +77,12 @@ describe('MenuService', () => {
 
     const openOptionsPageSpy = jest.spyOn(chrome.runtime, 'openOptionsPage');
     const createTabGroupSpy = jest.spyOn(service, 'createTabGroup');
-    const saveTabGroupsSpy = jest.spyOn(service, 'saveTabGroups');
-    const saveTabGroupSpy = jest.spyOn(service, 'saveTabGroup');
+    const saveTabGroupsSpy = jest.spyOn(service, 'addTabGroups');
+    const saveTabGroupSpy = jest.spyOn(service, 'addTabGroup');
 
     await spectator.service.handleMenuAction(Action.Save);
     expect(service.createTabGroup).toHaveBeenCalledTimes(1);
-    expect(service.saveTabGroup).toHaveBeenCalledTimes(1);
+    expect(service.addTabGroup).toHaveBeenCalledTimes(1);
     expect(chrome.runtime.openOptionsPage).toHaveBeenCalledTimes(1);
 
     openOptionsPageSpy.mockClear();
@@ -95,7 +95,7 @@ describe('MenuService', () => {
     openOptionsPageSpy.mockClear();
 
     await spectator.service.handleMenuAction(Action.Import);
-    expect(service.saveTabGroups).toHaveBeenCalledTimes(1);
+    expect(service.addTabGroups).toHaveBeenCalledTimes(1);
 
     saveTabGroupsSpy.mockClear();
   });

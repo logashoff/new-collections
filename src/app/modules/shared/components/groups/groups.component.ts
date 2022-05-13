@@ -18,5 +18,8 @@ export class GroupsComponent {
    */
   @Input() groups: TabGroup[];
 
+  /**
+   * Group list ngFor trackBy function.
+   */
   readonly trackByGroupId = (_, group: TabGroup): string => group.id;
 }

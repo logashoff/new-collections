@@ -61,7 +61,7 @@ export class MenuService {
           const tabGroup = await this.tabsService.createTabGroup(tabs);
 
           if (tabGroup?.tabs?.length > 0) {
-            await this.tabsService.saveTabGroup(tabGroup);
+            await this.tabsService.addTabGroup(tabGroup);
             this.openOptions();
           } else {
             this.tabsService.displayMessage('Opened tabs cannot be saved');
@@ -80,7 +80,7 @@ export class MenuService {
           break;
         case Action.Import:
           const importedTabs = await importTabs();
-          await this.tabsService.saveTabGroups(importedTabs);
+          await this.tabsService.addTabGroups(importedTabs);
           break;
       }
     } catch (e) {

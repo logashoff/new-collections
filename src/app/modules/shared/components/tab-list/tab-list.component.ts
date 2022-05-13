@@ -23,6 +23,11 @@ export class TabListComponent {
    */
   @Input() tabs: BrowserTab[];
 
+  /**
+   * Tab list *ngFor trackBy function
+   */
+  readonly trackByTabId = (_, tab: BrowserTab): number => tab.id;
+
   constructor(private tabService: TabService, private dialog: MatDialog, private cdr: ChangeDetectorRef) {}
 
   /**
@@ -36,7 +41,7 @@ export class TabListComponent {
       tab.title = update.title;
       tab.url = update.url;
 
-      this.tabService.saveTabs();
+      this.tabService.save();
       this.cdr.markForCheck();
     }
   }
@@ -51,6 +56,4 @@ export class TabListComponent {
       remove(this.tabs, (t) => t === tab);
     }
   }
-
-  readonly trackByTabId = (_, tab: BrowserTab): number => tab.id;
 }

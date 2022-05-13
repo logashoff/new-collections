@@ -48,7 +48,7 @@ describe('TabService', () => {
 
   it('should save tab group', async () => {
     const tabGroup = await spectator.service.createTabGroup(browserTabsMock);
-    await spectator.service.saveTabGroup(tabGroup);
+    await spectator.service.addTabGroup(tabGroup);
 
     const tabGroups = spectator.service['tabGroupsSource$'].value;
 
