@@ -30,6 +30,13 @@ export interface TabGroup {
 export type HostnameGroup = BrowserTab[][];
 
 /**
+ * Maps hostname groups to tab group ID.
+ */
+export interface TabsByHostname {
+  [groupId: string]: HostnameGroup;
+}
+
+/**
  * Action icons.
  */
 export enum ActionIcons {
@@ -54,11 +61,18 @@ export enum Action {
  */
 export type IconSize = 'small' | 'medium';
 
-export interface TimelineItem {
+/**
+ * Timeline-like element.
+ */
+export interface TimelineElement {
   timestamp: number;
 }
 
 /**
  * Group tab groups by time label in hashmap.
  */
-export type Timeline = Map<string, TimelineItem[]>;
+export interface Timeline {
+  [label: string]: TimelineElement[];
+}
+
+

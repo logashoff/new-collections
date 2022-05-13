@@ -1,5 +1,6 @@
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
+import { firstValueFrom } from 'rxjs';
 import { browserTabsMock, tabGroupsMock } from 'src/mocks';
 import { ignoreUrlsRegExp } from '../utils/models';
 import { getHostname } from '../utils/tab';
@@ -30,8 +31,8 @@ describe('TabService', () => {
     expect(spectator.service).toBeTruthy();
   });
 
-  it('should initialize tabs', () => {
-    const tabGroups = spectator.service['tabGroups'];
+  it('should initialize tabs', async () => {
+    const tabGroups = await firstValueFrom(spectator.service.tabGroups$);
 
     expect(tabGroups.length).toBe(3);
     expect(tabGroups[0].tabs.length).toBe(5);
@@ -69,32 +70,40 @@ describe('TabService', () => {
     expect(tab3.url).toBe('https://getfedora.org/');
   });
 
-  it('should generate icon groups', () => {
-    const tabGroups = spectator.service['tabGroups'];
+  it('should generate icon groups', async () => {
+    const tabGroups = await firstValueFrom(spectator.service.tabGroups$);
 
     expect(tabGroups.length).toBe(3);
 
-    expect(spectator.service.getTabsGroupedByHostname(tabGroups[0]).length).toBe(4);
-    expect(spectator.service.getTabsGroupedByHostname(tabGroups[1]).length).toBe(2);
-    expect(spectator.service.getTabsGroupedByHostname(tabGroups[2]).length).toBe(4);
+    const [g1, g2, g3] = tabGroups;
+
+    const hostnameGroups = await firstValueFrom(spectator.service.tabsByHostname$);
+
+    expect(hostnameGroups[g1.id].length).toBe(4);
+    expect(hostnameGroups[g2.id].length).toBe(2);
+    expect(hostnameGroups[g3.id].length).toBe(4);
   });
 
-  it('should update tab and icon groups list when tab is removed', () => {
-    const [group1] = spectator.service['tabGroups'];
-    const [tab1, tab2, tab3] = group1.tabs;
+  it('should update tab and icon groups list when tab is removed', async () => {
+    const [group1] = await firstValueFrom(spectator.service.tabGroups$);
+    const [ubuntuTab1, ubuntuTab2, mintTab] = group1.tabs;
 
-    expect(spectator.service.getTabsGroupedByHostname(group1).length).toBe(4);
+    let hostnameGroups = await firstValueFrom(spectator.service.tabsByHostname$);
+    expect(hostnameGroups[group1.id].length).toBe(4);
 
-    spectator.service.removeTab(tab1);
-    expect(spectator.service.getTabsGroupedByHostname(group1).length).toBe(4);
+    await spectator.service.removeTab(ubuntuTab1);
+    hostnameGroups = await firstValueFrom(spectator.service.tabsByHostname$);
+    expect(hostnameGroups[group1.id].length).toBe(4);
     expect(group1.tabs.length).toBe(4);
 
-    spectator.service.removeTab(tab2);
-    expect(spectator.service.getTabsGroupedByHostname(group1).length).toBe(3);
+    await spectator.service.removeTab(ubuntuTab2);
+    hostnameGroups = await firstValueFrom(spectator.service.tabsByHostname$);
+    expect(hostnameGroups[group1.id].length).toBe(3);
     expect(group1.tabs.length).toBe(3);
 
-    spectator.service.removeTab(tab3);
-    expect(spectator.service.getTabsGroupedByHostname(group1).length).toBe(2);
+    await spectator.service.removeTab(mintTab);
+    hostnameGroups = await firstValueFrom(spectator.service.tabsByHostname$);
+    expect(hostnameGroups[group1.id].length).toBe(2);
     expect(group1.tabs.length).toBe(2);
   });
 });

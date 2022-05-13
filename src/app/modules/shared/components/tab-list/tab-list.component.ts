@@ -1,13 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, Input, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { remove } from 'lodash';
 import { lastValueFrom } from 'rxjs';
 import { TabService } from 'src/app/services';
 import { BrowserTab } from 'src/app/utils';
@@ -22,7 +15,6 @@ import { RenameDialogComponent } from '../rename-dialog/rename-dialog.component'
   selector: 'app-tab-list',
   templateUrl: './tab-list.component.html',
   styleUrls: ['./tab-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
 export class TabListComponent {
@@ -30,11 +22,6 @@ export class TabListComponent {
    * Tabs list to display
    */
   @Input() tabs: BrowserTab[];
-
-  /**
-   * Emits event when tab is removed.
-   */
-  @Output() readonly tabRemoved = new EventEmitter<BrowserTab>();
 
   constructor(private tabService: TabService, private dialog: MatDialog, private cdr: ChangeDetectorRef) {}
 
@@ -58,10 +45,10 @@ export class TabListComponent {
    * Removes specified tab from tab list.
    */
   async removeTab(tab: BrowserTab) {
-    const result = await this.tabService.removeTab(tab);
+    const tabRemoved = await this.tabService.removeTab(tab);
 
-    if (result) {
-      this.tabRemoved.emit(tab);
+    if (tabRemoved) {
+      remove(this.tabs, (t) => t === tab);
     }
   }
 }

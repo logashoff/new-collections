@@ -4,6 +4,7 @@ app-search {
   .search-field {
     width: 100%;
     font-size: 1.15rem;
+    margin-bottom: 1rem;
 
     .mat-form-field-wrapper {
       padding: 0;
@@ -44,6 +45,10 @@ app-search {
     .mat-form-field-subscript-wrapper {
       display: none;
     }
+  }
+  
+  .search-container {
+    padding: 0;
   }
 }
 

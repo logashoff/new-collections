@@ -2,6 +2,10 @@
 
 h3.timeline-label {
   margin: 1rem 0;
+
+  &:first-of-type {
+    margin-top: 0;
+  }
 }
 
 @include theme using($theme) {
