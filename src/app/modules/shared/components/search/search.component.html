@@ -17,9 +17,9 @@
   <ng-container *ngSwitchCase="true">
     <ng-container *ngIf="searchResults$ | async as searchResults">
       <ng-container *ngIf="searchResults.length > 0; else empty">
-        <h3 class="results-count" [ngPlural]="searchLength$ | async">
+        <h3 class="results-count" [ngPlural]="searchResults.length">
           <ng-template ngPluralCase="one">One result</ng-template>
-          <ng-template ngPluralCase="other">{{ searchLength$ | async }} results</ng-template>
+          <ng-template ngPluralCase="other">{{ searchResults.length }} results</ng-template>
         </h3>
         <mat-card class="search-container">
           <app-tab-list [tabs]="searchResults"></app-tab-list>
