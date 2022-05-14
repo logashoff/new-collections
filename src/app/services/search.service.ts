@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import Fuse from 'fuse.js';
 import { flatMap } from 'lodash';
-import { BehaviorSubject, map, Observable, withLatestFrom } from 'rxjs';
+import { BehaviorSubject, map, Observable, shareReplay, withLatestFrom } from 'rxjs';
 import { BrowserTab } from '../utils';
 import { TabService } from './tab.service';
 
@@ -25,14 +25,16 @@ export class SearchService {
   private readonly searchValue$ = new BehaviorSubject<string>('');
 
   private readonly tabs$: Observable<BrowserTab[]> = this.tabService.tabGroups$.pipe(
-    map((tabGroups) => flatMap(tabGroups, (tabGroup) => tabGroup.tabs))
+    map((tabGroups) => flatMap(tabGroups, (tabGroup) => tabGroup.tabs)),
+    shareReplay(1)
   );
 
   /**
    * Returns Fuse search instance.
    */
   private readonly fuseSearch$: Observable<Fuse<BrowserTab>> = this.tabs$.pipe(
-    map((tabs) => new Fuse(tabs, fuseOptions))
+    map((tabs) => new Fuse(tabs, fuseOptions)),
+    shareReplay(1)
   );
 
   /**
@@ -41,7 +43,8 @@ export class SearchService {
   readonly searchResults$: Observable<BrowserTab[]> = this.searchValue$.pipe(
     withLatestFrom(this.fuseSearch$),
     map(([searchValue, fuseSearch]) => (searchValue?.length > 0 ? fuseSearch.search(searchValue) : null)),
-    map((results) => results?.map(({ item }) => item) ?? null)
+    map((results) => results?.map(({ item }) => item) ?? null),
+    shareReplay(1)
   );
 
   constructor(private tabService: TabService) {}
