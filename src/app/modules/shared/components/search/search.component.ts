@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { isNil } from 'lodash';
 import { map, Observable, shareReplay } from 'rxjs';
 import { SearchService } from 'src/app/services';
 
@@ -23,13 +24,18 @@ export class SearchComponent implements OnInit {
   /**
    * Source for search results.
    */
-   readonly searchResults$ = this.searchService.searchResults$;
+  readonly searchResults$ = this.searchService.searchResults$;
 
   /**
    * Indicates search results state
    */
   readonly hasSearchValue$: Observable<boolean> = this.searchResults$.pipe(
-    map((searchResult) => !!searchResult),
+    map((searchResult) => !isNil(searchResult)),
+    shareReplay(1)
+  );
+
+  readonly searchLength$: Observable<number> = this.searchResults$.pipe(
+    map((searchResults) => searchResults?.length),
     shareReplay(1)
   );
 

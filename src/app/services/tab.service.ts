@@ -155,13 +155,13 @@ export class TabService {
     if (tabGroups?.length > 0) {
       const currentTabGroups = await firstValueFrom(this.tabGroups$);
 
-      const newTabGroups: TabGroup[] = [
-        ...currentTabGroups,
+      const newTabGroups: TabGroup[] = currentTabGroups ?? [];
+      newTabGroups.push(
         ...tabGroups.map((tabGroup) => {
           tabGroup.id = uuidv4();
           return tabGroup;
-        }),
-      ];
+        })
+      );
 
       this.tabGroupsSource$.next(newTabGroups);
 

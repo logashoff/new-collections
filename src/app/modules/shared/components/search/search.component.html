@@ -13,12 +13,18 @@
     </button>
   </mat-form-field>
 </form>
-<ng-container [ngSwitch]="(searchResults$ | async) !== null">
+<ng-container [ngSwitch]="hasSearchValue$ | async">
   <ng-container *ngSwitchCase="true">
     <ng-container *ngIf="searchResults$ | async as searchResults">
-      <mat-card class="search-container" *ngIf="searchResults.length > 0; else empty">
-        <app-tab-list [tabs]="searchResults"></app-tab-list>
-      </mat-card>
+      <ng-container *ngIf="searchResults.length > 0; else empty">
+        <h3 class="results-count" [ngPlural]="searchLength$ | async">
+          <ng-template ngPluralCase="one">One result</ng-template>
+          <ng-template ngPluralCase="other">{{ searchLength$ | async }} results</ng-template>
+        </h3>
+        <mat-card class="search-container">
+          <app-tab-list [tabs]="searchResults"></app-tab-list>
+        </mat-card>
+      </ng-container>
     </ng-container>
   </ng-container>
   <ng-container *ngSwitchCase="false">
