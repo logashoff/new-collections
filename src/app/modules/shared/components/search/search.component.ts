@@ -34,11 +34,6 @@ export class SearchComponent implements OnInit {
     shareReplay(1)
   );
 
-  readonly searchLength$: Observable<number> = this.searchResults$.pipe(
-    map((searchResults) => searchResults?.length),
-    shareReplay(1)
-  );
-
   constructor(private searchService: SearchService) {}
 
   ngOnInit(): void {
