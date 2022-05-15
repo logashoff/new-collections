@@ -1,6 +1,7 @@
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
 import { browserTabsMock, tabGroupsMock } from 'src/mocks';
 import { ignoreUrlsRegExp } from '../utils/models';
 import { getHostname } from '../utils/tab';
@@ -21,6 +22,16 @@ describe('TabService', () => {
   const createService = createServiceFactory({
     service: TabService,
     imports: [MatSnackBarModule],
+    providers: [
+      {
+        provide: ActivatedRoute,
+        useValue: {
+          queryParams: of({
+            groupId: '7dd29b1c-dfab-44d4-8d29-76d402d24038',
+          }),
+        },
+      },
+    ],
   });
 
   beforeEach(() => {
