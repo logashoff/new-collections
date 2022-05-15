@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef, TextOnlySnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
 import { groupBy, remove } from 'lodash';
 import moment from 'moment';
 import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
@@ -56,7 +57,15 @@ export class TabService {
     shareReplay(1)
   );
 
-  constructor(private snackBar: MatSnackBar) {
+  /**
+   * Group ID set by URL query params
+   */
+  readonly paramsGroupId$: Observable<string> = this.activeRoute.queryParams.pipe(
+    map((params) => params.groupId),
+    shareReplay(1)
+  );
+
+  constructor(private snackBar: MatSnackBar, private activeRoute: ActivatedRoute) {
     this.initService();
   }
 
@@ -127,9 +136,9 @@ export class TabService {
    */
   async createTabGroup(tabs: Tab[]): Promise<TabGroup> {
     return new Promise((resolve) => {
-      const filteredTabs = tabs
+      const filteredTabs: BrowserTab[] = tabs
         .filter((tab) => !ignoreUrlsRegExp.test(tab.url))
-        .map(({ id, url, title, favIconUrl, active, pinned }) => ({
+        .map(({ id, url, title, favIconUrl, active, pinned }): BrowserTab => ({
           active,
           favIconUrl,
           id,
@@ -188,25 +197,32 @@ export class TabService {
     return new Promise(async (resolve) => {
       const tabGroups = await firstValueFrom(this.tabGroups$);
 
-      const tabGroup = tabGroups.find((group) => group.tabs.includes(tab));
+      const tabGroup = await this.getGroupByTab(tab);
 
       if (tabGroup) {
         const removedTabs = remove(tabGroup.tabs, (t) => t === tab);
-        let removedGroups = [];
 
         if (tabGroup.tabs.length === 0) {
-          removedGroups = remove(tabGroups, (tg) => tg === tabGroup);
-        }
-
-        if (removedTabs?.length > 0 || removedGroups?.length > 0) {
+          this.removeTabGroup(tabGroup);
+        } else if (removedTabs?.length > 0) {
           this.tabGroupsSource$.next(tabGroups);
           this.save();
-          resolve(true);
         }
+
+        resolve(true);
       }
 
       resolve(false);
     });
+  }
+
+  /**
+   * Returns group that specified tab belongs to.
+   */
+  async getGroupByTab(tab: BrowserTab): Promise<TabGroup> {
+    const tabGroups = await firstValueFrom(this.tabGroups$);
+
+    return tabGroups.find((group) => group.tabs.includes(tab));
   }
 
   /**

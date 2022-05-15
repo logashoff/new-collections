@@ -41,7 +41,7 @@ import {
   TabListComponent,
   TimelineComponent,
 } from './components/index';
-import { StopPropagationDirective } from './directives/index';
+import { ScrollIntoViewDirective, StopPropagationDirective } from './directives/index';
 
 const components = [
   ChipComponent,
@@ -53,6 +53,7 @@ const components = [
   MenuComponent,
   PanelHeaderComponent,
   RenameDialogComponent,
+  ScrollIntoViewDirective,
   SearchComponent,
   StopPropagationDirective,
   TabListComponent,
