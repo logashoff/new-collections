@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { isNil } from 'lodash';
 import { map, Observable, shareReplay } from 'rxjs';
-import { SearchService } from 'src/app/services';
+import { SearchService, TabService } from 'src/app/services';
+import { BrowserTab } from 'src/app/utils';
 
 /**
  * @description
@@ -34,10 +36,25 @@ export class SearchComponent implements OnInit {
     shareReplay(1)
   );
 
-  constructor(private searchService: SearchService) {}
+  constructor(
+    private activeRoute: ActivatedRoute,
+    private router: Router,
+    private searchService: SearchService,
+    private tabService: TabService
+  ) {}
 
   ngOnInit(): void {
-    this.formGroup.valueChanges.subscribe(({ search }) => this.searchService.search(search));
+    this.formGroup.valueChanges.subscribe(({ search }) => {
+      this.searchService.search(search);
+      this.router.navigate([], {
+        relativeTo: this.activeRoute,
+        queryParams: {
+          groupId: undefined,
+        },
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
+    });
   }
 
   /**
@@ -45,5 +62,22 @@ export class SearchComponent implements OnInit {
    */
   clearSearch() {
     this.formGroup.get('search').setValue('');
+  }
+
+  /**
+   * Handles list item click event
+   */
+  async resultsClickHandler(tab: BrowserTab) {
+    const group = await this.tabService.getGroupByTab(tab);
+
+    this.clearSearch();
+
+    this.router.navigate([], {
+      relativeTo: this.activeRoute,
+      queryParams: {
+        groupId: group.id,
+      },
+      replaceUrl: true,
+    });
   }
 }

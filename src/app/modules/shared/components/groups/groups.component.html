@@ -1,10 +1,14 @@
 <mat-accordion>
-  <mat-expansion-panel *ngFor="let group of groups; trackBy: trackByGroupId" hideToggle>
+  <mat-expansion-panel
+    *ngFor="let group of groups; trackBy: trackByGroupId"
+    [appScrollIntoView]="(activeGroupId$ | async) === group.id"
+    [expanded]="(activeGroupId$ | async) === group.id"
+    hideToggle>
     <mat-expansion-panel-header>
       <app-panel-header [group]="group"></app-panel-header>
       <app-group-controls [group]="group"></app-group-controls>
     </mat-expansion-panel-header>
     <mat-divider></mat-divider>
-    <app-tab-list [tabs]="group.tabs"></app-tab-list>
+    <app-tab-list (itemClicked)="handleListClick($event)" [tabs]="group.tabs"></app-tab-list>
   </mat-expansion-panel>
 </mat-accordion>

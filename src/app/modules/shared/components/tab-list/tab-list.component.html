@@ -1,13 +1,13 @@
 <mat-list>
   <ng-container *ngFor="let tab of tabs; let first = first; trackBy: trackByTabId">
     <mat-divider *ngIf="!first"></mat-divider>
-    <mat-list-item>
+    <mat-list-item (click)="handleItemClick(tab)" matRipple>
       <app-chip [source]="tab.favIconUrl"></app-chip>
       <div class="text-container">
         <div class="title">{{ tab.title }}</div>
-        <a class="link" href="{{ tab.url }}" target="_blank"> {{ tab.url }}</a>
+        <a [appStopPropagation] class="link" href="{{ tab.url }}" target="_blank"> {{ tab.url }}</a>
       </div>
-      <button mat-icon-button [matMenuTriggerFor]="tabMenu">
+      <button mat-icon-button [appStopPropagation] [matMenuTriggerFor]="tabMenu">
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #tabMenu="matMenu">

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { remove } from 'lodash';
 import { lastValueFrom } from 'rxjs';
@@ -22,6 +22,11 @@ export class TabListComponent {
    * Tabs list to display
    */
   @Input() tabs: BrowserTab[];
+
+  /**
+   * Emits event when list item is clicked.
+   */
+  @Output() readonly itemClicked = new EventEmitter<BrowserTab>();
 
   /**
    * Tab list *ngFor trackBy function
@@ -55,5 +60,12 @@ export class TabListComponent {
     if (tabRemoved) {
       remove(this.tabs, (t) => t === tab);
     }
+  }
+
+  /**
+   * Handles list item click and dispatches event.
+   */
+  handleItemClick(tab: BrowserTab) {
+    this.itemClicked.emit(tab);
   }
 }
