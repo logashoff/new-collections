@@ -30,6 +30,11 @@ export class GroupsComponent {
   );
 
   /**
+   * Active tab ID from query params
+   */
+  readonly activeTabId$: Observable<number> = this.tabService.paramsTabId$;
+
+  /**
    * List of tab groups to render.
    */
   @Input() groups: TabGroup[];

@@ -50,6 +50,7 @@ export class SearchComponent implements OnInit {
         relativeTo: this.activeRoute,
         queryParams: {
           groupId: undefined,
+          tabId: undefined,
         },
         queryParamsHandling: 'merge',
         replaceUrl: true,
@@ -76,6 +77,7 @@ export class SearchComponent implements OnInit {
       relativeTo: this.activeRoute,
       queryParams: {
         groupId: group.id,
+        tabId: tab.id,
       },
       replaceUrl: true,
     });

@@ -1,7 +1,7 @@
 <mat-list>
   <ng-container *ngFor="let tab of tabs; let first = first; trackBy: trackByTabId">
     <mat-divider *ngIf="!first"></mat-divider>
-    <mat-list-item (click)="handleItemClick(tab)" matRipple>
+    <mat-list-item matRipple (click)="handleItemClick(tab)" [attr.tabId]="tab.id">
       <app-chip [source]="tab.favIconUrl"></app-chip>
       <div class="text-container">
         <div class="title">{{ tab.title }}</div>
