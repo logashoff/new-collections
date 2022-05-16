@@ -1,7 +1,7 @@
 import { waitForAsync } from '@angular/core/testing';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { take } from 'rxjs/operators';
-import { browserTabMock, tabGroupMock } from 'src/mocks';
+import { getBrowserTabMock, getTabGroupMock } from 'src/mocks';
 import { Action, ActionIcons } from '../utils/models';
 import { MenuService } from './menu.service';
 import { TabService } from './tab.service';
@@ -11,7 +11,7 @@ jest.mock('src/app/utils', () => ({
   ActionIcons,
   importTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   getSavedTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
-  queryCurrentWindow: jest.fn().mockImplementation(() => new Promise((resolve) => resolve([browserTabMock]))),
+  queryCurrentWindow: jest.fn().mockImplementation(() => new Promise((resolve) => resolve([getBrowserTabMock()]))),
 }));
 
 describe('MenuService', () => {
@@ -24,7 +24,7 @@ describe('MenuService', () => {
         useValue: {
           addTabGroup: () => new Promise((resolve) => resolve(0)),
           addTabGroups() {},
-          createTabGroup: () => new Promise((resolve) => resolve(tabGroupMock)),
+          createTabGroup: () => new Promise((resolve) => resolve(getTabGroupMock())),
           displayMessage() {},
         },
       },

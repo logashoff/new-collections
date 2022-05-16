@@ -1,7 +1,7 @@
 import { waitForAsync } from '@angular/core/testing';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { of, take } from 'rxjs';
-import { tabGroupsMock } from 'src/mocks';
+import { getTabGroupsMock } from 'src/mocks';
 import { SearchService } from './search.service';
 import { TabService } from './tab.service';
 
@@ -13,7 +13,7 @@ describe('SearchService', () => {
       {
         provide: TabService,
         useValue: {
-          tabGroups$: of(tabGroupsMock),
+          tabGroups$: of(getTabGroupsMock()),
         },
       },
     ],
