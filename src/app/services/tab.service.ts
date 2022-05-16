@@ -65,6 +65,14 @@ export class TabService {
     shareReplay(1)
   );
 
+  /**
+   * Group ID set by URL query params
+   */
+  readonly paramsTabId$: Observable<number> = this.activeRoute.queryParams.pipe(
+    map((params) => params.tabId),
+    shareReplay(1)
+  );
+
   constructor(private snackBar: MatSnackBar, private activeRoute: ActivatedRoute) {
     this.initService();
   }
@@ -138,14 +146,16 @@ export class TabService {
     return new Promise((resolve) => {
       const filteredTabs: BrowserTab[] = tabs
         .filter((tab) => !ignoreUrlsRegExp.test(tab.url))
-        .map(({ id, url, title, favIconUrl, active, pinned }): BrowserTab => ({
-          active,
-          favIconUrl,
-          id,
-          pinned,
-          title,
-          url,
-        }));
+        .map(
+          ({ id, url, title, favIconUrl, active, pinned }): BrowserTab => ({
+            active,
+            favIconUrl,
+            id,
+            pinned,
+            title,
+            url,
+          })
+        );
 
       const tabGroup: TabGroup = {
         id: uuidv4(),
