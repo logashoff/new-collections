@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef, TextOnlySnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
-import { groupBy, remove } from 'lodash';
+import { groupBy, keyBy, remove, unionBy } from 'lodash';
 import moment from 'moment';
 import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -175,12 +175,16 @@ export class TabService {
       const currentTabGroups = await firstValueFrom(this.tabGroups$);
 
       const newTabGroups: TabGroup[] = currentTabGroups ?? [];
-      newTabGroups.push(
-        ...tabGroups.map((tabGroup) => {
-          tabGroup.id = uuidv4();
-          return tabGroup;
-        })
-      );
+      const currentGroupsMap = keyBy(newTabGroups, 'id');
+
+      tabGroups.forEach((newGroup) => {
+        const currentGroup = currentGroupsMap[newGroup.id];
+        if (currentGroup) {
+          currentGroup.tabs = unionBy(newGroup.tabs, currentGroup.tabs, 'id');
+        } else {
+          newTabGroups.push(newGroup);
+        }
+      });
 
       this.tabGroupsSource$.next(newTabGroups);
 
