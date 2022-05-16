@@ -196,10 +196,14 @@ export class TabService {
    * Saves specified tab group to local storage.
    */
   async addTabGroup(tabGroup: TabGroup) {
-    const tabGroups = await firstValueFrom(this.tabGroups$);
+    let tabGroups = await firstValueFrom(this.tabGroups$);
 
+    tabGroups = tabGroups ?? [];
+    
     // merge saved and new tabs
     tabGroups.unshift(tabGroup);
+
+    this.tabGroupsSource$.next(tabGroups);
 
     this.save();
   }
