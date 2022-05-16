@@ -130,6 +130,15 @@ describe('TabService', () => {
     expect(group2.tabs.length).toBe(2);
     expect(group3.tabs.length).toBe(4);
 
+    let [tab1, tab2] = group2.tabs;
+    expect(tab1.id).toBe(51);
+    expect(tab1.title).toBe('GitHub: Where the world builds software · GitHub');
+    expect(tab1.url).toBe('https://github.com/');
+    expect(tab2.id).toBe(52);
+    expect(tab2.title).toBe('DuckDuckGo — Privacy, simplified.');
+    expect(tab2.url).toBe('https://duckduckgo.com/');
+
+    // add same groups and groups array should be the same
     await spectator.service.addTabGroups(getTabGroupsMock());
 
     groups = await firstValueFrom(spectator.service.tabGroups$);
@@ -142,6 +151,7 @@ describe('TabService', () => {
     expect(group2.tabs.length).toBe(2);
     expect(group3.tabs.length).toBe(4);
 
+    // update groups with group ID that already exists
     await spectator.service.addTabGroups([
       {
         id: 'e200698d-d053-45f7-b917-e03b104ae127',
@@ -149,23 +159,23 @@ describe('TabService', () => {
           {
             favIconUrl: 'https://github.githubassets.com/favicons/favicon.svg',
             id: 51,
-            title: 'GitHub: Where the world builds software · GitHub',
-            url: 'https://github.com/',
+            title: 'NEW TITLE 1',
+            url: 'https://newlink.com/',
             pinned: false,
             active: false,
           },
           {
             favIconUrl: 'https://duckduckgo.com/favicon.ico',
             id: 52,
-            title: 'DuckDuckGo — Privacy, simplified.',
-            url: 'https://duckduckgo.com/',
+            title: 'NEW TITLE 2',
+            url: 'https://anotherlink.com/',
             pinned: false,
             active: false,
           },
           {
             favIconUrl: 'https://duckduckgo.com/favicon.ico',
             id: 53,
-            title: 'DuckDuckGo — Privacy, simplified.',
+            title: 'DuckDuckGo',
             url: 'https://duckduckgo.com/',
             pinned: false,
             active: false,
@@ -181,8 +191,19 @@ describe('TabService', () => {
 
     [group1, group2, group3] = groups;
 
+    // tabs list should be updated
     expect(group2.tabs.length).toBe(3);
 
+    // tabs titles and urls for existing tabs should be updated
+    [tab1, tab2] = group2.tabs;
+    expect(tab1.id).toBe(51);
+    expect(tab1.title).toBe('NEW TITLE 1');
+    expect(tab1.url).toBe('https://newlink.com/');
+    expect(tab2.id).toBe(52);
+    expect(tab2.title).toBe('NEW TITLE 2');
+    expect(tab2.url).toBe('https://anotherlink.com/');
+
+    // should add new group
     await spectator.service.addTabGroups([
       {
         id: uuidv4(),
