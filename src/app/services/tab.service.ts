@@ -18,7 +18,7 @@ import {
   Timeline,
   TimelineElement,
 } from 'src/app/utils';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
 import { MessageComponent } from '../modules/shared';
 
 /**
@@ -183,7 +183,7 @@ export class TabService {
         const currentGroup = currentGroupsMap[newGroup.id];
         if (currentGroup) {
           currentGroup.tabs = unionBy(newGroup.tabs, currentGroup.tabs, 'id');
-        } else {
+        } else if (uuidValidate(newGroup.id) && newGroup.timestamp && newGroup.tabs?.length > 0) {
           newTabGroups.push(newGroup);
         }
       });
