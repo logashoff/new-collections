@@ -50,6 +50,11 @@ app-search {
   .search-container {
     padding: 0;
   }
+
+  h3.results-count {
+    line-height: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
 }
 
 @include theme using($theme) {
