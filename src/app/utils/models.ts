@@ -74,5 +74,3 @@ export interface TimelineElement {
 export interface Timeline {
   [label: string]: TimelineElement[];
 }
-
-

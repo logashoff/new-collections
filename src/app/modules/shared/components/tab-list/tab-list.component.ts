@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { remove } from 'lodash';
 import { lastValueFrom } from 'rxjs';
 import { TabService } from 'src/app/services';
 import { BrowserTab } from 'src/app/utils';
@@ -54,11 +53,18 @@ export class TabListComponent {
   /**
    * Removes specified tab from tab list.
    */
-  async removeTab(tab: BrowserTab) {
-    const tabRemoved = await this.tabService.removeTab(tab);
+  async removeTab(removedTab: BrowserTab) {
+    const messageRef = await this.tabService.removeTab(removedTab);
 
-    if (tabRemoved) {
-      remove(this.tabs, (t) => t === tab);
+    let index = this.tabs.findIndex((tab) => tab === removedTab);
+    if (messageRef && index > -1) {
+      this.tabs.splice(index, 1);
+
+      const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
+
+      if (revert) {
+        this.tabs.splice(index, 0, removedTab);
+      }
     }
   }
 
