@@ -1,7 +1,7 @@
 import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { Injectable } from '@angular/core';
 import { TooltipPosition } from '@angular/material/tooltip';
-import { BehaviorSubject } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Action, ActionIcon, exportTabs, getSavedTabs, importTabs, queryCurrentWindow } from 'src/app/utils';
 import { TabService } from './tab.service';
 
@@ -14,7 +14,10 @@ export const tooltipPosition: TooltipPosition = 'left';
   providedIn: 'root',
 })
 export class MenuService {
-  private readonly menuItemsSubject = new BehaviorSubject<MatFabMenu[]>([
+  /**
+   * All available FAB menu items.
+   */
+  readonly menuItems$: Observable<MatFabMenu[]> = of([
     {
       id: Action.Save,
       icon: ActionIcon.Save,
@@ -41,8 +44,6 @@ export class MenuService {
       tooltipPosition,
     },
   ]);
-
-  readonly menuItems$ = this.menuItemsSubject.asObservable();
 
   constructor(private tabsService: TabService) {}
 
