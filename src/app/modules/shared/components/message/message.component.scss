@@ -1,8 +1,10 @@
+@import 'common';
+
 .container {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
 }
 
 .message {
@@ -10,4 +12,20 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.icon {
+  line-height: 1rem;
+}
+
+@include theme using($theme) {
+  :host {
+    .icon {
+      color: getPaletteColor(getPrimaryPalette($theme));
+    }
+
+    .message {
+      color: getPaletteColor(getForegroundPalette($theme), text);
+    }
+  }
 }

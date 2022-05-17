@@ -6,6 +6,7 @@ import moment from 'moment';
 import { BehaviorSubject, firstValueFrom, lastValueFrom, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import {
+  ActionIcon,
   BrowserTab,
   getHostname,
   getSavedTabs,
@@ -237,7 +238,7 @@ export class TabService {
           } else if (removeIndex > -1) {
             this.tabGroupsSource$.next(tabGroups);
             this.save();
-            messageRef = this.displayMessage('Tab removed', 'Undo');
+            messageRef = this.displayMessage('Tab removed', ActionIcon.Undo);
           }
         }
       }
@@ -271,7 +272,7 @@ export class TabService {
   async removeTabGroup(tabGroup: TabGroup): Promise<MatSnackBarRef<MessageComponent>> {
     return new Promise(async (resolve) => {
       const tabGroups = await firstValueFrom(this.tabGroups$);
-      const messageRef = this.displayMessage('Group removed', 'Undo');
+      const messageRef = this.displayMessage('Group removed', ActionIcon.Undo);
 
       const removedGroups = remove(tabGroups, (tg) => tg === tabGroup);
 
@@ -301,7 +302,7 @@ export class TabService {
   /**
    * Displays snackbar message.
    */
-  displayMessage(message: string, action = 'Dismiss', config: MatSnackBarConfig = {}) {
+  displayMessage(message: string, actionIcon?: ActionIcon, config: MatSnackBarConfig = {}) {
     return this.snackBar.openFromComponent(MessageComponent, {
       duration: 10_000,
       ...config,
@@ -309,8 +310,8 @@ export class TabService {
       horizontalPosition: 'center',
       panelClass: 'message-container',
       data: {
+        actionIcon,
         message,
-        action,
       },
     });
   }
