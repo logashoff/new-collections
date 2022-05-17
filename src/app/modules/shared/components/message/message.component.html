@@ -1,0 +1,9 @@
+<div class="container">
+  <div class="message">{{ data.message }}</div>
+  <button *ngIf="data.action" mat-stroked-button color="primary" (click)="dismissWithAction()">
+    {{ data.action }}
+  </button>
+  <button mat-icon-button (click)="dismiss()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>

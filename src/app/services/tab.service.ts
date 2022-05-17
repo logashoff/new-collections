@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef, TextOnlySnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { groupBy, keyBy, remove, unionBy } from 'lodash';
 import moment from 'moment';
@@ -18,6 +18,7 @@ import {
   TimelineElement,
 } from 'src/app/utils';
 import { v4 as uuidv4 } from 'uuid';
+import { MessageComponent } from '../modules/shared';
 
 /**
  * @description
@@ -216,9 +217,9 @@ export class TabService {
   /**
    * Removes tab from specified tab group.
    */
-  async removeTab(removedTab: BrowserTab): Promise<MatSnackBarRef<TextOnlySnackBar>> {
+  async removeTab(removedTab: BrowserTab): Promise<MatSnackBarRef<MessageComponent>> {
     return new Promise(async (resolve) => {
-      let messageRef: MatSnackBarRef<TextOnlySnackBar>;
+      let messageRef: MatSnackBarRef<MessageComponent>;
 
       const tabGroups = await firstValueFrom(this.tabGroups$);
       const tabGroup = await this.getGroupByTab(removedTab);
@@ -267,7 +268,7 @@ export class TabService {
   /**
    * Removed specified tab group from local storage.
    */
-  async removeTabGroup(tabGroup: TabGroup): Promise<MatSnackBarRef<TextOnlySnackBar>> {
+  async removeTabGroup(tabGroup: TabGroup): Promise<MatSnackBarRef<MessageComponent>> {
     return new Promise(async (resolve) => {
       const tabGroups = await firstValueFrom(this.tabGroups$);
       const messageRef = this.displayMessage('Group removed', 'Undo');
@@ -301,11 +302,16 @@ export class TabService {
    * Displays snackbar message.
    */
   displayMessage(message: string, action = 'Dismiss', config: MatSnackBarConfig = {}) {
-    return this.snackBar.open(message, action, {
+    return this.snackBar.openFromComponent(MessageComponent, {
+      duration: 10_000,
+      ...config,
       verticalPosition: 'bottom',
       horizontalPosition: 'center',
-      duration: 5_000,
-      ...config,
+      panelClass: 'message-container',
+      data: {
+        message,
+        action,
+      },
     });
   }
 }
