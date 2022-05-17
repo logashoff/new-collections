@@ -80,3 +80,13 @@ a {
     font-family: 'Roboto';
   }
 }
+
+.cdk-overlay-pane.mat-snack-bar-handset {
+  width: unset;
+
+  .mat-snack-bar-container {
+    max-width: 33vw;
+    min-width: 344px;
+    margin: 24px;
+  }
+}

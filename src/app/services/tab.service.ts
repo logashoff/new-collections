@@ -3,7 +3,7 @@ import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef, TextOnlySnackBar } from
 import { ActivatedRoute } from '@angular/router';
 import { groupBy, keyBy, remove, unionBy } from 'lodash';
 import moment from 'moment';
-import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, lastValueFrom, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import {
   BrowserTab,
@@ -199,9 +199,14 @@ export class TabService {
     let tabGroups = await firstValueFrom(this.tabGroups$);
 
     tabGroups = tabGroups ?? [];
-    
-    // merge saved and new tabs
-    tabGroups.unshift(tabGroup);
+    const groupsMap = keyBy(tabGroups, 'id');
+
+    const existingGroup = groupsMap[tabGroup.id];
+    if (existingGroup) {
+      existingGroup.tabs = unionBy(tabGroup.tabs, existingGroup.tabs, 'id');
+    } else {
+      tabGroups.push(tabGroup);
+    }
 
     this.tabGroupsSource$.next(tabGroups);
 
@@ -211,26 +216,42 @@ export class TabService {
   /**
    * Removes tab from specified tab group.
    */
-  async removeTab(tab: BrowserTab): Promise<boolean> {
+  async removeTab(removedTab: BrowserTab): Promise<MatSnackBarRef<TextOnlySnackBar>> {
     return new Promise(async (resolve) => {
-      const tabGroups = await firstValueFrom(this.tabGroups$);
+      let messageRef: MatSnackBarRef<TextOnlySnackBar>;
 
-      const tabGroup = await this.getGroupByTab(tab);
+      const tabGroups = await firstValueFrom(this.tabGroups$);
+      const tabGroup = await this.getGroupByTab(removedTab);
+
+      let removeIndex = -1;
 
       if (tabGroup) {
-        const removedTabs = remove(tabGroup.tabs, (t) => t === tab);
+        removeIndex = tabGroup.tabs.findIndex((tab) => tab === removedTab);
 
-        if (tabGroup.tabs.length === 0) {
-          this.removeTabGroup(tabGroup);
-        } else if (removedTabs?.length > 0) {
+        if (removeIndex > -1) {
+          tabGroup.tabs.splice(removeIndex, 1);
+
+          if (tabGroup.tabs.length === 0) {
+            messageRef = await this.removeTabGroup(tabGroup);
+          } else if (removeIndex > -1) {
+            this.tabGroupsSource$.next(tabGroups);
+            this.save();
+            messageRef = this.displayMessage('Tab removed', 'Undo');
+          }
+        }
+      }
+
+      resolve(messageRef);
+
+      if (removeIndex > -1) {
+        const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
+
+        if (revert) {
+          tabGroup.tabs.splice(removeIndex, 0, removedTab);
           this.tabGroupsSource$.next(tabGroups);
           this.save();
         }
-
-        resolve(true);
       }
-
-      resolve(false);
     });
   }
 
@@ -246,13 +267,27 @@ export class TabService {
   /**
    * Removed specified tab group from local storage.
    */
-  async removeTabGroup(tabGroup: TabGroup) {
-    const tabGroups = await firstValueFrom(this.tabGroups$);
+  async removeTabGroup(tabGroup: TabGroup): Promise<MatSnackBarRef<TextOnlySnackBar>> {
+    return new Promise(async (resolve) => {
+      const tabGroups = await firstValueFrom(this.tabGroups$);
+      const messageRef = this.displayMessage('Group removed', 'Undo');
 
-    remove(tabGroups, (tg) => tg === tabGroup);
+      const removedGroups = remove(tabGroups, (tg) => tg === tabGroup);
 
-    this.tabGroupsSource$.next(tabGroups);
-    this.save();
+      this.tabGroupsSource$.next(tabGroups);
+
+      resolve(messageRef);
+
+      this.save();
+
+      if (removedGroups?.length > 0) {
+        const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
+
+        if (revert) {
+          await this.addTabGroup(tabGroup);
+        }
+      }
+    });
   }
 
   /**
@@ -265,15 +300,12 @@ export class TabService {
   /**
    * Displays snackbar message.
    */
-  displayMessage(
-    message: string,
-    action = 'Dismiss',
-    config: MatSnackBarConfig = {}
-  ): MatSnackBarRef<TextOnlySnackBar> {
+  displayMessage(message: string, action = 'Dismiss', config: MatSnackBarConfig = {}) {
     return this.snackBar.open(message, action, {
+      verticalPosition: 'bottom',
+      horizontalPosition: 'center',
+      duration: 5_000,
       ...config,
-      verticalPosition: 'top',
-      politeness: 'assertive',
     });
   }
 }
