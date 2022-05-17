@@ -1,3 +1,4 @@
+@use '@angular/material' as mat;
 @import 'common';
 
 html,
@@ -45,6 +46,11 @@ a {
       color: getPaletteColor(getPrimaryPalette($theme));
     }
   }
+
+  .message-container.mat-snack-bar-container {
+    color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+    background: getPaletteColor(getBackgroundPalette($theme), background);
+  }
 }
 
 .mat-raised-button,
@@ -79,6 +85,13 @@ a {
   .mat-badge-content {
     font-family: 'Roboto';
   }
+}
+
+.message-container.mat-snack-bar-container {
+  @include mat.elevation(8);
+
+  padding: 0;
+  border-radius: 2rem;
 }
 
 .cdk-overlay-pane.mat-snack-bar-handset {
