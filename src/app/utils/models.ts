@@ -39,11 +39,12 @@ export interface TabsByHostname {
 /**
  * Action icons.
  */
-export enum ActionIcons {
-  Export = 'download',
+export enum ActionIcon {
+  Export = 'save_alt',
   Import = 'file_upload',
-  Options = 'settings',
-  Save = 'collections_bookmark',
+  Options = 'open_in_new',
+  Save = 'bookmark_add',
+  Undo = 'undo'
 }
 
 /**

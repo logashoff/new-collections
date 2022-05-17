@@ -2,7 +2,7 @@ import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { Injectable } from '@angular/core';
 import { TooltipPosition } from '@angular/material/tooltip';
 import { BehaviorSubject } from 'rxjs';
-import { Action, ActionIcons, exportTabs, getSavedTabs, importTabs, queryCurrentWindow } from 'src/app/utils';
+import { Action, ActionIcon, exportTabs, getSavedTabs, importTabs, queryCurrentWindow } from 'src/app/utils';
 import { TabService } from './tab.service';
 
 /**
@@ -17,27 +17,27 @@ export class MenuService {
   private readonly menuItemsSubject = new BehaviorSubject<MatFabMenu[]>([
     {
       id: Action.Save,
-      icon: ActionIcons.Save,
-      tooltip: 'Save',
+      icon: ActionIcon.Save,
+      tooltip: 'Bookmark open tabs',
       tooltipPosition,
       color: 'accent',
     },
     {
       id: Action.Export,
-      icon: ActionIcons.Export,
-      tooltip: 'Export',
+      icon: ActionIcon.Export,
+      tooltip: 'Save list as file',
       tooltipPosition,
     },
     {
       id: Action.Import,
-      icon: ActionIcons.Import,
-      tooltip: 'Import',
+      icon: ActionIcon.Import,
+      tooltip: 'Import list from file',
       tooltipPosition,
     },
     {
       id: Action.Options,
-      icon: ActionIcons.Options,
-      tooltip: 'Options',
+      icon: ActionIcon.Options,
+      tooltip: 'Open in new window',
       tooltipPosition,
     },
   ]);
@@ -64,7 +64,7 @@ export class MenuService {
             await this.tabsService.addTabGroup(tabGroup);
             this.openOptions();
           } else {
-            this.tabsService.displayMessage('Opened tabs cannot be saved');
+            this.tabsService.displayMessage('Current tab list is invalid');
           }
           break;
         case Action.Options:
@@ -75,7 +75,7 @@ export class MenuService {
           if (tabGroups?.length > 0) {
             exportTabs(tabGroups);
           } else {
-            this.tabsService.displayMessage('Empty list cannot be saved');
+            this.tabsService.displayMessage('Empty list cannot be exported');
           }
           break;
         case Action.Import:

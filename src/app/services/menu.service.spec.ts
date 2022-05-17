@@ -2,16 +2,17 @@ import { waitForAsync } from '@angular/core/testing';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { take } from 'rxjs/operators';
 import { getBrowserTabMock, getTabGroupMock } from 'src/mocks';
-import { Action, ActionIcons } from '../utils/models';
+import { Action, ActionIcon } from '../utils/models';
 import { MenuService } from './menu.service';
 import { TabService } from './tab.service';
 
 jest.mock('src/app/utils', () => ({
   Action,
-  ActionIcons,
+  ActionIcon,
   importTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   getSavedTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   queryCurrentWindow: jest.fn().mockImplementation(() => new Promise((resolve) => resolve([getBrowserTabMock()]))),
+  usesDarkMode: jest.fn().mockImplementation(() => {}),
 }));
 
 describe('MenuService', () => {
@@ -45,27 +46,27 @@ describe('MenuService', () => {
       expect(actions).toEqual([
         {
           id: 4,
-          icon: 'collections_bookmark',
-          tooltip: 'Save',
+          icon: 'bookmark_add',
+          tooltip: 'Bookmark open tabs',
           tooltipPosition: 'left',
           color: 'accent',
         },
         {
           id: 1,
-          icon: 'download',
-          tooltip: 'Export',
+          icon: 'save_alt',
+          tooltip: 'Save list as file',
           tooltipPosition: 'left',
         },
         {
           id: 2,
           icon: 'file_upload',
-          tooltip: 'Import',
+          tooltip: 'Import list from file',
           tooltipPosition: 'left',
         },
         {
           id: 3,
-          icon: 'settings',
-          tooltip: 'Options',
+          icon: 'open_in_new',
+          tooltip: 'Open in new window',
           tooltipPosition: 'left',
         },
       ]);
