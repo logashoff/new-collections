@@ -1,7 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { isNil } from 'lodash';
 import { BehaviorSubject, filter, map, Observable, shareReplay } from 'rxjs';
-import { Timeline } from 'src/app/utils';
+import { TabService } from 'src/app/services';
+import { TabGroup, Timeline, TimelineElement } from 'src/app/utils';
 
 /**
  * @description
@@ -32,4 +33,13 @@ export class TimelineComponent {
     map((timeline) => Object.keys(timeline)),
     shareReplay(1)
   );
+
+  constructor(private tabService: TabService) {}
+
+  /**`
+   * Removes all items in timeline section
+   */
+  async removeGroups(groups: TimelineElement[]) {
+    await this.tabService.removeTabGroups(groups as TabGroup[]);
+  }
 }

@@ -238,7 +238,7 @@ export class TabService {
           } else if (removeIndex > -1) {
             this.tabGroupsSource$.next(tabGroups);
             this.save();
-            messageRef = this.displayMessage('Tab removed', ActionIcon.Undo);
+            messageRef = this.displayMessage('Item removed', ActionIcon.Undo);
           }
         }
       }
@@ -272,7 +272,7 @@ export class TabService {
   async removeTabGroup(tabGroup: TabGroup): Promise<MatSnackBarRef<MessageComponent>> {
     return new Promise(async (resolve) => {
       const tabGroups = await firstValueFrom(this.tabGroups$);
-      const messageRef = this.displayMessage('Group removed', ActionIcon.Undo);
+      const messageRef = this.displayMessage('Item removed', ActionIcon.Undo);
 
       const removedGroups = remove(tabGroups, (tg) => tg === tabGroup);
 
@@ -287,6 +287,34 @@ export class TabService {
 
         if (revert) {
           await this.addTabGroup(tabGroup);
+        }
+      }
+    });
+  }
+
+  /**
+   * Removed multiple tab groups.
+   */
+  async removeTabGroups(tabGroups: TabGroup[]): Promise<MatSnackBarRef<MessageComponent>> {
+    return new Promise(async (resolve) => {
+      const currentTabGroups = await firstValueFrom(this.tabGroups$);
+      const messageRef = this.displayMessage('Items removed', ActionIcon.Undo);
+
+      const removedGroups = remove(currentTabGroups, (tabGroup) => tabGroups.includes(tabGroup));
+
+      if (removedGroups?.length > 0) {
+        this.tabGroupsSource$.next(currentTabGroups);
+
+        resolve(messageRef);
+
+        this.save();
+
+        if (removedGroups?.length > 0) {
+          const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
+
+          if (revert) {
+            await this.addTabGroups(removedGroups);
+          }
         }
       }
     });

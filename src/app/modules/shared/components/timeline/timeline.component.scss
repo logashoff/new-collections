@@ -1,16 +1,23 @@
 @import 'common';
 
-h3.timeline-label {
-  margin: 1rem 0;
+.timeline-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.5rem 0;
 
   &:first-of-type {
     margin-top: 0;
   }
 }
 
+h3.timeline-label {
+  margin: 0;
+}
+
 @include theme using($theme) {
   :host {
-    h3.timeline-label {
+    .timeline-header {
       color: getPaletteColor(getForegroundPalette($theme), hint-text);
     }
   }

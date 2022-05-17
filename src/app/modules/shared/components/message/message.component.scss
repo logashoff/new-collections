@@ -4,7 +4,8 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  padding: 0 0.5rem;
+  height: 3rem;
 }
 
 .message {
@@ -15,17 +16,19 @@
 }
 
 .icon {
-  line-height: 1rem;
+  line-height: 0;
+
+  mat-icon {
+    font-size: 1.75rem;
+    height: 1.75rem;
+    width: 1.75rem;
+  }
 }
 
 @include theme using($theme) {
   :host {
     .icon {
       color: getPaletteColor(getPrimaryPalette($theme));
-    }
-
-    .message {
-      color: getPaletteColor(getForegroundPalette($theme), text);
     }
   }
 }
