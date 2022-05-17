@@ -91,6 +91,7 @@ a {
   @include mat.elevation(8);
 
   padding: 0;
+  border-radius: 2rem;
 }
 
 .cdk-overlay-pane.mat-snack-bar-handset {
@@ -100,6 +101,5 @@ a {
     max-width: 33vw;
     min-width: 344px;
     margin: 24px;
-    border-radius: 2rem;
   }
 }
