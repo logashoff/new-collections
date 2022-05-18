@@ -10,7 +10,7 @@ Save Tabs is a browser extension that allows to quickly save and restore open ta
 - [x] Remove individual tabs or entire tab group
 - [x] Edit tab titles
 - [x] Search tab lists
-- [ ] Add new links to existing lists
+- [x] Add new links to existing lists
 ## Build
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.

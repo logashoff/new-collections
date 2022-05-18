@@ -1,0 +1,27 @@
+<form [formGroup]="formGroup" (ngSubmit)="save()">
+  <div *ngIf="tabs?.length; else empty" class="container">
+    <div class="header">
+      <button type="submit" mat-flat-button color="primary" [disabled]="!formGroup.valid" matTooltip="Add Selected">
+        Select
+      </button>
+      <mat-checkbox
+        [checked]="allSelected$ | async"
+        [indeterminate]="someSelected$ | async"
+        (change)="selectAll($event.checked)">
+      </mat-checkbox>
+    </div>
+    <mat-divider></mat-divider>
+    <mat-selection-list formControlName="list">
+      <mat-list-option *ngFor="let tab of tabs" [value]="tab">
+        <img matListAvatar [src]="tab.favIconUrl" [alt]="tab.url" />
+        <span matLine>{{ tab.title }}</span>
+        <span matLine>{{ tab.url }}</span>
+      </mat-list-option>
+    </mat-selection-list>
+  </div>
+</form>
+<ng-template #empty>
+  <div class="empty">
+    <app-empty>tab_unselected</app-empty>
+  </div>
+</ng-template>
