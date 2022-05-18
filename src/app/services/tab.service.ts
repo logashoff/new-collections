@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { groupBy, keyBy, remove, unionBy } from 'lodash';
@@ -19,7 +20,7 @@ import {
   TimelineElement,
 } from 'src/app/utils';
 import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
-import { MessageComponent } from '../modules/shared';
+import { MessageComponent, TabsSelectorComponent } from '../modules/shared';
 
 /**
  * @description
@@ -75,7 +76,7 @@ export class TabService {
     shareReplay(1)
   );
 
-  constructor(private snackBar: MatSnackBar, private activeRoute: ActivatedRoute) {
+  constructor(private snackBar: MatSnackBar, private activeRoute: ActivatedRoute, private bottomSheet: MatBottomSheet) {
     this.initService();
   }
 
@@ -213,6 +214,40 @@ export class TabService {
     this.tabGroupsSource$.next(tabGroups);
 
     this.save();
+  }
+
+  /**
+   * Add tab list to group specified.
+   */
+  async addTabs(group: TabGroup, tabs: BrowserTab[]) {
+    let filteredTabs = tabs.filter(({ url }) => !ignoreUrlsRegExp.test(url));
+
+    if (filteredTabs.length === 0) {
+      this.displayMessage('Tab list in invalid');
+    } else {
+      const existingUrls = keyBy(group.tabs, 'url');
+      filteredTabs = filteredTabs.filter(({ url }) => !existingUrls[url]);
+
+      if (filteredTabs?.length > 0) {
+        let tabGroups = await firstValueFrom(this.tabGroups$);
+
+        const bottomSheetRef = this.bottomSheet.open(TabsSelectorComponent, {
+          data: filteredTabs,
+        });
+
+        const tabs: BrowserTab[] = await lastValueFrom(bottomSheetRef.afterDismissed());
+
+        if (tabs?.length > 0) {
+          group.tabs.push(...tabs);
+
+          this.tabGroupsSource$.next(tabGroups);
+
+          this.save();
+        }
+      } else {
+        this.displayMessage('Tabs are already in the list');
+      }
+    }
   }
 
   /**

@@ -1,0 +1,25 @@
+app-tabs-selector {
+  .container {
+    display: flex;
+    flex-direction: column;
+
+    .mat-list-base .mat-list-option .mat-list-text {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1rem 1rem 0.5rem;
+      flex: 0 0 0;
+    }
+  }
+
+  .empty {
+    min-height: 33vh;
+  }
+}
