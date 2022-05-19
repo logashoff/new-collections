@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { MatSelectionList } from '@angular/material/list';
 import { isNil } from 'lodash';
-import { filter, map, Observable, shareReplay, withLatestFrom } from 'rxjs';
+import { filter, map, Observable, shareReplay, startWith, withLatestFrom } from 'rxjs';
 import { Tabs } from 'src/app/utils';
 
 /**
@@ -36,10 +36,19 @@ export class TabsSelectorComponent {
   );
 
   /**
+   * Number of items selected in the list.
+   */
+  readonly selectionLength$: Observable<number> = this.checkList$.pipe(
+    startWith([]),
+    map((list) => list?.length ?? 0),
+    shareReplay(1)
+  );
+
+  /**
    * True if all list items are selected.
    */
-  readonly allSelected$: Observable<boolean> = this.checkList$.pipe(
-    map((list) => list.length === this.tabs.length),
+  readonly allSelected$: Observable<boolean> = this.selectionLength$.pipe(
+    map((len) => len === this.tabs.length),
     shareReplay(1)
   );
 

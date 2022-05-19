@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { groupBy, keyBy, remove } from 'lodash';
@@ -15,7 +15,6 @@ import {
   getSavedTabs,
   ignoreUrlsRegExp,
   saveTabGroups,
-  Tab,
   TabGroup,
   TabGroups,
   Tabs,
@@ -236,9 +235,7 @@ export class TabService {
       if (filteredTabs?.length > 0) {
         let tabGroups = await firstValueFrom(this.tabGroups$);
 
-        const bottomSheetRef = this.bottomSheet.open(TabsSelectorComponent, {
-          data: filteredTabs,
-        });
+        const bottomSheetRef = this.openTabsSelector(filteredTabs);
 
         const tabs: BrowserTabs = await lastValueFrom(bottomSheetRef.afterDismissed());
 
@@ -248,6 +245,14 @@ export class TabService {
           this.tabGroupsSource$.next(tabGroups);
 
           this.save();
+
+          const messageRef = this.displayMessage(`Added ${tabs.length} tabs`, ActionIcon.Undo);
+
+          const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
+
+          if (revert) {
+            await group.removeTabs(tabs);
+          }
         }
       } else {
         this.displayMessage('Tabs are already in the list');
@@ -390,6 +395,16 @@ export class TabService {
         actionIcon,
         message,
       },
+    });
+  }
+
+  /**
+   * Opens tabs selector bottom sheet.
+   */
+  openTabsSelector(tabs: BrowserTabs): MatBottomSheetRef<TabsSelectorComponent> {
+    return this.bottomSheet.open(TabsSelectorComponent, {
+      data: tabs,
+      panelClass: 'bottom-sheet',
     });
   }
 }

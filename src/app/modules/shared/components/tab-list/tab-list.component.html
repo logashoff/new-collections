@@ -5,7 +5,7 @@
       <app-chip [source]="tab.favIconUrl"></app-chip>
       <div class="text-container">
         <div class="title">{{ tab.title }}</div>
-        <a [appStopPropagation] class="link" href="{{ tab.url }}" target="_blank"> {{ tab.url }}</a>
+        <a [appStopPropagation] class="link" href="{{ tab.url }}" target="_blank">{{ tab.url }}</a>
       </div>
       <button mat-icon-button [appStopPropagation] [matMenuTriggerFor]="tabMenu">
         <mat-icon>more_vert</mat-icon>
