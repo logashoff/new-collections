@@ -10,6 +10,6 @@
       <app-group-controls [group]="group"></app-group-controls>
     </mat-expansion-panel-header>
     <mat-divider></mat-divider>
-    <app-tab-list (itemClicked)="handleListClick($event)" [tabs]="group.tabs"></app-tab-list>
+    <app-tab-list (itemClicked)="handleListClick($event)" [tabs]="group.tabs$ | async"></app-tab-list>
   </mat-expansion-panel>
 </mat-accordion>

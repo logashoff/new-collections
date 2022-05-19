@@ -1,30 +1,32 @@
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { firstValueFrom, of } from 'rxjs';
 import { getBrowserTabsMock, getTabGroupsMock } from 'src/mocks';
 import { v4 as uuidv4 } from 'uuid';
-import { ActionIcon, ignoreUrlsRegExp } from '../utils/models';
+import { ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
 import { getHostname } from '../utils/tab';
 import { TabService } from './tab.service';
 
 jest.mock('src/app/utils', () => ({
   getSavedTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(getTabGroupsMock()))),
-  queryTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(getBrowserTabsMock))),
   queryCurrentWindow: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(getBrowserTabsMock()))),
+  queryTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(getBrowserTabsMock))),
   removeTab: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   saveTabGroups: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   usesDarkMode: jest.fn().mockImplementation(() => {}),
-  ignoreUrlsRegExp,
-  getHostname,
   ActionIcon,
+  getHostname,
+  ignoreUrlsRegExp,
+  TabGroup,
 }));
 
 describe('TabService', () => {
   let spectator: SpectatorService<TabService>;
   const createService = createServiceFactory({
     service: TabService,
-    imports: [MatSnackBarModule],
+    imports: [MatSnackBarModule, MatBottomSheetModule],
     providers: [
       {
         provide: ActivatedRoute,
@@ -141,7 +143,8 @@ describe('TabService', () => {
     expect(tab2.url).toBe('https://duckduckgo.com/');
 
     // add same groups and groups array should be the same
-    await spectator.service.addTabGroups(getTabGroupsMock());
+    const collections = getTabGroupsMock();
+    await spectator.service.addTabGroups(collections.map((collection) => new TabGroup(collection)));
 
     groups = await firstValueFrom(spectator.service.tabGroups$);
 
@@ -155,7 +158,7 @@ describe('TabService', () => {
 
     // update groups with group ID that already exists
     await spectator.service.addTabGroups([
-      {
+      new TabGroup({
         id: 'e200698d-d053-45f7-b917-e03b104ae127',
         tabs: [
           {
@@ -184,7 +187,7 @@ describe('TabService', () => {
           },
         ],
         timestamp: 1650858875455,
-      },
+      }),
     ]);
 
     groups = await firstValueFrom(spectator.service.tabGroups$);
@@ -207,7 +210,7 @@ describe('TabService', () => {
 
     // should add new group
     await spectator.service.addTabGroups([
-      {
+      new TabGroup({
         id: uuidv4(),
         tabs: [
           {
@@ -220,7 +223,7 @@ describe('TabService', () => {
           },
         ],
         timestamp: new Date().getTime(),
-      },
+      }),
     ]);
 
     groups = await firstValueFrom(spectator.service.tabGroups$);

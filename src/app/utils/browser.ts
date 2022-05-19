@@ -1,18 +1,16 @@
-export type QueryInfo = chrome.tabs.QueryInfo;
-export type Tab = chrome.tabs.Tab;
-export type TabIconDetails = chrome.browserAction.TabIconDetails;
+import { QueryInfo, TabIconDetails, Tabs } from './models';
 
 /**
  * Returns tabs promise based on provided config.
  */
-export function queryTabs(config: QueryInfo): Promise<Tab[]> {
+export function queryTabs(config: QueryInfo): Promise<Tabs> {
   return new Promise((resolve) => chrome.tabs.query(config, (tabs) => resolve(tabs)));
 }
 
 /**
  * Returns tab list from current window.
  */
-export function queryCurrentWindow(): Promise<Tab[]> {
+export function queryCurrentWindow(): Promise<Tabs> {
   return queryTabs({ currentWindow: true });
 }
 

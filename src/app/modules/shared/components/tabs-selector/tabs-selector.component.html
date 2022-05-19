@@ -5,6 +5,7 @@
         Select
       </button>
       <mat-checkbox
+        color="primary"
         [checked]="allSelected$ | async"
         [indeterminate]="someSelected$ | async"
         (change)="selectAll($event.checked)">
@@ -12,7 +13,7 @@
     </div>
     <mat-divider></mat-divider>
     <mat-selection-list formControlName="list">
-      <mat-list-option *ngFor="let tab of tabs" [value]="tab">
+      <mat-list-option *ngFor="let tab of tabs" [value]="tab" color="primary">
         <img matListAvatar [src]="tab.favIconUrl" [alt]="tab.url" />
         <span matLine>{{ tab.title }}</span>
         <span matLine>{{ tab.url }}</span>

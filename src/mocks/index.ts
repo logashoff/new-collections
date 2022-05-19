@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash';
-import { Tab, TabGroup } from 'src/app/utils';
+import { Collection, Collections, Tab, Tabs } from 'src/app/utils';
 
-const tabGroupMock: TabGroup = {
+const tabGroupMock: Collection = {
   id: 'e200698d-d053-45f7-b917-e03b104ae127',
   tabs: [
     {
@@ -24,9 +24,9 @@ const tabGroupMock: TabGroup = {
   timestamp: 1650858875455,
 };
 
-export const getTabGroupMock = () => ({ ...tabGroupMock });
+export const getTabGroupMock = () => cloneDeep(tabGroupMock);
 
-const tabGroupsMock: TabGroup[] = [
+const tabGroupsMock: Collections = [
   {
     id: '7dd29b1c-dfab-44d4-8d29-76d402d24038',
     tabs: [
@@ -163,7 +163,7 @@ const browserTabMock: Tab = {
 
 export const getBrowserTabMock = () => cloneDeep(browserTabMock);
 
-const browserTabsMock: Tab[] = [
+const browserTabsMock: Tabs = [
   {
     active: true,
     audible: false,
