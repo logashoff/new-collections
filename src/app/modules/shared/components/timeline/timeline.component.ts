@@ -1,8 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { isNil } from 'lodash';
 import { BehaviorSubject, filter, map, Observable, shareReplay } from 'rxjs';
 import { TabService } from 'src/app/services';
-import { TabGroup, Timeline, TimelineElement } from 'src/app/utils';
+import { TabGroups, Timeline, TimelineElement } from 'src/app/utils';
 
 /**
  * @description
@@ -13,6 +13,7 @@ import { TabGroup, Timeline, TimelineElement } from 'src/app/utils';
   selector: 'app-timeline',
   templateUrl: './timeline.component.html',
   styleUrls: ['./timeline.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimelineComponent {
   private readonly timeline$ = new BehaviorSubject<Timeline>(null);
@@ -40,6 +41,6 @@ export class TimelineComponent {
    * Removes all items in timeline section
    */
   async removeGroups(groups: TimelineElement[]) {
-    await this.tabService.removeTabGroups(groups as TabGroup[]);
+    await this.tabService.removeTabGroups(groups as TabGroups);
   }
 }

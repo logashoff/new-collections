@@ -1,8 +1,8 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { lastValueFrom } from 'rxjs';
 import { TabService } from 'src/app/services';
-import { BrowserTab } from 'src/app/utils';
+import { BrowserTab, BrowserTabs } from 'src/app/utils';
 import { RenameDialogComponent } from '../rename-dialog/rename-dialog.component';
 
 /**
@@ -20,7 +20,7 @@ export class TabListComponent {
   /**
    * Tabs list to display
    */
-  @Input() tabs: BrowserTab[];
+  @Input() tabs: BrowserTabs;
 
   /**
    * Emits event when list item is clicked.
@@ -32,7 +32,7 @@ export class TabListComponent {
    */
   readonly trackByTabId = (_, tab: BrowserTab): number => tab.id;
 
-  constructor(private tabService: TabService, private dialog: MatDialog, private cdr: ChangeDetectorRef) {}
+  constructor(private tabService: TabService, private dialog: MatDialog) {}
 
   /**
    * Opens dialog to edit specified tab.
@@ -46,7 +46,6 @@ export class TabListComponent {
       tab.url = update.url;
 
       this.tabService.save();
-      this.cdr.markForCheck();
     }
   }
 

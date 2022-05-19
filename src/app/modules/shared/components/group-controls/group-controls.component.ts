@@ -1,10 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { keyBy } from 'lodash';
-import { lastValueFrom } from 'rxjs';
 import { TabService } from 'src/app/services';
-import { BrowserTab, ignoreUrlsRegExp, queryCurrentWindow, restoreTabs, Tab, TabGroup } from 'src/app/utils';
-import { TabsSelectorComponent } from '../tabs-selector/tabs-selector.component';
+import { queryCurrentWindow, restoreTabs, TabGroup, Tabs } from 'src/app/utils';
 
 /**
  * @description
@@ -40,7 +36,7 @@ export class GroupControlsComponent {
    * Opens browser tab selector to add new tabs to current group.
    */
   async addTabs() {
-    const tabs: Tab[] = await queryCurrentWindow();
+    const tabs: Tabs = await queryCurrentWindow();
 
     this.tabService.addTabs(this.group, tabs);
   }

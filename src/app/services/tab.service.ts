@@ -2,19 +2,23 @@ import { Injectable } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
-import { groupBy, keyBy, remove, unionBy } from 'lodash';
+import { groupBy, keyBy, remove } from 'lodash';
 import moment from 'moment';
 import { BehaviorSubject, firstValueFrom, lastValueFrom, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import {
   ActionIcon,
   BrowserTab,
+  BrowserTabs,
+  Collection,
   getHostname,
   getSavedTabs,
   ignoreUrlsRegExp,
   saveTabGroups,
   Tab,
   TabGroup,
+  TabGroups,
+  Tabs,
   TabsByHostname,
   Timeline,
   TimelineElement,
@@ -34,7 +38,7 @@ export class TabService {
   /**
    * Behavior subject will be used to populate tabs data when managing tabs.
    */
-  private readonly tabGroupsSource$ = new BehaviorSubject<TabGroup[]>(null);
+  private readonly tabGroupsSource$ = new BehaviorSubject<TabGroups>(null);
 
   /**
    * Observable used by components to listen for tabs data changes.
@@ -84,13 +88,14 @@ export class TabService {
    * Initialize service and load stored tab groups.
    */
   private async initService() {
-    this.tabGroupsSource$.next(await getSavedTabs());
+    const collections = await getSavedTabs();
+    this.tabGroupsSource$.next(collections?.map((collection) => new TabGroup(collection)));
   }
 
   /**
    * Generates icon group based on tab group specified.
    */
-  private createHostnameGroups(tabGroups: TabGroup[]): TabsByHostname {
+  private createHostnameGroups(tabGroups: TabGroups): TabsByHostname {
     const ret: TabsByHostname = {};
 
     tabGroups.forEach((tabGroup) => {
@@ -145,9 +150,9 @@ export class TabService {
   /**
    * Generates tab group from browser tab list.
    */
-  async createTabGroup(tabs: Tab[]): Promise<TabGroup> {
+  async createTabGroup(tabs: Tabs): Promise<TabGroup> {
     return new Promise((resolve) => {
-      const filteredTabs: BrowserTab[] = tabs
+      const filteredTabs: BrowserTabs = tabs
         .filter((tab) => !ignoreUrlsRegExp.test(tab.url))
         .map(
           ({ id, url, title, favIconUrl, active, pinned }): BrowserTab => ({
@@ -160,11 +165,11 @@ export class TabService {
           })
         );
 
-      const tabGroup: TabGroup = {
+      const tabGroup = new TabGroup({
         id: uuidv4(),
         timestamp: new Date().getTime(),
         tabs: filteredTabs,
-      };
+      });
 
       resolve(tabGroup);
     });
@@ -173,17 +178,17 @@ export class TabService {
   /**
    * Saves provided tab groups to local storage.
    */
-  async addTabGroups(tabGroups: TabGroup[]) {
+  async addTabGroups(tabGroups: TabGroups) {
     if (tabGroups?.length > 0) {
       const currentTabGroups = await firstValueFrom(this.tabGroups$);
 
-      const newTabGroups: TabGroup[] = currentTabGroups ?? [];
+      const newTabGroups: TabGroups = currentTabGroups ?? [];
       const currentGroupsMap = keyBy(newTabGroups, 'id');
 
       tabGroups.forEach((newGroup) => {
         const currentGroup = currentGroupsMap[newGroup.id];
         if (currentGroup) {
-          currentGroup.tabs = unionBy(newGroup.tabs, currentGroup.tabs, 'id');
+          currentGroup.mergeTabs(newGroup.tabs);
         } else if (uuidValidate(newGroup.id) && newGroup.timestamp && newGroup.tabs?.length > 0) {
           newTabGroups.push(newGroup);
         }
@@ -206,7 +211,7 @@ export class TabService {
 
     const existingGroup = groupsMap[tabGroup.id];
     if (existingGroup) {
-      existingGroup.tabs = unionBy(tabGroup.tabs, existingGroup.tabs, 'id');
+      existingGroup.mergeTabs(tabGroup.tabs);
     } else {
       tabGroups.push(tabGroup);
     }
@@ -219,7 +224,7 @@ export class TabService {
   /**
    * Add tab list to group specified.
    */
-  async addTabs(group: TabGroup, tabs: BrowserTab[]) {
+  async addTabs(group: TabGroup, tabs: BrowserTabs) {
     let filteredTabs = tabs.filter(({ url }) => !ignoreUrlsRegExp.test(url));
 
     if (filteredTabs.length === 0) {
@@ -235,10 +240,10 @@ export class TabService {
           data: filteredTabs,
         });
 
-        const tabs: BrowserTab[] = await lastValueFrom(bottomSheetRef.afterDismissed());
+        const tabs: BrowserTabs = await lastValueFrom(bottomSheetRef.afterDismissed());
 
         if (tabs?.length > 0) {
-          group.tabs.push(...tabs);
+          group.addTabs(tabs);
 
           this.tabGroupsSource$.next(tabGroups);
 
@@ -266,7 +271,7 @@ export class TabService {
         removeIndex = tabGroup.tabs.findIndex((tab) => tab === removedTab);
 
         if (removeIndex > -1) {
-          tabGroup.tabs.splice(removeIndex, 1);
+          tabGroup.removeTabAt(removeIndex);
 
           if (tabGroup.tabs.length === 0) {
             messageRef = await this.removeTabGroup(tabGroup);
@@ -284,7 +289,7 @@ export class TabService {
         const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
 
         if (revert) {
-          tabGroup.tabs.splice(removeIndex, 0, removedTab);
+          tabGroup.addTabAt(removeIndex, removedTab);
           this.tabGroupsSource$.next(tabGroups);
           this.save();
         }
@@ -330,7 +335,7 @@ export class TabService {
   /**
    * Removed multiple tab groups.
    */
-  async removeTabGroups(tabGroups: TabGroup[]): Promise<MatSnackBarRef<MessageComponent>> {
+  async removeTabGroups(tabGroups: TabGroups): Promise<MatSnackBarRef<MessageComponent>> {
     return new Promise(async (resolve) => {
       const currentTabGroups = await firstValueFrom(this.tabGroups$);
       const messageRef = this.displayMessage('Items removed', ActionIcon.Undo);
@@ -359,7 +364,16 @@ export class TabService {
    * Save current tabs state to local storage.
    */
   async save(): Promise<void> {
-    return await saveTabGroups(await firstValueFrom(this.tabGroups$));
+    const tabGroups = await firstValueFrom(this.tabGroups$);
+    const collections = tabGroups.map(
+      ({ id, timestamp, tabs }): Collection => ({
+        id,
+        timestamp,
+        tabs,
+      })
+    );
+
+    return await saveTabGroups(collections);
   }
 
   /**

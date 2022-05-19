@@ -1,8 +1,8 @@
-import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
 import { Observable, shareReplay, tap } from 'rxjs';
 import { TabService } from 'src/app/services';
-import { BrowserTab, TabGroup } from 'src/app/utils';
+import { BrowserTab, TabGroup, TabGroups } from 'src/app/utils';
 
 /**
  * @description
@@ -14,6 +14,7 @@ import { BrowserTab, TabGroup } from 'src/app/utils';
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GroupsComponent {
   /**
@@ -37,7 +38,7 @@ export class GroupsComponent {
   /**
    * List of tab groups to render.
    */
-  @Input() groups: TabGroup[];
+  @Input() groups: TabGroups;
 
   /**
    * Group list ngFor trackBy function.

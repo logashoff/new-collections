@@ -4,7 +4,7 @@ import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bott
 import { MatSelectionList } from '@angular/material/list';
 import { isNil } from 'lodash';
 import { filter, map, Observable, shareReplay, withLatestFrom } from 'rxjs';
-import { Tab } from 'src/app/utils';
+import { Tabs } from 'src/app/utils';
 
 /**
  * @description
@@ -29,7 +29,7 @@ export class TabsSelectorComponent {
   /**
    * List of checked items.
    */
-  private readonly checkList$: Observable<Tab[]> = this.formGroup.valueChanges.pipe(
+  private readonly checkList$: Observable<Tabs> = this.formGroup.valueChanges.pipe(
     filter((values) => !isNil(values)),
     map(({ list }) => list),
     shareReplay(1)
@@ -57,7 +57,7 @@ export class TabsSelectorComponent {
   @ViewChild(MatSelectionList) private listComponent: MatSelectionList;
 
   constructor(
-    @Inject(MAT_BOTTOM_SHEET_DATA) readonly tabs: Tab[],
+    @Inject(MAT_BOTTOM_SHEET_DATA) readonly tabs: Tabs,
     private bottomSheetRef: MatBottomSheetRef<TabsSelectorComponent>
   ) {}
 
