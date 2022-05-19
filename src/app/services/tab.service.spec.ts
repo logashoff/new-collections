@@ -6,7 +6,7 @@ import { firstValueFrom, of } from 'rxjs';
 import { getBrowserTabsMock, getTabGroupsMock } from 'src/mocks';
 import { v4 as uuidv4 } from 'uuid';
 import { ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
-import { getHostname } from '../utils/tab';
+import { getHostname, hostname } from '../utils/tab';
 import { TabService } from './tab.service';
 
 jest.mock('src/app/utils', () => ({
@@ -18,6 +18,7 @@ jest.mock('src/app/utils', () => ({
   usesDarkMode: jest.fn().mockImplementation(() => {}),
   ActionIcon,
   getHostname,
+  hostname,
   ignoreUrlsRegExp,
   TabGroup,
 }));

@@ -30,15 +30,17 @@ import {
   SearchComponent,
   TabListComponent,
   TabsSelectorComponent,
-  TimelineComponent
+  TimelineComponent,
 } from './components/index';
 import { ScrollIntoViewDirective, StopPropagationDirective } from './directives/index';
+import { HostnamePipe } from './pipes/index';
 
-const components = [
+const declarations = [
   ChipComponent,
   EmptyComponent,
   GroupControlsComponent,
   GroupsComponent,
+  HostnamePipe,
   ImageComponent,
   ImageDirective,
   MenuComponent,
@@ -72,8 +74,8 @@ const materialModules = [
 ];
 
 @NgModule({
-  declarations: [...components],
+  declarations: [...declarations],
   imports: [CommonModule, ReactiveFormsModule, ...materialModules],
-  exports: [...materialModules, ...components],
+  exports: [...materialModules, ...declarations],
 })
 export class SharedModule {}

@@ -1,4 +1,4 @@
-import { unionBy } from 'lodash';
+import { remove, unionBy } from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 /**
@@ -74,6 +74,11 @@ export class TabGroup {
 
   removeTabAt(index: number) {
     this.tabs.splice(index, 1);
+    this.tabsSource$.next(this.tabs);
+  }
+
+  removeTabs(tabs: BrowserTabs) {
+    remove(this.tabs, tab => tabs.includes(tab));
     this.tabsSource$.next(this.tabs);
   }
 }

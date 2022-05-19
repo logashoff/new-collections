@@ -51,6 +51,10 @@ a {
     color: getPaletteColor(getForegroundPalette($theme), secondary-text);
     background: getPaletteColor(getBackgroundPalette($theme), background);
   }
+
+  .bottom-sheet.mat-bottom-sheet-container {
+    background: getPaletteColor(getBackgroundPalette($theme), background);
+  }
 }
 
 .mat-raised-button,
@@ -102,4 +106,9 @@ a {
     min-width: 344px;
     margin: 24px;
   }
+}
+
+.bottom-sheet.mat-bottom-sheet-container {
+  min-width: auto;
+  padding: 0;
 }

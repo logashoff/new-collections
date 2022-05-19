@@ -62,8 +62,15 @@ export async function importCollections(): Promise<Collections> {
 }
 
 /**
+ * Returns hostname from URL.
+ */
+export function hostname(url: string): string {
+  return new URL(url).hostname;
+}
+
+/**
  * Returns hostname from tab's url
  */
 export function getHostname(tab: Tab): string {
-  return new URL(tab.url).hostname;
+  return hostname(tab.url);
 }
