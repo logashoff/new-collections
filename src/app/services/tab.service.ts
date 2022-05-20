@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
 import { groupBy, keyBy, remove } from 'lodash';
 import moment from 'moment';
 import { BehaviorSubject, firstValueFrom, lastValueFrom, Observable } from 'rxjs';
@@ -20,10 +19,11 @@ import {
   Tabs,
   TabsByHostname,
   Timeline,
-  TimelineElement,
+  TimelineElement
 } from 'src/app/utils';
 import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
 import { MessageComponent, TabsSelectorComponent } from '../modules/shared';
+import { NavService } from './nav.service';
 
 /**
  * @description
@@ -63,23 +63,7 @@ export class TabService {
     shareReplay(1)
   );
 
-  /**
-   * Group ID set by URL query params
-   */
-  readonly paramsGroupId$: Observable<string> = this.activeRoute.queryParams.pipe(
-    map((params) => params.groupId),
-    shareReplay(1)
-  );
-
-  /**
-   * Group ID set by URL query params
-   */
-  readonly paramsTabId$: Observable<number> = this.activeRoute.queryParams.pipe(
-    map((params) => params.tabId),
-    shareReplay(1)
-  );
-
-  constructor(private snackBar: MatSnackBar, private activeRoute: ActivatedRoute, private bottomSheet: MatBottomSheet) {
+  constructor(private snackBar: MatSnackBar, private bottomSheet: MatBottomSheet, private navService: NavService) {
     this.initService();
   }
 
@@ -234,24 +218,23 @@ export class TabService {
 
       if (filteredTabs?.length > 0) {
         let tabGroups = await firstValueFrom(this.tabGroups$);
-
         const bottomSheetRef = this.openTabsSelector(filteredTabs);
-
         const tabs: BrowserTabs = await lastValueFrom(bottomSheetRef.afterDismissed());
 
         if (tabs?.length > 0) {
           group.addTabs(tabs);
-
+          this.navService.go(group.id, tabs[0].id);
           this.tabGroupsSource$.next(tabGroups);
-
           this.save();
 
           const messageRef = this.displayMessage(`Added ${tabs.length} tabs`, ActionIcon.Undo);
-
           const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
-
+          
           if (revert) {
-            await group.removeTabs(tabs);
+            group.removeTabs(tabs);
+            this.navService.go(group.id, group.tabs[0].id);
+            this.tabGroupsSource$.next(tabGroups);
+            this.save();
           }
         }
       } else {

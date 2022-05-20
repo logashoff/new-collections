@@ -1,12 +1,12 @@
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
-import { firstValueFrom, of } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { getBrowserTabsMock, getTabGroupsMock } from 'src/mocks';
 import { v4 as uuidv4 } from 'uuid';
 import { ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
 import { getHostname, hostname } from '../utils/tab';
+import { NavService } from './nav.service';
 import { TabService } from './tab.service';
 
 jest.mock('src/app/utils', () => ({
@@ -30,11 +30,9 @@ describe('TabService', () => {
     imports: [MatSnackBarModule, MatBottomSheetModule],
     providers: [
       {
-        provide: ActivatedRoute,
+        provide: NavService,
         useValue: {
-          queryParams: of({
-            groupId: '7dd29b1c-dfab-44d4-8d29-76d402d24038',
-          }),
+          go() {},
         },
       },
     ],

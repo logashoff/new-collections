@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
-import { Observable, shareReplay, tap } from 'rxjs';
-import { TabService } from 'src/app/services';
+import { distinctUntilChanged, Observable, shareReplay, tap } from 'rxjs';
+import { NavService } from 'src/app/services';
 import { BrowserTab, TabGroup, TabGroups } from 'src/app/utils';
 
 /**
@@ -25,7 +25,8 @@ export class GroupsComponent {
   /**
    * Expand and collapse panels based on query params groupId
    */
-  readonly activeGroupId$: Observable<string> = this.tabService.paramsGroupId$.pipe(
+  readonly activeGroupId$: Observable<string> = this.navService.paramsGroupId$.pipe(
+    distinctUntilChanged(),
     tap(() => this.accordion?.closeAll()),
     shareReplay(1)
   );
@@ -33,7 +34,7 @@ export class GroupsComponent {
   /**
    * Active tab ID from query params
    */
-  readonly activeTabId$: Observable<number> = this.tabService.paramsTabId$;
+  readonly activeTabId$: Observable<number> = this.navService.paramsTabId$;
 
   /**
    * List of tab groups to render.
@@ -52,5 +53,5 @@ export class GroupsComponent {
     window.open(tab.url, '_blank');
   }
 
-  constructor(private tabService: TabService) {}
+  constructor(private navService: NavService) {}
 }
