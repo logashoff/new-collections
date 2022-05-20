@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { isNil } from 'lodash';
 import { map, Observable, shareReplay } from 'rxjs';
-import { SearchService, TabService } from 'src/app/services';
+import { SearchService, TabService, NavService } from 'src/app/services';
 import { BrowserTab } from 'src/app/utils';
 
 /**
@@ -35,25 +34,12 @@ export class SearchComponent implements OnInit {
     shareReplay(1)
   );
 
-  constructor(
-    private activeRoute: ActivatedRoute,
-    private router: Router,
-    private searchService: SearchService,
-    private tabService: TabService
-  ) {}
+  constructor(private navService: NavService, private searchService: SearchService, private tabService: TabService) {}
 
   ngOnInit(): void {
     this.formGroup.valueChanges.subscribe(({ search }) => {
       this.searchService.search(search);
-      this.router.navigate([], {
-        relativeTo: this.activeRoute,
-        queryParams: {
-          groupId: undefined,
-          tabId: undefined,
-        },
-        queryParamsHandling: 'merge',
-        replaceUrl: true,
-      });
+      this.navService.clear();
     });
   }
 
@@ -72,13 +58,6 @@ export class SearchComponent implements OnInit {
 
     this.clearSearch();
 
-    this.router.navigate([], {
-      relativeTo: this.activeRoute,
-      queryParams: {
-        groupId: group.id,
-        tabId: tab.id,
-      },
-      replaceUrl: true,
-    });
+    this.navService.go(group.id, tab.id);
   }
 }

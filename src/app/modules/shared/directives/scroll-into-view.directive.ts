@@ -15,19 +15,38 @@ export class ScrollIntoViewDirective {
   private tabId: number;
 
   /**
+   * Scroll timeout gets cleared before scrolling again.
+   */
+  private timeoutId: any;
+
+  /**
+   * Indicates scroll function should trigger scrolling.
+   */
+  private shouldScroll = false;
+
+  /**
    * Set tab ID in case panel height is too big to scroll to child tab instead
    */
   @Input() set appScrollIntoViewTabId(value: number) {
     this.tabId = value;
+    this.scroll();
   }
 
   /**
    * Targets expansion panel header by group ID
    */
   @Input() set appScrollIntoView(value: boolean) {
-    if (value) {
+    this.shouldScroll = value;
+  }
+
+  constructor(private el: ElementRef) {}
+
+  private scroll() {
+    if (this.shouldScroll) {
+      clearTimeout(this.timeoutId);
+
       // delay to wait for panel animation to complete
-      setTimeout(() => {
+      this.timeoutId = setTimeout(() => {
         const vh = window.innerHeight;
         const el: HTMLElement = this.el.nativeElement;
         const rect = el.getBoundingClientRect();
@@ -49,6 +68,4 @@ export class ScrollIntoViewDirective {
       }, 450);
     }
   }
-
-  constructor(private el: ElementRef) {}
 }
