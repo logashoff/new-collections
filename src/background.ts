@@ -6,4 +6,5 @@ const updateGroupCount = async () => {
 };
 
 chrome.runtime.onInstalled.addListener(() => updateGroupCount());
+chrome.runtime.onStartup.addListener(() => updateGroupCount());
 chrome.storage.onChanged.addListener(() => updateGroupCount());
