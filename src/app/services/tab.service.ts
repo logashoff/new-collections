@@ -238,7 +238,7 @@ export class TabService {
           }
         }
       } else {
-        this.displayMessage('Tabs are already in the list');
+        this.displayMessage('All tabs are already in the list');
       }
     }
   }
