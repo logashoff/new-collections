@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
-import { distinctUntilChanged, Observable, shareReplay, tap } from 'rxjs';
+import { isNil } from 'lodash';
+import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, shareReplay, switchMap, tap } from 'rxjs';
 import { NavService } from 'src/app/services';
 import { BrowserTab, TabGroup, TabGroups } from 'src/app/utils';
 
@@ -27,19 +28,38 @@ export class GroupsComponent {
    */
   readonly activeGroupId$: Observable<string> = this.navService.paramsGroupId$.pipe(
     distinctUntilChanged(),
-    tap(() => this.accordion?.closeAll()),
+    filter((activeGroupId) => !isNil(activeGroupId)),
+    switchMap((activeGroupId) =>
+      this.groups$.pipe(
+        map((groups) => groups.some(({ id }) => id === activeGroupId)),
+        tap((hasGroups) => {
+          if (!hasGroups) {
+            this.accordion?.closeAll();
+          }
+        }),
+        map(() => activeGroupId)
+      )
+    ),
     shareReplay(1)
   );
 
   /**
    * Active tab ID from query params
    */
-  readonly activeTabId$: Observable<number> = this.navService.paramsTabId$;
+  readonly activeTabId$: Observable<number> = this.navService.paramsTabId$.pipe(distinctUntilChanged(), shareReplay(1));
+
+  private readonly groups$ = new BehaviorSubject<TabGroups>(null);
 
   /**
    * List of tab groups to render.
    */
-  @Input() groups: TabGroups;
+  @Input() set groups(value: TabGroups) {
+    this.groups$.next(value);
+  }
+
+  get groups(): TabGroups {
+    return this.groups$.value;
+  }
 
   /**
    * Group list ngFor trackBy function.

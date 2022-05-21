@@ -222,18 +222,19 @@ export class TabService {
         const tabs: BrowserTabs = await lastValueFrom(bottomSheetRef.afterDismissed());
 
         if (tabs?.length > 0) {
-          group.addTabs(tabs);
+          group.prepend(tabs);
           this.tabGroupsSource$.next(tabGroups);
           await this.save();
-          this.navService.go(group.id, tabs[0].id);
 
-          const messageRef = this.displayMessage(`Added ${tabs.length} tabs`, ActionIcon.Undo);
+          const tabsLen = tabs.length;
+          const messageRef = this.displayMessage(`Added ${tabsLen} tab${tabsLen > 1 ? 's' : ''}`, ActionIcon.Undo);
           const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
-          
+
           if (revert) {
             group.removeTabs(tabs);
             this.tabGroupsSource$.next(tabGroups);
             this.save();
+            this.navService.reset();
           }
         }
       } else {
@@ -258,7 +259,7 @@ export class TabService {
         removeIndex = tabGroup.tabs.findIndex((tab) => tab === removedTab);
 
         if (removeIndex > -1) {
-          this.navService.clear();
+          this.navService.reset();
           tabGroup.removeTabAt(removeIndex);
 
           if (tabGroup.tabs.length === 0) {
@@ -305,7 +306,7 @@ export class TabService {
 
       this.tabGroupsSource$.next(tabGroups);
 
-      this.navService.clear();
+      this.navService.reset();
       resolve(messageRef);
 
       this.save();
@@ -326,12 +327,13 @@ export class TabService {
   async removeTabGroups(tabGroups: TabGroups): Promise<MatSnackBarRef<MessageComponent>> {
     return new Promise(async (resolve) => {
       const currentTabGroups = await firstValueFrom(this.tabGroups$);
-      const messageRef = this.displayMessage('Items removed', ActionIcon.Undo);
-
       const removedGroups = remove(currentTabGroups, (tabGroup) => tabGroups.includes(tabGroup));
 
       if (removedGroups?.length > 0) {
-        this.navService.clear();
+        const rmLen = removedGroups.length;
+        const messageRef = this.displayMessage(`${rmLen} item${rmLen > 1 ? 's' : ''} removed`, ActionIcon.Undo);
+
+        this.navService.reset();
         this.tabGroupsSource$.next(currentTabGroups);
 
         resolve(messageRef);
@@ -386,7 +388,6 @@ export class TabService {
    * Opens tabs selector bottom sheet.
    */
   openTabsSelector(tabs: BrowserTabs): MatBottomSheetRef<TabsSelectorComponent> {
-    this.navService.clear();
     return this.bottomSheet.open(TabsSelectorComponent, {
       data: tabs,
       panelClass: 'bottom-sheet',

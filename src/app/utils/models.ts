@@ -62,8 +62,8 @@ export class TabGroup {
     this.tabsSource$.next(unionBy(tabs, this.tabs, 'id'));
   }
 
-  addTabs(tabs: BrowserTabs) {
-    this.tabs.push(...tabs);
+  prepend(tabs: BrowserTabs) {
+    this.tabs.unshift(...tabs);
     this.tabsSource$.next(this.tabs);
   }
 
