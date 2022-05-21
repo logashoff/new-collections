@@ -32,8 +32,8 @@ describe('TabService', () => {
       {
         provide: NavService,
         useValue: {
-          clear() {},
-          go() {},
+          reset() {},
+          setParams() {},
         },
       },
     ],

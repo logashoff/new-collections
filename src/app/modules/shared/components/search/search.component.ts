@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { isNil } from 'lodash';
 import { map, Observable, shareReplay } from 'rxjs';
-import { SearchService, TabService, NavService } from 'src/app/services';
+import { NavService, SearchService, TabService } from 'src/app/services';
 import { BrowserTab } from 'src/app/utils';
 
 /**
@@ -39,7 +39,7 @@ export class SearchComponent implements OnInit {
   ngOnInit(): void {
     this.formGroup.valueChanges.subscribe(({ search }) => {
       this.searchService.search(search);
-      this.navService.clear();
+      this.navService.reset();
     });
   }
 
@@ -58,6 +58,6 @@ export class SearchComponent implements OnInit {
 
     this.clearSearch();
 
-    this.navService.go(group.id, tab.id);
+    this.navService.setParams(group.id, tab.id);
   }
 }
