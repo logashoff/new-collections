@@ -32,6 +32,7 @@ describe('TabService', () => {
       {
         provide: NavService,
         useValue: {
+          clear() {},
           go() {},
         },
       },
