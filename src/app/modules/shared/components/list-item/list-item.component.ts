@@ -8,6 +8,7 @@ import {
   Output,
   ViewEncapsulation,
 } from '@angular/core';
+import { EXPANSION_PANEL_ANIMATION_TIMING } from '@angular/material/expansion';
 import { BrowserTab } from 'src/app/utils';
 
 /**
@@ -30,7 +31,7 @@ import { BrowserTab } from 'src/app/utils';
           opacity: 0,
         })
       ),
-      transition('void => *', animate('250ms ease-out')),
+      transition('void => *', animate(EXPANSION_PANEL_ANIMATION_TIMING)),
     ]),
   ],
 })
