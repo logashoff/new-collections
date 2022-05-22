@@ -1,4 +1,5 @@
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { firstValueFrom } from 'rxjs';
@@ -36,6 +37,12 @@ describe('TabService', () => {
           setParams() {},
         },
       },
+      {
+        provide: MatDialog,
+        useValue: {
+          open() {}
+        }
+      }
     ],
   });
 
