@@ -11,6 +11,7 @@ import {
   BrowserTab,
   BrowserTabs,
   Collection,
+  Collections,
   getHostname,
   getSavedTabs,
   ignoreUrlsRegExp,
@@ -380,7 +381,8 @@ export class TabService {
    */
   async save(): Promise<void> {
     const tabGroups = await firstValueFrom(this.tabGroups$);
-    const collections = tabGroups.map(
+
+    const collections: Collections = tabGroups?.map(
       ({ id, timestamp, tabs }): Collection => ({
         id,
         timestamp,
