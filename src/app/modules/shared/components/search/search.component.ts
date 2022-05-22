@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { isNil } from 'lodash';
-import { map, Observable, shareReplay } from 'rxjs';
+import { map, Observable, shareReplay, startWith, tap, withLatestFrom } from 'rxjs';
 import { NavService, SearchService, TabService } from 'src/app/services';
 import { BrowserTab } from 'src/app/utils';
 
@@ -16,7 +16,7 @@ import { BrowserTab } from 'src/app/utils';
   styleUrls: ['./search.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent {
   readonly formGroup = new FormGroup({
     search: new FormControl(''),
   });
@@ -24,7 +24,15 @@ export class SearchComponent implements OnInit {
   /**
    * Source for search results.
    */
-  readonly searchResults$ = this.searchService.searchResults$;
+  readonly searchResults$ = this.formGroup.valueChanges.pipe(
+    startWith({ search: '' }),
+    map(({ search }) => search),
+    tap(() => this.navService.reset()),
+    withLatestFrom(this.searchService.fuse$),
+    map(([search, fuse]) => (search?.length > 0 ? fuse.search(search) : null)),
+    map((results) => results?.map(({ item }) => item) ?? null),
+    shareReplay(1)
+  );
 
   /**
    * Indicates search results state
@@ -35,13 +43,6 @@ export class SearchComponent implements OnInit {
   );
 
   constructor(private navService: NavService, private searchService: SearchService, private tabService: TabService) {}
-
-  ngOnInit(): void {
-    this.formGroup.valueChanges.subscribe(({ search }) => {
-      this.searchService.search(search);
-      this.navService.reset();
-    });
-  }
 
   /**
    * Clears search input

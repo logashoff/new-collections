@@ -1,0 +1,20 @@
+<div class="container" matRipple>
+  <app-chip [source]="tab.favIconUrl"></app-chip>
+  <div class="text-container">
+    <div class="title">{{ tab.title }}</div>
+    <a [appStopPropagation] class="link" href="{{ tab.url }}" target="_blank">{{ tab.url }}</a>
+  </div>
+  <button mat-icon-button [appStopPropagation] [matMenuTriggerFor]="tabMenu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #tabMenu="matMenu">
+    <button mat-menu-item (click)="editClick()">
+      <mat-icon>edit_note</mat-icon>
+      <span>Edit</span>
+    </button>
+    <button mat-menu-item (click)="deleteClick()">
+      <mat-icon>playlist_remove</mat-icon>
+      <span>Delete</span>
+    </button>
+  </mat-menu>
+</div>

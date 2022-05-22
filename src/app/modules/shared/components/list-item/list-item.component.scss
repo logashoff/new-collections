@@ -1,0 +1,50 @@
+@use '@angular/material' as mat;
+
+@import 'common';
+
+$typography: mat.define-typography-config();
+
+app-list-item {
+  display: block;
+  position: relative;
+  overflow: hidden;
+
+  .container {
+    display: flex;
+    align-items: center;
+    height: 5rem;
+    padding: 0 0.5rem 0 1rem;
+    gap: 1rem;
+    cursor: pointer;
+  }
+
+  .text-container {
+    flex-grow: 1;
+
+    &,
+    .title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .title,
+    .link {
+      line-height: 1rem;
+    }
+
+    .title {
+      @include mat.typography-level($typography, subheading-1);
+    }
+
+    .link {
+      @include mat.typography-level($typography, body-1);
+    }
+  }
+}
+
+@include theme using($theme) {
+  app-list-item:hover {
+    background-color: getPaletteColor(getBackgroundPalette($theme), hover);
+  }
+}

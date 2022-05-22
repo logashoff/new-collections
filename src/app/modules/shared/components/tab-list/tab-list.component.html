@@ -1,25 +1,11 @@
 <mat-list>
   <ng-container *ngFor="let tab of tabs; let first = first; trackBy: trackByTabId">
     <mat-divider *ngIf="!first"></mat-divider>
-    <mat-list-item matRipple (click)="handleItemClick(tab)" [attr.tabId]="tab.id">
-      <app-chip [source]="tab.favIconUrl"></app-chip>
-      <div class="text-container">
-        <div class="title">{{ tab.title }}</div>
-        <a [appStopPropagation] class="link" href="{{ tab.url }}" target="_blank">{{ tab.url }}</a>
-      </div>
-      <button mat-icon-button [appStopPropagation] [matMenuTriggerFor]="tabMenu">
-        <mat-icon>more_vert</mat-icon>
-      </button>
-      <mat-menu #tabMenu="matMenu">
-        <button mat-menu-item (click)="editTab(tab)">
-          <mat-icon>edit_note</mat-icon>
-          <span>Edit</span>
-        </button>
-        <button mat-menu-item (click)="removeTab(tab)">
-          <mat-icon>playlist_remove</mat-icon>
-          <span>Delete</span>
-        </button>
-      </mat-menu>
-    </mat-list-item>
+    <app-list-item
+      [tab]="tab"
+      (click)="handleItemClick(tab)"
+      (editClicked)="editTab($event)"
+      (deleteClicked)="deleteTab($event)">
+    </app-list-item>
   </ng-container>
 </mat-list>

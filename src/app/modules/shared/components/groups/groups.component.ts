@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
-import { isNil } from 'lodash';
-import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, shareReplay, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, shareReplay } from 'rxjs';
 import { NavService } from 'src/app/services';
 import { BrowserTab, TabGroup, TabGroups } from 'src/app/utils';
 
@@ -26,27 +25,12 @@ export class GroupsComponent {
   /**
    * Expand and collapse panels based on query params groupId
    */
-  readonly activeGroupId$: Observable<string> = this.navService.paramsGroupId$.pipe(
-    distinctUntilChanged(),
-    filter((activeGroupId) => !isNil(activeGroupId)),
-    switchMap((activeGroupId) =>
-      this.groups$.pipe(
-        map((groups) => groups.some(({ id }) => id === activeGroupId)),
-        tap((hasGroups) => {
-          if (!hasGroups) {
-            this.accordion?.closeAll();
-          }
-        }),
-        map(() => activeGroupId)
-      )
-    ),
-    shareReplay(1)
-  );
+  readonly activeGroupId$: Observable<string> = this.navService.paramsGroupId$.pipe(shareReplay(1));
 
   /**
    * Active tab ID from query params
    */
-  readonly activeTabId$: Observable<number> = this.navService.paramsTabId$.pipe(distinctUntilChanged(), shareReplay(1));
+  readonly activeTabId$: Observable<number> = this.navService.paramsTabId$.pipe(shareReplay(1));
 
   private readonly groups$ = new BehaviorSubject<TabGroups>(null);
 

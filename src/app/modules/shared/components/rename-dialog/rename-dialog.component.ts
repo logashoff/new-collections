@@ -32,6 +32,7 @@ export class RenameDialogComponent implements OnInit {
   save(): void {
     const { title, url } = this.formGroup.value;
     this.dialogRef.close({
+      ...this.tab,
       title,
       url,
     });

@@ -22,7 +22,7 @@
           <ng-template ngPluralCase="other">{{ searchResults.length }} results</ng-template>
         </h3>
         <mat-card class="search-container">
-          <app-tab-list (itemClicked)="resultsClickHandler($event)" [tabs]="searchResults"></app-tab-list>
+          <app-tab-list (itemClicked)="resultsClickHandler($event)" [tabs]="searchResults$ | async"></app-tab-list>
         </mat-card>
       </ng-container>
     </ng-container>

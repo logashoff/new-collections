@@ -1,4 +1,5 @@
 import { Directive, ElementRef, Input } from '@angular/core';
+import { isNil } from 'lodash';
 
 /**
  * @description
@@ -29,7 +30,10 @@ export class ScrollIntoViewDirective {
    */
   @Input() set appScrollIntoViewTabId(value: number) {
     this.tabId = value;
-    this.scroll();
+
+    if (!isNil(this.tabId)) {
+      this.scroll();
+    }
   }
 
   /**
@@ -53,7 +57,7 @@ export class ScrollIntoViewDirective {
         const { height } = rect;
 
         // if panel height is bigger than viewport height, scroll to child tan instead
-        if (height > vh && this.tabId) {
+        if (height > vh) {
           const child = el.querySelector(`[tabId="${this.tabId}"]`);
           child.scrollIntoView({
             behavior: 'smooth',
