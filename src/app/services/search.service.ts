@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import Fuse from 'fuse.js';
 import { flatMap } from 'lodash';
-import { BehaviorSubject, map, Observable, shareReplay, withLatestFrom } from 'rxjs';
+import { BehaviorSubject, map, Observable, shareReplay } from 'rxjs';
 import { BrowserTab, BrowserTabs } from '../utils';
 import { TabService } from './tab.service';
 
@@ -38,27 +38,10 @@ export class SearchService {
   /**
    * Returns Fuse search instance.
    */
-  private readonly fuseSearch$: Observable<Fuse<BrowserTab>> = this.tabs$.pipe(
+  readonly fuse$: Observable<Fuse<BrowserTab>> = this.tabs$.pipe(
     map((tabs) => new Fuse(tabs, fuseOptions)),
     shareReplay(1)
   );
 
-  /**
-   * Returns search results based on search component input.
-   */
-  readonly searchResults$: Observable<BrowserTabs> = this.searchValue$.pipe(
-    withLatestFrom(this.fuseSearch$),
-    map(([searchValue, fuseSearch]) => (searchValue?.length > 0 ? fuseSearch.search(searchValue) : null)),
-    map((results) => results?.map(({ item }) => item) ?? null),
-    shareReplay(1)
-  );
-
   constructor(private tabService: TabService) {}
-
-  /**
-   * Filters loaded tabs list by value specified.
-   */
-  search(value: string) {
-    this.searchValue$.next(value);
-  }
 }

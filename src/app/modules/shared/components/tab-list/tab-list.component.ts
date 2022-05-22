@@ -1,9 +1,7 @@
 import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { lastValueFrom } from 'rxjs';
 import { TabService } from 'src/app/services';
 import { BrowserTab, BrowserTabs } from 'src/app/utils';
-import { RenameDialogComponent } from '../rename-dialog/rename-dialog.component';
 
 /**
  * @description
@@ -30,29 +28,26 @@ export class TabListComponent {
   /**
    * Tab list *ngFor trackBy function
    */
-  readonly trackByTabId = (_, tab: BrowserTab): number => tab.id;
+  readonly trackByTabId = (_, tab: BrowserTab): string => `${tab.id}+${tab.url}`;
 
-  constructor(private tabService: TabService, private dialog: MatDialog) {}
+  constructor(private tabService: TabService) {}
 
-  /**
-   * Opens dialog to edit specified tab.
-   */
   async editTab(tab: BrowserTab) {
-    const dialogRef = this.dialog.open(RenameDialogComponent, { data: tab, disableClose: true });
-    const update: Pick<BrowserTab, 'title' | 'url'> = await lastValueFrom(dialogRef.afterClosed());
+    const updatedTab = await this.tabService.updateTab(tab);
 
-    if (update && (tab.title !== update.title || tab.url !== update.url)) {
-      tab.title = update.title;
-      tab.url = update.url;
+    if (updatedTab && !this.tabs.includes(updatedTab)) {
+      const index = this.tabs.findIndex((t) => t.id === updatedTab.id);
 
-      this.tabService.save();
+      if (index > -1) {
+        this.tabs.splice(index, 1, updatedTab);
+      }
     }
   }
 
   /**
    * Removes specified tab from tab list.
    */
-  async removeTab(removedTab: BrowserTab) {
+  async deleteTab(removedTab: BrowserTab) {
     const messageRef = await this.tabService.removeTab(removedTab);
 
     let index = this.tabs.findIndex((tab) => tab === removedTab);

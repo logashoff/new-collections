@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, Observable, shareReplay } from 'rxjs';
+import { distinctUntilChanged, map, Observable, shareReplay } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +10,7 @@ export class NavService {
    * Group ID set by URL query params
    */
   readonly paramsGroupId$: Observable<string> = this.activeRoute.queryParams.pipe(
+    distinctUntilChanged((prev, curr) => prev.groupId === curr.groupId),
     map((params) => params.groupId),
     shareReplay(1)
   );
@@ -18,6 +19,7 @@ export class NavService {
    * Group ID set by URL query params
    */
   readonly paramsTabId$: Observable<number> = this.activeRoute.queryParams.pipe(
+    distinctUntilChanged((prev, curr) => prev.tabId === curr.tabId),
     map((params) => params.tabId),
     shareReplay(1)
   );

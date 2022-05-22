@@ -39,7 +39,7 @@ export type Collections = Collection[];
 /**
  * Group that contains tabs and is saved to local storage.
  */
-export class TabGroup {
+export class TabGroup implements Collection {
   readonly id: string;
   readonly timestamp: number;
 
@@ -62,6 +62,23 @@ export class TabGroup {
     this.tabsSource$.next(unionBy(tabs, this.tabs, 'id'));
   }
 
+  updateTab(tab: BrowserTab, updatedTab: BrowserTab): BrowserTab {
+    const index = this.tabs.findIndex((t) => t === tab);
+
+    if (index > -1) {
+      const mergeTab: BrowserTab = {
+        ...tab,
+        ...updatedTab,
+      };
+
+      this.tabs.splice(index, 1, mergeTab);
+
+      this.tabsSource$.next(this.tabs);
+
+      return mergeTab;
+    }
+  }
+
   prepend(tabs: BrowserTabs) {
     this.tabs.unshift(...tabs);
     this.tabsSource$.next(this.tabs);
@@ -78,7 +95,7 @@ export class TabGroup {
   }
 
   removeTabs(tabs: BrowserTabs) {
-    remove(this.tabs, tab => tabs.includes(tab));
+    remove(this.tabs, (tab) => tabs.includes(tab));
     this.tabsSource$.next(this.tabs);
   }
 }

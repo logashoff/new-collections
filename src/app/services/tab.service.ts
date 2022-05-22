@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material/snack-bar';
 import { groupBy, keyBy, remove } from 'lodash';
 import moment from 'moment';
@@ -19,10 +20,10 @@ import {
   Tabs,
   TabsByHostname,
   Timeline,
-  TimelineElement
+  TimelineElement,
 } from 'src/app/utils';
 import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
-import { MessageComponent, TabsSelectorComponent } from '../modules/shared';
+import { MessageComponent, RenameDialogComponent, TabsSelectorComponent } from '../modules/shared';
 import { NavService } from './nav.service';
 
 /**
@@ -63,7 +64,12 @@ export class TabService {
     shareReplay(1)
   );
 
-  constructor(private snackBar: MatSnackBar, private bottomSheet: MatBottomSheet, private navService: NavService) {
+  constructor(
+    private bottomSheet: MatBottomSheet,
+    private dialog: MatDialog,
+    private navService: NavService,
+    private snackBar: MatSnackBar
+  ) {
     this.initService();
   }
 
@@ -234,7 +240,6 @@ export class TabService {
             group.removeTabs(tabs);
             this.tabGroupsSource$.next(tabGroups);
             this.save();
-            this.navService.reset();
           }
         }
       } else {
@@ -259,7 +264,6 @@ export class TabService {
         removeIndex = tabGroup.tabs.findIndex((tab) => tab === removedTab);
 
         if (removeIndex > -1) {
-          this.navService.reset();
           tabGroup.removeTabAt(removeIndex);
 
           if (tabGroup.tabs.length === 0) {
@@ -282,6 +286,26 @@ export class TabService {
           this.tabGroupsSource$.next(tabGroups);
           this.save();
         }
+      }
+    });
+  }
+
+  /**
+   * Opens tab edit dialog.
+   */
+  async updateTab(tab: BrowserTab): Promise<BrowserTab> {
+    return new Promise(async (resolve) => {
+      const dialogRef = this.dialog.open(RenameDialogComponent, { data: tab, disableClose: true });
+      let updatedTab: BrowserTab = await lastValueFrom(dialogRef.afterClosed());
+
+      if (updatedTab && (tab.title !== updatedTab.title || tab.url !== updatedTab.url)) {
+        const group = await this.getGroupByTab(tab);
+        updatedTab = group.updateTab(tab, updatedTab);
+        this.tabGroupsSource$.next(await firstValueFrom(this.tabGroups$));
+
+        this.save();
+
+        resolve(updatedTab);
       }
     });
   }
