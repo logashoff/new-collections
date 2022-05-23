@@ -6,7 +6,7 @@ module.exports = {
     main: './src/background.ts',
   },
   output: {
-    path: path.resolve(__dirname, './dist/save-tabs'),
+    path: path.resolve(__dirname, './dist/home-collections'),
     filename: 'background.js',
   },
   resolve: {
