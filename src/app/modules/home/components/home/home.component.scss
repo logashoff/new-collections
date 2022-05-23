@@ -1,7 +1,5 @@
 @import 'common';
 
-$padding: 1rem;
-
 :host {
   display: block;
   position: absolute;
@@ -14,12 +12,19 @@ $padding: 1rem;
 }
 
 .content {
-  padding: $padding $padding 4rem;
+  margin: 2rem auto;
+  max-width: 80vw;
 }
 
-.menu {
+app-empty {
+  z-index: -1;
+}
+
+app-menu {
+  $padding: 1rem;
+
   position: fixed;
   right: $scrollbar-width + $padding;
-  bottom: 0;
+  bottom: $padding;
   z-index: 1;
 }

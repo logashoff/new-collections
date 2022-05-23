@@ -38,6 +38,10 @@ a {
     background: getPaletteColor(getForegroundPalette($theme), divider);
   }
 
+  body {
+    background: getPaletteColor(getBackgroundPalette($theme), background);
+  }
+
   a {
     &:link,
     &:visited,
