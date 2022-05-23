@@ -18,11 +18,19 @@
       "128": "assets/icons/icon-128.png"
     }
   },
-  "options_page": "index.html#/options",
   "background": {
     "service_worker": "background.js"
   },
+  "chrome_url_overrides":
+	{
+		"newtab": "index.html#/home"
+	},
   "permissions": [
+		"chrome://favicon/",
+		"management",
+		"sessions",
+		"topSites",
+    "bookmarks",
     "storage",
     "tabs"
   ],
