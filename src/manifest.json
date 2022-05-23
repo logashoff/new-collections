@@ -1,7 +1,7 @@
 {
   "name": "Save Tabs",
   "description": "Save and restore tabs",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "manifest_version": 3,
   "icons": {
     "16": "assets/icons/icon-16.png",
