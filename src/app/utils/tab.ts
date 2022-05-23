@@ -38,7 +38,7 @@ export function restoreTabs(collection: Collection) {
  */
 export function exportTabs(collections: Collections) {
   const blob = new Blob([JSON.stringify(collections, null, 2)], { type: 'text/json;charset=utf-8' });
-  saveAs(blob, `save-tabs-${new Date().toISOString()}.json`);
+  saveAs(blob, `home-collections-${new Date().toISOString()}.json`);
 }
 
 /**

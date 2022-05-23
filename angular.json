@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "save-tabs": {
+    "home-collections": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -20,7 +20,7 @@
             "allowedCommonJsDependencies": [
               "file-saver"
             ],
-            "outputPath": "dist/save-tabs",
+            "outputPath": "dist/home-collections",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -78,18 +78,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "save-tabs:build"
+            "browserTarget": "home-collections:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "save-tabs:build:production"
+              "browserTarget": "home-collections:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "save-tabs:build"
+            "browserTarget": "home-collections:build"
           }
         },
         "test": {
@@ -113,11 +113,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "save-tabs:serve"
+            "devServerTarget": "home-collections:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "save-tabs:serve:production"
+              "devServerTarget": "home-collections:serve:production"
             }
           }
         },
@@ -133,7 +133,7 @@
       }
     }
   },
-  "defaultProject": "save-tabs",
+  "defaultProject": "home-collections",
   "cli": {
     "defaultCollection": "@angular-eslint/schematics"
   }
