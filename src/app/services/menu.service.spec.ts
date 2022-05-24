@@ -56,19 +56,19 @@ describe('MenuService', () => {
         {
           id: 1,
           icon: 'save_alt',
-          tooltip: 'Save list as file',
+          tooltip: 'Export Collections',
           tooltipPosition: 'left',
         },
         {
           id: 2,
           icon: 'file_upload',
-          tooltip: 'Import list from file',
+          tooltip: 'Import Collections',
           tooltipPosition: 'left',
         },
         {
           id: 3,
-          icon: 'open_in_new',
-          tooltip: 'Open in new window',
+          icon: 'settings',
+          tooltip: 'Settings',
           tooltipPosition: 'left',
         },
       ]);
@@ -86,7 +86,6 @@ describe('MenuService', () => {
     await spectator.service.handleMenuAction(Action.Save);
     expect(service.createTabGroup).toHaveBeenCalledTimes(1);
     expect(service.addTabGroup).toHaveBeenCalledTimes(1);
-    expect(chrome.runtime.openOptionsPage).toHaveBeenCalledTimes(1);
 
     openOptionsPageSpy.mockClear();
     saveTabGroupSpy.mockClear();
