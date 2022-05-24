@@ -1,24 +1,26 @@
 <form [formGroup]="formGroup" (ngSubmit)="save()">
   <div class="container">
-    <div class="header">
-      <span class="heading">
-        Tabs {{ selectionLength$ | async }} / {{ tabs.length }}
-      </span>
-      <div class="controls">
-        <button type="submit" mat-icon-button [disabled]="!formGroup.valid" matTooltip="Add Selected">
-          <mat-icon>add</mat-icon>
-        </button>
-        <div class="checkbox-container">
-          <mat-checkbox
-            color="primary"
-            [checked]="allSelected$ | async"
-            [indeterminate]="someSelected$ | async"
-            (change)="selectAll($event.checked)">
-          </mat-checkbox>
+    <div class="header-container">
+      <div class="header">
+        <span class="heading">
+          Tabs {{ selectionLength$ | async }} / {{ tabs.length }}
+        </span>
+        <div class="controls">
+          <button type="submit" mat-icon-button [disabled]="!formGroup.valid" matTooltip="Add Selected">
+            <mat-icon>add</mat-icon>
+          </button>
+          <div class="checkbox-container">
+            <mat-checkbox
+              color="primary"
+              [checked]="allSelected$ | async"
+              [indeterminate]="someSelected$ | async"
+              (change)="selectAll($event.checked)">
+            </mat-checkbox>
+          </div>
         </div>
       </div>
+      <mat-divider></mat-divider>
     </div>
-    <mat-divider></mat-divider>
     <div class="list-container">
       <mat-selection-list formControlName="list">
         <mat-list-option *ngFor="let tab of tabs" [value]="tab" color="primary">

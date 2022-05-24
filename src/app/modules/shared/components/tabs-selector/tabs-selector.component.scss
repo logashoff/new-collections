@@ -5,11 +5,13 @@
 $typography: mat.define-typography-config();
 
 app-tabs-selector {
+  $max-width: 25rem;
+
   .container {
-    display: flex;
-    flex-direction: column;
     max-width: 25rem;
-    overflow: hidden;
+    position: relative;
+    max-height: 80vh;
+    overflow: auto;
 
     .mat-list-base .mat-list-option .mat-list-text {
       display: block;
@@ -18,11 +20,17 @@ app-tabs-selector {
       white-space: nowrap;
     }
 
+    .header-container {
+      overflow: hidden;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
     .header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex: 0 0 0;
       min-height: 3rem;
       padding: 0.5rem;
 
@@ -47,7 +55,8 @@ app-tabs-selector {
     }
 
     .list-container {
-      overflow: hidden;
+      position: relative;
+      display: block;
 
       .mat-list-item {
         height: 4rem;
@@ -101,6 +110,10 @@ app-tabs-selector {
   app-tabs-selector {
     .container {
       color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+
+      .header-container {
+        background: getPaletteColor(getBackgroundPalette($theme), background);
+      }
 
       .list-container .list-item {
         color: getPaletteColor(getForegroundPalette($theme), secondary-text);
