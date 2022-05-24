@@ -1,9 +1,9 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { isNil } from 'lodash';
-import { map, Observable, shareReplay, startWith, tap, withLatestFrom } from 'rxjs';
+import { firstValueFrom, lastValueFrom, map, Observable, shareReplay, startWith, tap, withLatestFrom } from 'rxjs';
 import { NavService, SearchService, TabService } from 'src/app/services';
-import { BrowserTab } from 'src/app/utils';
+import { BrowserTab, TabDelete, trackByTabId } from 'src/app/utils';
 
 /**
  * @description
@@ -21,16 +21,16 @@ export class SearchComponent {
     search: new FormControl(''),
   });
 
+  readonly trackByTabId = trackByTabId;
+
   /**
    * Source for search results.
    */
   readonly searchResults$ = this.formGroup.valueChanges.pipe(
     startWith({ search: '' }),
-    map(({ search }) => search),
     tap(() => this.navService.reset()),
-    withLatestFrom(this.searchService.fuse$),
-    map(([search, fuse]) => (search?.length > 0 ? fuse.search(search) : null)),
-    map((results) => results?.map(({ item }) => item) ?? null),
+    withLatestFrom(this.searchService.fuzzy$),
+    map(([{ search }, fuzzy]) => (search?.length > 0 ? fuzzy.search(search)?.map(({ item }) => item) : null)),
     shareReplay(1)
   );
 
@@ -49,6 +49,39 @@ export class SearchComponent {
    */
   clearSearch() {
     this.formGroup.get('search').setValue('');
+  }
+
+  /**
+   * Handles tab update
+   */
+  async itemModified(updatedTab: BrowserTab) {
+    const tabs = await firstValueFrom(this.searchResults$);
+
+    if (updatedTab && !tabs.includes(updatedTab)) {
+      const index = tabs.findIndex((t) => t.id === updatedTab.id);
+
+      if (index > -1) {
+        tabs.splice(index, 1, updatedTab);
+      }
+    }
+  }
+
+  /**
+   * Handles tab deletion
+   */
+  async itemDeleted({ deletedTab, revertDelete }: TabDelete) {
+    const tabs = await firstValueFrom(this.searchResults$);
+
+    let index = tabs.findIndex((tab) => tab === deletedTab);
+    if (revertDelete && index > -1) {
+      tabs.splice(index, 1);
+
+      const { dismissedByAction: undo } = await lastValueFrom(revertDelete.afterDismissed());
+
+      if (undo) {
+        tabs.splice(index, 0, deletedTab);
+      }
+    }
   }
 
   /**

@@ -8,7 +8,8 @@
       mat-icon-button
       [disableRipple]="true"
       tabindex="-1"
-      (click)="clearSearch()">
+      (click)="clearSearch()"
+    >
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
@@ -22,7 +23,15 @@
           <ng-template ngPluralCase="other">{{ searchResults.length }} results</ng-template>
         </h3>
         <mat-card class="search-container">
-          <app-tab-list (itemClicked)="resultsClickHandler($event)" [tabs]="searchResults$ | async"></app-tab-list>
+          <app-tab-list>
+            <app-list-item
+              *ngFor="let tab of searchResults$ | async; trackBy: trackByTabId"
+              [tab]="tab"
+              (deleted)="itemDeleted($event)"
+              (modified)="itemModified($event)"
+              (click)="resultsClickHandler(tab)">
+            </app-list-item>
+          </app-tab-list>
         </mat-card>
       </ng-container>
     </ng-container>

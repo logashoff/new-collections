@@ -8,7 +8,8 @@ app-tabs-selector {
   $max-width: 25rem;
 
   .container {
-    max-width: 25rem;
+    max-width: $max-width;
+    min-width: $max-width;
     position: relative;
     max-height: 80vh;
     overflow: auto;

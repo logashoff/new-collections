@@ -1,9 +1,11 @@
 <div class="content">
   <app-search *ngIf="groupsTimeline$ | async as groupsTimeline; else empty">
+    <app-top-sites></app-top-sites>
+    <app-devices></app-devices>
     <app-timeline [timeline]="groupsTimeline"></app-timeline>
   </app-search>
   <app-menu [menuItems]="menuItems$ | async"></app-menu>
 </div>
 <ng-template #empty>
-  <app-empty>tab_unselected</app-empty>
+  <app-empty>home</app-empty>
 </ng-template>

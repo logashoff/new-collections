@@ -10,9 +10,12 @@
       <app-group-controls [group]="group"></app-group-controls>
     </mat-expansion-panel-header>
     <mat-divider></mat-divider>
-    <app-tab-list
-      (itemClicked)="handleListClick($event)"
-      [tabs]="group.tabs$ | async">
+    <app-tab-list>
+      <app-list-item
+        *ngFor="let tab of group.tabs$ | async; trackBy: trackByTabId"
+        [tab]="tab"
+        (click)="handleItemClick(tab)">
+      </app-list-item>
     </app-tab-list>
   </mat-expansion-panel>
 </mat-accordion>
