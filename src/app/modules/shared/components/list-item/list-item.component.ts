@@ -9,7 +9,8 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { EXPANSION_PANEL_ANIMATION_TIMING } from '@angular/material/expansion';
-import { BrowserTab } from 'src/app/utils';
+import { TabService } from 'src/app/services';
+import { BrowserTab, TabDelete } from 'src/app/utils';
 
 /**
  * @description
@@ -41,14 +42,19 @@ export class ListItemComponent {
   tab: BrowserTab;
 
   /**
-   * Dispatches event when Delete menu item is clicked
+   * Disables item menu
    */
-  @Output() readonly editClicked = new EventEmitter<BrowserTab>();
+  @Input() readOnly = false;
 
   /**
    * Dispatches event when Delete menu item is clicked
    */
-  @Output() readonly deleteClicked = new EventEmitter<BrowserTab>();
+  @Output() readonly modified = new EventEmitter<BrowserTab>();
+
+  /**
+   * Dispatches event when Delete menu item is clicked
+   */
+  @Output() readonly deleted = new EventEmitter<TabDelete>();
 
   /**
    * Adds `tabId` attribute to component for `appScrollIntoView` directive to work
@@ -57,17 +63,26 @@ export class ListItemComponent {
     return this.tab.id;
   }
 
+  constructor(private tabService: TabService) {}
+
   /**
    * Opens dialog to edit specified tab.
    */
   async editClick() {
-    this.editClicked.emit(this.tab);
+    const updatedTab = await this.tabService.updateTab(this.tab);
+
+    this.modified.emit(updatedTab);
   }
 
   /**
    * Handles delete menu item click
    */
-  deleteClick() {
-    this.deleteClicked.emit(this.tab);
+  async deleteClick() {
+    const messageRef = await this.tabService.removeTab(this.tab);
+
+    this.deleted.emit({
+      deletedTab: this.tab,
+      revertDelete: messageRef,
+    });
   }
 }

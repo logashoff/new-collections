@@ -25,7 +25,7 @@ describe('SearchService', () => {
 
   it('should return results', waitForAsync(() => {
     of('fedora')
-      .pipe(switchMap((search) => spectator.service.fuse$.pipe(map((fuse) => fuse.search(search)))))
+      .pipe(switchMap((search) => spectator.service.fuzzy$.pipe(map((fuse) => fuse.search(search)))))
       .pipe(take(1))
       .subscribe((searchResults) => {
         expect(searchResults).toBeDefined();

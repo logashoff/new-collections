@@ -1,0 +1,16 @@
+<mat-accordion>
+  <mat-expansion-panel hideToggle *ngFor="let device of devices$ | async; trackBy: trackByDevice">
+    <mat-expansion-panel-header>
+      {{ device.deviceName }}
+    </mat-expansion-panel-header>
+    <mat-divider></mat-divider>
+    <app-tab-list>
+      <app-list-item
+        *ngFor="let tab of getTabsFromSessions(device.sessions); trackBy: trackByTabId"
+        [tab]="tab"
+        [readOnly]="true"
+        (click)="handleItemClick(tab)">
+      </app-list-item>
+    </app-tab-list>
+  </mat-expansion-panel>
+</mat-accordion>

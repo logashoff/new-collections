@@ -1,5 +1,7 @@
+import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { remove, unionBy } from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { MessageComponent } from '../modules/shared';
 
 /**
  * Storage key used to store tab groups in local storage.
@@ -20,6 +22,19 @@ export type QueryInfo = chrome.tabs.QueryInfo;
 export type Tab = chrome.tabs.Tab;
 export type Tabs = Tab[];
 export type TabIconDetails = chrome.browserAction.TabIconDetails;
+export type Device = chrome.sessions.Device;
+export type MostVisitedURL = chrome.topSites.MostVisitedURL;
+export type Session = chrome.sessions.Session;
+export type Sessions = Session[];
+export type Devices = Device[];
+export type TopSites = TopSite[];
+export interface TopSite extends BrowserTab {}
+export type MessageRef = MatSnackBarRef<MessageComponent>;
+
+export interface TabDelete {
+  deletedTab: BrowserTab;
+  revertDelete: MessageRef;
+}
 
 /**
  * Tab type.
@@ -117,7 +132,7 @@ export interface TabsByHostname {
 export enum ActionIcon {
   Export = 'save_alt',
   Import = 'file_upload',
-  Options = 'open_in_new',
+  Options = 'settings',
   Save = 'bookmark_add',
   Undo = 'undo',
 }

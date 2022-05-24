@@ -1,11 +1,4 @@
 <mat-list>
-  <ng-container *ngFor="let tab of tabs; let first = first; trackBy: trackByTabId">
-    <mat-divider *ngIf="!first"></mat-divider>
-    <app-list-item
-      [tab]="tab"
-      (click)="handleItemClick(tab)"
-      (editClicked)="editTab($event)"
-      (deleteClicked)="deleteTab($event)">
-    </app-list-item>
-  </ng-container>
+  <mat-divider></mat-divider>
+  <ng-content select="app-list-item"></ng-content>
 </mat-list>

@@ -1,0 +1,16 @@
+<mat-accordion>
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+      Top Sites
+    </mat-expansion-panel-header>
+    <mat-divider></mat-divider>
+    <app-tab-list>
+      <app-list-item
+        *ngFor="let tab of topSites$ | async; trackBy: trackByTabId"
+        [tab]="tab"
+        [readOnly]="true"
+        (click)="handleItemClick(tab)">
+      </app-list-item>
+    </app-tab-list>
+  </mat-expansion-panel>
+</mat-accordion>

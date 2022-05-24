@@ -37,19 +37,19 @@ export class MenuService {
     {
       id: Action.Export,
       icon: ActionIcon.Export,
-      tooltip: 'Save list as file',
+      tooltip: 'Export Collections',
       tooltipPosition,
     },
     {
       id: Action.Import,
       icon: ActionIcon.Import,
-      tooltip: 'Import list from file',
+      tooltip: 'Import Collections',
       tooltipPosition,
     },
     {
       id: Action.Options,
       icon: ActionIcon.Options,
-      tooltip: 'Open in new window',
+      tooltip: 'Settings',
       tooltipPosition,
     },
   ]);
@@ -74,7 +74,6 @@ export class MenuService {
 
           if (tabGroup?.tabs?.length > 0) {
             await this.tabsService.addTabGroup(tabGroup);
-            this.openOptions();
           } else {
             this.tabsService.displayMessage('Current tab list is invalid');
           }

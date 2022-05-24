@@ -23,11 +23,6 @@ const fuseOptions: Fuse.IFuseOptions<BrowserTab> = {
 })
 export class SearchService {
   /**
-   * Search value source will trigger data refresh.
-   */
-  private readonly searchValue$ = new BehaviorSubject<string>('');
-
-  /**
    * Tab list source from all tab groups.
    */
   private readonly tabs$: Observable<BrowserTabs> = this.tabService.tabGroups$.pipe(
@@ -38,7 +33,7 @@ export class SearchService {
   /**
    * Returns Fuse search instance.
    */
-  readonly fuse$: Observable<Fuse<BrowserTab>> = this.tabs$.pipe(
+  readonly fuzzy$: Observable<Fuse<BrowserTab>> = this.tabs$.pipe(
     map((tabs) => new Fuse(tabs, fuseOptions)),
     shareReplay(1)
   );
