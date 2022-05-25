@@ -1,6 +1,7 @@
 import { saveAs } from 'file-saver';
+import { groupBy } from 'lodash';
 import selectFiles from 'select-files';
-import { Collection, Collections, Tab, tabsStorageKey } from './models';
+import { BrowserTabs, Collections, HostnameGroup, Tab, tabsStorageKey } from './models';
 
 /**
  * Saves specified tab groups to local storage.
@@ -23,8 +24,8 @@ export function getSavedTabs(): Promise<Collections> {
 /**
  * Restores all tabs from specified tab group.
  */
-export function restoreTabs(collection: Collection) {
-  collection.tabs.forEach(({ url, active, pinned }) =>
+export function restoreTabs(tabs: BrowserTabs) {
+  tabs.forEach(({ url, active, pinned }) =>
     chrome.tabs.create({
       active,
       pinned,
@@ -64,13 +65,26 @@ export async function importCollections(): Promise<Collections> {
 /**
  * Returns hostname from URL.
  */
-export function hostname(url: string): string {
+export function getUrlHostname(url: string): string {
   return new URL(url).hostname;
+}
+
+export function getUrlOrigin(url: string): string {
+  return new URL(url).origin;
 }
 
 /**
  * Returns hostname from tab's url
  */
 export function getHostname(tab: Tab): string {
-  return hostname(tab.url);
+  return getUrlHostname(tab.url);
+}
+
+/**
+ * Returns BrowserTab array grouped by hostnames
+ */
+export function getHostnameGroup(tabs: BrowserTabs): HostnameGroup {
+  const groupByHostname = groupBy(tabs, getHostname);
+  const values = Object.values(groupByHostname);
+  return values.sort((a, b) => b.length - a.length);
 }

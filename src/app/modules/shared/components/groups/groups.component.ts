@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
 import { BehaviorSubject, Observable, shareReplay } from 'rxjs';
-import { NavService } from 'src/app/services';
-import { BrowserTab, TabGroups, trackByGroupId, trackByTabId } from 'src/app/utils';
+import { NavService, TabService } from 'src/app/services';
+import { BrowserTab, TabGroups, TabsByHostname, trackByGroupId, trackByTabId } from 'src/app/utils';
 
 /**
  * @description
@@ -34,6 +34,8 @@ export class GroupsComponent {
 
   private readonly groups$ = new BehaviorSubject<TabGroups>(null);
 
+  readonly tabsByHostname$: Observable<TabsByHostname> = this.tabService.tabsByHostname$;
+
   /**
    * List of tab groups to render.
    */
@@ -58,5 +60,5 @@ export class GroupsComponent {
     window.open(tab.url, '_blank');
   }
 
-  constructor(private navService: NavService) {}
+  constructor(private navService: NavService, private tabService: TabService) {}
 }

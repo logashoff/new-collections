@@ -8,12 +8,14 @@ app-list-item {
   display: block;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
 
   .container {
     display: flex;
     align-items: center;
     height: 5rem;
     padding: 0 0.5rem 0 1rem;
+    margin: 0;
     gap: 1rem;
     cursor: pointer;
   }
@@ -44,7 +46,13 @@ app-list-item {
 }
 
 @include theme using($theme) {
-  app-list-item:hover {
-    background-color: getPaletteColor(getBackgroundPalette($theme), hover);
+  app-list-item {
+    &:hover {
+      background-color: getPaletteColor(getBackgroundPalette($theme), hover);
+    }
+
+    &:not(:first-of-type) {
+      border-top: 1px solid getPaletteColor(getForegroundPalette($theme), divider);
+    }
   }
 }

@@ -1,13 +1,14 @@
 import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { Injectable } from '@angular/core';
 import { TooltipPosition } from '@angular/material/tooltip';
-import { Observable, of } from 'rxjs';
+import { lastValueFrom, Observable, of } from 'rxjs';
 import {
   Action,
   ActionIcon,
   Collections,
   exportTabs,
   getSavedTabs,
+  ignoreUrlsRegExp,
   importCollections,
   queryCurrentWindow,
   TabGroup,
@@ -69,11 +70,16 @@ export class MenuService {
 
       switch (menuAction) {
         case Action.Save:
-          const tabs = await queryCurrentWindow();
-          const tabGroup = await this.tabsService.createTabGroup(tabs);
+          let tabs = await queryCurrentWindow();
+          tabs = tabs?.filter(({ url }) => !ignoreUrlsRegExp.test(url));
 
-          if (tabGroup?.tabs?.length > 0) {
-            await this.tabsService.addTabGroup(tabGroup);
+          if (tabs?.length > 0) {
+            const bottomSheetRef = this.tabsService.openTabsSelector(tabs);
+            tabs = await lastValueFrom(bottomSheetRef.afterDismissed());
+            if (tabs?.length > 0) {
+              const tabGroup = await this.tabsService.createTabGroup(tabs);
+              await this.tabsService.addTabGroup(tabGroup);
+            }
           } else {
             this.tabsService.displayMessage('Current tab list is invalid');
           }

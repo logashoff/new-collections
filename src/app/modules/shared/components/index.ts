@@ -2,6 +2,7 @@ export * from './chip/chip.component';
 export * from './empty/empty.component';
 export * from './group-controls/group-controls.component';
 export * from './groups/groups.component';
+export * from './icons-container/icons-container.component';
 export * from './image/image.component';
 export * from './list-item/list-item.component';
 export * from './menu/menu.component';

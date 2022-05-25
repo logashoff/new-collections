@@ -6,7 +6,11 @@
     [expanded]="(activeGroupId$ | async) === group.id"
     hideToggle>
     <mat-expansion-panel-header>
-      <app-panel-header [group]="group"></app-panel-header>
+      <app-panel-header
+        *ngIf="tabsByHostname$ | async as tabsByHostname"
+        [icons]="tabsByHostname[group.id]"
+        [total]="group.tabs.length">
+      </app-panel-header>
       <app-group-controls [group]="group"></app-group-controls>
     </mat-expansion-panel-header>
     <mat-divider></mat-divider>
@@ -14,7 +18,8 @@
       <app-list-item
         *ngFor="let tab of group.tabs$ | async; trackBy: trackByTabId"
         [tab]="tab"
-        (click)="handleItemClick(tab)">
+        (click)="handleItemClick(tab)"
+      >
       </app-list-item>
     </app-tab-list>
   </mat-expansion-panel>

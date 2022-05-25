@@ -117,3 +117,47 @@ a {
   min-width: auto;
   padding: 0;
 }
+
+.mat-accordion {
+  .mat-expansion-panel-body {
+    padding: 0;
+  }
+
+  .mat-expansion-panel-header {
+    padding: 0;
+    height: 3rem;
+
+    &.mat-expanded {
+      height: 3rem;
+      padding: 0.5rem 0;
+    }
+
+    .mat-content {
+      display: block;
+      overflow: hidden;
+      height: inherit;
+    }
+  }
+
+  .mat-expansion-panel-header-title {
+    align-items: center;
+    margin-left: 1rem;
+  }
+
+  .mat-expansion-panel-header-title,
+  .mat-expansion-panel-header-description {
+    margin-right: 0;
+    white-space: nowrap;
+  }
+
+  .mat-expansion-panel-header-description {
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 1rem;
+  }
+
+  .mat-expansion-panel.mat-expanded {
+    @include mat.elevation(8);
+    margin: 2rem 0;
+  }
+}

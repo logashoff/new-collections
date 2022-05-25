@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { hostname } from 'src/app/utils';
+import { getUrlHostname } from 'src/app/utils';
 
 /**
  * @description
@@ -11,6 +11,6 @@ import { hostname } from 'src/app/utils';
 })
 export class HostnamePipe implements PipeTransform {
   transform(url: string): unknown {
-    return hostname(url);
+    return getUrlHostname(url);
   }
 }

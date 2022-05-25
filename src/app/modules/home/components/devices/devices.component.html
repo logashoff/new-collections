@@ -1,16 +1,32 @@
-<mat-accordion>
-  <mat-expansion-panel hideToggle *ngFor="let device of devices$ | async; trackBy: trackByDevice">
-    <mat-expansion-panel-header>
-      {{ device.deviceName }}
-    </mat-expansion-panel-header>
-    <mat-divider></mat-divider>
-    <app-tab-list>
-      <app-list-item
-        *ngFor="let tab of getTabsFromSessions(device.sessions); trackBy: trackByTabId"
-        [tab]="tab"
-        [readOnly]="true"
-        (click)="handleItemClick(tab)">
-      </app-list-item>
-    </app-tab-list>
-  </mat-expansion-panel>
-</mat-accordion>
+<div class="container" *ngIf="devices$ | async as devices">
+  <h3 class="header">Devices</h3>
+  <mat-accordion>
+    <mat-expansion-panel hideToggle *ngFor="let device of devices; trackBy: trackByDevice">
+      <mat-expansion-panel-header>
+        <div class="header-container">
+          <div class="device-name">
+            {{ device.deviceName }}
+          </div>
+          <app-icons-container *ngIf="deviceHostnameGroup$ | async as deviceHostnameGroup"
+            [icons]="deviceHostnameGroup[device.deviceName]">
+          </app-icons-container>
+        </div>
+        <div class="header-controls">
+          <div>{{ device.deviceName }}</div>
+          <button mat-icon-button (click)="restoreTabs(getTabsFromSessions(device.sessions))" matTooltip="Restore">
+            <mat-icon>restore</mat-icon>
+          </button>
+        </div>
+      </mat-expansion-panel-header>
+      <mat-divider></mat-divider>
+      <app-tab-list>
+        <app-list-item
+          *ngFor="let tab of getTabsFromSessions(device.sessions); trackBy: trackByTabId"
+          [tab]="tab"
+          [readOnly]="true"
+          (click)="handleItemClick(tab)">
+        </app-list-item>
+      </app-tab-list>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

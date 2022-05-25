@@ -1,7 +1,7 @@
 import { Injectable, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { from, map, Observable, shareReplay } from 'rxjs';
-import { Devices, hostname, MostVisitedURL, TopSite, TopSites } from 'src/app/utils';
+import { Devices, getUrlHostname, MostVisitedURL, TopSite, TopSites } from 'src/app/utils';
 
 /**
  * @description
@@ -13,19 +13,24 @@ export class HomeService {
   readonly topSites$: Observable<TopSites> = from(this.getTopSites()).pipe(
     map(
       (sites): TopSites =>
-        sites.map(
-          (site): TopSite => ({
-            ...site,
-            favIconUrl: this.getFavIconUrl(hostname(site.url)),
-            pinned: false,
-            active: false,
-          })
-        )
+        sites?.length > 0
+          ? sites.map(
+              (site): TopSite => ({
+                ...site,
+                favIconUrl: this.getFavIconUrl(getUrlHostname(site.url)),
+                pinned: false,
+                active: false,
+              })
+            )
+          : null
     ),
     shareReplay(1)
   );
 
-  readonly devices$: Observable<Devices> = from(this.getDevices()).pipe(shareReplay(1));
+  readonly devices$: Observable<Devices> = from(this.getDevices()).pipe(
+    map((devices) => (devices?.length > 0 ? devices : null)),
+    shareReplay(1)
+  );
 
   constructor(private sanitizer: DomSanitizer) {}
 
