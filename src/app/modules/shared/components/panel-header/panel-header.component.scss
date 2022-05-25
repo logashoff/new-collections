@@ -43,7 +43,7 @@ $typography: mat.define-typography-config();
       color: getPaletteColor(getForegroundPalette($theme), secondary-text);
       
       .total {
-        border: 1px solid getPaletteColor(getForegroundPalette($theme), divider);
+        background: getPaletteColor(getBackgroundPalette($theme), disabled-button-toggle);
       }
     }
 

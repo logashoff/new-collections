@@ -1,11 +1,26 @@
 @import 'common';
 
 app-devices {
+  $height: 3rem;
+
   .mat-expansion-panel-header {
+    &.mat-expanded {
+      .header-container {
+        app-icons-container {
+          display: none;
+        }
+
+        .header-controls {
+          display: flex;
+        }
+      }
+    }
+
     .header-container {
       display: flex;
       align-items: center;
-      height: 3rem;
+      justify-content: space-between;
+      height: $height;
       gap: 0.5rem;
       padding: 0 0.5rem;
 
@@ -19,22 +34,12 @@ app-devices {
       app-icons-container {
         flex: 1;
       }
-    }
 
-    .header-controls {
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      margin: 0 0.5rem 0 1rem;
-    }
-
-    &.mat-expanded {
       .header-controls {
-        display: flex;
-      }
-
-      .header-container {
         display: none;
+        align-items: center;
+        justify-content: space-between;
+        height: $height;
       }
     }
   }

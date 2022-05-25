@@ -13,7 +13,7 @@ app-list-item {
   .container {
     display: flex;
     align-items: center;
-    height: 5rem;
+    height: 4rem;
     padding: 0 0.5rem 0 1rem;
     margin: 0;
     gap: 1rem;
@@ -53,6 +53,10 @@ app-list-item {
 
     &:not(:first-of-type) {
       border-top: 1px solid getPaletteColor(getForegroundPalette($theme), divider);
+    }
+
+    .link {
+      color: getPaletteColor(getForegroundPalette($theme), secondary-text);
     }
   }
 }

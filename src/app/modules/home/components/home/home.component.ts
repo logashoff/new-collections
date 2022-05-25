@@ -19,10 +19,7 @@ export class HomeComponent {
   /**
    * Main menu items.
    */
-  readonly menuItems$: Observable<MatFabMenu[]> = this.menuService.menuItems$.pipe(
-    map((menuItems) => menuItems.filter((item) => ![Action.Save].includes(item.id as Action))),
-    shareReplay(1)
-  );
+  readonly menuItems$: Observable<MatFabMenu[]> = this.menuService.menuItems$;
 
   constructor(private menuService: MenuService, private tabsService: TabService) {}
 }
