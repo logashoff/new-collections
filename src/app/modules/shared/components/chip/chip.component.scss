@@ -33,7 +33,7 @@
     }
 
     .icon-container {
-      background-color: getPaletteColor(getBackgroundPalette($theme), unselected-chip);
+      background-color: getPaletteColor(getBackgroundPalette($theme), disabled-list-option);
 
       .icon-label {
         color: getPaletteColor(getForegroundPalette($theme), text);

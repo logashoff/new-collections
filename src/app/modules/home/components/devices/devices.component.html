@@ -10,12 +10,11 @@
           <app-icons-container *ngIf="deviceHostnameGroup$ | async as deviceHostnameGroup"
             [icons]="deviceHostnameGroup[device.deviceName]">
           </app-icons-container>
-        </div>
-        <div class="header-controls">
-          <div>{{ device.deviceName }}</div>
-          <button mat-icon-button (click)="restoreTabs(getTabsFromSessions(device.sessions))" matTooltip="Restore">
-            <mat-icon>restore</mat-icon>
-          </button>
+          <div class="header-controls">
+            <button mat-icon-button (click)="restoreTabs(getTabsFromSessions(device.sessions))" matTooltip="Restore">
+              <mat-icon>restore</mat-icon>
+            </button>
+          </div>
         </div>
       </mat-expansion-panel-header>
       <mat-divider></mat-divider>
