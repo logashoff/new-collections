@@ -1,12 +1,23 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { flatMap } from 'lodash';
-import { Observable, tap } from 'rxjs';
-import { BrowserTab, Devices, Sessions, Tabs, trackByDevice, trackBySession, trackByTabId } from 'src/app/utils';
+import { map, Observable, shareReplay } from 'rxjs';
+import {
+  BrowserTab,
+  Devices,
+  getHostnameGroup,
+  HostnameGroup,
+  restoreTabs,
+  Sessions,
+  Tabs,
+  trackByDevice,
+  trackBySession,
+  trackByTabId,
+} from 'src/app/utils';
 import { HomeService } from '../../services';
 
 /**
  * @description
- * 
+ *
  * Devices list expansion panel
  */
 @Component({
@@ -14,13 +25,28 @@ import { HomeService } from '../../services';
   templateUrl: './devices.component.html',
   styleUrls: ['./devices.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class DevicesComponent {
-  readonly devices$: Observable<Devices> = this.homeService.devices$.pipe(tap((dd) => console.log(dd)));
+  readonly devices$: Observable<Devices> = this.homeService.devices$.pipe(shareReplay(1));
+
+  readonly deviceHostnameGroup$: Observable<{ [deviceName in string]: HostnameGroup }> = this.devices$.pipe(
+    map((devices) => {
+      const mapByDeviceName: any = {};
+
+      devices.forEach(
+        (device) => (mapByDeviceName[device.deviceName] = getHostnameGroup(this.getTabsFromSessions(device.sessions)))
+      );
+
+      return mapByDeviceName;
+    }),
+    shareReplay(1)
+  );
 
   readonly trackByDevice = trackByDevice;
   readonly trackBySession = trackBySession;
   readonly trackByTabId = trackByTabId;
+  readonly restoreTabs = restoreTabs;
 
   constructor(private homeService: HomeService) {}
 
@@ -28,7 +54,5 @@ export class DevicesComponent {
     return flatMap(sessions, (session) => session.tab || session.window?.tabs);
   }
 
-  handleItemClick(tab: BrowserTab) {
-
-  }
+  handleItemClick(tab: BrowserTab) {}
 }

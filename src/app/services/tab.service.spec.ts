@@ -6,7 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { getBrowserTabsMock, getTabGroupsMock } from 'src/mocks';
 import { v4 as uuidv4 } from 'uuid';
 import { ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
-import { getHostname, hostname } from '../utils/tab';
+import { getHostname, getHostnameGroup, getUrlHostname } from '../utils/tab';
 import { NavService } from './nav.service';
 import { TabService } from './tab.service';
 
@@ -19,7 +19,8 @@ jest.mock('src/app/utils', () => ({
   usesDarkMode: jest.fn().mockImplementation(() => {}),
   ActionIcon,
   getHostname,
-  hostname,
+  getHostnameGroup,
+  getUrlHostname,
   ignoreUrlsRegExp,
   TabGroup,
 }));
@@ -40,9 +41,9 @@ describe('TabService', () => {
       {
         provide: MatDialog,
         useValue: {
-          open() {}
-        }
-      }
+          open() {},
+        },
+      },
     ],
   });
 

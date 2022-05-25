@@ -15,11 +15,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import {} from './components/icons-container/icons-container.component';
 import {
   ChipComponent,
   EmptyComponent,
   GroupControlsComponent,
   GroupsComponent,
+  IconsContainerComponent,
   ImageComponent,
   ImageDirective,
   ListItemComponent,
@@ -41,6 +43,7 @@ const declarations = [
   GroupControlsComponent,
   GroupsComponent,
   HostnamePipe,
+  IconsContainerComponent,
   ImageComponent,
   ImageDirective,
   ListItemComponent,

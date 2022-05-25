@@ -1,0 +1,26 @@
+@import 'common';
+
+app-top-sites {
+  .mat-expansion-panel-header.mat-expanded {
+    app-panel-header {
+      display: none;
+    }
+  }
+
+  h3.header {
+    margin-bottom: 0.5rem;
+    line-height: 2.5rem;
+  }
+
+  .container {
+    margin-bottom: 0.5rem;
+  }
+}
+
+@include theme using($theme) {
+  app-top-sites {
+    .header {
+      color: getPaletteColor(getForegroundPalette($theme), hint-text);
+    }
+  }
+}

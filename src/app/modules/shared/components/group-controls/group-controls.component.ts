@@ -29,7 +29,7 @@ export class GroupControlsComponent {
    * Opens all tabs from `group` object.
    */
   restoreTabs() {
-    restoreTabs(this.group);
+    restoreTabs(this.group.tabs);
   }
 
   /**

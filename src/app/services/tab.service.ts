@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material/snack-bar';
-import { groupBy, keyBy, remove } from 'lodash';
+import { keyBy, remove } from 'lodash';
 import moment from 'moment';
 import { BehaviorSubject, firstValueFrom, lastValueFrom, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -12,7 +12,7 @@ import {
   BrowserTabs,
   Collection,
   Collections,
-  getHostname,
+  getHostnameGroup,
   getSavedTabs,
   ignoreUrlsRegExp,
   saveTabGroups,
@@ -88,11 +88,7 @@ export class TabService {
   private createHostnameGroups(tabGroups: TabGroups): TabsByHostname {
     const ret: TabsByHostname = {};
 
-    tabGroups.forEach((tabGroup) => {
-      const groupByHostname = groupBy(tabGroup.tabs, getHostname);
-      const values = Object.values(groupByHostname);
-      ret[tabGroup.id] = values.sort((a, b) => b.length - a.length);
-    });
+    tabGroups.forEach((tabGroup) => (ret[tabGroup.id] = getHostnameGroup(tabGroup.tabs)));
 
     return ret;
   }

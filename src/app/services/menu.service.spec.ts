@@ -1,8 +1,9 @@
 import { waitForAsync } from '@angular/core/testing';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
+import { of } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { getBrowserTabMock, getTabGroupMock, getTabGroupsMock } from 'src/mocks';
-import { Action, ActionIcon, TabGroup } from '../utils/models';
+import { getBrowserTabMock, getBrowserTabsMock, getTabGroupMock, getTabGroupsMock } from 'src/mocks';
+import { Action, ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
 import { MenuService } from './menu.service';
 import { TabService } from './tab.service';
 
@@ -15,6 +16,7 @@ jest.mock('src/app/utils', () => ({
   Action,
   ActionIcon,
   TabGroup,
+  ignoreUrlsRegExp,
 }));
 
 describe('MenuService', () => {
@@ -29,6 +31,9 @@ describe('MenuService', () => {
           addTabGroups() {},
           createTabGroup: () => new Promise((resolve) => resolve(getTabGroupMock())),
           displayMessage() {},
+          openTabsSelector: () => ({
+            afterDismissed: () => of(getBrowserTabsMock()),
+          }),
         },
       },
     ],

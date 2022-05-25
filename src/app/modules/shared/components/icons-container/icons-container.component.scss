@@ -1,0 +1,38 @@
+@import 'common';
+
+:host {
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+.icons-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  width: 100%;
+  min-height: inherit;
+  gap: 0.5rem;
+  height: 3rem;
+
+  .badged-icon {
+    min-width: 2rem;
+
+    &:last-child {
+      margin-right: 0.5rem;
+    }
+
+    &.mat-badge-hidden {
+      overflow: hidden;
+    }
+  }
+}
+
+@include theme using($theme) {
+  :host {
+    .icons-container .overflow {
+      color: getPaletteColor(getForegroundPalette($theme), disabled-text);
+    }
+  }
+}

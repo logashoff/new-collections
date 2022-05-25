@@ -1,0 +1,67 @@
+@import 'common';
+
+app-devices {
+  .mat-expansion-panel-header {
+    .header-container {
+      display: flex;
+      align-items: center;
+      height: 3rem;
+      gap: 0.5rem;
+      padding: 0 0.5rem;
+
+      .device-name {
+        border-radius: 2rem;
+        padding: 0.5rem 1rem;
+        line-height: 1rem;
+        text-align: center;
+      }
+
+      app-icons-container {
+        flex: 1;
+      }
+    }
+
+    .header-controls {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 0.5rem 0 1rem;
+    }
+
+    &.mat-expanded {
+      .header-controls {
+        display: flex;
+      }
+
+      .header-container {
+        display: none;
+      }
+    }
+  }
+
+  h3.header {
+    margin-bottom: 0.5rem;
+    line-height: 2.5rem;
+  }
+
+  .container {
+    margin-bottom: 0.5rem;
+  }
+}
+
+@include theme using($theme) {
+  app-devices {
+    .header {
+      color: getPaletteColor(getForegroundPalette($theme), hint-text);
+    }
+
+    .header-controls {
+      color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+    }
+
+    .device-name {
+      color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+      border: 1px solid getPaletteColor(getForegroundPalette($theme), divider);
+    }
+  }
+}
