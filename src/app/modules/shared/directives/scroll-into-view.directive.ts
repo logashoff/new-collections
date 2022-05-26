@@ -58,7 +58,7 @@ export class ScrollIntoViewDirective {
 
         // if panel height is bigger than viewport height, scroll to child tan instead
         if (height > vh) {
-          const child = el.querySelector(`[tabId="${this.tabId}"]`);
+          const child = el.querySelector(`[data-tab-id="${this.tabId}"]`);
           child.scrollIntoView({
             behavior: 'smooth',
             block: 'start',
