@@ -59,7 +59,7 @@ export class ListItemComponent {
   /**
    * Adds `tabId` attribute to component for `appScrollIntoView` directive to work
    */
-  @HostBinding('attr.tabId') get tabId(): number {
+  @HostBinding('attr.data-tab-id') get tabId(): number {
     return this.tab.id;
   }
 
