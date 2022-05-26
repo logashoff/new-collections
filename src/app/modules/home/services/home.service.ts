@@ -1,6 +1,8 @@
 import { Injectable, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { from, map, Observable, shareReplay } from 'rxjs';
+import { isUndefined } from 'lodash';
+import { filter, from, map, Observable, shareReplay, switchMap } from 'rxjs';
+import { SettingsService } from 'src/app/services';
 import { Devices, getUrlHostname, MostVisitedURL, TopSite, TopSites } from 'src/app/utils';
 
 /**
@@ -10,29 +12,43 @@ import { Devices, getUrlHostname, MostVisitedURL, TopSite, TopSites } from 'src/
  */
 @Injectable()
 export class HomeService {
-  readonly topSites$: Observable<TopSites> = from(this.getTopSites()).pipe(
-    map(
-      (sites): TopSites =>
-        sites?.length > 0
-          ? sites.map(
-              (site): TopSite => ({
-                ...site,
-                favIconUrl: this.getFavIconUrl(getUrlHostname(site.url)),
-                pinned: false,
-                active: false,
-              })
-            )
-          : null
+  /**
+   * Top sites list
+   */
+  readonly topSites$: Observable<TopSites> = this.settings.settings$.pipe(
+    filter((settings) => isUndefined(settings) || settings?.enableTopSites),
+    switchMap((settings) =>
+      from(this.getTopSites()).pipe(
+        map(
+          (sites): TopSites =>
+            sites?.length > 0
+              ? sites
+                  .filter((site) => !settings?.ignoreTopSites.some(({ url }) => url === site.url))
+                  .map(
+                    (site): TopSite => ({
+                      ...site,
+                      favIconUrl: this.getFavIconUrl(getUrlHostname(site.url)),
+                      pinned: false,
+                      active: false,
+                    })
+                  )
+              : null
+        )
+      )
     ),
     shareReplay(1)
   );
 
-  readonly devices$: Observable<Devices> = from(this.getDevices()).pipe(
-    map((devices) => (devices?.length > 0 ? devices : null)),
+  /**
+   * Synced devices list
+   */
+  readonly devices$: Observable<Devices> = this.settings.settings$.pipe(
+    filter((settings) => isUndefined(settings) || settings?.enableDevices),
+    switchMap(() => from(this.getDevices()).pipe(map((devices) => (devices?.length > 0 ? devices : null)))),
     shareReplay(1)
   );
 
-  constructor(private sanitizer: DomSanitizer) {}
+  constructor(private sanitizer: DomSanitizer, private settings: SettingsService) {}
 
   /**
    * Returns fav icon link based on domain name.

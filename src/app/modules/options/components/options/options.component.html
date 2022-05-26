@@ -1,1 +1,23 @@
-<app-empty>construction</app-empty>
+<form [formGroup]="formGroup">
+  <mat-card>
+    <mat-slide-toggle formControlName="enableDevices">
+      Enable Devices
+    </mat-slide-toggle>
+    <mat-slide-toggle formControlName="enableTopSites">
+      Enable Sites
+    </mat-slide-toggle>
+    <div *ngIf="ignoreSitesControl.controls?.length > 0" class="list-container">
+      <h4>Ignored Sites:</h4>
+      <div class="list">
+        <div class="list-item" *ngFor="let ignoredSite of ignoreSitesControl.controls; let i = index">
+          <span>
+            {{ ignoredSite.value?.title }}
+          </span>
+          <button mat-icon-button (click)="ignoreSitesControl.removeAt(i)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</form>

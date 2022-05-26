@@ -1,14 +1,18 @@
 <div class="container" *ngIf="topSites$ | async as topSites">
   <div class="site-container">
-    <a class="site" *ngFor="let site of topSites; trackBy: trackBySite" href="{{ site.url }}">
-      <app-chip 
-        class="site-image" 
-        [source]="site.favIconUrl" 
-        [label]="site.title"
-        [labelHidden]="false"
-        size="medium">
-      </app-chip>
-    </a>
+    <div class="site" *ngFor="let site of topSites; trackBy: trackBySite">
+      <a href="{{ site.url }}">
+        <app-chip 
+          [source]="site.favIconUrl" 
+          [label]="site.title"
+          [labelHidden]="false"
+          size="medium">
+        </app-chip>
+      </a>
+      <button class="remove-btn" color="warn" (click)="removeSite(site)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
     <div class="spacer"></div>
   </div>
 </div>

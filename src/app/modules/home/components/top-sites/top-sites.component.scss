@@ -1,4 +1,9 @@
+@import 'common';
+
 app-top-sites {
+  display: block;
+  position: relative;
+
   .container {
     margin: 1rem 0;
 
@@ -8,9 +13,52 @@ app-top-sites {
       flex-wrap: wrap;
       justify-content: space-between;
 
+      .site {
+        position: relative;
+
+        .remove-btn {
+          align-items: center;
+          border-radius: 1rem;
+          box-sizing: border-box;
+          cursor: pointer;
+          display: none;
+          height: 1rem;
+          justify-content: center;
+          margin: 0;
+          padding: 0.75rem;
+          position: absolute;
+          right: -0.75rem;
+          top: -0.75rem;
+          width: 1rem;
+
+          .mat-icon {
+            font-size: 1rem;
+            height: 1rem;
+            line-height: 1rem;
+            width: 1rem;
+          }
+        }
+
+        &:hover {
+          .remove-btn {
+            display: flex;
+          }
+        }
+      }
+
       .spacer {
         flex: 1 1 auto;
       }
+    }
+  }
+}
+
+@include theme using($theme) {
+  app-top-sites {
+    .site-container .site .remove-btn {
+      background: getPaletteColor(getBackgroundPalette($theme), card);
+      color: getPaletteColor(getForegroundPalette($theme), text);
+      border: 1px solid getPaletteColor(getForegroundPalette($theme), divider);
     }
   }
 }

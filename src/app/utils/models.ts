@@ -9,6 +9,11 @@ import { MessageComponent } from '../modules/shared';
 export const tabsStorageKey = 'tabs';
 
 /**
+ * Local storage key for saving app settings
+ */
+export const settingsStorageKey = 'settings';
+
+/**
  * Matches domain name.
  */
 export const domainRegExp = new RegExp('([^.]*).([^.]*)$');
@@ -34,6 +39,15 @@ export type MessageRef = MatSnackBarRef<MessageComponent>;
 export interface TabDelete {
   deletedTab: BrowserTab;
   revertDelete: MessageRef;
+}
+
+/**
+ * App settings config
+ */
+export interface Settings {
+  enableDevices?: boolean;
+  enableTopSites?: boolean;
+  ignoreTopSites?: MostVisitedURL[];
 }
 
 /**
