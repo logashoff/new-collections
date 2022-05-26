@@ -54,5 +54,10 @@ export class DevicesComponent {
     return flatMap(sessions, (session) => session.tab || session.window?.tabs);
   }
 
-  handleItemClick(tab: BrowserTab) {}
+  /**
+   * Handles list item click
+   */
+  handleItemClick(tab: BrowserTab) {
+    window.open(tab.url, '_blank');
+  }
 }

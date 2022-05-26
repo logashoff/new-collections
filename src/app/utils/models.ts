@@ -150,7 +150,7 @@ export enum Action {
 /**
  * Common icon sizes.
  */
-export type IconSize = 'small' | 'medium';
+export type IconSize = 'small' | 'medium' | 'large';
 
 /**
  * Timeline-like element.

@@ -1,5 +1,6 @@
 $size-small: 1rem;
 $size-medium: 1.5rem;
+$size-large: 2rem;
 
 :host,
 img {
@@ -13,5 +14,10 @@ img {
   &.medium {
     width: $size-medium;
     height: $size-medium;
+  }
+
+  &.large {
+    width: $size-large;
+    height: $size-large;
   }
 }

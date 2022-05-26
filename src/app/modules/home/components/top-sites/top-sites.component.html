@@ -1,23 +1,14 @@
 <div class="container" *ngIf="topSites$ | async as topSites">
-  <h3 class="header">Top Sites</h3>
-  <mat-accordion>
-    <mat-expansion-panel hideToggle>
-      <mat-expansion-panel-header>
-        <app-panel-header
-          [icons]="hostnameGroup$ | async"
-          [total]="total$ | async">
-        </app-panel-header>
-      </mat-expansion-panel-header>
-      <mat-divider></mat-divider>
-      <app-tab-list>
-        <app-list-item
-          *ngFor="let tab of topSites; trackBy: trackByTabId"
-          [tab]="tab"
-          [readOnly]="true"
-          (click)="handleItemClick(tab)">
-        </app-list-item>
-      </app-tab-list>
-    </mat-expansion-panel>
-  </mat-accordion>
+  <div class="site-container">
+    <a class="site" *ngFor="let site of topSites; trackBy: trackBySite" href="{{ site.url }}">
+      <app-chip 
+        class="site-image" 
+        [source]="site.favIconUrl" 
+        [label]="site.title"
+        [labelHidden]="false"
+        size="medium">
+      </app-chip>
+    </a>
+    <div class="spacer"></div>
+  </div>
 </div>
-

@@ -25,8 +25,7 @@ app-devices {
       padding: 0 0.5rem;
 
       .device-name {
-        border-radius: 2rem;
-        padding: 0.5rem 1rem;
+        padding: 0 1rem 0 0.5rem;
         line-height: 1rem;
         text-align: center;
       }
@@ -66,7 +65,6 @@ app-devices {
 
     .device-name {
       color: getPaletteColor(getForegroundPalette($theme), secondary-text);
-      border: 1px solid getPaletteColor(getForegroundPalette($theme), divider);
     }
   }
 }
