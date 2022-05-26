@@ -17,6 +17,15 @@
   max-width: 12rem;
   min-width: 2rem;
 
+  &.medium {
+    max-width: 14rem;
+  }
+
+  &.large {
+    padding: 0.5rem 0.75rem;
+    max-width: 16rem;
+  }
+
   .icon-label {
     line-height: 1rem;
     margin-right: 0.5rem;

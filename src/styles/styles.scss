@@ -124,17 +124,18 @@ a {
   }
 
   .mat-expansion-panel-header {
+    display: flex;
+    align-items: center;
     padding: 0;
     height: 3rem;
 
     &.mat-expanded {
-      height: 3rem;
+      height: 4rem;
     }
 
     .mat-content {
       display: block;
       overflow: hidden;
-      height: inherit;
     }
   }
 

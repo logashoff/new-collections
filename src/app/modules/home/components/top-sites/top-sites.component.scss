@@ -1,26 +1,16 @@
-@import 'common';
-
 app-top-sites {
-  .mat-expansion-panel-header.mat-expanded {
-    app-panel-header {
-      display: none;
-    }
-  }
-
-  h3.header {
-    margin-bottom: 0.5rem;
-    line-height: 2.5rem;
-  }
-
   .container {
-    margin-bottom: 0.5rem;
-  }
-}
+    margin: 1rem 0;
 
-@include theme using($theme) {
-  app-top-sites {
-    .header {
-      color: getPaletteColor(getForegroundPalette($theme), hint-text);
+    .site-container {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: space-between;
+
+      .spacer {
+        flex: 1 1 auto;
+      }
     }
   }
 }

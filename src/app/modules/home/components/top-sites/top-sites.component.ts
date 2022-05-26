@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { map, Observable, shareReplay } from 'rxjs';
-import { BrowserTab, getHostnameGroup, HostnameGroup, TopSites, trackBySite, trackByTabId } from 'src/app/utils';
+import { Observable, shareReplay } from 'rxjs';
+import { TopSites, trackBySite } from 'src/app/utils';
 import { HomeService } from '../../services';
 
 /**
@@ -18,19 +18,7 @@ import { HomeService } from '../../services';
 export class TopSitesComponent {
   readonly topSites$: Observable<TopSites> = this.homeService.topSites$.pipe(shareReplay(1));
 
-  readonly total$: Observable<number> = this.topSites$.pipe(
-    map((topSites) => topSites.length),
-    shareReplay(1)
-  );
-
-  readonly hostnameGroup$: Observable<HostnameGroup> = this.topSites$.pipe(
-    map((topSites) => getHostnameGroup(topSites))
-  );
-
   readonly trackBySite = trackBySite;
-  readonly trackByTabId = trackByTabId;
 
   constructor(private homeService: HomeService) {}
-
-  handleItemClick(tab: BrowserTab) {}
 }
