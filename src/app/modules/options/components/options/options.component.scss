@@ -1,10 +1,26 @@
 @import 'common';
 
-:host {
-  display: block;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: 0;
+.mat-card {
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  margin: 1rem auto;
+
+  & > * {
+    margin-bottom: 1rem;
+  }
+
+  .list-container {
+    margin-top: 1rem;
+
+    .list {
+      margin-left: 1rem;
+
+      .list-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+  }
 }
