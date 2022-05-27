@@ -54,7 +54,7 @@ describe('MenuService', () => {
         {
           id: 4,
           icon: 'bookmark_add',
-          tooltip: 'Bookmark open tabs',
+          tooltip: 'Add Bookmarks',
           tooltipPosition: 'left',
           color: 'accent',
         },

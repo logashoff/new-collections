@@ -31,7 +31,7 @@ export class MenuService {
     {
       id: Action.Save,
       icon: ActionIcon.Save,
-      tooltip: 'Bookmark open tabs',
+      tooltip: 'Add Bookmarks',
       tooltipPosition,
       color: 'accent',
     },
@@ -81,7 +81,7 @@ export class MenuService {
               await this.tabsService.addTabGroup(tabGroup);
             }
           } else {
-            this.tabsService.displayMessage('Current tab list is invalid');
+            this.tabsService.displayMessage('Tab list is invalid');
           }
           break;
         case Action.Options:
