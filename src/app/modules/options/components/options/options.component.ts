@@ -30,8 +30,8 @@ export class OptionsComponent implements OnInit {
   ngOnInit(): void {
     this.settings.settings$.pipe(take(1)).subscribe((settings) => {
       if (settings) {
-        this.sitesControl.setValue(settings.enableTopSites);
-        this.devicesControl.setValue(settings.enableDevices);
+        this.sitesControl.setValue(settings.enableTopSites || true);
+        this.devicesControl.setValue(settings.enableDevices || true);
 
         if (settings.ignoreTopSites?.length > 0) {
           settings.ignoreTopSites.forEach((site) => this.ignoreSitesControl.push(new FormControl(site)));

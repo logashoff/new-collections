@@ -214,7 +214,7 @@ export class TabService {
     let filteredTabs = tabs.filter(({ url }) => !ignoreUrlsRegExp.test(url));
 
     if (filteredTabs.length === 0) {
-      this.displayMessage('Tab list in invalid');
+      this.displayMessage('Tab list is invalid');
     } else {
       const existingUrls = keyBy(group.tabs, 'url');
       filteredTabs = filteredTabs.filter(({ url }) => !existingUrls[url]);

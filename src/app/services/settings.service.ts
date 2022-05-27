@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { uniqBy } from 'lodash';
 import { BehaviorSubject, from, Observable, shareReplay, switchMap } from 'rxjs';
 import { MostVisitedURL, Settings, settingsStorageKey } from '../utils';
 
@@ -37,12 +38,16 @@ export class SettingsService {
    * Updates and saves new settings
    */
   async update(settings: Settings) {
-    const currentSettings = await this.getSettings();
+    const currentSettings = (await this.getSettings()) ?? {};
 
     const newSettings = {
       ...currentSettings,
       ...settings,
     };
+
+    if (newSettings.ignoreTopSites?.length > 0) {
+      newSettings.ignoreTopSites = uniqBy(newSettings.ignoreTopSites, (site) => site.url);
+    }
 
     this.saveSettings(newSettings);
 
@@ -53,7 +58,7 @@ export class SettingsService {
    * Updates ignore site list with new site specified
    */
   async ignoreSite(site: MostVisitedURL) {
-    const settings = await this.getSettings();
+    const settings = (await this.getSettings()) ?? {};
 
     if (settings.ignoreTopSites?.length > 0) {
       settings.ignoreTopSites.push(site);

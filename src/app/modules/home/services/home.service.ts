@@ -16,14 +16,14 @@ export class HomeService {
    * Top sites list
    */
   readonly topSites$: Observable<TopSites> = this.settings.settings$.pipe(
-    filter((settings) => isUndefined(settings) || settings?.enableTopSites),
+    filter((settings) => isUndefined(settings?.enableTopSites) || settings?.enableTopSites),
     switchMap((settings) =>
       from(this.getTopSites()).pipe(
         map(
           (sites): TopSites =>
             sites?.length > 0
               ? sites
-                  .filter((site) => !settings?.ignoreTopSites.some(({ url }) => url === site.url))
+                  .filter((site) => !settings?.ignoreTopSites?.some(({ url }) => url === site.url))
                   .map(
                     (site): TopSite => ({
                       ...site,
@@ -43,7 +43,7 @@ export class HomeService {
    * Synced devices list
    */
   readonly devices$: Observable<Devices> = this.settings.settings$.pipe(
-    filter((settings) => isUndefined(settings) || settings?.enableDevices),
+    filter((settings) => isUndefined(settings?.enableDevices) || settings?.enableDevices),
     switchMap(() => from(this.getDevices()).pipe(map((devices) => (devices?.length > 0 ? devices : null)))),
     shareReplay(1)
   );
