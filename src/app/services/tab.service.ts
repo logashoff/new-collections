@@ -136,28 +136,24 @@ export class TabService {
   /**
    * Generates tab group from browser tab list.
    */
-  async createTabGroup(tabs: Tabs): Promise<TabGroup> {
-    return new Promise((resolve) => {
-      const filteredTabs: BrowserTabs = tabs
-        .filter((tab) => !ignoreUrlsRegExp.test(tab.url))
-        .map(
-          ({ id, url, title, favIconUrl, active, pinned }): BrowserTab => ({
-            active,
-            favIconUrl,
-            id,
-            pinned,
-            title,
-            url,
-          })
-        );
+  createTabGroup(tabs: Tabs): TabGroup {
+    const filteredTabs: BrowserTabs = tabs
+      .filter((tab) => !ignoreUrlsRegExp.test(tab.url))
+      .map(
+        ({ id, url, title, favIconUrl, active, pinned }): BrowserTab => ({
+          active,
+          favIconUrl,
+          id,
+          pinned,
+          title,
+          url,
+        })
+      );
 
-      const tabGroup = new TabGroup({
-        id: uuidv4(),
-        timestamp: new Date().getTime(),
-        tabs: filteredTabs,
-      });
-
-      resolve(tabGroup);
+    return new TabGroup({
+      id: uuidv4(),
+      timestamp: new Date().getTime(),
+      tabs: filteredTabs,
     });
   }
 
@@ -291,20 +287,18 @@ export class TabService {
    * Opens tab edit dialog.
    */
   async updateTab(tab: BrowserTab): Promise<BrowserTab> {
-    return new Promise(async (resolve) => {
-      const dialogRef = this.dialog.open(RenameDialogComponent, { data: tab, disableClose: true });
-      let updatedTab: BrowserTab = await lastValueFrom(dialogRef.afterClosed());
+    const dialogRef = this.dialog.open(RenameDialogComponent, { data: tab, disableClose: true });
+    let updatedTab: BrowserTab = await lastValueFrom(dialogRef.afterClosed());
 
-      if (updatedTab && (tab.title !== updatedTab.title || tab.url !== updatedTab.url)) {
-        const group = await this.getGroupByTab(tab);
-        updatedTab = group.updateTab(tab, updatedTab);
-        this.tabGroupsSource$.next(await firstValueFrom(this.tabGroups$));
+    if (updatedTab && (tab.title !== updatedTab.title || tab.url !== updatedTab.url)) {
+      const group = await this.getGroupByTab(tab);
+      updatedTab = group.updateTab(tab, updatedTab);
+      this.tabGroupsSource$.next(await firstValueFrom(this.tabGroups$));
 
-        this.save();
+      this.save();
 
-        resolve(updatedTab);
-      }
-    });
+      return updatedTab;
+    }
   }
 
   /**

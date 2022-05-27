@@ -52,6 +52,8 @@ export class SettingsService {
     this.saveSettings(newSettings);
 
     this.settingsSource$.next(newSettings);
+
+    return newSettings;
   }
 
   /**
@@ -66,6 +68,6 @@ export class SettingsService {
       settings.ignoreTopSites = [site];
     }
 
-    this.update(settings);
+    return this.update(settings);
   }
 }
