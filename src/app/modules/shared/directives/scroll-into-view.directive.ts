@@ -41,6 +41,8 @@ export class ScrollIntoViewDirective {
    */
   @Input() set appScrollIntoView(value: boolean) {
     this.shouldScroll = value;
+
+    this.scroll();
   }
 
   constructor(private el: ElementRef) {}
@@ -55,10 +57,10 @@ export class ScrollIntoViewDirective {
         const el: HTMLElement = this.el.nativeElement;
         const rect = el.getBoundingClientRect();
         const { height } = rect;
+        const child = el.querySelector(`[data-tab-id="${this.tabId}"]`);
 
         // if panel height is bigger than viewport height, scroll to child tan instead
-        if (height > vh) {
-          const child = el.querySelector(`[data-tab-id="${this.tabId}"]`);
+        if (height > vh && child) {
           child.scrollIntoView({
             behavior: 'smooth',
             block: 'start',

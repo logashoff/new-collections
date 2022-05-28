@@ -38,7 +38,7 @@ export class NavService {
     });
   }
 
-  setParams(groupId: string, tabId: number) {
+  setParams(groupId: string, tabId?: number) {
     this.router.navigate([], {
       relativeTo: this.activeRoute,
       queryParams: {
