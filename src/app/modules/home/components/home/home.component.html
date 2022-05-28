@@ -1,8 +1,8 @@
 <div class="content">
-  <app-search *ngIf="groupsTimeline$ | async as groupsTimeline; else empty">
-    <app-top-sites></app-top-sites>
+  <app-search *ngIf="hasAnyData$ | async; else empty">
+    <app-top-sites [topSites]="topSites$ | async"></app-top-sites>
     <app-devices></app-devices>
-    <app-timeline [timeline]="groupsTimeline"></app-timeline>
+    <app-timeline></app-timeline>
   </app-search>
   <app-menu [menuItems]="menuItems$ | async"></app-menu>
 </div>

@@ -4,7 +4,7 @@ import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bott
 import { MatSelectionList } from '@angular/material/list';
 import { isNil } from 'lodash';
 import { filter, map, Observable, shareReplay, startWith, withLatestFrom } from 'rxjs';
-import { Tabs } from 'src/app/utils';
+import { Tabs, trackByTabId } from 'src/app/utils';
 
 /**
  * @description
@@ -25,6 +25,8 @@ export class TabsSelectorComponent {
   readonly formGroup = new FormGroup({
     list: new FormControl([], [Validators.required, Validators.minLength(1)]),
   });
+
+  readonly trackByTabId = trackByTabId;
 
   /**
    * List of checked items.

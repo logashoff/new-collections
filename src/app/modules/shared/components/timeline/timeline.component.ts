@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { isNil } from 'lodash';
-import { BehaviorSubject, filter, map, Observable, shareReplay } from 'rxjs';
+import { map, Observable, shareReplay } from 'rxjs';
 import { TabService } from 'src/app/services';
-import { TabGroups, Timeline, TimelineElement } from 'src/app/utils';
+import { TabGroups, TimelineElement } from 'src/app/utils';
 
 /**
  * @description
@@ -16,22 +16,10 @@ import { TabGroups, Timeline, TimelineElement } from 'src/app/utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimelineComponent {
-  private readonly timeline$ = new BehaviorSubject<Timeline>(null);
-
-  /**
-   * Tab groups grouped by time
-   */
-  @Input() set timeline(value: Timeline) {
-    this.timeline$.next(value);
-  }
-
-  get timeline(): Timeline {
-    return this.timeline$.value;
-  }
+  readonly timeline$ = this.tabService.groupsTimeline$;
 
   readonly timelineLabels$: Observable<string[]> = this.timeline$.pipe(
-    filter((timeline) => !isNil(timeline)),
-    map((timeline) => Object.keys(timeline)),
+    map((timeline) => (!isNil(timeline) ? Object.keys(timeline) : null)),
     shareReplay(1)
   );
 

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { isUndefined } from 'lodash';
 import { take } from 'rxjs';
 import { SettingsService } from 'src/app/services';
 
@@ -30,8 +31,17 @@ export class OptionsComponent implements OnInit {
   ngOnInit(): void {
     this.settings.settings$.pipe(take(1)).subscribe((settings) => {
       if (settings) {
-        this.sitesControl.setValue(settings.enableTopSites || true);
-        this.devicesControl.setValue(settings.enableDevices || true);
+        if (isUndefined(settings.enableTopSites)) {
+          settings.enableTopSites = true;
+        }
+
+        this.sitesControl.setValue(settings.enableTopSites);
+
+        if (isUndefined(settings.enableDevices)) {
+          settings.enableDevices = true;
+        }
+
+        this.devicesControl.setValue(settings.enableDevices);
 
         if (settings.ignoreTopSites?.length > 0) {
           settings.ignoreTopSites.forEach((site) => this.ignoreSitesControl.push(new FormControl(site)));

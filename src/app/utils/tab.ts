@@ -8,7 +8,11 @@ import { BrowserTabs, Collections, HostnameGroup, Tab, tabsStorageKey } from './
  */
 export function saveTabGroups(collections: Collections): Promise<void> {
   return new Promise((resolve) => {
-    chrome.storage.local.set({ [tabsStorageKey]: collections }, () => resolve());
+    if (collections?.length > 0) {
+      chrome.storage.local.set({ [tabsStorageKey]: collections }, () => resolve());
+    } else {
+      return chrome.storage.local.remove(tabsStorageKey);
+    }
   });
 }
 

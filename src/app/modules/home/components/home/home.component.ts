@@ -1,9 +1,14 @@
 import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { map, Observable, shareReplay } from 'rxjs';
-import { MenuService, TabService } from 'src/app/services';
-import { Action, Timeline } from 'src/app/utils';
+import { Observable } from 'rxjs';
+import { MenuService } from 'src/app/services';
+import { HomeService } from '../../services';
 
+/**
+ * @description
+ *
+ * Home / New Tap component.
+ */
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -11,15 +16,14 @@ import { Action, Timeline } from 'src/app/utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
-  /**
-   * Tab groups grouped by time
-   */
-  readonly groupsTimeline$: Observable<Timeline> = this.tabsService.groupsTimeline$;
+  readonly hasAnyData$ = this.homeService.hasAnyData$;
+  readonly timeline$ = this.homeService.timeline$;
+  readonly topSites$ = this.homeService.topSites$;
 
   /**
    * Main menu items.
    */
   readonly menuItems$: Observable<MatFabMenu[]> = this.menuService.menuItems$;
 
-  constructor(private menuService: MenuService, private tabsService: TabService) {}
+  constructor(private menuService: MenuService, private homeService: HomeService) {}
 }

@@ -24,6 +24,11 @@ export class SearchComponent {
   readonly trackByTabId = trackByTabId;
 
   /**
+   * Indicates there is data to search.
+   */
+  readonly hasSearchData$: Observable<boolean> = this.searchService.hasSearchData$;
+
+  /**
    * Source for search results.
    */
   readonly searchResults$ = this.formGroup.valueChanges.pipe(
