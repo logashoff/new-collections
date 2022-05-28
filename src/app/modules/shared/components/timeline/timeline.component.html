@@ -1,11 +1,13 @@
-<ng-container *ngFor="let timelineLabel of timelineLabels$ | async">
-  <ng-container *ngIf="timeline[timelineLabel]?.length > 0">
-    <div class="timeline-header">
-      <h3 class="timeline-label">{{ timelineLabel }}</h3>
-      <button mat-icon-button (click)="removeGroups(timeline[timelineLabel])">
-        <mat-icon>done_all</mat-icon>
-      </button>
-    </div>
-    <app-groups [groups]="timeline[timelineLabel]"></app-groups>
+<ng-container *ngIf="timeline$ | async as timeline">
+  <ng-container *ngFor="let timelineLabel of timelineLabels$ | async">
+    <ng-container *ngIf="timeline[timelineLabel]?.length > 0">
+      <div class="timeline-header">
+        <h3 class="timeline-label">{{ timelineLabel }}</h3>
+        <button mat-icon-button (click)="removeGroups(timeline[timelineLabel])">
+          <mat-icon>done_all</mat-icon>
+        </button>
+      </div>
+      <app-groups [groups]="timeline[timelineLabel]"></app-groups>
+    </ng-container>
   </ng-container>
 </ng-container>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import Fuse from 'fuse.js';
 import { flatMap } from 'lodash';
-import { BehaviorSubject, map, Observable, shareReplay } from 'rxjs';
+import { map, Observable, shareReplay } from 'rxjs';
 import { BrowserTab, BrowserTabs } from '../utils';
 import { TabService } from './tab.service';
 
@@ -27,6 +27,14 @@ export class SearchService {
    */
   private readonly tabs$: Observable<BrowserTabs> = this.tabService.tabGroups$.pipe(
     map((tabGroups) => flatMap(tabGroups, (tabGroup) => tabGroup.tabs)),
+    shareReplay(1)
+  );
+
+  /**
+   * Indicates search data is present.
+   */
+  readonly hasSearchData$: Observable<boolean> = this.tabs$.pipe(
+    map((tabs) => tabs?.length > 0),
     shareReplay(1)
   );
 

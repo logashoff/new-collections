@@ -23,7 +23,7 @@
     </div>
     <div class="list-container">
       <mat-selection-list formControlName="list">
-        <mat-list-option *ngFor="let tab of tabs" [value]="tab" color="primary">
+        <mat-list-option *ngFor="let tab of tabs; trackBy: trackByTabId" [value]="tab" color="primary">
           <div class="list-item">
             <app-chip [source]="tab.favIconUrl" size="small"></app-chip>
             <div class="item-text">

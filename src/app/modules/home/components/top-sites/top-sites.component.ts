@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { Observable, shareReplay } from 'rxjs';
+import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { SettingsService } from 'src/app/services';
 import { TopSite, TopSites, trackBySite } from 'src/app/utils';
 import { HomeService } from '../../services';
@@ -17,7 +16,7 @@ import { HomeService } from '../../services';
   encapsulation: ViewEncapsulation.None,
 })
 export class TopSitesComponent {
-  readonly topSites$: Observable<TopSites> = this.homeService.topSites$.pipe(shareReplay(1));
+  @Input() topSites: TopSites;
 
   readonly trackBySite = trackBySite;
 

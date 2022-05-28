@@ -1,9 +1,9 @@
 import { Injectable, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { isUndefined } from 'lodash';
-import { filter, from, map, Observable, shareReplay, switchMap } from 'rxjs';
-import { SettingsService } from 'src/app/services';
-import { Devices, getUrlHostname, MostVisitedURL, TopSite, TopSites } from 'src/app/utils';
+import { isNil, isUndefined } from 'lodash';
+import { combineLatest, filter, from, map, Observable, shareReplay, startWith, switchMap } from 'rxjs';
+import { SettingsService, TabService } from 'src/app/services';
+import { Devices, getUrlHostname, MostVisitedURL, Timeline, TopSite, TopSites } from 'src/app/utils';
 
 /**
  * @description
@@ -48,7 +48,24 @@ export class HomeService {
     shareReplay(1)
   );
 
-  constructor(private sanitizer: DomSanitizer, private settings: SettingsService) {}
+  /**
+   * Tab groups grouped by time
+   */
+  readonly timeline$: Observable<Timeline> = this.tabsService.groupsTimeline$;
+
+  /**
+   * Indicates if timeline, top sites or devices data is present
+   */
+  readonly hasAnyData$: Observable<boolean> = combineLatest([
+    this.timeline$.pipe(startWith(null)),
+    this.devices$.pipe(startWith(null)),
+    this.topSites$.pipe(startWith(null)),
+  ]).pipe(
+    map(([timeline, devices, topSites]) => !isNil(timeline) || !isNil(devices) || !isNil(topSites)),
+    shareReplay(1)
+  );
+
+  constructor(private sanitizer: DomSanitizer, private settings: SettingsService, private tabsService: TabService) {}
 
   /**
    * Returns fav icon link based on domain name.

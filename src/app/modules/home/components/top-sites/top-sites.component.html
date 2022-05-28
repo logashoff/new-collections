@@ -1,4 +1,4 @@
-<div class="container" *ngIf="topSites$ | async as topSites">
+<div class="container" *ngIf="topSites?.length > 0">
   <div class="site-container">
     <div class="site" *ngFor="let site of topSites; trackBy: trackBySite">
       <a href="{{ site.url }}">
