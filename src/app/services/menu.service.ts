@@ -13,6 +13,7 @@ import {
   queryCurrentWindow,
   TabGroup,
 } from 'src/app/utils';
+import { NavService } from './nav.service';
 import { TabService } from './tab.service';
 
 /**
@@ -55,7 +56,7 @@ export class MenuService {
     },
   ]);
 
-  constructor(private tabsService: TabService) {}
+  constructor(private tabsService: TabService, private nav: NavService) {}
 
   /**
    * Navigates to options page.
@@ -79,6 +80,7 @@ export class MenuService {
             if (tabs?.length > 0) {
               const tabGroup = await this.tabsService.createTabGroup(tabs);
               await this.tabsService.addTabGroup(tabGroup);
+              this.nav.setParams(tabGroup.id);
             }
           } else {
             this.tabsService.displayMessage('Tab list is invalid');

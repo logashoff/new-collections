@@ -16,6 +16,11 @@ chrome = {
         callback({});
       },
     },
+    onChanged: {
+      addListener: function (callback) {
+        callback();
+      },
+    },
   },
   tabs: {
     query: function (config, callback) {

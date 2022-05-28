@@ -5,6 +5,7 @@ import { take } from 'rxjs/operators';
 import { getBrowserTabMock, getBrowserTabsMock, getTabGroupMock, getTabGroupsMock } from 'src/mocks';
 import { Action, ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
 import { MenuService } from './menu.service';
+import { NavService } from './nav.service';
 import { TabService } from './tab.service';
 
 jest.mock('src/app/utils', () => ({
@@ -34,6 +35,12 @@ describe('MenuService', () => {
           openTabsSelector: () => ({
             afterDismissed: () => of(getBrowserTabsMock()),
           }),
+        },
+      },
+      {
+        provide: NavService,
+        useValue: {
+          setParams() {},
         },
       },
     ],
