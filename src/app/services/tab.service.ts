@@ -98,11 +98,7 @@ export class TabService {
       }
     });
 
-    for (let i = 0; i < tabGroups.length; i++) {
-      if (!(tabGroups[i].id in savedGroupIds)) {
-        tabGroups.splice(i--, 1);
-      }
-    }
+    remove(tabGroups, ({ id }) => !(id in savedGroupIds));
 
     this.tabGroupsSource$.next(tabGroups);
   }
@@ -250,7 +246,6 @@ export class TabService {
         if (tabs?.length > 0) {
           group.prepend(tabs);
 
-          this.tabGroupsSource$.next(tabGroups);
           await this.save(tabGroups);
 
           const tabsLen = tabs.length;
@@ -289,7 +284,6 @@ export class TabService {
           if (tabGroup.tabs.length === 0) {
             messageRef = await this.removeTabGroup(tabGroup);
           } else if (removeIndex > -1) {
-            this.tabGroupsSource$.next(tabGroups);
             this.save(tabGroups);
             messageRef = this.displayMessage('Item removed', ActionIcon.Undo);
           }
@@ -303,7 +297,6 @@ export class TabService {
 
         if (revert) {
           tabGroup.addTabAt(removeIndex, removedTab);
-          this.tabGroupsSource$.next(tabGroups);
           this.save(tabGroups);
         }
       }
@@ -322,7 +315,6 @@ export class TabService {
       updatedTab = group.updateTab(tab, updatedTab);
 
       const tabGroups = await firstValueFrom(this.tabGroups$);
-      this.tabGroupsSource$.next(tabGroups);
 
       await this.save(tabGroups);
 
@@ -347,8 +339,6 @@ export class TabService {
       const tabGroups = await firstValueFrom(this.tabGroups$);
       const messageRef = this.displayMessage('Item removed', ActionIcon.Undo);
       const removedGroups = remove(tabGroups, (tg) => tg === tabGroup);
-
-      this.tabGroupsSource$.next(tabGroups);
 
       this.navService.reset();
       resolve(messageRef);
@@ -378,7 +368,6 @@ export class TabService {
         const messageRef = this.displayMessage(`${rmLen} item${rmLen > 1 ? 's' : ''} removed`, ActionIcon.Undo);
 
         this.navService.reset();
-        this.tabGroupsSource$.next(currentTabGroups);
 
         resolve(messageRef);
 
