@@ -99,12 +99,23 @@ export class TabGroup implements Collection {
     this.tabsSource$.next(tabs);
   }
 
-  mergeTabs(tabs: BrowserTabs) {
+  /**
+   * Merges current tabs list with provided one.
+   * 
+   * @param tabs New tab list.
+   * @param sync True if current tabs should be removed if not in new list.
+   */
+  mergeTabs(tabs: BrowserTabs, sync = false) {
     const currTabsById = keyBy(this.tabs, 'id');
+    
+    if (sync) {
+      const newTabsById = keyBy(tabs, 'id');
+      remove(this.tabs, ({ id }) => !(id in newTabsById));
+    }
 
-    tabs.forEach((newTab) => {
+    tabs.forEach((newTab, index) => {
       if (!(newTab.id in currTabsById)) {
-        this.tabs.push(newTab);
+        this.tabs.splice(index, 0, newTab);
       } else {
         const currTab = currTabsById[newTab.id];
         currTab.active = newTab.active;
