@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { isUndefined } from 'lodash';
-import { take } from 'rxjs';
+import { from, map, Observable, shareReplay, startWith, take } from 'rxjs';
 import { SettingsService } from 'src/app/services';
 
 /**
@@ -19,6 +19,15 @@ export class OptionsComponent implements OnInit {
   private readonly sitesControl = new FormControl(true);
   private readonly devicesControl = new FormControl(true);
   readonly ignoreSitesControl = new FormArray([]);
+
+  /**
+   * Chrome sync storage has limited quota (~100KB), this will show how much storage is currently inuse.
+   */
+  readonly storageUsage$: Observable<number> = from(chrome.storage.sync.getBytesInUse()).pipe(
+    startWith(0),
+    map((usage) => (usage / chrome.storage.sync.QUOTA_BYTES) * 100),
+    shareReplay(1)
+  );
 
   readonly formGroup = new FormGroup({
     enableDevices: this.devicesControl,

@@ -6,13 +6,26 @@
   width: 80vw;
   margin: 1rem auto;
 
+  .storage-usage {
+    margin: 0 0 2rem;
+
+    h4.storage-heading {
+      margin: 0;
+    }
+
+    .mat-hint {
+      margin-bottom: 1rem;
+      position: relative;
+      display: block;
+    }
+  }
+
   & > * {
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
+    line-height: initial;
   }
 
   .list-container {
-    margin-top: 1rem;
-
     .list {
       margin-left: 1rem;
 
