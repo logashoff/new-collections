@@ -1,5 +1,5 @@
 import { MatSnackBarRef } from '@angular/material/snack-bar';
-import { remove, unionBy } from 'lodash';
+import { keyBy, remove } from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { MessageComponent } from '../modules/shared';
 
@@ -100,7 +100,22 @@ export class TabGroup implements Collection {
   }
 
   mergeTabs(tabs: BrowserTabs) {
-    this.tabsSource$.next(unionBy(tabs, this.tabs, 'id'));
+    const currTabsById = keyBy(this.tabs, 'id');
+
+    tabs.forEach((newTab) => {
+      if (!(newTab.id in currTabsById)) {
+        this.tabs.push(newTab);
+      } else {
+        const currTab = currTabsById[newTab.id];
+        currTab.active = newTab.active;
+        currTab.favIconUrl = newTab.favIconUrl;
+        currTab.pinned = newTab.pinned;
+        currTab.title = newTab.title;
+        currTab.url = newTab.url;
+      }
+    });
+
+    this.tabsSource$.next(this.tabs);
   }
 
   updateTab(tab: BrowserTab, updatedTab: BrowserTab): BrowserTab {

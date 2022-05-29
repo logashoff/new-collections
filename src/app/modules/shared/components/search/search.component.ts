@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { isNil } from 'lodash';
 import { firstValueFrom, lastValueFrom, map, Observable, shareReplay, startWith, tap, withLatestFrom } from 'rxjs';
 import { NavService, SearchService, TabService } from 'src/app/services';
-import { BrowserTab, TabDelete, trackByTabId } from 'src/app/utils';
+import { BrowserTab, BrowserTabs, TabDelete, trackByTabId } from 'src/app/utils';
 
 /**
  * @description
@@ -31,7 +31,7 @@ export class SearchComponent {
   /**
    * Source for search results.
    */
-  readonly searchResults$ = this.formGroup.valueChanges.pipe(
+  readonly searchResults$: Observable<BrowserTabs> = this.formGroup.valueChanges.pipe(
     startWith({ search: '' }),
     tap(() => this.navService.reset()),
     withLatestFrom(this.searchService.fuzzy$),

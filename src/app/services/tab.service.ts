@@ -89,7 +89,7 @@ export class TabService {
    * Sync local storage collection with loaded UI tap groups.
    */
   private async syncCollections(changes: StorageChanges) {
-    const tabGroups = (await firstValueFrom(this.tabGroups$)) ?? [];
+    const tabGroups = await firstValueFrom(this.tabGroups$);
 
     const groupsById = keyBy(tabGroups, 'id');
 
