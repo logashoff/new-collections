@@ -2,6 +2,18 @@ import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { MostVisitedURL, Settings } from '../utils';
 import { SettingsService } from './settings.service';
 
+jest.mock('src/app/utils', () => ({
+  getSettings: jest.fn().mockImplementation(
+    () =>
+      new Promise((resolve) =>
+        resolve({
+          enableDevices: true,
+          enableTopSites: true,
+        })
+      )
+  ),
+}));
+
 describe('SettingsService', () => {
   let spectator: SpectatorService<SettingsService>;
   const createService = createServiceFactory({
@@ -21,20 +33,23 @@ describe('SettingsService', () => {
     const newSettings = await spectator.service.ignoreSite(site);
 
     expect(newSettings).toEqual({
+      enableDevices: true,
+      enableTopSites: true,
       ignoreTopSites: [site],
     });
   });
 
   it('should update current settings', async () => {
-    const savedSettings: Settings = {
-      enableDevices: true,
-      enableTopSites: true,
-    };
-
-    jest.spyOn<any, any>(spectator.service, 'getSettings').mockReturnValue(savedSettings);
-
     const updateSettings: Settings = {
       ignoreTopSites: [
+        {
+          title: 'Site 1',
+          url: 'https://site1.org',
+        },
+        {
+          title: 'Site 1',
+          url: 'https://site1.org',
+        },
         {
           title: 'Site 1',
           url: 'https://site1.org',

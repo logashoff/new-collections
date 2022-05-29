@@ -18,7 +18,7 @@ chrome = {
     },
     onChanged: {
       addListener: function (callback) {
-        callback();
+        callback({});
       },
     },
   },
