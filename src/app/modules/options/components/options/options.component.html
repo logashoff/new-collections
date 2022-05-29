@@ -3,7 +3,7 @@
     <section class="storage-usage" *ngIf="storageUsage$ | async as storageUsage">
       <h4 class="storage-heading">Sync usage</h4>
       <mat-hint>
-        Data used to store synced collection ({{ 100 - storageUsage}}% remains)
+        Data used to store synced collections ({{ 100 - storageUsage | number: '1.0-0' }}% remaining)
       </mat-hint>
       <mat-progress-bar
         mode="determinate" 
