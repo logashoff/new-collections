@@ -1,10 +1,22 @@
 <form [formGroup]="formGroup">
   <mat-card>
+    <section class="storage-usage" *ngIf="storageUsage$ | async as storageUsage">
+      <h4 class="storage-heading">Sync usage</h4>
+      <mat-hint>
+        Data used to store synced collection ({{ 100 - storageUsage}}% remains)
+      </mat-hint>
+      <mat-progress-bar
+        mode="determinate" 
+        [value]="storageUsage">
+      </mat-progress-bar>
+    </section>
     <mat-slide-toggle formControlName="enableDevices">
-      Enable Devices
+      <div>Enable Devices</div>
+      <mat-hint>Show synced devices on home page</mat-hint>
     </mat-slide-toggle>
     <mat-slide-toggle formControlName="enableTopSites">
-      Enable Sites
+      <div>Enable Sites</div>
+      <mat-hint>Show top visited sites on home page</mat-hint>
     </mat-slide-toggle>
     <div *ngIf="ignoreSitesControl.controls?.length > 0" class="list-container">
       <h4>Ignored Sites:</h4>

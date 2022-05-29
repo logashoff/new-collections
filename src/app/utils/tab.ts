@@ -1,29 +1,60 @@
 import { saveAs } from 'file-saver';
-import { groupBy } from 'lodash';
+import { groupBy, keyBy } from 'lodash';
 import selectFiles from 'select-files';
-import { BrowserTabs, Collections, HostnameGroup, Tab, tabsStorageKey } from './models';
+import { validate as uuidValidate } from 'uuid';
+import { BrowserTabs, Collections, HostnameGroup, Settings, settingsStorageKey, SyncData, Tab } from './models';
 
 /**
  * Saves specified tab groups to local storage.
  */
-export function saveTabGroups(collections: Collections): Promise<void> {
-  return new Promise((resolve) => {
-    if (collections?.length > 0) {
-      chrome.storage.local.set({ [tabsStorageKey]: collections }, () => resolve());
-    } else {
-      return chrome.storage.local.remove(tabsStorageKey);
+export async function saveTabGroups(collections: Collections): Promise<void> {
+  const syncData: SyncData = (await chrome.storage.sync.get()) ?? {};
+  const collectionsById = keyBy(collections, 'id');
+
+  for (let groupId in syncData) {
+    if (uuidValidate(groupId) && !(groupId in collectionsById)) {
+      delete syncData[groupId];
+      chrome.storage.sync.remove(groupId);
     }
-  });
+  }
+
+  if (collections?.length > 0) {
+    collections?.forEach(
+      ({ tabs, timestamp, id }) =>
+        (syncData[id] = {
+          tabs,
+          timestamp,
+        })
+    );
+
+    return chrome.storage.sync.set(syncData);
+  }
 }
 
 /**
  * Returns tab groups stored in local storage.
  */
-export function getSavedTabs(): Promise<Collections> {
-  return new Promise((resolve) => {
-    chrome.storage.local.get(tabsStorageKey, ({ tabs }) => resolve(tabs));
-  });
-}
+export const getSavedTabs = async (): Promise<Collections> => {
+  const syncData: SyncData = await chrome.storage.sync.get();
+
+  if (syncData) {
+    return Object.keys(syncData)
+      .filter((groupId) => uuidValidate(groupId))
+      .map((groupId) => ({
+        id: groupId,
+        tabs: syncData[groupId].tabs,
+        timestamp: syncData[groupId].timestamp,
+      }));
+  }
+};
+
+/**
+ * Returns saved settings.
+ */
+export const getSettings = async (): Promise<Settings> => {
+  const storage = await chrome.storage.local.get(settingsStorageKey);
+  return storage[settingsStorageKey];
+};
 
 /**
  * Restores all tabs from specified tab group.

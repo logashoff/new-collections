@@ -51,6 +51,18 @@ export interface Settings {
 }
 
 /**
+ * Data used to store collections in sync storage
+ */
+export interface SyncData {
+  [groupId: string]: Pick<Collection, 'tabs' | 'timestamp'>;
+}
+
+/**
+ * Storage change event
+ */
+export type StorageChanges = { [key: string]: chrome.storage.StorageChange };
+
+/**
  * Tab type.
  */
 export type BrowserTab = Pick<chrome.tabs.Tab, 'id' | 'url' | 'favIconUrl' | 'title' | 'pinned' | 'active'>;

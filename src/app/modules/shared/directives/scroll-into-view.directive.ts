@@ -55,20 +55,19 @@ export class ScrollIntoViewDirective {
       this.timeoutId = setTimeout(() => {
         const vh = window.innerHeight;
         const el: HTMLElement = this.el.nativeElement;
-        const rect = el.getBoundingClientRect();
-        const { height } = rect;
+        const { height } = el.getBoundingClientRect();
         const child = el.querySelector(`[data-tab-id="${this.tabId}"]`);
 
         // if panel height is bigger than viewport height, scroll to child tan instead
         if (height > vh && child) {
           child.scrollIntoView({
             behavior: 'smooth',
-            block: 'start',
+            block: 'center',
           });
         } else {
           el.scrollIntoView({
             behavior: 'smooth',
-            block: 'start',
+            block: 'center',
           });
         }
       }, 450);

@@ -16,6 +16,7 @@ import {
   getSavedTabs,
   ignoreUrlsRegExp,
   saveTabGroups,
+  StorageChanges,
   TabGroup,
   TabGroups,
   Tabs,
@@ -78,29 +79,39 @@ export class TabService {
    * Initialize service and load stored tab groups.
    */
   private async initService() {
-    await this.syncCollections();
-    chrome.storage.onChanged.addListener(() => this.syncCollections());
+    const collections = (await getSavedTabs()) ?? [];
+    this.tabGroupsSource$.next(collections.map((collection) => new TabGroup(collection)));
+
+    chrome.storage.onChanged.addListener((changes: StorageChanges) => this.syncCollections(changes));
   }
 
   /**
    * Sync local storage collection with loaded UI tap groups.
    */
-  private async syncCollections() {
-    const collections = (await getSavedTabs()) ?? [];
+  private async syncCollections(changes: StorageChanges) {
     const tabGroups = (await firstValueFrom(this.tabGroups$)) ?? [];
 
-    const savedGroupIds = keyBy(collections, 'id');
-    const currGroupIds = keyBy(tabGroups, 'id');
+    const groupsById = keyBy(tabGroups, 'id');
 
-    collections.forEach((collection) => {
-      if (!(collection.id in currGroupIds)) {
-        tabGroups.push(new TabGroup(collection));
-      }
-    });
+    Object.keys(changes)
+      .filter((groupId) => uuidValidate(groupId))
+      .forEach((groupId) => {
+        const { oldValue, newValue } = changes[groupId];
+        if (oldValue && !newValue && groupsById[groupId]) {
+          remove(tabGroups, ({ id }) => id === groupId);
+        } else if (newValue && !oldValue && !(groupId in groupsById)) {
+          const newGroup = new TabGroup({
+            id: groupId,
+            tabs: newValue.tabs,
+            timestamp: newValue.timestamp,
+          });
+          tabGroups.push(newGroup);
+        } else if (newValue && groupsById[groupId]) {
+          groupsById[groupId].mergeTabs(newValue.tabs);
+        }
 
-    remove(tabGroups, ({ id }) => !(id in savedGroupIds));
-
-    this.tabGroupsSource$.next(tabGroups);
+        this.tabGroupsSource$.next(tabGroups);
+      });
   }
 
   /**
@@ -197,10 +208,9 @@ export class TabService {
         }
       });
 
-      // TODO: ⛔ This should not be necessary, but new groups don't render until click
       this.tabGroupsSource$.next(newTabGroups);
 
-      this.save(newTabGroups);
+      this.save();
     }
   }
 
@@ -220,10 +230,9 @@ export class TabService {
       tabGroups.push(tabGroup);
     }
 
-    // TODO: ⛔ This should not be necessary, but new groups don't render until click
     this.tabGroupsSource$.next(tabGroups);
 
-    this.save(tabGroups);
+    this.save();
   }
 
   /**
@@ -245,8 +254,8 @@ export class TabService {
 
         if (tabs?.length > 0) {
           group.prepend(tabs);
-
-          await this.save(tabGroups);
+          this.tabGroupsSource$.next(tabGroups);
+          await this.save();
 
           const tabsLen = tabs.length;
           const messageRef = this.displayMessage(`Added ${tabsLen} tab${tabsLen > 1 ? 's' : ''}`, ActionIcon.Undo);
@@ -254,7 +263,8 @@ export class TabService {
 
           if (revert) {
             group.removeTabs(tabs);
-            this.save(tabGroups);
+            this.tabGroupsSource$.next(tabGroups);
+            this.save();
           }
         }
       } else {
@@ -284,7 +294,8 @@ export class TabService {
           if (tabGroup.tabs.length === 0) {
             messageRef = await this.removeTabGroup(tabGroup);
           } else if (removeIndex > -1) {
-            this.save(tabGroups);
+            this.tabGroupsSource$.next(tabGroups);
+            this.save();
             messageRef = this.displayMessage('Item removed', ActionIcon.Undo);
           }
         }
@@ -297,7 +308,8 @@ export class TabService {
 
         if (revert) {
           tabGroup.addTabAt(removeIndex, removedTab);
-          this.save(tabGroups);
+          this.tabGroupsSource$.next(tabGroups);
+          this.save();
         }
       }
     });
@@ -313,10 +325,9 @@ export class TabService {
     if (updatedTab && (tab.title !== updatedTab.title || tab.url !== updatedTab.url)) {
       const group = await this.getGroupByTab(tab);
       updatedTab = group.updateTab(tab, updatedTab);
+      this.tabGroupsSource$.next(await firstValueFrom(this.tabGroups$));
 
-      const tabGroups = await firstValueFrom(this.tabGroups$);
-
-      await this.save(tabGroups);
+      this.save();
 
       return updatedTab;
     }
@@ -340,10 +351,12 @@ export class TabService {
       const messageRef = this.displayMessage('Item removed', ActionIcon.Undo);
       const removedGroups = remove(tabGroups, (tg) => tg === tabGroup);
 
+      this.tabGroupsSource$.next(tabGroups);
+
       this.navService.reset();
       resolve(messageRef);
 
-      this.save(tabGroups);
+      this.save();
 
       if (removedGroups?.length > 0) {
         const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
@@ -368,10 +381,11 @@ export class TabService {
         const messageRef = this.displayMessage(`${rmLen} item${rmLen > 1 ? 's' : ''} removed`, ActionIcon.Undo);
 
         this.navService.reset();
+        this.tabGroupsSource$.next(currentTabGroups);
 
         resolve(messageRef);
 
-        this.save(currentTabGroups);
+        this.save();
 
         if (removedGroups?.length > 0) {
           const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
@@ -387,7 +401,9 @@ export class TabService {
   /**
    * Save current tabs state to local storage.
    */
-  async save(tabGroups: TabGroups): Promise<void> {
+  async save(): Promise<void> {
+    const tabGroups = await firstValueFrom(this.tabGroups$);
+
     const collections: Collections = tabGroups?.map(
       ({ id, timestamp, tabs }): Collection => ({
         id,

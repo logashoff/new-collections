@@ -121,13 +121,11 @@ describe('TabService', () => {
     expect(group1.tabs.length).toBe(4);
 
     await spectator.service.removeTab(ubuntuTab2);
-    await spectator.service['syncCollections']();
     hostnameGroups = await firstValueFrom(spectator.service.tabsByHostname$);
     expect(hostnameGroups[group1.id].length).toBe(3);
     expect(group1.tabs.length).toBe(3);
 
     await spectator.service.removeTab(mintTab);
-    await spectator.service['syncCollections']();
     hostnameGroups = await firstValueFrom(spectator.service.tabsByHostname$);
     expect(hostnameGroups[group1.id].length).toBe(2);
     expect(group1.tabs.length).toBe(2);
