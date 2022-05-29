@@ -89,13 +89,13 @@ export class TabService {
    * Sync local storage collection with loaded UI tap groups.
    */
   private async syncCollections(changes: StorageChanges) {
-    const tabGroups = await firstValueFrom(this.tabGroups$);
+    const changedGroupIds = Object.keys(changes).filter((groupId) => uuidValidate(groupId));
 
-    const groupsById = keyBy(tabGroups, 'id');
+    if (changedGroupIds?.length > 0) {
+      const tabGroups = (await firstValueFrom(this.tabGroups$)) ?? [];
+      const groupsById = keyBy(tabGroups, 'id');
 
-    Object.keys(changes)
-      .filter((groupId) => uuidValidate(groupId))
-      .forEach((groupId) => {
+      changedGroupIds.forEach((groupId) => {
         const { oldValue, newValue } = changes[groupId];
         if (oldValue && !newValue && groupsById[groupId]) {
           remove(tabGroups, ({ id }) => id === groupId);
@@ -107,11 +107,12 @@ export class TabService {
           });
           tabGroups.push(newGroup);
         } else if (newValue && groupsById[groupId]) {
-          groupsById[groupId].mergeTabs(newValue.tabs);
+          groupsById[groupId].mergeTabs(newValue.tabs, true);
         }
-
-        this.tabGroupsSource$.next(tabGroups);
       });
+
+      this.tabGroupsSource$.next(tabGroups);
+    }
   }
 
   /**
@@ -248,13 +249,11 @@ export class TabService {
       filteredTabs = filteredTabs.filter(({ url }) => !existingUrls[url]);
 
       if (filteredTabs?.length > 0) {
-        let tabGroups = await firstValueFrom(this.tabGroups$);
         const bottomSheetRef = this.openTabsSelector(filteredTabs);
         const tabs: BrowserTabs = await lastValueFrom(bottomSheetRef.afterDismissed());
 
         if (tabs?.length > 0) {
           group.prepend(tabs);
-          this.tabGroupsSource$.next(tabGroups);
           await this.save();
 
           const tabsLen = tabs.length;
@@ -263,7 +262,6 @@ export class TabService {
 
           if (revert) {
             group.removeTabs(tabs);
-            this.tabGroupsSource$.next(tabGroups);
             this.save();
           }
         }
@@ -280,7 +278,6 @@ export class TabService {
     return new Promise(async (resolve) => {
       let messageRef: MatSnackBarRef<MessageComponent>;
 
-      const tabGroups = await firstValueFrom(this.tabGroups$);
       const tabGroup = await this.getGroupByTab(removedTab);
 
       let removeIndex = -1;
@@ -294,7 +291,6 @@ export class TabService {
           if (tabGroup.tabs.length === 0) {
             messageRef = await this.removeTabGroup(tabGroup);
           } else if (removeIndex > -1) {
-            this.tabGroupsSource$.next(tabGroups);
             this.save();
             messageRef = this.displayMessage('Item removed', ActionIcon.Undo);
           }
@@ -308,7 +304,6 @@ export class TabService {
 
         if (revert) {
           tabGroup.addTabAt(removeIndex, removedTab);
-          this.tabGroupsSource$.next(tabGroups);
           this.save();
         }
       }
@@ -325,7 +320,6 @@ export class TabService {
     if (updatedTab && (tab.title !== updatedTab.title || tab.url !== updatedTab.url)) {
       const group = await this.getGroupByTab(tab);
       updatedTab = group.updateTab(tab, updatedTab);
-      this.tabGroupsSource$.next(await firstValueFrom(this.tabGroups$));
 
       this.save();
 
