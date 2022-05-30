@@ -3,17 +3,16 @@
 
 html,
 body {
-  height: 100%;
-}
-body {
   margin: 0;
+  padding: 0;
+}
+
+body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
 body {
   min-width: $popup-width;
-  max-width: $popup-width;
-  min-height: $popup-height;
 }
 
 ::-webkit-scrollbar {
