@@ -2,21 +2,34 @@
 
 $padding: 1rem;
 
-:host {
-  display: block;
-  position: relative;
+body {
+  min-width: $popup-width;
   max-width: $popup-width;
   min-height: $popup-height;
 }
 
-.content {
-  padding: $padding $padding 4rem;
-  box-sizing: border-box;
+html.cdk-global-scrollblock {
+  position: relative;
 }
 
-.menu {
-  position: fixed;
-  right: $scrollbar-width + $padding;
+app-popup {
+  display: block;
+  position: absolute;
   bottom: 0;
-  z-index: 1;
+  left: 0;
+  right: 0;
+  top: 0;
+  overflow: hidden;
+  overflow-y: auto;
+
+  .content {
+    padding: $padding $padding 4rem;
+  }
+
+  .menu {
+    position: fixed;
+    right: $scrollbar-width + $padding;
+    bottom: 0;
+    z-index: 1;
+  }
 }

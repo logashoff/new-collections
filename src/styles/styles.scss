@@ -9,10 +9,8 @@ body {
 
 body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
-}
-
-body {
   min-width: $popup-width;
+  min-height: $popup-height;
 }
 
 ::-webkit-scrollbar {
