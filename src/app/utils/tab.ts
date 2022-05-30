@@ -2,7 +2,16 @@ import { saveAs } from 'file-saver';
 import { groupBy, keyBy } from 'lodash';
 import selectFiles from 'select-files';
 import { validate as uuidValidate } from 'uuid';
-import { BrowserTabs, Collections, HostnameGroup, Settings, settingsStorageKey, SyncData, Tab } from './models';
+import {
+  BrowserTabs,
+  Collections,
+  HostnameGroup,
+  Settings,
+  settingsStorageKey,
+  SyncData,
+  SyncTabs,
+  Tab,
+} from './models';
 
 /**
  * Saves specified tab groups to local storage.
@@ -19,13 +28,7 @@ export async function saveTabGroups(collections: Collections): Promise<void> {
   }
 
   if (collections?.length > 0) {
-    collections?.forEach(
-      ({ tabs, timestamp, id }) =>
-        (syncData[id] = {
-          tabs,
-          timestamp,
-        })
-    );
+    collections.forEach(({ tabs, timestamp, id }) => (syncData[id] = [timestamp, tabsToSync(tabs)]));
 
     return chrome.storage.sync.set(syncData);
   }
@@ -38,15 +41,38 @@ export const getSavedTabs = async (): Promise<Collections> => {
   const syncData: SyncData = await chrome.storage.sync.get();
 
   if (syncData) {
-    return Object.keys(syncData)
+    const collections: Collections = Object.keys(syncData)
       .filter((groupId) => uuidValidate(groupId))
       .map((groupId) => ({
         id: groupId,
-        tabs: syncData[groupId].tabs,
-        timestamp: syncData[groupId].timestamp,
+        timestamp: syncData[groupId][0],
+        tabs: syncToTabs(syncData[groupId][1]),
       }));
+
+    return collections;
   }
 };
+
+/**
+ * Converts BrowserTabs to tabs structure used in sync storage.
+ */
+export function tabsToSync(tabs: BrowserTabs): SyncTabs {
+  return tabs.map(({ id, url, favIconUrl, title, pinned, active }) => [id, url, favIconUrl, title, pinned, active]);
+}
+
+/**
+ * Converts sync storage tabs to BrowserTabs.
+ */
+export function syncToTabs(sync: SyncTabs): BrowserTabs {
+  return sync.map(([id, url, favIconUrl, title, pinned, active]) => ({
+    id,
+    url,
+    favIconUrl,
+    title,
+    pinned,
+    active,
+  }));
+}
 
 /**
  * Returns saved settings.

@@ -34,7 +34,7 @@ export class DevicesComponent {
     map((devices) => {
       const mapByDeviceName: any = {};
 
-      devices.forEach(
+      devices?.forEach(
         (device) => (mapByDeviceName[device.deviceName] = getHostnameGroup(this.getTabsFromSessions(device.sessions)))
       );
 

@@ -17,6 +17,7 @@ import {
   ignoreUrlsRegExp,
   saveTabGroups,
   StorageChanges,
+  syncToTabs,
   TabGroup,
   TabGroups,
   Tabs,
@@ -102,12 +103,12 @@ export class TabService {
         } else if (newValue && !oldValue && !(groupId in groupsById)) {
           const newGroup = new TabGroup({
             id: groupId,
-            tabs: newValue.tabs,
-            timestamp: newValue.timestamp,
+            timestamp: newValue[0],
+            tabs: syncToTabs(newValue[1]),
           });
           tabGroups.push(newGroup);
         } else if (newValue && groupsById[groupId]) {
-          groupsById[groupId].mergeTabs(newValue.tabs, true);
+          groupsById[groupId].mergeTabs(syncToTabs(newValue[1]), true);
         }
       });
 
