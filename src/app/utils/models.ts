@@ -51,10 +51,19 @@ export interface Settings {
 }
 
 /**
+ * BrowserTab structure used in storing in sync storage
+ */
+export type SyncTab = [number, string, string, string, boolean, boolean]
+export type SyncTabs = SyncTab[];
+
+/**
  * Data used to store collections in sync storage
  */
 export interface SyncData {
-  [groupId: string]: Pick<Collection, 'tabs' | 'timestamp'>;
+  /**
+   * Map group ID to array containing group timestamp and tabs
+   */
+  [groupId: string]: [number, SyncTabs];
 }
 
 /**
@@ -101,19 +110,19 @@ export class TabGroup implements Collection {
 
   /**
    * Merges current tabs list with provided one.
-   * 
+   *
    * @param tabs New tab list.
    * @param sync True if current tabs should be removed if not in new list.
    */
   mergeTabs(tabs: BrowserTabs, sync = false) {
     const currTabsById = keyBy(this.tabs, 'id');
-    
+
     if (sync) {
       const newTabsById = keyBy(tabs, 'id');
       remove(this.tabs, ({ id }) => !(id in newTabsById));
     }
 
-    tabs.forEach((newTab, index) => {
+    tabs?.forEach((newTab, index) => {
       if (!(newTab.id in currTabsById)) {
         this.tabs.splice(index, 0, newTab);
       } else {

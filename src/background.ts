@@ -1,8 +1,8 @@
 import { getSavedTabs } from './app/utils';
 
 const updateGroupCount = async () => {
-  const tabs = await getSavedTabs();
-  chrome.action.setBadgeText({ text: tabs?.length > 0 ? tabs.length.toString() : '' });
+  const collections = await getSavedTabs();
+  chrome.action.setBadgeText({ text: collections?.length.toString() ?? '' });
 };
 
 chrome.runtime.onInstalled.addListener(() => updateGroupCount());
