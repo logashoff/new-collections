@@ -4,17 +4,14 @@ $padding: 1rem;
 
 :host {
   display: block;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: 0;
-  overflow: hidden;
-  overflow-y: auto;
+  position: relative;
+  max-width: $popup-width;
+  min-height: $popup-height;
 }
 
 .content {
   padding: $padding $padding 4rem;
+  box-sizing: border-box;
 }
 
 .menu {

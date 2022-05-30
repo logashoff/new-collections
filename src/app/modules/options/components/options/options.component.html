@@ -6,9 +6,10 @@
         Data used to store synced collections ({{ 100 - storageUsage | number: '1.0-0' }}% remaining)
       </mat-hint>
       <mat-progress-bar
-        mode="determinate" 
-        [value]="storageUsage">
-      </mat-progress-bar>
+        mode="determinate"
+        [value]="storageUsage"
+        [color]="storageUsage > 80 ? 'warn' : 'primary'"
+      ></mat-progress-bar>
     </section>
     <mat-slide-toggle formControlName="enableDevices">
       <div>Enable Devices</div>

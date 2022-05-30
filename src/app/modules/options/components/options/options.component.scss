@@ -1,38 +1,59 @@
 @import 'common';
 
-.mat-card {
-  display: flex;
-  flex-direction: column;
-  width: 80vw;
-  margin: 1rem auto;
+html,
+body {
+  min-height: 35rem;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
 
-  .storage-usage {
-    margin: 0 0 2rem;
+app-options {
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  overflow-y: auto;
 
-    h4.storage-heading {
-      margin: 0;
+  .mat-card {
+    display: flex;
+    flex-direction: column;
+    width: 90vw;
+    margin: 1rem auto;
+    padding: 1rem 1rem 2rem;
+    box-sizing: border-box;
+
+    .storage-usage {
+      margin: 0 0 2rem;
+
+      h4.storage-heading {
+        margin: 0;
+      }
+
+      .mat-hint {
+        margin-bottom: 1rem;
+        position: relative;
+        display: block;
+      }
     }
 
-    .mat-hint {
-      margin-bottom: 1rem;
-      position: relative;
-      display: block;
+    & > * {
+      margin-bottom: 2rem;
+      line-height: initial;
     }
-  }
 
-  & > * {
-    margin-bottom: 2rem;
-    line-height: initial;
-  }
+    .list-container {
+      .list {
+        margin-left: 1rem;
 
-  .list-container {
-    .list {
-      margin-left: 1rem;
-
-      .list-item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        .list-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
       }
     }
   }

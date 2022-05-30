@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { isUndefined } from 'lodash';
 import { from, map, Observable, shareReplay, startWith, take } from 'rxjs';
@@ -14,6 +14,7 @@ import { SettingsService } from 'src/app/services';
   templateUrl: './options.component.html',
   styleUrls: ['./options.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class OptionsComponent implements OnInit {
   private readonly sitesControl = new FormControl(true);
