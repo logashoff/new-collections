@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { firstValueFrom } from 'rxjs';
-import { getBrowserTabsMock, getTabGroupsMock } from 'src/mocks';
+import { getBrowserTabsMock, getTabGroupMock, getTabGroupsMock } from 'src/mocks';
 import { v4 as uuidv4 } from 'uuid';
 import { ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
 import { getHostname, getHostnameGroup, getUrlHostname } from '../utils/tab';
@@ -71,10 +71,10 @@ describe('TabService', () => {
   });
 
   it('should save tab group', async () => {
-    const tabGroup = await spectator.service.createTabGroup(getBrowserTabsMock());
+    const tabGroup = spectator.service.createTabGroup(getBrowserTabsMock());
     await spectator.service.addTabGroup(tabGroup);
 
-    const tabGroups = spectator.service['tabGroupsSource$'].value;
+    const tabGroups = await firstValueFrom(spectator.service.tabGroups$);
 
     expect(tabGroups.length).toBe(4);
     expect(tabGroups[0].tabs.length).toBe(3);
@@ -244,5 +244,57 @@ describe('TabService', () => {
     [group1] = groups;
 
     expect(group1.tabs.length).toBe(1);
+  });
+
+  it('should sync collections', async () => {
+    let groups = await firstValueFrom(spectator.service.tabGroups$);
+
+    expect(groups.length).toBe(3);
+
+    const mock = getTabGroupMock();
+
+    await spectator.service['syncCollections']({
+      '0c7b96b3-b457-4208-bff9-a249177c1e03': {
+        newValue: {
+          tabs: mock.tabs,
+          timestamp: mock.timestamp,
+        },
+      },
+    });
+
+    groups = await firstValueFrom(spectator.service.tabGroups$);
+
+    expect(groups.length).toBe(4);
+  });
+
+  it('should generate timeline', async () => {
+    const timeline = await firstValueFrom(spectator.service.groupsTimeline$);
+
+    expect(timeline).toBeDefined();
+
+    const [label] = Object.keys(timeline);
+
+    expect(timeline[label]).toBeDefined();
+    expect(timeline[label].length).toBeGreaterThan(0);
+  });
+
+  it('should remove groups', async () => {
+    let groups = await firstValueFrom(spectator.service.tabGroups$);
+
+    await spectator.service.removeTabGroups(groups);
+
+    groups = await firstValueFrom(spectator.service.tabGroups$);
+    expect(groups).toBeNull();
+  });
+
+  it('should remove group', async () => {
+    let groups = await firstValueFrom(spectator.service.tabGroups$);
+
+    expect(groups.length).toBe(3);
+
+    await spectator.service.removeTabGroup(groups[0]);
+    groups = await firstValueFrom(spectator.service.tabGroups$);
+
+    expect(groups.length).toBe(2);
   });
 });
