@@ -1,5 +1,5 @@
 import { MatFabMenu } from '@angular-material-extensions/fab-menu';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { MenuService, TabService } from 'src/app/services';
 import { Action, Timeline } from 'src/app/utils';
@@ -14,6 +14,7 @@ import { Action, Timeline } from 'src/app/utils';
   templateUrl: './popup.component.html',
   styleUrls: ['./popup.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class PopupComponent {
 

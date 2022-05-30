@@ -2,6 +2,7 @@
 
 html,
 body {
+  min-width: 32rem;
   min-height: 35rem;
   margin: 0;
   padding: 0;
@@ -23,11 +24,10 @@ app-options {
     flex-direction: column;
     width: 90vw;
     margin: 1rem auto;
-    padding: 1rem 1rem 2rem;
     box-sizing: border-box;
 
     .storage-usage {
-      margin: 0 0 2rem;
+      margin: 0 0 1rem;
 
       h4.storage-heading {
         margin: 0;
@@ -40,9 +40,13 @@ app-options {
       }
     }
 
-    & > * {
-      margin-bottom: 2rem;
-      line-height: initial;
+    .toggles {
+      padding-top: 1rem;
+
+      .mat-slide-toggle {
+        margin-bottom: 2rem;
+        line-height: initial;
+      }
     }
 
     .list-container {
