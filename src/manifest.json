@@ -23,5 +23,5 @@
   "options_ui": {
     "page": "index.html#/options"
   },
-  "permissions": ["sessions", "topSites", "management", "storage", "tabs"]
+  "permissions": ["sessions", "topSites", "storage", "tabs"]
 }
