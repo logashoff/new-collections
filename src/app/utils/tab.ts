@@ -23,7 +23,7 @@ export async function saveTabGroups(collections: Collections): Promise<void> {
   for (let groupId in syncData) {
     if (uuidValidate(groupId) && !(groupId in collectionsById)) {
       delete syncData[groupId];
-      chrome.storage.sync.remove(groupId);
+      await chrome.storage.sync.remove(groupId);
     }
   }
 

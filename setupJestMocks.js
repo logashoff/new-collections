@@ -16,6 +16,17 @@ chrome = {
         callback({});
       },
     },
+    sync: {
+      set: function (config, callback) {
+        if (callback) {
+          callback();
+        }
+      },
+      get: function (key, callback) {
+        callback({});
+      },
+      remove: function (key) {},
+    },
     onChanged: {
       addListener: function (callback) {
         callback({});
