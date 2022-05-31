@@ -6,7 +6,7 @@ module.exports = {
     main: './src/background.ts',
   },
   output: {
-    path: path.resolve(__dirname, './dist/home-collections'),
+    path: path.resolve(__dirname, './dist/new-collections'),
     filename: 'background.js',
   },
   resolve: {

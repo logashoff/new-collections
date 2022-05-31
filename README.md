@@ -1,6 +1,6 @@
-# Home Collections
+# New Collections
 
-Home Collections is a browser extension that allows to quickly save and restore open tabs. It's similar to browser's default "Bookmark all tabs..." behavior, but it doesn't create bookmark entries and all data is stored offline within extension. It doesn't use any online services or connections. Import and export is done by saving and loading JSON file.
+New Collections is a browser extension that allows to quickly save and restore open tabs. It's similar to browser's default "Bookmark all tabs..." behavior, but it doesn't create bookmark entries and all data is stored offline within extension. It doesn't use any online services or connections except Chrome's default storage sync service to sync collections between browsers. Import and export is done by saving and loading generated JSON file locally.
 
 ### Features
 
