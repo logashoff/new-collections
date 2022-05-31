@@ -49,7 +49,7 @@ export const getSavedTabs = async (): Promise<Collections> => {
         tabs: syncToTabs(syncData[groupId][1]),
       }));
 
-    return collections;
+    return collections.length > 0 ? collections : null;
   }
 };
 

@@ -80,8 +80,8 @@ export class TabService {
    * Initialize service and load stored tab groups.
    */
   private async initService() {
-    const collections = (await getSavedTabs()) ?? [];
-    this.tabGroupsSource$.next(collections.map((collection) => new TabGroup(collection)));
+    const collections = await getSavedTabs();
+    this.tabGroupsSource$.next(collections?.map((collection) => new TabGroup(collection)));
 
     chrome.storage.onChanged.addListener((changes: StorageChanges) => this.syncCollections(changes));
   }
