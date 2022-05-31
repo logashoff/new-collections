@@ -8,9 +8,10 @@ app-top-sites {
     margin: 1rem 0;
 
     .site-container {
-      display: grid;
-      grid-gap: 1rem;
-      grid-template-columns: repeat(5, 1fr);
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: space-between;
 
       .site {
         position: relative;
