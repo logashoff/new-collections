@@ -100,7 +100,7 @@ export function restoreTabs(tabs: BrowserTabs) {
  */
 export function exportTabs(collections: Collections) {
   const blob = new Blob([JSON.stringify(collections, null, 2)], { type: 'text/json;charset=utf-8' });
-  saveAs(blob, `home-collections-${new Date().toISOString()}.json`);
+  saveAs(blob, `new-collections-${new Date().toISOString()}.json`);
 }
 
 /**
