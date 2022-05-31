@@ -6,7 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { getBrowserTabsMock, getTabGroupMock, getTabGroupsMock } from 'src/mocks';
 import { v4 as uuidv4 } from 'uuid';
 import { ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
-import { getHostname, getHostnameGroup, getUrlHostname } from '../utils/tab';
+import { getHostname, getHostnameGroup, getUrlHostname, syncToTabs, tabsToSync } from '../utils/tab';
 import { NavService } from './nav.service';
 import { TabService } from './tab.service';
 
@@ -22,6 +22,7 @@ jest.mock('src/app/utils', () => ({
   getHostnameGroup,
   getUrlHostname,
   ignoreUrlsRegExp,
+  syncToTabs,
   TabGroup,
 }));
 
@@ -255,10 +256,7 @@ describe('TabService', () => {
 
     await spectator.service['syncCollections']({
       '0c7b96b3-b457-4208-bff9-a249177c1e03': {
-        newValue: {
-          tabs: mock.tabs,
-          timestamp: mock.timestamp,
-        },
+        newValue: [mock.timestamp, tabsToSync(mock.tabs)],
       },
     });
 
