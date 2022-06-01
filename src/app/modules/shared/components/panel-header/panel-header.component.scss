@@ -18,31 +18,54 @@ $typography: mat.define-typography-config();
   overflow: hidden;
   gap: 1rem;
   min-height: 3rem;
+
+  &:hover {
+    .description {
+      .fav {
+        display: flex;
+      }
+
+      .total {
+        display: none;
+      }
+    }
+  }
 }
 
 .description {
   white-space: nowrap;
-  
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .total,
+  .fav {
+    width: 1.75rem;
+    height: 1.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2rem;
+  }
+
   .total {
     @include mat.typography-level($typography, caption);
 
-    border-radius: 2rem;
-    width: 1.75rem;
-    height: 1.75rem;
     display: flex;
-    align-items: center;
-    justify-content: center;
+  }
+
+  .fav {
+    display: none;
   }
 }
-
-
 
 @include theme using($theme) {
   :host {
     .description {
       color: getPaletteColor(getForegroundPalette($theme), secondary-text);
-      
-      .total {
+
+      .total,
+      .fav {
         background: getPaletteColor(getBackgroundPalette($theme), disabled-button-toggle);
       }
     }

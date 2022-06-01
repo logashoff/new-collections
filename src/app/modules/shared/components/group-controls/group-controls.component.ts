@@ -16,6 +16,8 @@ import { queryCurrentWindow, restoreTabs, TabGroup, Tabs } from 'src/app/utils';
 export class GroupControlsComponent {
   @Input() group: TabGroup;
 
+  readonly abs = Math.abs;
+
   constructor(private tabService: TabService) {}
 
   /**

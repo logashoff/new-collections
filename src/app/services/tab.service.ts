@@ -48,7 +48,9 @@ export class TabService {
    * Observable used by components to listen for tabs data changes.
    */
   readonly tabGroups$ = this.tabGroupsSource$.pipe(
-    map((res) => (res?.length > 0 ? res.sort((a, b) => b.timestamp - a.timestamp) : null)),
+    map((res) =>
+      res?.length > 0 ? res.sort(({ timestamp: a }, { timestamp: b }) => (a < 0 || b < 0 ? a - b : b - a)) : null
+    ),
     shareReplay(1)
   );
 
@@ -155,6 +157,8 @@ export class TabService {
     const now = moment();
 
     switch (true) {
+      case timestamp < 0:
+        return 'Pinned';
       case date.isSame(now, 'd'):
         return 'Today';
       case date.isSame(now.subtract(1, 'd'), 'd'):
@@ -166,6 +170,15 @@ export class TabService {
       default:
         return date.format('MMMM YYYY');
     }
+  }
+
+  /**
+   * Toggles pinned status for group specified.
+   */
+  favGroupToggle(group: TabGroup) {
+    this.navService.reset();
+    group.favToggle();
+    this.save();
   }
 
   /**

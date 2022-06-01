@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { HostnameGroup } from 'src/app/utils';
 
 /**
@@ -19,4 +19,18 @@ export class PanelHeaderComponent {
    * Total number of items in the list
    */
   @Input() total: number;
+
+  /**
+   * Indicates pinned expansion panel
+   */
+  @Input() pinned = false;
+
+  /**
+   * Emits event when star button is clicked
+   */
+  @Output() readonly starred = new EventEmitter();
+
+  favClicked() {
+    this.starred.emit();
+  }
 }
