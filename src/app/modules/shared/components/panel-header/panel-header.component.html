@@ -1,7 +1,12 @@
 <div class="header-container">
   <app-icons-container [icons]="icons"></app-icons-container>
-  <div class="description" [ngSwitch]="total > 0">
-    <div *ngSwitchCase="true" class="total">{{ total }}</div>
-    <ng-content *ngSwitchCase="false"></ng-content>
+  <div class="description" *ngIf="total > 0">
+    <div class="fav" [appStopPropagation] (click)="favClicked()">
+      <ng-container [ngSwitch]="pinned">
+        <mat-icon *ngSwitchCase="false">grade</mat-icon>
+        <mat-icon *ngSwitchCase="true">star</mat-icon>
+      </ng-container>
+    </div>
+    <div class="total">{{ total }}</div>
   </div>
 </div>

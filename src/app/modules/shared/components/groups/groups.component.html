@@ -9,7 +9,9 @@
       <app-panel-header
         *ngIf="tabsByHostname$ | async as tabsByHostname"
         [icons]="tabsByHostname[group.id]"
-        [total]="group.tabs.length">
+        [total]="group.tabs.length"
+        [pinned]="group.timestamp < 0"
+        (starred)="favGroup(group)">
       </app-panel-header>
       <app-group-controls [group]="group"></app-group-controls>
     </mat-expansion-panel-header>

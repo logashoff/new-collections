@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, ViewChild, ViewEncapsulation
 import { MatAccordion } from '@angular/material/expansion';
 import { BehaviorSubject, Observable, shareReplay } from 'rxjs';
 import { NavService, TabService } from 'src/app/services';
-import { BrowserTab, TabGroups, TabsByHostname, trackByGroupId, trackByTabId } from 'src/app/utils';
+import { BrowserTab, TabGroup, TabGroups, TabsByHostname, trackByGroupId, trackByTabId } from 'src/app/utils';
 
 /**
  * @description
@@ -61,4 +61,8 @@ export class GroupsComponent {
   }
 
   constructor(private navService: NavService, private tabService: TabService) {}
+
+  favGroup(group: TabGroup) {
+    this.tabService.favGroupToggle(group);
+  }
 }

@@ -92,7 +92,12 @@ export type Collections = Collection[];
  */
 export class TabGroup implements Collection {
   readonly id: string;
-  readonly timestamp: number;
+  
+  private _timestamp: number;
+
+  get timestamp(): number {
+    return this._timestamp;
+  }
 
   private readonly tabsSource$ = new BehaviorSubject<BrowserTabs>(null);
 
@@ -104,9 +109,13 @@ export class TabGroup implements Collection {
 
   constructor({ id, timestamp, tabs }: Collection) {
     this.id = id;
-    this.timestamp = timestamp;
+    this._timestamp = timestamp;
 
     this.tabsSource$.next(tabs);
+  }
+
+  favToggle() {
+    this._timestamp *= -1;
   }
 
   /**
