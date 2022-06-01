@@ -9,8 +9,7 @@ import { NavService } from './nav.service';
 import { TabService } from './tab.service';
 
 jest.mock('src/app/utils', () => ({
-  getSavedTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
-  importCollections: jest.fn().mockImplementation(() => new Promise((resolve) => resolve([getTabGroupsMock()]))),
+  getCollections: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   importTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   queryCurrentWindow: jest.fn().mockImplementation(() => new Promise((resolve) => resolve([getBrowserTabMock()]))),
   usesDarkMode: jest.fn().mockImplementation(() => {}),
@@ -48,6 +47,9 @@ describe('MenuService', () => {
 
   beforeEach(() => {
     spectator = createService();
+    spectator.service['importCollections'] = jest
+      .fn()
+      .mockImplementation(() => new Promise((resolve) => resolve([getTabGroupsMock()])));
   });
 
   it('should be created', () => {
@@ -88,16 +90,16 @@ describe('MenuService', () => {
   }));
 
   it('should handle actions', async () => {
-    const service = spectator.service['tabsService'];
+    const tabsService = spectator.service['tabsService'];
 
     const openOptionsPageSpy = jest.spyOn(chrome.runtime, 'openOptionsPage');
-    const createTabGroupSpy = jest.spyOn(service, 'createTabGroup');
-    const saveTabGroupsSpy = jest.spyOn(service, 'addTabGroups');
-    const saveTabGroupSpy = jest.spyOn(service, 'addTabGroup');
+    const createTabGroupSpy = jest.spyOn(tabsService, 'createTabGroup');
+    const saveTabGroupsSpy = jest.spyOn(tabsService, 'addTabGroups');
+    const saveTabGroupSpy = jest.spyOn(tabsService, 'addTabGroup');
 
     await spectator.service.handleMenuAction(Action.Save);
-    expect(service.createTabGroup).toHaveBeenCalledTimes(1);
-    expect(service.addTabGroup).toHaveBeenCalledTimes(1);
+    expect(tabsService.createTabGroup).toHaveBeenCalledTimes(1);
+    expect(tabsService.addTabGroup).toHaveBeenCalledTimes(1);
 
     openOptionsPageSpy.mockClear();
     saveTabGroupSpy.mockClear();
@@ -109,7 +111,7 @@ describe('MenuService', () => {
     openOptionsPageSpy.mockClear();
 
     await spectator.service.handleMenuAction(Action.Import);
-    expect(service.addTabGroups).toHaveBeenCalledTimes(1);
+    expect(tabsService.addTabGroups).toHaveBeenCalledTimes(1);
 
     saveTabGroupsSpy.mockClear();
   });

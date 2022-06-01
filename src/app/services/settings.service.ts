@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { uniqBy } from 'lodash';
+import uniqBy from 'lodash/unionBy';
 import { BehaviorSubject, from, Observable, shareReplay, switchMap } from 'rxjs';
 import { getSettings, MostVisitedURL, Settings, settingsStorageKey } from '../utils';
 

@@ -1,4 +1,5 @@
 export * from './browser';
+export * from './collections';
 export * from './models';
-export * from './tab';
 export * from './track-by';
+export * from './utils';

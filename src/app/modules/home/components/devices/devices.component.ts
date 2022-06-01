@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { flatMap } from 'lodash';
+import flatMap from 'lodash/flatMap';
 import { map, Observable, shareReplay } from 'rxjs';
 import {
   BrowserTab,

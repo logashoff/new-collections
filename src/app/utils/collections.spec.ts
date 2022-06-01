@@ -1,16 +1,8 @@
 import { getBrowserTabMock, getTabGroupMock, getTabGroupsMock } from 'src/mocks';
+import { getCollections, getHostname, getUrlOrigin, saveCollections, syncToTabs, tabsToSync } from './collections';
 import { SyncData } from './models';
-import {
-  getHostname,
-  getHostnameGroup,
-  getSavedTabs,
-  getUrlOrigin,
-  saveTabGroups,
-  syncToTabs,
-  tabsToSync,
-} from './tab';
 
-describe('tab.ts', () => {
+describe('collections.ts', () => {
   const syncedData: SyncData = {
     '6ab9c99e-8942-4236-ad6e-7e38c51da810': [
       1650847781791,
@@ -125,32 +117,6 @@ describe('tab.ts', () => {
     );
   });
 
-  it('should create hostname groups', () => {
-    const collection = getTabGroupMock();
-    expect(getHostnameGroup(collection.tabs)).toEqual([
-      [
-        {
-          active: false,
-          favIconUrl: 'https://github.githubassets.com/favicons/favicon.svg',
-          id: 51,
-          pinned: false,
-          title: 'GitHub: Where the world builds software · GitHub',
-          url: 'https://github.com/',
-        },
-      ],
-      [
-        {
-          active: false,
-          favIconUrl: 'https://duckduckgo.com/favicon.ico',
-          id: 52,
-          pinned: false,
-          title: 'DuckDuckGo — Privacy, simplified.',
-          url: 'https://duckduckgo.com/',
-        },
-      ],
-    ]);
-  });
-
   it('should save tab groups to storage', async () => {
     const getSyncSpy = jest.spyOn<any, any>(chrome.storage.sync, 'get');
     getSyncSpy.mockReturnValue({ '07297efc-2629-47dc-abf3-c8612781600f': [] });
@@ -158,7 +124,7 @@ describe('tab.ts', () => {
     const setSyncSpy = jest.spyOn(chrome.storage.sync, 'set');
     const remSyncSpy = jest.spyOn(chrome.storage.sync, 'remove');
 
-    await saveTabGroups(getTabGroupsMock());
+    await saveCollections(getTabGroupsMock());
 
     expect(remSyncSpy).toHaveBeenCalled();
     expect(setSyncSpy).toHaveBeenCalledWith(syncedData);
@@ -168,7 +134,7 @@ describe('tab.ts', () => {
     const getSyncSpy = jest.spyOn<any, any>(chrome.storage.sync, 'get');
     getSyncSpy.mockReturnValue(syncedData);
 
-    const collections = await getSavedTabs();
+    const collections = await getCollections();
 
     expect(collections).toEqual([
       {

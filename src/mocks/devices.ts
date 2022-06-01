@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { Devices } from 'src/app/utils';
 
 const devicesMock: Devices = [

@@ -1,5 +1,5 @@
 import { Directive, ElementRef, Input } from '@angular/core';
-import { isNil } from 'lodash';
+import isNil from 'lodash/isNil';
 
 /**
  * @description

@@ -11,7 +11,7 @@
     "importHelpers": false,
     "typeRoots": ["node_modules/@types"],
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "allowJs": true,
     "target": "es2017",
     "module": "es2020",
