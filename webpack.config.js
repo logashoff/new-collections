@@ -9,6 +9,7 @@ module.exports = {
     path: path.resolve(__dirname, './dist/new-collections'),
     filename: 'background.js',
   },
+  target: ['web', 'es6'],
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
   },
