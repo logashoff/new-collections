@@ -8,7 +8,7 @@
             {{ device.deviceName }}
           </div>
           <app-icons-container *ngIf="deviceHostnameGroup$ | async as deviceHostnameGroup"
-            [icons]="deviceHostnameGroup[device.deviceName]">
+            [icons]="deviceHostnameGroup.get(device)">
           </app-icons-container>
           <div class="header-controls">
             <button mat-icon-button (click)="restoreTabs(getTabsFromSessions(device.sessions))" matTooltip="Restore">
