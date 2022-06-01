@@ -3,19 +3,19 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
-    "sourceMap": true,
+    "sourceMap": false,
     "declaration": false,
-    "downlevelIteration": true,
+    "downlevelIteration": false,
     "experimentalDecorators": true,
-    "module": "es2022",
     "moduleResolution": "node",
-    "importHelpers": true,
-    "target": "es2021",
+    "importHelpers": false,
     "typeRoots": ["node_modules/@types"],
-    "lib": ["es2021", "dom"],
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "allowJs": true
+    "esModuleInterop": false,
+    "allowJs": true,
+    "target": "es2017",
+    "module": "es2020",
+    "lib": ["es2020", "dom"]
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
