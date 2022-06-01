@@ -3,6 +3,7 @@ import flatMap from 'lodash/flatMap';
 import { map, Observable, shareReplay } from 'rxjs';
 import {
   BrowserTab,
+  Device,
   Devices,
   getHostnameGroup,
   HostnameGroup,
@@ -30,12 +31,15 @@ import { HomeService } from '../../services';
 export class DevicesComponent {
   readonly devices$: Observable<Devices> = this.homeService.devices$.pipe(shareReplay(1));
 
-  readonly deviceHostnameGroup$: Observable<{ [deviceName in string]: HostnameGroup }> = this.devices$.pipe(
+  /**
+   * Icons shown in panel header
+   */
+  readonly deviceHostnameGroup$: Observable<WeakMap<Device, HostnameGroup>> = this.devices$.pipe(
     map((devices) => {
-      const mapByDeviceName: any = {};
+      const mapByDeviceName = new WeakMap<Device, HostnameGroup>();
 
-      devices?.forEach(
-        (device) => (mapByDeviceName[device.deviceName] = getHostnameGroup(this.getTabsFromSessions(device.sessions)))
+      devices?.forEach((device) =>
+        mapByDeviceName.set(device, getHostnameGroup(this.getTabsFromSessions(device.sessions)))
       );
 
       return mapByDeviceName;
@@ -50,6 +54,9 @@ export class DevicesComponent {
 
   constructor(private homeService: HomeService) {}
 
+  /**
+   * Returns tab list from all synced session's windows
+   */
   getTabsFromSessions(sessions: Sessions): Tabs {
     return flatMap(sessions, (session) => session.tab || session.window?.tabs);
   }
