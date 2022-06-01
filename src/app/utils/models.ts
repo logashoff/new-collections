@@ -1,5 +1,6 @@
 import { MatSnackBarRef } from '@angular/material/snack-bar';
-import { keyBy, remove } from 'lodash';
+import keyBy from 'lodash/keyBy';
+import remove from 'lodash/remove';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { MessageComponent } from '../modules/shared';
 
@@ -53,7 +54,7 @@ export interface Settings {
 /**
  * BrowserTab structure used in storing in sync storage
  */
-export type SyncTab = [number, string, string, string, boolean, boolean]
+export type SyncTab = [number, string, string, string, boolean, boolean];
 export type SyncTabs = SyncTab[];
 
 /**

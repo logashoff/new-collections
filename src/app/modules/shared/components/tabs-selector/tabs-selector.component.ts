@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject, ViewChild, ViewEncapsulatio
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { MatSelectionList } from '@angular/material/list';
-import { isNil } from 'lodash';
+import isNil from 'lodash/isNil';
 import { filter, map, Observable, shareReplay, startWith, withLatestFrom } from 'rxjs';
 import { Tabs, trackByTabId } from 'src/app/utils';
 

@@ -18,7 +18,8 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "allowedCommonJsDependencies": [
-              "file-saver"
+              "file-saver",
+              "lodash"
             ],
             "outputPath": "dist/new-collections",
             "index": "src/index.html",

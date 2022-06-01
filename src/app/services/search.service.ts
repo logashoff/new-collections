@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import Fuse from 'fuse.js';
-import { flatMap } from 'lodash';
+import flatMap from 'lodash/flatMap';
 import { map, Observable, shareReplay } from 'rxjs';
 import { BrowserTab, BrowserTabs } from '../utils';
 import { TabService } from './tab.service';

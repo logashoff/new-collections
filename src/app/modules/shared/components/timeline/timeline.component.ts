@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { isNil } from 'lodash';
+import isNil from 'lodash/isNil';
 import { map, Observable, shareReplay } from 'rxjs';
 import { TabService } from 'src/app/services';
 import { TabGroups, TimelineElement } from 'src/app/utils';

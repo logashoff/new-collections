@@ -1,15 +1,15 @@
 import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { Injectable } from '@angular/core';
 import { TooltipPosition } from '@angular/material/tooltip';
+import saveAs from 'file-saver';
 import { lastValueFrom, Observable, of } from 'rxjs';
+import selectFiles from 'select-files';
 import {
   Action,
   ActionIcon,
   Collections,
-  exportTabs,
-  getSavedTabs,
+  getCollections,
   ignoreUrlsRegExp,
-  importCollections,
   queryCurrentWindow,
   TabGroup,
 } from 'src/app/utils';
@@ -65,6 +65,34 @@ export class MenuService {
     chrome.runtime.openOptionsPage();
   }
 
+  /**
+   * Writes provided tab groups to JSON file.
+   */
+  private exportCollections(collections: Collections) {
+    const blob = new Blob([JSON.stringify(collections, null, 2)], { type: 'text/json;charset=utf-8' });
+    saveAs(blob, `new-collections-${new Date().toISOString()}.json`);
+  }
+
+  /**
+   * Import tab groups JSON file from file system.
+   */
+  private async importCollections(): Promise<Collections> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const files = await selectFiles({ accept: '.json', multiple: false });
+
+        const reader = new FileReader();
+        reader.readAsText(files[0], 'utf-8');
+
+        reader.onload = ({ target: { result } }) => {
+          resolve(JSON.parse(result as string));
+        };
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
+
   async handleMenuAction(menuAction: Action) {
     try {
       let collections: Collections;
@@ -90,15 +118,15 @@ export class MenuService {
           this.openOptions();
           break;
         case Action.Export:
-          collections = await getSavedTabs();
+          collections = await getCollections();
           if (collections?.length > 0) {
-            exportTabs(collections);
+            this.exportCollections(collections);
           } else {
             this.tabsService.displayMessage('Empty list cannot be exported');
           }
           break;
         case Action.Import:
-          collections = await importCollections();
+          collections = await this.importCollections();
           const tabGroups = collections.map((collection) => new TabGroup(collection));
           await this.tabsService.addTabGroups(tabGroups);
           break;

@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { Tab, Tabs } from 'src/app/utils';
 
 const browserTabMock: Tab = {

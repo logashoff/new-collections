@@ -1,6 +1,7 @@
 import { Injectable, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { isNil, isUndefined } from 'lodash';
+import isNil from 'lodash/isNil';
+import isUndefined from 'lodash/isUndefined';
 import { combineLatest, filter, from, map, Observable, shareReplay, startWith, switchMap } from 'rxjs';
 import { SettingsService, TabService } from 'src/app/services';
 import { Devices, getUrlHostname, MostVisitedURL, Timeline, TopSite, TopSites } from 'src/app/utils';

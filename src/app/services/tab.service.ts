@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material/snack-bar';
-import { keyBy, remove } from 'lodash';
+import keyBy from 'lodash/keyBy';
+import remove from 'lodash/remove';
 import moment from 'moment';
 import { BehaviorSubject, firstValueFrom, lastValueFrom, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -12,10 +13,10 @@ import {
   BrowserTabs,
   Collection,
   Collections,
+  getCollections,
   getHostnameGroup,
-  getSavedTabs,
   ignoreUrlsRegExp,
-  saveTabGroups,
+  saveCollections,
   StorageChanges,
   syncToTabs,
   TabGroup,
@@ -80,7 +81,7 @@ export class TabService {
    * Initialize service and load stored tab groups.
    */
   private async initService() {
-    const collections = await getSavedTabs();
+    const collections = await getCollections();
     this.tabGroupsSource$.next(collections?.map((collection) => new TabGroup(collection)));
 
     chrome.storage.onChanged.addListener((changes: StorageChanges) => this.syncCollections(changes));
@@ -407,7 +408,7 @@ export class TabService {
       })
     );
 
-    return await saveTabGroups(collections);
+    return await saveCollections(collections);
   }
 
   /**

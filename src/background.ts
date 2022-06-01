@@ -1,7 +1,7 @@
-import { getSavedTabs } from './app/utils';
+import { getCollections } from './app/utils';
 
 const updateGroupCount = async () => {
-  const collections = await getSavedTabs();
+  const collections = await getCollections();
   chrome.action.setBadgeText({ text: collections?.length.toString() ?? '' });
 };
 

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 import { from, map, Observable, shareReplay, startWith, take } from 'rxjs';
 import { SettingsService } from 'src/app/services';
 

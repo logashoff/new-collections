@@ -5,17 +5,18 @@ import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { firstValueFrom } from 'rxjs';
 import { getBrowserTabsMock, getTabGroupMock, getTabGroupsMock } from 'src/mocks';
 import { v4 as uuidv4 } from 'uuid';
+import { getHostname, getUrlHostname, syncToTabs, tabsToSync } from '../utils/collections';
 import { ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
-import { getHostname, getHostnameGroup, getUrlHostname, syncToTabs, tabsToSync } from '../utils/tab';
+import { getHostnameGroup } from '../utils/utils';
 import { NavService } from './nav.service';
 import { TabService } from './tab.service';
 
 jest.mock('src/app/utils', () => ({
-  getSavedTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(getTabGroupsMock()))),
+  getCollections: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(getTabGroupsMock()))),
   queryCurrentWindow: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(getBrowserTabsMock()))),
   queryTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(getBrowserTabsMock))),
   removeTab: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
-  saveTabGroups: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
+  saveCollections: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   usesDarkMode: jest.fn().mockImplementation(() => {}),
   ActionIcon,
   getHostname,
@@ -24,6 +25,7 @@ jest.mock('src/app/utils', () => ({
   ignoreUrlsRegExp,
   syncToTabs,
   TabGroup,
+  tabsToSync,
 }));
 
 describe('TabService', () => {

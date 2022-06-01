@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { isNil } from 'lodash';
+import isNil from 'lodash/isNil';
 import { firstValueFrom, lastValueFrom, map, Observable, shareReplay, startWith, tap, withLatestFrom } from 'rxjs';
 import { NavService, SearchService, TabService } from 'src/app/services';
 import { BrowserTab, BrowserTabs, TabDelete, trackByTabId } from 'src/app/utils';
