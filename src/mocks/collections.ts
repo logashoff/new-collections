@@ -10,7 +10,6 @@ const tabGroupMock: Collection = {
       title: 'GitHub: Where the world builds software · GitHub',
       url: 'https://github.com/',
       pinned: false,
-      active: false,
     },
     {
       favIconUrl: 'https://duckduckgo.com/favicon.ico',
@@ -18,7 +17,6 @@ const tabGroupMock: Collection = {
       title: 'DuckDuckGo — Privacy, simplified.',
       url: 'https://duckduckgo.com/',
       pinned: false,
-      active: false,
     },
   ],
   timestamp: 1650858875455,
@@ -36,7 +34,6 @@ const tabGroupsMock: Collections = [
         title: 'Enterprise Open Source and Linux | Ubuntu',
         url: 'https://ubuntu.com/',
         pinned: false,
-        active: false,
       },
       {
         favIconUrl: 'https://assets.ubuntu.com/v1/49a1a858-favicon-32x32.png',
@@ -44,7 +41,6 @@ const tabGroupsMock: Collections = [
         title: 'Enterprise Open Source and Linux | Ubuntu',
         url: 'https://ubuntu.com/',
         pinned: false,
-        active: false,
       },
       {
         favIconUrl: 'https://linuxmint.com/web/img/favicon.ico',
@@ -52,7 +48,6 @@ const tabGroupsMock: Collections = [
         title: 'Home - Linux Mint',
         url: 'https://linuxmint.com/',
         pinned: false,
-        active: false,
       },
       {
         favIconUrl: 'https://c.s-microsoft.com/favicon.ico',
@@ -60,7 +55,6 @@ const tabGroupsMock: Collections = [
         title: 'Explore Windows 11 OS, Computers, Apps, & More | Microsoft',
         url: 'https://www.microsoft.com/en-us/windows?r=1',
         pinned: false,
-        active: false,
       },
       {
         favIconUrl: 'https://www.apple.com/favicon.ico',
@@ -68,7 +62,6 @@ const tabGroupsMock: Collections = [
         title: 'Apple',
         url: 'https://www.apple.com/',
         pinned: false,
-        active: false,
       },
     ],
     timestamp: 1650858932558,
@@ -82,7 +75,6 @@ const tabGroupsMock: Collections = [
         title: 'GitHub: Where the world builds software · GitHub',
         url: 'https://github.com/',
         pinned: false,
-        active: false,
       },
       {
         favIconUrl: 'https://duckduckgo.com/favicon.ico',
@@ -90,7 +82,6 @@ const tabGroupsMock: Collections = [
         title: 'DuckDuckGo — Privacy, simplified.',
         url: 'https://duckduckgo.com/',
         pinned: false,
-        active: false,
       },
     ],
     timestamp: 1650858875455,
@@ -104,7 +95,6 @@ const tabGroupsMock: Collections = [
         title: 'Fedora',
         url: 'https://getfedora.org/',
         pinned: false,
-        active: false,
       },
       {
         favIconUrl: 'https://assets.ubuntu.com/v1/49a1a858-favicon-32x32.png',
@@ -112,7 +102,6 @@ const tabGroupsMock: Collections = [
         title: 'Enterprise Open Source and Linux | Ubuntu',
         url: 'https://ubuntu.com/',
         pinned: false,
-        active: false,
       },
       {
         favIconUrl: 'https://c.s-microsoft.com/favicon.ico?v2',
@@ -120,7 +109,6 @@ const tabGroupsMock: Collections = [
         title: 'Microsoft – Cloud, Computers, Apps & Gaming',
         url: 'https://www.microsoft.com/en-us/',
         pinned: false,
-        active: false,
       },
       {
         favIconUrl: 'https://www.google.com/favicon.ico',
@@ -128,7 +116,6 @@ const tabGroupsMock: Collections = [
         title: 'Google',
         url: 'https://www.google.com/',
         pinned: false,
-        active: false,
       },
     ],
     timestamp: 1650847781791,

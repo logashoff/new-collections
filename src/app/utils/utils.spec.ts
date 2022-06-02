@@ -7,7 +7,6 @@ describe('utils.ts', () => {
     expect(getHostnameGroup(collection.tabs)).toEqual([
       [
         {
-          active: false,
           favIconUrl: 'https://github.githubassets.com/favicons/favicon.svg',
           id: 51,
           pinned: false,
@@ -17,7 +16,6 @@ describe('utils.ts', () => {
       ],
       [
         {
-          active: false,
           favIconUrl: 'https://duckduckgo.com/favicon.ico',
           id: 52,
           pinned: false,

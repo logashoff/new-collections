@@ -46,20 +46,19 @@ export const getCollections = async (): Promise<Collections> => {
  * Converts BrowserTabs to tabs structure used in sync storage.
  */
 export function tabsToSync(tabs: BrowserTabs): SyncTabs {
-  return tabs.map(({ id, url, favIconUrl, title, pinned, active }) => [id, url, favIconUrl, title, pinned, active]);
+  return tabs.map(({ id, url, favIconUrl, title, pinned }) => [id, url, favIconUrl, title, pinned]);
 }
 
 /**
  * Converts sync storage tabs to BrowserTabs.
  */
 export function syncToTabs(sync: SyncTabs): BrowserTabs {
-  return sync.map(([id, url, favIconUrl, title, pinned, active]) => ({
+  return sync.map(([id, url, favIconUrl, title, pinned]) => ({
     id,
     url,
     favIconUrl,
     title,
     pinned,
-    active,
   }));
 }
 
@@ -67,9 +66,8 @@ export function syncToTabs(sync: SyncTabs): BrowserTabs {
  * Restores all tabs from specified tab group.
  */
 export function restoreTabs(tabs: BrowserTabs) {
-  tabs.forEach(({ url, active, pinned }) =>
+  tabs.forEach(({ url, pinned }) =>
     chrome.tabs.create({
-      active,
       pinned,
       url,
     })
