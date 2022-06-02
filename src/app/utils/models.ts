@@ -99,6 +99,10 @@ export class TabGroup implements Collection {
     return this._timestamp;
   }
 
+  set timestamp(value: number) {
+    this._timestamp = value;
+  }
+
   private readonly tabsSource$ = new BehaviorSubject<BrowserTabs>(null);
 
   readonly tabs$: Observable<BrowserTabs> = this.tabsSource$.asObservable();
@@ -114,6 +118,10 @@ export class TabGroup implements Collection {
     this.tabsSource$.next(tabs);
   }
 
+  /**
+   * Toggles timestamp positive to negative.
+   * Negative timestamp value means tab group is pinned.
+   */
   favToggle() {
     this._timestamp *= -1;
   }
