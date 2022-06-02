@@ -1,9 +1,25 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import Fuse from 'fuse.js';
 import isNil from 'lodash/isNil';
-import { firstValueFrom, lastValueFrom, map, Observable, shareReplay, startWith, tap, withLatestFrom } from 'rxjs';
-import { NavService, SearchService, TabService } from 'src/app/services';
+import {
+  BehaviorSubject,
+  firstValueFrom,
+  lastValueFrom,
+  map,
+  Observable,
+  shareReplay,
+  startWith,
+  tap,
+  withLatestFrom,
+} from 'rxjs';
+import { NavService, TabService } from 'src/app/services';
 import { BrowserTab, BrowserTabs, TabDelete, trackByTabId } from 'src/app/utils';
+
+const fuseOptions: Fuse.IFuseOptions<BrowserTab> = {
+  keys: ['title', 'url'],
+  threshold: 0.5,
+};
 
 /**
  * @description
@@ -17,6 +33,16 @@ import { BrowserTab, BrowserTabs, TabDelete, trackByTabId } from 'src/app/utils'
   encapsulation: ViewEncapsulation.None,
 })
 export class SearchComponent {
+  private readonly source$ = new BehaviorSubject<BrowserTabs>([]);
+
+  @Input() set source(value: BrowserTabs) {
+    this.source$.next(value);
+  }
+
+  get source(): BrowserTabs {
+    return this.source$.value;
+  }
+
   readonly formGroup = new FormGroup({
     search: new FormControl(''),
   });
@@ -24,9 +50,20 @@ export class SearchComponent {
   readonly trackByTabId = trackByTabId;
 
   /**
-   * Indicates there is data to search.
+   * Indicates search data is present.
    */
-  readonly hasSearchData$: Observable<boolean> = this.searchService.hasSearchData$;
+  readonly hasSearchData$: Observable<boolean> = this.source$.pipe(
+    map((source) => source?.length > 0),
+    shareReplay(1)
+  );
+
+  /**
+   * Returns Fuse search instance.
+   */
+  private readonly fuse$: Observable<Fuse<BrowserTab>> = this.source$.pipe(
+    map((source) => new Fuse(source ?? [], fuseOptions)),
+    shareReplay(1)
+  );
 
   /**
    * Source for search results.
@@ -34,8 +71,8 @@ export class SearchComponent {
   readonly searchResults$: Observable<BrowserTabs> = this.formGroup.valueChanges.pipe(
     startWith({ search: '' }),
     tap(() => this.navService.reset()),
-    withLatestFrom(this.searchService.fuzzy$),
-    map(([{ search }, fuzzy]) => (search?.length > 0 ? fuzzy.search(search)?.map(({ item }) => item) : null)),
+    withLatestFrom(this.fuse$),
+    map(([{ search }, fuse]) => (search?.length > 0 ? fuse.search(search)?.map(({ item }) => item) : null)),
     shareReplay(1)
   );
 
@@ -47,7 +84,7 @@ export class SearchComponent {
     shareReplay(1)
   );
 
-  constructor(private navService: NavService, private searchService: SearchService, private tabService: TabService) {}
+  constructor(private navService: NavService, private tabService: TabService) {}
 
   /**
    * Clears search input
@@ -95,8 +132,9 @@ export class SearchComponent {
   async resultsClickHandler(tab: BrowserTab) {
     const group = await this.tabService.getGroupByTab(tab);
 
-    this.clearSearch();
-
-    this.navService.setParams(group.id, tab.id);
+    if (group) {
+      this.clearSearch();
+      this.navService.setParams(group.id, tab.id);
+    }
   }
 }

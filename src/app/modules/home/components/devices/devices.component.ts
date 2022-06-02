@@ -1,12 +1,8 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import flatMap from 'lodash/flatMap';
-import { map, Observable, shareReplay } from 'rxjs';
+import { Observable, shareReplay } from 'rxjs';
 import {
   BrowserTab,
-  Device,
   Devices,
-  getHostnameGroup,
-  HostnameGroup,
   restoreTabs,
   Sessions,
   Tabs,
@@ -31,21 +27,7 @@ import { HomeService } from '../../services';
 export class DevicesComponent {
   readonly devices$: Observable<Devices> = this.homeService.devices$.pipe(shareReplay(1));
 
-  /**
-   * Icons shown in panel header
-   */
-  readonly deviceHostnameGroup$: Observable<WeakMap<Device, HostnameGroup>> = this.devices$.pipe(
-    map((devices) => {
-      const mapByDeviceName = new WeakMap<Device, HostnameGroup>();
-
-      devices?.forEach((device) =>
-        mapByDeviceName.set(device, getHostnameGroup(this.getTabsFromSessions(device.sessions)))
-      );
-
-      return mapByDeviceName;
-    }),
-    shareReplay(1)
-  );
+  readonly deviceHostnameGroup$ = this.homeService.deviceHostnameGroup$;
 
   readonly trackByDevice = trackByDevice;
   readonly trackBySession = trackBySession;
@@ -58,7 +40,7 @@ export class DevicesComponent {
    * Returns tab list from all synced session's windows
    */
   getTabsFromSessions(sessions: Sessions): Tabs {
-    return flatMap(sessions, (session) => session.tab || session.window?.tabs);
+    return this.homeService.getTabsFromSessions(sessions);
   }
 
   /**

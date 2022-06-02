@@ -19,6 +19,7 @@ export class HomeComponent {
   readonly hasAnyData$ = this.homeService.hasAnyData$;
   readonly timeline$ = this.homeService.timeline$;
   readonly topSites$ = this.homeService.topSites$;
+  readonly searchSource$ = this.homeService.searchSource$;
 
   /**
    * Main menu items.
