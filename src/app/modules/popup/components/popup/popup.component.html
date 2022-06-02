@@ -1,5 +1,5 @@
 <div class="content">
-  <app-search *ngIf="groupsTimeline$ | async; else empty">
+  <app-search *ngIf="groupsTimeline$ | async; else empty" [source]="searchSource$ | async">
     <app-timeline></app-timeline>
   </app-search>
 </div>

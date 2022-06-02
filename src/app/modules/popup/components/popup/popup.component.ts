@@ -2,7 +2,7 @@ import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { MenuService, TabService } from 'src/app/services';
-import { Action, Timeline } from 'src/app/utils';
+import { Action, BrowserTabs, Timeline } from 'src/app/utils';
 
 /**
  * @description
@@ -29,6 +29,8 @@ export class PopupComponent {
   readonly menuItems$: Observable<MatFabMenu[]> = this.menuService.menuItems$.pipe(
     map((menuItems) => menuItems.filter((item) => ![Action.Import].includes(item.id as Action)))
   );
+
+  readonly searchSource$: Observable<BrowserTabs> = this.tabsService.tabs$;
 
   constructor(private tabsService: TabService, private menuService: MenuService) {}
 }

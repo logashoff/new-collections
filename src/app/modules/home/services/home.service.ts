@@ -1,10 +1,24 @@
 import { Injectable, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import flatMap from 'lodash/flatMap';
 import isNil from 'lodash/isNil';
 import isUndefined from 'lodash/isUndefined';
 import { combineLatest, filter, from, map, Observable, shareReplay, startWith, switchMap } from 'rxjs';
 import { SettingsService, TabService } from 'src/app/services';
-import { Devices, getUrlHostname, MostVisitedURL, Timeline, TopSite, TopSites } from 'src/app/utils';
+import {
+  BrowserTabs,
+  Device,
+  Devices,
+  getHostnameGroup,
+  getUrlHostname,
+  HostnameGroup,
+  MostVisitedURL,
+  Sessions,
+  Tabs,
+  Timeline,
+  TopSite,
+  TopSites,
+} from 'src/app/utils';
 
 /**
  * @description
@@ -30,7 +44,6 @@ export class HomeService {
                       ...site,
                       favIconUrl: this.getFavIconUrl(getUrlHostname(site.url)),
                       pinned: false,
-                      active: false,
                     })
                   )
               : null
@@ -50,6 +63,43 @@ export class HomeService {
   );
 
   /**
+   * Icons shown in panel header
+   */
+  readonly deviceHostnameGroup$: Observable<WeakMap<Device, HostnameGroup>> = this.devices$.pipe(
+    map((devices) => {
+      const mapByDeviceName = new WeakMap<Device, HostnameGroup>();
+
+      devices?.forEach((device) =>
+        mapByDeviceName.set(device, getHostnameGroup(this.getTabsFromSessions(device.sessions)))
+      );
+
+      return mapByDeviceName;
+    }),
+    shareReplay(1)
+  );
+
+  readonly searchSource$: Observable<BrowserTabs> = combineLatest([
+    this.devices$.pipe(startWith(null)),
+    this.tabsService.tabs$.pipe(startWith(null)),
+  ]).pipe(
+    map(([devices, tabs]) => {
+      const deviceTabs = flatMap(devices?.map((device) => this.getTabsFromSessions(device.sessions)));
+      let ret: BrowserTabs = [];
+
+      if (deviceTabs?.length > 0) {
+        ret = ret.concat(deviceTabs);
+      }
+
+      if (tabs?.length > 0) {
+        ret = ret.concat(tabs);
+      }
+
+      return ret;
+    }),
+    shareReplay(1)
+  );
+
+  /**
    * Tab groups grouped by time
    */
   readonly timeline$: Observable<Timeline> = this.tabsService.groupsTimeline$;
@@ -58,11 +108,11 @@ export class HomeService {
    * Indicates if timeline, top sites or devices data is present
    */
   readonly hasAnyData$: Observable<boolean> = combineLatest([
-    this.timeline$.pipe(startWith(null)),
     this.devices$.pipe(startWith(null)),
+    this.timeline$.pipe(startWith(null)),
     this.topSites$.pipe(startWith(null)),
   ]).pipe(
-    map(([timeline, devices, topSites]) => !isNil(timeline) || !isNil(devices) || !isNil(topSites)),
+    map(([devices, timeline, topSites]) => !isNil(timeline) || !isNil(devices) || !isNil(topSites)),
     shareReplay(1)
   );
 
@@ -86,5 +136,12 @@ export class HomeService {
 
   getTopSites(): Promise<MostVisitedURL[]> {
     return new Promise((resolve) => chrome.topSites.get((data) => resolve(data)));
+  }
+
+  /**
+   * Returns tab list from all synced session's windows
+   */
+  getTabsFromSessions(sessions: Sessions): Tabs {
+    return flatMap(sessions, (session) => session.tab || session.window?.tabs);
   }
 }

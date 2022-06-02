@@ -1,5 +1,5 @@
 <div class="content">
-  <app-search *ngIf="hasAnyData$ | async; else empty">
+  <app-search *ngIf="hasAnyData$ | async; else empty" [source]="searchSource$ | async">
     <app-top-sites [topSites]="topSites$ | async"></app-top-sites>
     <app-devices></app-devices>
     <app-timeline></app-timeline>
