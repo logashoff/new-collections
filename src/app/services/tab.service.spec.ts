@@ -181,7 +181,6 @@ describe('TabService', () => {
             title: 'NEW TITLE 1',
             url: 'https://newlink.com/',
             pinned: false,
-            active: false,
           },
           {
             favIconUrl: 'https://duckduckgo.com/favicon.ico',
@@ -189,7 +188,6 @@ describe('TabService', () => {
             title: 'NEW TITLE 2',
             url: 'https://anotherlink.com/',
             pinned: false,
-            active: false,
           },
           {
             favIconUrl: 'https://duckduckgo.com/favicon.ico',
@@ -197,7 +195,6 @@ describe('TabService', () => {
             title: 'DuckDuckGo',
             url: 'https://duckduckgo.com/',
             pinned: false,
-            active: false,
           },
         ],
         timestamp: 1650858875455,
@@ -233,7 +230,6 @@ describe('TabService', () => {
             title: 'GitHub: Where the world builds software · GitHub',
             url: 'https://github.com/',
             pinned: false,
-            active: false,
           },
         ],
         timestamp: new Date().getTime(),

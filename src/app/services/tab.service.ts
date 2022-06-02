@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material/snack-bar';
+import flatMap from 'lodash/flatMap';
 import keyBy from 'lodash/keyBy';
 import remove from 'lodash/remove';
 import moment from 'moment';
 import { BehaviorSubject, firstValueFrom, lastValueFrom, Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { filter, map, shareReplay, startWith } from 'rxjs/operators';
 import {
   ActionIcon,
   BrowserTab,
@@ -51,6 +52,15 @@ export class TabService {
     map((res) =>
       res?.length > 0 ? res.sort(({ timestamp: a }, { timestamp: b }) => (a < 0 || b < 0 ? a - b : b - a)) : null
     ),
+    shareReplay(1)
+  );
+
+  /**
+   * Tab list source from all tab groups.
+   */
+  readonly tabs$: Observable<BrowserTabs> = this.tabGroups$.pipe(
+    filter((tabGroups) => tabGroups?.length > 0),
+    map((tabGroups) => flatMap(tabGroups, (tabGroup) => tabGroup.tabs)),
     shareReplay(1)
   );
 
@@ -188,8 +198,7 @@ export class TabService {
     const filteredTabs: BrowserTabs = tabs
       .filter((tab) => !ignoreUrlsRegExp.test(tab.url))
       .map(
-        ({ id, url, title, favIconUrl, active, pinned }): BrowserTab => ({
-          active,
+        ({ id, url, title, favIconUrl, pinned }): BrowserTab => ({
           favIconUrl,
           id,
           pinned,
