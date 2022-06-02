@@ -111,17 +111,19 @@ export class TabService {
 
       changedGroupIds.forEach((groupId) => {
         const { oldValue, newValue } = changes[groupId];
-        if (oldValue && !newValue && groupsById[groupId]) {
+        const group = groupsById[groupId];
+        if (oldValue && !newValue && group) {
           remove(tabGroups, ({ id }) => id === groupId);
-        } else if (newValue && !oldValue && !(groupId in groupsById)) {
+        } else if (newValue && !oldValue && !group) {
           const newGroup = new TabGroup({
             id: groupId,
             timestamp: newValue[0],
             tabs: syncToTabs(newValue[1]),
           });
           tabGroups.push(newGroup);
-        } else if (newValue && groupsById[groupId]) {
-          groupsById[groupId].mergeTabs(syncToTabs(newValue[1]), true);
+        } else if (newValue && group) {
+          group.timestamp = newValue[0];
+          group.mergeTabs(syncToTabs(newValue[1]), true);
         }
       });
 
