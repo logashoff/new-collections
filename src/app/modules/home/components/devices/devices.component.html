@@ -21,8 +21,7 @@
       <app-tab-list>
         <app-list-item
           *ngFor="let tab of getTabsFromSessions(device.sessions); trackBy: trackByTabId"
-          [tab]="tab"
-          [readOnly]="true">
+          [tab]="tab">
         </app-list-item>
       </app-tab-list>
     </mat-expansion-panel>

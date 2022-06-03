@@ -9,6 +9,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { EXPANSION_PANEL_ANIMATION_TIMING } from '@angular/material/expansion';
+import { BehaviorSubject, map, Observable, shareReplay, switchMap } from 'rxjs';
 import { TabService } from 'src/app/services';
 import { BrowserTab, TabDelete } from 'src/app/utils';
 
@@ -37,14 +38,25 @@ import { BrowserTab, TabDelete } from 'src/app/utils';
   ],
 })
 export class ListItemComponent {
+  private readonly tab$ = new BehaviorSubject<BrowserTab>(null);
+
   @HostBinding('@fadeAnimation')
   @Input()
-  tab: BrowserTab;
+  set tab(value: BrowserTab) {
+    this.tab$.next(value);
+  }
+
+  get tab(): BrowserTab {
+    return this.tab$.value;
+  }
 
   /**
    * Disables item menu
    */
-  @Input() readOnly = false;
+  readonly readOnly$: Observable<boolean> = this.tab$.pipe(
+    switchMap((tab) => this.tabService.tabs$.pipe(map((tabs) => !tabs.includes(tab)))),
+    shareReplay(1)
+  );
 
   /**
    * Dispatches event when Delete menu item is clicked
