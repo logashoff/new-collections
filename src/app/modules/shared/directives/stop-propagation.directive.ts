@@ -14,5 +14,6 @@ export class StopPropagationDirective {
 
   @HostListener('click', ['$event']) onClick(event: MouseEvent) {
     event.stopPropagation();
+    event.preventDefault();
   }
 }
