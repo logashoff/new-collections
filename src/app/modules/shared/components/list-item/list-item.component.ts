@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { EXPANSION_PANEL_ANIMATION_TIMING } from '@angular/material/expansion';
 import { BehaviorSubject, map, Observable, shareReplay, switchMap } from 'rxjs';
-import { TabService } from 'src/app/services';
+import { NavService, TabService } from 'src/app/services';
 import { BrowserTab, TabDelete } from 'src/app/utils';
 
 /**
@@ -59,6 +59,16 @@ export class ListItemComponent {
   );
 
   /**
+   * Displays locate button to navigate to item in the list.
+   */
+  @Input() showItemLocation = false;
+
+  readonly canLocate$: Observable<boolean> = this.tab$.pipe(
+    switchMap((tab) => this.tabService.tabs$.pipe(map((tabs) => tabs.includes(tab)))),
+    shareReplay(1)
+  );
+
+  /**
    * Dispatches event when Delete menu item is clicked
    */
   @Output() readonly modified = new EventEmitter<BrowserTab>();
@@ -75,7 +85,7 @@ export class ListItemComponent {
     return this.tab.id;
   }
 
-  constructor(private tabService: TabService) {}
+  constructor(private tabService: TabService, private nav: NavService) {}
 
   /**
    * Opens dialog to edit specified tab.
@@ -96,5 +106,16 @@ export class ListItemComponent {
       deletedTab: this.tab,
       revertDelete: messageRef,
     });
+  }
+
+  /**
+   * Navigates to tab location.
+   */
+  async locateItem() {
+    const group = await this.tabService.getGroupByTab(this.tab);
+
+    if (group) {
+      this.nav.setParams(group.id, this.tab.id);
+    }
   }
 }

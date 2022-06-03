@@ -1,4 +1,4 @@
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import Fuse from 'fuse.js';
 import isNil from 'lodash/isNil';
@@ -9,7 +9,6 @@ import {
   map,
   Observable,
   shareReplay,
-  startWith,
   tap,
   withLatestFrom,
 } from 'rxjs';
@@ -32,7 +31,7 @@ const fuseOptions: Fuse.IFuseOptions<BrowserTab> = {
   styleUrls: ['./search.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class SearchComponent {
+export class SearchComponent implements OnInit {
   private readonly source$ = new BehaviorSubject<BrowserTabs>([]);
 
   @Input() set source(value: BrowserTabs) {
@@ -68,11 +67,14 @@ export class SearchComponent {
   /**
    * Source for search results.
    */
-  readonly searchResults$: Observable<BrowserTabs> = this.formGroup.valueChanges.pipe(
-    startWith({ search: '' }),
-    tap(() => this.navService.reset()),
+  readonly searchResults$: Observable<BrowserTabs> = this.navService.paramsSearch$.pipe(
+    tap((search) => {
+      this.formGroup.get('search').setValue(search, {
+        emitEvent: false,
+      });
+    }),
     withLatestFrom(this.fuse$),
-    map(([{ search }, fuse]) => (search?.length > 0 ? fuse.search(search)?.map(({ item }) => item) : null)),
+    map(([search, fuse]) => (search?.length > 0 ? fuse.search(search)?.map(({ item }) => item) : null)),
     shareReplay(1)
   );
 
@@ -85,6 +87,16 @@ export class SearchComponent {
   );
 
   constructor(private navService: NavService) {}
+
+  ngOnInit(): void {
+    this.formGroup.valueChanges.subscribe(({ search }) => {
+      if (search) {
+        this.navService.search(search);
+      } else {
+        this.navService.reset();
+      }
+    });
+  }
 
   /**
    * Clears search input

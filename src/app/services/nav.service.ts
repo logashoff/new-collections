@@ -24,6 +24,15 @@ export class NavService {
     shareReplay(1)
   );
 
+  /**
+   * Group ID set by URL query params
+   */
+  readonly paramsSearch$: Observable<string> = this.activeRoute.queryParams.pipe(
+    distinctUntilChanged((prev, curr) => prev.search === curr.search),
+    map((params) => params.search as string),
+    shareReplay(1)
+  );
+
   constructor(private activeRoute: ActivatedRoute, private router: Router) {}
 
   reset() {
@@ -32,8 +41,21 @@ export class NavService {
       queryParams: {
         groupId: undefined,
         tabId: undefined,
+        search: undefined,
       },
       queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
+  }
+
+  search(value: string) {
+    this.router.navigate([], {
+      relativeTo: this.activeRoute,
+      queryParams: {
+        groupId: undefined,
+        tabId: undefined,
+        search: value,
+      },
       replaceUrl: true,
     });
   }
@@ -44,6 +66,7 @@ export class NavService {
       queryParams: {
         groupId,
         tabId,
+        search: undefined,
       },
       replaceUrl: true,
     });
