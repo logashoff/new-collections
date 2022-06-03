@@ -4,17 +4,27 @@
     <div class="title">{{ tab.title }}</div>
     <span class="link">{{ tab.url }}</span>
   </div>
-  <button *ngIf="(readOnly$ | async) === false" mat-icon-button [appStopPropagation] [matMenuTriggerFor]="tabMenu">
-    <mat-icon>more_vert</mat-icon>
-  </button>
-  <mat-menu #tabMenu="matMenu">
-    <button mat-menu-item (click)="editClick()">
-      <mat-icon>edit_note</mat-icon>
-      <span>Edit</span>
+  <div class="controls">
+    <button
+      class="locate-button"
+      mat-icon-button
+      *ngIf="showItemLocation && (canLocate$ | async)"
+      [appStopPropagation]
+      (click)="locateItem()">
+      <mat-icon>search</mat-icon>
     </button>
-    <button mat-menu-item (click)="deleteClick()">
-      <mat-icon>playlist_remove</mat-icon>
-      <span>Delete</span>
+    <button *ngIf="(readOnly$ | async) === false" mat-icon-button [appStopPropagation] [matMenuTriggerFor]="tabMenu">
+      <mat-icon>more_vert</mat-icon>
     </button>
-  </mat-menu>
+    <mat-menu #tabMenu="matMenu">
+      <button mat-menu-item (click)="editClick()">
+        <mat-icon>edit_note</mat-icon>
+        <span>Edit</span>
+      </button>
+      <button mat-menu-item (click)="deleteClick()">
+        <mat-icon>playlist_remove</mat-icon>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
+  </div>
 </a>

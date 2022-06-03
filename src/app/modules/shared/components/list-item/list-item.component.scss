@@ -18,6 +18,19 @@ app-list-item {
     margin: 0;
     gap: 1rem;
     cursor: pointer;
+
+    &:hover .locate-button {
+      display: block;
+    }
+  }
+
+  .locate-button {
+    display: none;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
   }
 
   .text-container {
