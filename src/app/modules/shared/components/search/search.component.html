@@ -28,8 +28,7 @@
               *ngFor="let tab of searchResults$ | async; trackBy: trackByTabId"
               [tab]="tab"
               (deleted)="itemDeleted($event)"
-              (modified)="itemModified($event)"
-              (click)="resultsClickHandler(tab)">
+              (modified)="itemModified($event)">
             </app-list-item>
           </app-tab-list>
         </mat-card>

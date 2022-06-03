@@ -13,7 +13,7 @@ import {
   tap,
   withLatestFrom,
 } from 'rxjs';
-import { NavService, TabService } from 'src/app/services';
+import { NavService } from 'src/app/services';
 import { BrowserTab, BrowserTabs, TabDelete, trackByTabId } from 'src/app/utils';
 
 const fuseOptions: Fuse.IFuseOptions<BrowserTab> = {
@@ -84,7 +84,7 @@ export class SearchComponent {
     shareReplay(1)
   );
 
-  constructor(private navService: NavService, private tabService: TabService) {}
+  constructor(private navService: NavService) {}
 
   /**
    * Clears search input
@@ -123,18 +123,6 @@ export class SearchComponent {
       if (undo) {
         tabs.splice(index, 0, deletedTab);
       }
-    }
-  }
-
-  /**
-   * Handles list item click event
-   */
-  async resultsClickHandler(tab: BrowserTab) {
-    const group = await this.tabService.getGroupByTab(tab);
-
-    if (group) {
-      this.clearSearch();
-      this.navService.setParams(group.id, tab.id);
     }
   }
 }

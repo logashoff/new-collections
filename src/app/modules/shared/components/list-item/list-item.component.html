@@ -1,8 +1,8 @@
-<div class="container" matRipple>
+<a class="container" matRipple href="{{ tab.url }}" target="_blank">
   <app-chip [source]="tab.favIconUrl"></app-chip>
   <div class="text-container">
     <div class="title">{{ tab.title }}</div>
-    <a [appStopPropagation] class="link" href="{{ tab.url }}" target="_blank">{{ tab.url }}</a>
+    <span class="link">{{ tab.url }}</span>
   </div>
   <button *ngIf="!readOnly" mat-icon-button [appStopPropagation] [matMenuTriggerFor]="tabMenu">
     <mat-icon>more_vert</mat-icon>
@@ -17,4 +17,4 @@
       <span>Delete</span>
     </button>
   </mat-menu>
-</div>
+</a>

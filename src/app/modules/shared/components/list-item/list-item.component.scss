@@ -47,6 +47,10 @@ app-list-item {
 
 @include theme using($theme) {
   app-list-item {
+    .container {
+      color: getPaletteColor(getForegroundPalette($theme), text);
+    }
+
     &:hover {
       background-color: getPaletteColor(getBackgroundPalette($theme), hover);
     }
