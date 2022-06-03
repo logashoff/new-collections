@@ -19,9 +19,7 @@
     <app-tab-list>
       <app-list-item
         *ngFor="let tab of group.tabs$ | async; trackBy: trackByTabId"
-        [tab]="tab"
-        (click)="handleItemClick(tab)"
-      >
+        [tab]="tab">
       </app-list-item>
     </app-tab-list>
   </mat-expansion-panel>

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, ViewChild, ViewEncapsulation
 import { MatAccordion } from '@angular/material/expansion';
 import { BehaviorSubject, Observable, shareReplay } from 'rxjs';
 import { NavService, TabService } from 'src/app/services';
-import { BrowserTab, TabGroup, TabGroups, TabsByHostname, trackByGroupId, trackByTabId } from 'src/app/utils';
+import { TabGroup, TabGroups, TabsByHostname, trackByGroupId, trackByTabId } from 'src/app/utils';
 
 /**
  * @description
@@ -52,13 +52,6 @@ export class GroupsComponent {
    */
   readonly trackByGroupId = trackByGroupId;
   readonly trackByTabId = trackByTabId;
-
-  /**
-   * Handles list item click event and opens new browser tab with tab URL
-   */
-  handleItemClick(tab: BrowserTab) {
-    window.open(tab.url, '_blank');
-  }
 
   constructor(private navService: NavService, private tabService: TabService) {}
 

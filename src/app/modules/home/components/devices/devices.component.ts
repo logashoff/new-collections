@@ -42,11 +42,4 @@ export class DevicesComponent {
   getTabsFromSessions(sessions: Sessions): Tabs {
     return this.homeService.getTabsFromSessions(sessions);
   }
-
-  /**
-   * Handles list item click
-   */
-  handleItemClick(tab: BrowserTab) {
-    window.open(tab.url, '_blank');
-  }
 }
