@@ -27,7 +27,7 @@ app-top-sites {
           display: flex;
         }
 
-        .site-link {
+        .site-title {
           display: block;
           position: relative;
           overflow: hidden;
@@ -70,7 +70,7 @@ app-top-sites {
         background: getPaletteColor(getBackgroundPalette($theme), disabled-list-option);
       }
 
-      .site-link {
+      .site-title {
         color: getPaletteColor(getForegroundPalette($theme), text);
       }
 

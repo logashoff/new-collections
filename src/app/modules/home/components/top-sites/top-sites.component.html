@@ -1,13 +1,13 @@
 <div class="container" *ngIf="topSites?.length > 0">
   <div class="site-container">
-    <div class="site" *ngFor="let site of topSites; trackBy: trackBySite">
+    <a class="site" *ngFor="let site of topSites; trackBy: trackBySite" href="{{ site.url }}">
       <app-image [source]="site.favIconUrl" size="medium"></app-image>
-      <a class="site-link" href="{{ site.url }}">
+      <span class="site-title">
         {{ site.title }}
-      </a>
-      <button class="remove-btn" (click)="removeSite(site)">
+      </span>
+      <button [appStopPropagation] class="remove-btn" (click)="removeSite(site)">
         <mat-icon>close</mat-icon>
       </button>
-    </div>
+    </a>
   </div>
 </div>
