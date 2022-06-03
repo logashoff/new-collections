@@ -8,13 +8,34 @@ app-top-sites {
     margin: 1rem 0;
 
     .site-container {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
       gap: 1rem;
-      flex-wrap: wrap;
-      justify-content: space-between;
+      overflow: hidden;
 
       .site {
         position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        border-radius: 2rem;
+        height: 1.5rem;
+
+        &:hover .remove-btn {
+          display: flex;
+        }
+
+        .site-link {
+          display: block;
+          position: relative;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          margin-right: 0.5rem;
+          flex: 1;
+        }
 
         .remove-btn {
           align-items: center;
@@ -26,10 +47,9 @@ app-top-sites {
           justify-content: center;
           margin: 0;
           padding: 0.75rem;
-          position: absolute;
-          right: -0.75rem;
-          top: -0.75rem;
+          position: relative;
           width: 1rem;
+          border: 0;
 
           .mat-icon {
             font-size: 1rem;
@@ -38,16 +58,6 @@ app-top-sites {
             width: 1rem;
           }
         }
-
-        &:hover {
-          .remove-btn {
-            display: flex;
-          }
-        }
-      }
-
-      .spacer {
-        flex: 1 1 auto;
       }
     }
   }
@@ -55,10 +65,19 @@ app-top-sites {
 
 @include theme using($theme) {
   app-top-sites {
-    .site-container .site .remove-btn {
-      background: getPaletteColor(getBackgroundPalette($theme), card);
-      color: getPaletteColor(getForegroundPalette($theme), text);
-      border: 1px solid getPaletteColor(getForegroundPalette($theme), divider);
+    .site-container {
+      .site {
+        background: getPaletteColor(getBackgroundPalette($theme), disabled-list-option);
+      }
+
+      .site-link {
+        color: getPaletteColor(getForegroundPalette($theme), text);
+      }
+
+      .remove-btn {
+        color: getPaletteColor(getForegroundPalette($theme), text);
+        background: getPaletteColor(getBackgroundPalette($theme), card);
+      }
     }
   }
 }

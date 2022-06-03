@@ -14,15 +14,18 @@
     <section class="toggles">
       <mat-slide-toggle formControlName="enableDevices">
         <div>Enable Devices</div>
-        <mat-hint>Show synced devices on home page</mat-hint>
+        <mat-hint>Show synced devices on New Tab page</mat-hint>
       </mat-slide-toggle>
       <mat-slide-toggle formControlName="enableTopSites">
         <div>Enable Sites</div>
-        <mat-hint>Show top visited sites on home page</mat-hint>
+        <mat-hint>Show top sites on New Tab page</mat-hint>
       </mat-slide-toggle>
     </section>
     <section *ngIf="ignoreSitesControl.controls?.length > 0" class="list-container">
-      <h4>Ignored Sites:</h4>
+      <h4 class="ignore-heading">Ignored Sites</h4>
+      <mat-hint>
+        Sites hidden from top sites list on New Tab page
+      </mat-hint>
       <div class="list">
         <div class="list-item" *ngFor="let ignoredSite of ignoreSitesControl.controls; let i = index">
           <span>
