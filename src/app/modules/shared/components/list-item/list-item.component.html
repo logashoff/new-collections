@@ -4,7 +4,7 @@
     <div class="title">{{ tab.title }}</div>
     <span class="link">{{ tab.url }}</span>
   </div>
-  <button *ngIf="!readOnly" mat-icon-button [appStopPropagation] [matMenuTriggerFor]="tabMenu">
+  <button *ngIf="(readOnly$ | async) === false" mat-icon-button [appStopPropagation] [matMenuTriggerFor]="tabMenu">
     <mat-icon>more_vert</mat-icon>
   </button>
   <mat-menu #tabMenu="matMenu">
