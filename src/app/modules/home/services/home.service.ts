@@ -3,7 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import flatMap from 'lodash/flatMap';
 import isNil from 'lodash/isNil';
 import isUndefined from 'lodash/isUndefined';
-import { combineLatest, filter, from, map, Observable, shareReplay, startWith, switchMap } from 'rxjs';
+import { combineLatest, from, map, Observable, of, shareReplay, switchMap, take } from 'rxjs';
 import { SettingsService, TabService } from 'src/app/services';
 import {
   BrowserTabs,
@@ -31,25 +31,29 @@ export class HomeService {
    * Top sites list
    */
   readonly topSites$: Observable<TopSites> = this.settings.settings$.pipe(
-    filter((settings) => isUndefined(settings?.enableTopSites) || settings?.enableTopSites),
-    switchMap((settings) =>
-      from(this.getTopSites()).pipe(
-        map(
-          (sites): TopSites =>
-            sites?.length > 0
-              ? sites
-                  .filter((site) => !settings?.ignoreTopSites?.some(({ url }) => url === site.url))
-                  .map(
-                    (site): TopSite => ({
-                      ...site,
-                      favIconUrl: this.getFavIconUrl(getUrlHostname(site.url)),
-                      pinned: false,
-                    })
-                  )
-              : null
-        )
-      )
-    ),
+    take(1),
+    switchMap((settings) => {
+      if (isUndefined(settings?.enableTopSites) || settings?.enableTopSites) {
+        return from(this.getTopSites()).pipe(
+          map(
+            (sites): TopSites =>
+              sites?.length > 0
+                ? sites
+                    .filter((site) => !settings?.ignoreTopSites?.some(({ url }) => url === site.url))
+                    .map(
+                      (site): TopSite => ({
+                        ...site,
+                        favIconUrl: this.getFavIconUrl(getUrlHostname(site.url)),
+                        pinned: false,
+                      })
+                    )
+                : null
+          )
+        );
+      }
+
+      return of(null);
+    }),
     shareReplay(1)
   );
 
@@ -57,8 +61,14 @@ export class HomeService {
    * Synced devices list
    */
   readonly devices$: Observable<Devices> = this.settings.settings$.pipe(
-    filter((settings) => isUndefined(settings?.enableDevices) || settings?.enableDevices),
-    switchMap(() => from(this.getDevices()).pipe(map((devices) => (devices?.length > 0 ? devices : null)))),
+    take(1),
+    switchMap((settings) => {
+      if (isUndefined(settings?.enableDevices) || settings?.enableDevices) {
+        return from(this.getDevices()).pipe(map((devices) => (devices?.length > 0 ? devices : null)));
+      }
+
+      return of(null);
+    }),
     shareReplay(1)
   );
 
@@ -66,6 +76,7 @@ export class HomeService {
    * Icons shown in panel header
    */
   readonly deviceHostnameGroup$: Observable<WeakMap<Device, HostnameGroup>> = this.devices$.pipe(
+    take(1),
     map((devices) => {
       const mapByDeviceName = new WeakMap<Device, HostnameGroup>();
 
@@ -78,20 +89,12 @@ export class HomeService {
     shareReplay(1)
   );
 
-  readonly searchSource$: Observable<BrowserTabs> = combineLatest([
-    this.devices$.pipe(startWith(null)),
-    this.tabsService.tabs$.pipe(startWith(null)),
-  ]).pipe(
+  readonly searchSource$: Observable<BrowserTabs> = combineLatest([this.devices$, this.tabsService.tabs$]).pipe(
     map(([devices, tabs]) => {
-      const deviceTabs = flatMap(devices?.map((device) => this.getTabsFromSessions(device.sessions)));
-      let ret: BrowserTabs = [];
-
-      if (deviceTabs?.length > 0) {
-        ret = ret.concat(deviceTabs);
-      }
+      const ret: BrowserTabs = flatMap(devices?.map((device) => this.getTabsFromSessions(device.sessions))) ?? [];
 
       if (tabs?.length > 0) {
-        ret = ret.concat(tabs);
+        ret.push(...tabs);
       }
 
       return ret;
@@ -107,11 +110,7 @@ export class HomeService {
   /**
    * Indicates if timeline, top sites or devices data is present
    */
-  readonly hasAnyData$: Observable<boolean> = combineLatest([
-    this.devices$.pipe(startWith(null)),
-    this.timeline$.pipe(startWith(null)),
-    this.topSites$.pipe(startWith(null)),
-  ]).pipe(
+  readonly hasAnyData$: Observable<boolean> = combineLatest([this.devices$, this.timeline$, this.topSites$]).pipe(
     map(([devices, timeline, topSites]) => !isNil(timeline) || !isNil(devices) || !isNil(topSites)),
     shareReplay(1)
   );
@@ -130,11 +129,11 @@ export class HomeService {
     );
   }
 
-  getDevices(): Promise<Devices> {
+  private getDevices(): Promise<Devices> {
     return new Promise((resolve) => chrome.sessions.getDevices((devices) => resolve(devices)));
   }
 
-  getTopSites(): Promise<MostVisitedURL[]> {
+  private getTopSites(): Promise<MostVisitedURL[]> {
     return new Promise((resolve) => chrome.topSites.get((data) => resolve(data)));
   }
 

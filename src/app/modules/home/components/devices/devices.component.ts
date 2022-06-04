@@ -1,15 +1,6 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { Observable, shareReplay } from 'rxjs';
-import {
-  BrowserTab,
-  Devices,
-  restoreTabs,
-  Sessions,
-  Tabs,
-  trackByDevice,
-  trackBySession,
-  trackByTabId,
-} from 'src/app/utils';
+import { Observable } from 'rxjs';
+import { Devices, restoreTabs, Sessions, Tabs, trackByDevice, trackBySession, trackByTabId } from 'src/app/utils';
 import { HomeService } from '../../services';
 
 /**
@@ -25,8 +16,7 @@ import { HomeService } from '../../services';
   encapsulation: ViewEncapsulation.None,
 })
 export class DevicesComponent {
-  readonly devices$: Observable<Devices> = this.homeService.devices$.pipe(shareReplay(1));
-
+  readonly devices$: Observable<Devices> = this.homeService.devices$;
   readonly deviceHostnameGroup$ = this.homeService.deviceHostnameGroup$;
 
   readonly trackByDevice = trackByDevice;
