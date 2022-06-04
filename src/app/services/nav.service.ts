@@ -33,6 +33,14 @@ export class NavService {
     shareReplay(1)
   );
 
+  /**
+   * Checks is current nav state is popup.
+   * TODO: Does chrome API has extension type indicator?
+   */
+  get isPopup(): boolean {
+    return this.router.url.match(/popup/gi)?.length > 0;
+  }
+
   constructor(private activeRoute: ActivatedRoute, private router: Router) {}
 
   reset() {

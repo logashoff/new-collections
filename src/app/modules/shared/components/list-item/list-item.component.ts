@@ -85,6 +85,13 @@ export class ListItemComponent {
     return this.tab.id;
   }
 
+  /**
+   * Target where URL will be opened when list item is clicked
+   */
+  get target(): string {
+    return this.nav.isPopup ? '_blank' : '_self';
+  }
+
   constructor(private tabService: TabService, private nav: NavService) {}
 
   /**
