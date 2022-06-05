@@ -83,16 +83,20 @@ $mat-dark-theme-foreground: (
   text: $light-text,
 );
 
-$light-background: #ffffff;
+$light-background-color: #ffffff;
+$dark-background-color: #242528;
+
+$light-background: $light-background-color;
 $light-card-background: #f8f9fa;
 $light-bg-darker-5: darken($light-card-background, 5%);
 $light-bg-darker-10: darken($light-card-background, 10%);
 $light-bg-darker-20: darken($light-card-background, 20%);
 $light-bg-darker-30: darken($light-card-background, 30%);
 $light-bg-lighter-5: $light-card-background;
-$dark-bg-tooltip: lighten(#242528, 20%);
-$dark-bg-alpha-4: rgba(#242528, 0.04);
-$dark-bg-alpha-12: rgba(#242528, 0.12);
+$dark-bg-tooltip: lighten($dark-background-color, 20%);
+$dark-bg-alpha-4: rgba($dark-background-color, 0.04);
+$dark-bg-alpha-12: rgba($dark-background-color, 0.12);
+$dark-bg-alpha-24: rgba($dark-background-color, 0.24);
 
 $mat-light-theme-background: (
   app-bar: $light-bg-darker-5,
@@ -110,16 +114,18 @@ $mat-light-theme-background: (
   status-bar: $light-bg-darker-20,
   tooltip: $dark-bg-tooltip,
   unselected-chip: $light-bg-darker-10,
+  ripple: $dark-bg-alpha-24,
 );
 
-$dark-background: #242528;
+$dark-background: $dark-background-color;
 $dark-card-background: #303134;
 $dark-bg-lighter-5: $dark-card-background;
 $dark-bg-lighter-10: lighten($dark-card-background, 10%);
 $dark-bg-lighter-20: lighten($dark-card-background, 20%);
 $dark-bg-lighter-30: lighten($dark-card-background, 30%);
-$light-bg-alpha-4: rgba(#ffffff, 0.04);
-$light-bg-alpha-12: rgba(#ffffff, 0.12);
+$light-bg-alpha-4: rgba($light-background-color, 0.04);
+$light-bg-alpha-12: rgba($light-background-color, 0.12);
+$light-bg-alpha-24: rgba($light-background-color, 0.24);
 
 $mat-dark-theme-background: (
   app-bar: $dark-bg-lighter-5,
@@ -137,6 +143,7 @@ $mat-dark-theme-background: (
   status-bar: $dark-bg-lighter-20,
   tooltip: $dark-bg-lighter-20,
   unselected-chip: $dark-bg-lighter-20,
+  ripple: $light-bg-alpha-24,
 );
 
 @include mat.core($fontConfig);

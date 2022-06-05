@@ -30,7 +30,7 @@ export class GroupsComponent {
   /**
    * Active tab ID from query params
    */
-  readonly activeTabId$: Observable<number> = this.navService.paramsTabId$.pipe(shareReplay(1));
+  readonly activeTabId$: Observable<string> = this.navService.paramsTabId$.pipe(shareReplay(1));
 
   private readonly groups$ = new BehaviorSubject<TabGroups>(null);
 

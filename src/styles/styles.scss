@@ -158,3 +158,8 @@ a {
     margin: 2rem 0;
   }
 }
+
+.mat-tooltip,
+.cdk-overlay-pane.mat-tooltip-panel {
+  pointer-events: none;
+}
