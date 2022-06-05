@@ -8,9 +8,9 @@
     <button
       class="locate-button"
       mat-icon-button
-      *ngIf="showItemLocation && (canLocate$ | async)"
+      *ngIf="timelineButton && (inTimeline$ | async)"
       [appStopPropagation]
-      (click)="locateItem()">
+      (click)="scrollToTimeline()">
       <mat-icon>read_more</mat-icon>
     </button>
     <button *ngIf="(readOnly$ | async) === false" mat-icon-button [appStopPropagation] [matMenuTriggerFor]="tabMenu">

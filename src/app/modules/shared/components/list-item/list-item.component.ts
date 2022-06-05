@@ -59,11 +59,14 @@ export class ListItemComponent {
   );
 
   /**
-   * Displays locate button to navigate to item in the list.
+   * Displays button to reveal list item inside timeline
    */
-  @Input() showItemLocation = false;
+  @Input() timelineButton = false;
 
-  readonly canLocate$: Observable<boolean> = this.tab$.pipe(
+  /**
+   * Indicates if list item is part of timeline.
+   */
+  readonly inTimeline$: Observable<boolean> = this.tab$.pipe(
     switchMap((tab) => this.tabService.tabs$.pipe(map((tabs) => tabs.includes(tab)))),
     shareReplay(1)
   );
@@ -116,9 +119,9 @@ export class ListItemComponent {
   }
 
   /**
-   * Navigates to tab location.
+   * Navigates to list item inside timeline.
    */
-  async locateItem() {
+  async scrollToTimeline() {
     const group = await this.tabService.getGroupByTab(this.tab);
 
     if (group) {
