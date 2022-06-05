@@ -1,0 +1,48 @@
+@import 'common';
+
+app-ripple {
+  @keyframes ripple {
+    from {
+      background-size: 0%;
+      opacity: 1;
+    }
+
+    to {
+      background-size: 300%;
+      opacity: 0;
+    }
+  }
+
+  &,
+  .ripple {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    pointer-events: none;
+  }
+
+  .ripple {
+    opacity: 0;
+
+    &.focused {
+      animation-duration: 1s;
+      animation-delay: 0.8s;
+      animation-name: ripple;
+    }
+  }
+}
+
+@include theme using($theme) {
+  app-list-item {
+    .ripple.focused {
+      $color: getPaletteColor(getBackgroundPalette($theme), ripple);
+      $alpha: rgba(0, 0, 0, 0);
+      background: radial-gradient(circle, $color 0%, $color 49%, $alpha 50%, $alpha 100%);
+      background-position: 50%;
+      background-repeat: no-repeat;
+    }
+  }
+}

@@ -51,6 +51,14 @@ export class ListItemComponent {
   }
 
   /**
+   * Plays ripple animation when router param tab ID matches this list item ID
+   */
+  readonly focused$: Observable<boolean> = this.nav.paramsTabId$.pipe(
+    switchMap((tabId) => this.tab$.pipe(map((tab) => tab.id === Number(tabId)))),
+    shareReplay(1)
+  );
+
+  /**
    * Disables item menu
    */
   readonly readOnly$: Observable<boolean> = this.tab$.pipe(
