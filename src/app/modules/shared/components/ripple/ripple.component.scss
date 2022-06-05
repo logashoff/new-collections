@@ -28,9 +28,7 @@ app-ripple {
     opacity: 0;
 
     &.focused {
-      animation-duration: 1s;
-      animation-delay: 0.8s;
-      animation-name: ripple;
+      animation: ripple 1s ease 1s;
     }
   }
 }
