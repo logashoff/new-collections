@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
-import { SettingsService } from 'src/app/services';
-import { TopSite, TopSites, trackBySite } from 'src/app/utils';
-import { HomeService } from '../../services';
+import { lastValueFrom } from 'rxjs';
+import { MessageService, SettingsService } from 'src/app/services';
+import { ActionIcon, TopSite, TopSites, trackBySite } from 'src/app/utils';
 
 /**
  * @description
@@ -20,15 +20,22 @@ export class TopSitesComponent {
 
   readonly trackBySite = trackBySite;
 
-  constructor(private homeService: HomeService, private settings: SettingsService) {}
+  constructor(private settings: SettingsService, private message: MessageService) {}
 
   /**
    * Removes site from the list for top sites by ignoring it from the settings config
    */
-  removeSite(site: TopSite) {
-    this.settings.ignoreSite({
+  async removeSite(site: TopSite) {
+    await this.settings.ignoreSite({
       title: site.title,
       url: site.url,
     });
+
+    const ref = this.message.open('Site moved to ignore list', ActionIcon.Settings);
+    const { dismissedByAction } = await lastValueFrom(ref.afterDismissed());
+
+    if (dismissedByAction) {
+      chrome.runtime.openOptionsPage();
+    }
   }
 }

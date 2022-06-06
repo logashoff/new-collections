@@ -5,6 +5,7 @@ import { take } from 'rxjs/operators';
 import { getBrowserTabMock, getBrowserTabsMock, getTabGroupMock, getTabGroupsMock } from 'src/mocks';
 import { Action, ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
 import { MenuService } from './menu.service';
+import { MessageService } from './message.service';
 import { NavService } from './nav.service';
 import { TabService } from './tab.service';
 
@@ -30,11 +31,16 @@ describe('MenuService', () => {
           addTabGroup: () => new Promise((resolve) => resolve(0)),
           addTabGroups() {},
           createTabGroup: () => new Promise((resolve) => resolve(getTabGroupMock())),
-          displayMessage() {},
           openTabsSelector: () => ({
             afterDismissed: () => of(getBrowserTabsMock()),
           }),
         },
+      },
+      {
+        provide: MessageService,
+        useValue: {
+          open() {}
+        }
       },
       {
         provide: NavService,
@@ -105,7 +111,7 @@ describe('MenuService', () => {
     saveTabGroupSpy.mockClear();
     createTabGroupSpy.mockClear();
 
-    await spectator.service.handleMenuAction(Action.Options);
+    await spectator.service.handleMenuAction(Action.Settings);
     expect(chrome.runtime.openOptionsPage).toHaveBeenCalledTimes(1);
 
     openOptionsPageSpy.mockClear();

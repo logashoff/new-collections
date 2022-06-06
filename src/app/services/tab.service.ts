@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material/snack-bar';
+import { MatSnackBarRef } from '@angular/material/snack-bar';
 import flatMap from 'lodash/flatMap';
 import keyBy from 'lodash/keyBy';
 import remove from 'lodash/remove';
 import moment from 'moment';
 import { BehaviorSubject, firstValueFrom, lastValueFrom, Observable } from 'rxjs';
-import { filter, map, shareReplay, startWith } from 'rxjs/operators';
+import { filter, map, shareReplay } from 'rxjs/operators';
 import {
   ActionIcon,
   BrowserTab,
@@ -29,6 +29,7 @@ import {
 } from 'src/app/utils';
 import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
 import { MessageComponent, RenameDialogComponent, TabsSelectorComponent } from '../modules/shared';
+import { MessageService } from './message.service';
 import { NavService } from './nav.service';
 
 /**
@@ -83,8 +84,8 @@ export class TabService {
   constructor(
     private bottomSheet: MatBottomSheet,
     private dialog: MatDialog,
-    private navService: NavService,
-    private snackBar: MatSnackBar
+    private message: MessageService,
+    private navService: NavService
   ) {
     this.initService();
   }
@@ -269,7 +270,7 @@ export class TabService {
     let filteredTabs = tabs.filter(({ url }) => !ignoreUrlsRegExp.test(url));
 
     if (filteredTabs.length === 0) {
-      this.displayMessage('Tab list is invalid');
+      this.message.open('Tab list is invalid');
     } else {
       const existingUrls = keyBy(group.tabs, 'url');
       filteredTabs = filteredTabs.filter(({ url }) => !existingUrls[url]);
@@ -283,7 +284,7 @@ export class TabService {
           await this.save();
 
           const tabsLen = tabs.length;
-          const messageRef = this.displayMessage(`Added ${tabsLen} tab${tabsLen > 1 ? 's' : ''}`, ActionIcon.Undo);
+          const messageRef = this.message.open(`Added ${tabsLen} tab${tabsLen > 1 ? 's' : ''}`, ActionIcon.Undo);
           const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
 
           if (revert) {
@@ -292,7 +293,7 @@ export class TabService {
           }
         }
       } else {
-        this.displayMessage('All tabs are already in the list');
+        this.message.open('All tabs are already in the list');
       }
     }
   }
@@ -318,7 +319,7 @@ export class TabService {
             messageRef = await this.removeTabGroup(tabGroup);
           } else if (removeIndex > -1) {
             this.save();
-            messageRef = this.displayMessage('Item removed', ActionIcon.Undo);
+            messageRef = this.message.open('Item removed', ActionIcon.Undo);
           }
         }
       }
@@ -368,7 +369,7 @@ export class TabService {
   async removeTabGroup(tabGroup: TabGroup): Promise<MatSnackBarRef<MessageComponent>> {
     return new Promise(async (resolve) => {
       const tabGroups = await firstValueFrom(this.tabGroups$);
-      const messageRef = this.displayMessage('Item removed', ActionIcon.Undo);
+      const messageRef = this.message.open('Item removed', ActionIcon.Undo);
       const removedGroups = remove(tabGroups, (tg) => tg === tabGroup);
 
       this.tabGroupsSource$.next(tabGroups);
@@ -398,7 +399,7 @@ export class TabService {
 
       if (removedGroups?.length > 0) {
         const rmLen = removedGroups.length;
-        const messageRef = this.displayMessage(`${rmLen} item${rmLen > 1 ? 's' : ''} removed`, ActionIcon.Undo);
+        const messageRef = this.message.open(`${rmLen} item${rmLen > 1 ? 's' : ''} removed`, ActionIcon.Undo);
 
         this.navService.reset();
         this.tabGroupsSource$.next(currentTabGroups);
@@ -433,23 +434,6 @@ export class TabService {
     );
 
     return await saveCollections(collections);
-  }
-
-  /**
-   * Displays snackbar message.
-   */
-  displayMessage(message: string, actionIcon?: ActionIcon, config: MatSnackBarConfig = {}) {
-    return this.snackBar.openFromComponent(MessageComponent, {
-      duration: 10_000,
-      ...config,
-      verticalPosition: 'bottom',
-      horizontalPosition: 'center',
-      panelClass: 'message-container',
-      data: {
-        actionIcon,
-        message,
-      },
-    });
   }
 
   /**

@@ -92,7 +92,7 @@ export type Collections = Collection[];
  */
 export class TabGroup implements Collection {
   readonly id: string;
-  
+
   private _timestamp: number;
 
   get timestamp(): number {
@@ -210,8 +210,8 @@ export interface TabsByHostname {
 export enum ActionIcon {
   Export = 'save_alt',
   Import = 'file_upload',
-  Options = 'settings',
   Save = 'bookmark_add',
+  Settings = 'settings',
   Undo = 'undo',
 }
 
@@ -221,7 +221,7 @@ export enum ActionIcon {
 export enum Action {
   Export = 1,
   Import = 2,
-  Options = 3,
+  Settings = 3,
   Save = 4,
 }
 

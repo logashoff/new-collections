@@ -13,6 +13,7 @@ import {
   queryCurrentWindow,
   TabGroup,
 } from 'src/app/utils';
+import { MessageService } from './message.service';
 import { NavService } from './nav.service';
 import { TabService } from './tab.service';
 
@@ -49,14 +50,14 @@ export class MenuService {
       tooltipPosition,
     },
     {
-      id: Action.Options,
-      icon: ActionIcon.Options,
+      id: Action.Settings,
+      icon: ActionIcon.Settings,
       tooltip: 'Settings',
       tooltipPosition,
     },
   ]);
 
-  constructor(private tabsService: TabService, private nav: NavService) {}
+  constructor(private tabsService: TabService, private nav: NavService, private message: MessageService) {}
 
   /**
    * Navigates to options page.
@@ -111,10 +112,10 @@ export class MenuService {
               this.nav.setParams(tabGroup.id);
             }
           } else {
-            this.tabsService.displayMessage('Tab list is invalid');
+            this.message.open('Tab list is invalid');
           }
           break;
-        case Action.Options:
+        case Action.Settings:
           this.openOptions();
           break;
         case Action.Export:
@@ -122,7 +123,7 @@ export class MenuService {
           if (collections?.length > 0) {
             this.exportCollections(collections);
           } else {
-            this.tabsService.displayMessage('Empty list cannot be exported');
+            this.message.open('Empty list cannot be exported');
           }
           break;
         case Action.Import:
@@ -132,7 +133,7 @@ export class MenuService {
           break;
       }
     } catch (e) {
-      this.tabsService.displayMessage(e);
+      this.message.open(e);
     }
   }
 }

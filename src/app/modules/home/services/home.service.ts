@@ -31,7 +31,6 @@ export class HomeService {
    * Top sites list
    */
   readonly topSites$: Observable<TopSites> = this.settings.settings$.pipe(
-    take(1),
     switchMap((settings) => {
       if (isUndefined(settings?.enableTopSites) || settings?.enableTopSites) {
         return from(this.getTopSites()).pipe(
