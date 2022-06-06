@@ -2,16 +2,16 @@ app-groups {
   display: block;
 
   .mat-expansion-panel-header {
-    app-group-controls {
+    .expanded {
       display: none;
     }
 
     &.mat-expanded {
-      app-group-controls {
+      .expanded {
         display: block;
       }
 
-      app-panel-header {
+      .collapsed {
         display: none;
       }
     }

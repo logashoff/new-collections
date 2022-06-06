@@ -6,14 +6,19 @@
     [expanded]="(activeGroupId$ | async) === group.id && (activeTabId$ | async)"
     hideToggle>
     <mat-expansion-panel-header>
-      <app-panel-header
-        *ngIf="tabsByHostname$ | async as tabsByHostname"
-        [icons]="tabsByHostname[group.id]"
-        [total]="group.tabs.length"
-        [pinned]="group.timestamp < 0"
-        (starred)="favGroup(group)">
-      </app-panel-header>
-      <app-group-controls [group]="group"></app-group-controls>
+      <app-ripple [focused]="(activeGroupId$ | async) === group.id && isNil(activeTabId$ | async)"></app-ripple>
+      <div class="collapsed">
+        <app-panel-header
+          *ngIf="tabsByHostname$ | async as tabsByHostname"
+          [icons]="tabsByHostname[group.id]"
+          [total]="group.tabs.length"
+          [pinned]="group.timestamp < 0"
+          (starred)="favGroup(group)">
+        </app-panel-header>
+      </div>
+      <div class="expanded">
+        <app-group-controls [group]="group"></app-group-controls>
+      </div>
     </mat-expansion-panel-header>
     <mat-divider></mat-divider>
     <app-tab-list>

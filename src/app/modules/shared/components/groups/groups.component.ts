@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
+import { isNil } from 'lodash';
 import { BehaviorSubject, Observable, shareReplay } from 'rxjs';
 import { NavService, TabService } from 'src/app/services';
 import { TabGroup, TabGroups, TabsByHostname, trackByGroupId, trackByTabId } from 'src/app/utils';
@@ -52,6 +53,7 @@ export class GroupsComponent {
    */
   readonly trackByGroupId = trackByGroupId;
   readonly trackByTabId = trackByTabId;
+  readonly isNil = isNil;
 
   constructor(private navService: NavService, private tabService: TabService) {}
 
