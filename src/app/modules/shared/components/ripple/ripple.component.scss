@@ -34,7 +34,7 @@ app-ripple {
 }
 
 @include theme using($theme) {
-  app-list-item {
+  app-ripple {
     .ripple.focused {
       $color: getPaletteColor(getBackgroundPalette($theme), ripple);
       $alpha: rgba(0, 0, 0, 0);
