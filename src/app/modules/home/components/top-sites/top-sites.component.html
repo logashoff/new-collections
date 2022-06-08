@@ -1,7 +1,7 @@
 <div class="container" *ngIf="topSites?.length > 0">
   <div class="site-container">
     <a class="site" *ngFor="let site of topSites; trackBy: trackBySite" href="{{ site.url }}">
-      <app-image [source]="site.favIconUrl" size="medium"></app-image>
+      <app-image [source]="undefined | favicon: site.url" size="medium"></app-image>
       <span class="site-title">
         {{ site.title }}
       </span>

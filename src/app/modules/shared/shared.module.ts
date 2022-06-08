@@ -23,7 +23,6 @@ import {
   GroupsComponent,
   IconsContainerComponent,
   ImageComponent,
-  ImageDirective,
   ListItemComponent,
   MenuComponent,
   MessageComponent,
@@ -37,17 +36,18 @@ import {
   TimelineElementComponent,
 } from './components/index';
 import { StopPropagationDirective } from './directives/index';
-import { HostnamePipe } from './pipes/index';
+import { HostnamePipe, FaviconPipe } from './pipes/index';
+
 
 const declarations = [
   ChipComponent,
   EmptyComponent,
+  FaviconPipe,
   GroupControlsComponent,
   GroupsComponent,
   HostnamePipe,
   IconsContainerComponent,
   ImageComponent,
-  ImageDirective,
   ListItemComponent,
   MenuComponent,
   MessageComponent,

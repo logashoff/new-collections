@@ -1,63 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Directive,
-  ElementRef,
-  HostBinding,
-  HostListener,
-  Input,
-} from '@angular/core';
-import { IconSize, usesDarkMode } from 'src/app/utils';
-
-/**
- * Default dark theme tab icon.
- */
-const darkIcon = 'broken-dark.png';
-
-/**
- * Default light theme tab icon.
- */
-const lightIcon = 'broken.png';
-
-/**
- * Icons directory.
- */
-const iconsDir = 'assets/icons';
-
-/**
- * Dark icon full path.
- */
-const darkIconPath = `${iconsDir}/${darkIcon}`;
-
-/**
- * Light icon full path.
- */
-const lightIconPath = `${iconsDir}/${lightIcon}`;
-
-/**
- * Icon path depends on browser dark theme.
- */
-const iconPath = usesDarkMode() ? lightIconPath : darkIconPath;
-
-/**
- * @description
- *
- * HTML image element directive that will populate default image when image source
- * link is broken.
- */
-@Directive({
-  selector: '[appImage]',
-})
-export class ImageDirective {
-  /**
-   * Handles img element src loading error.
-   */
-  @HostListener('error') error() {
-    this.el.nativeElement.src = iconPath;
-  }
-
-  constructor(private el: ElementRef) {}
-}
+import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
+import { IconSize, ImageSource } from 'src/app/utils';
 
 /**
  * @description
@@ -74,7 +16,7 @@ export class ImageComponent {
   /**
    * Image source path.
    */
-  @Input() source: string;
+  @Input() source: ImageSource;
 
   /**
    * Icon size.

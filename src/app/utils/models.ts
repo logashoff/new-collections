@@ -1,4 +1,5 @@
 import { MatSnackBarRef } from '@angular/material/snack-bar';
+import { SafeUrl } from '@angular/platform-browser';
 import keyBy from 'lodash/keyBy';
 import remove from 'lodash/remove';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -29,9 +30,10 @@ export type StorageArea = chrome.storage.StorageArea;
 export type Session = chrome.sessions.Session;
 export type Sessions = Session[];
 export type Devices = Device[];
+export type TopSite = MostVisitedURL;
 export type TopSites = TopSite[];
-export interface TopSite extends BrowserTab {}
 export type MessageRef = MatSnackBarRef<MessageComponent>;
+export type ImageSource = string | SafeUrl;
 
 export interface TabDelete {
   deletedTab: BrowserTab;
