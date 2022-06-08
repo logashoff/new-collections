@@ -7,7 +7,7 @@
       [matBadge]="tabs.length"
       [matBadgeHidden]="tabs.length <= 1">
       <app-chip 
-        [source]="tabs[0].favIconUrl" 
+        [source]="tabs[0].favIconUrl | favicon: tabs[0].url" 
         [label]="tabs[0].title" 
         [labelHidden]="tabs.length > 1" size="small">
       </app-chip>

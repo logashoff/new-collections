@@ -51,3 +51,17 @@ export async function restoreTabs(tabs: BrowserTabs) {
     )
   );
 }
+
+/**
+ * Returns favicon URL based on page URL provided.
+ */
+export function getFaviconUrl(favIconUrl: string, size = 32) {
+  try {
+    const url = new URL(chrome.runtime.getURL('_favicon'));
+
+    url.searchParams.append('pageUrl', favIconUrl);
+    url.searchParams.append('size', `${size}`);
+
+    return url.href;
+  } catch (e) {}
+}

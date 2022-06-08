@@ -1,22 +1,10 @@
-import { Injectable, SecurityContext } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Injectable } from '@angular/core';
 import flatMap from 'lodash/flatMap';
 import isNil from 'lodash/isNil';
 import isUndefined from 'lodash/isUndefined';
 import { combineLatest, from, map, Observable, of, shareReplay, switchMap, take } from 'rxjs';
 import { SettingsService, TabService } from 'src/app/services';
-import {
-  BrowserTabs,
-  Devices,
-  getUrlHostname,
-  MostVisitedURL,
-  Sessions,
-  TabGroup,
-  Tabs,
-  Timeline,
-  TopSite,
-  TopSites,
-} from 'src/app/utils';
+import { BrowserTabs, Devices, MostVisitedURL, Sessions, TabGroup, Tabs, Timeline, TopSites } from 'src/app/utils';
 
 /**
  * @description
@@ -35,15 +23,7 @@ export class HomeService {
           map(
             (sites): TopSites =>
               sites?.length > 0
-                ? sites
-                    .filter((site) => !settings?.ignoreTopSites?.some(({ url }) => url === site.url))
-                    .map(
-                      (site): TopSite => ({
-                        ...site,
-                        favIconUrl: this.getFavIconUrl(getUrlHostname(site.url)),
-                        pinned: false,
-                      })
-                    )
+                ? sites.filter((site) => !settings?.ignoreTopSites?.some(({ url }) => url === site.url))
                 : null
           )
         );
@@ -122,19 +102,7 @@ export class HomeService {
     shareReplay(1)
   );
 
-  constructor(private sanitizer: DomSanitizer, private settings: SettingsService, private tabsService: TabService) {}
-
-  /**
-   * Returns fav icon link based on domain name.
-   */
-  private getFavIconUrl(domain: string): string {
-    return this.sanitizer.sanitize(
-      SecurityContext.URL,
-      // TODO: Temp while waiting for "favicon" manifest permission to get merged into stable channel
-      // Manifest changes to be updated: https://chromium.googlesource.com/chromium/src/+/refs/heads/main/chrome/common/extensions/api/_permission_features.json#351
-      `https://s2.googleusercontent.com/s2/favicons?domain=${domain}&sz=32`
-    );
-  }
+  constructor(private settings: SettingsService, private tabsService: TabService) {}
 
   private getDevices(): Promise<Devices> {
     return new Promise((resolve) => chrome.sessions.getDevices((devices) => resolve(devices)));

@@ -25,7 +25,7 @@
       <mat-selection-list formControlName="list">
         <mat-list-option *ngFor="let tab of tabs; trackBy: trackByTabId" [value]="tab" color="primary">
           <div class="list-item">
-            <app-chip [source]="tab.favIconUrl" size="small"></app-chip>
+            <app-chip [source]="tab.favIconUrl | favicon: tab.url" size="small"></app-chip>
             <div class="item-text">
               <div class="item-title">{{ tab.title }}</div>
               <span class="item-subtitle">
