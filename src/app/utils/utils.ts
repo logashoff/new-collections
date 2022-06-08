@@ -1,4 +1,6 @@
 import groupBy from 'lodash/groupBy';
+import { from, Observable } from 'rxjs';
+import scrollIntoView from 'scroll-into-view';
 import { getHostname } from './collections';
 import { BrowserTabs, HostnameGroup, Settings, settingsStorageKey } from './models';
 
@@ -18,3 +20,19 @@ export const getSettings = async (): Promise<Settings> => {
   const storage = await chrome.storage.local.get(settingsStorageKey);
   return storage[settingsStorageKey];
 };
+
+/**
+ * Scrolls specified element into view.
+ */
+export const scrollToElement = (element: any): Observable<unknown> =>
+  from(
+    new Promise((resolve) =>
+      scrollIntoView(
+        element,
+        {
+          time: 500,
+        },
+        resolve
+      )
+    )
+  );

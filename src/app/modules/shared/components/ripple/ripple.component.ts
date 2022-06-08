@@ -1,8 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewEncapsulation } from '@angular/core';
+import { BehaviorSubject, map, Observable, of, switchMap, timer } from 'rxjs';
+import { scrollToElement } from 'src/app/utils';
 
 /**
  * @description
- * 
+ *
  * Stretches to fit parent element and plays ripple animation when triggered
  */
 @Component({
@@ -13,8 +15,29 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RippleComponent {
+  private readonly focused$ = new BehaviorSubject<boolean>(false);
+
   /**
    * Triggers animation when true
    */
-  @Input() focused = false;
+  @Input() set focused(value: boolean) {
+    this.focused$.next(value);
+  }
+
+  get focused(): boolean {
+    return this.focused$.value;
+  }
+
+  /**
+   * Waits for element to scroll into view before setting focus animation
+   */
+  readonly isFocused$: Observable<boolean> = this.focused$.pipe(
+    switchMap((focused) =>
+      focused
+        ? timer(225).pipe(switchMap(() => scrollToElement(this.el.nativeElement).pipe(map(() => focused))))
+        : of(focused)
+    )
+  );
+
+  constructor(private el: ElementRef) {}
 }

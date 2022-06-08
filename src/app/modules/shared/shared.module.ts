@@ -35,7 +35,7 @@ import {
   TabsSelectorComponent,
   TimelineComponent,
 } from './components/index';
-import { ScrollIntoViewDirective, StopPropagationDirective } from './directives/index';
+import { StopPropagationDirective } from './directives/index';
 import { HostnamePipe } from './pipes/index';
 
 const declarations = [
@@ -53,7 +53,6 @@ const declarations = [
   PanelHeaderComponent,
   RenameDialogComponent,
   RippleComponent,
-  ScrollIntoViewDirective,
   SearchComponent,
   StopPropagationDirective,
   TabListComponent,

@@ -90,13 +90,6 @@ export class ListItemComponent {
   @Output() readonly deleted = new EventEmitter<TabDelete>();
 
   /**
-   * Adds `tabId` attribute to component for `appScrollIntoView` directive to work
-   */
-  @HostBinding('attr.data-tab-id') get tabId(): number {
-    return this.tab.id;
-  }
-
-  /**
    * Target where URL will be opened when list item is clicked
    */
   get target(): string {
