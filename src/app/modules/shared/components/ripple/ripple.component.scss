@@ -28,7 +28,7 @@ app-ripple {
     opacity: 0;
 
     &.focused {
-      animation: ripple 1s ease 1s;
+      animation: ripple 1s ease;
     }
   }
 }

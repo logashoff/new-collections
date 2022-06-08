@@ -1,8 +1,6 @@
 <mat-accordion>
   <mat-expansion-panel
     *ngFor="let group of groups; trackBy: trackByGroupId"
-    [appScrollIntoView]="(activeGroupId$ | async) === group.id"
-    [appScrollIntoViewTabId]="activeTabId$ | async"
     [expanded]="(activeGroupId$ | async) === group.id && (activeTabId$ | async)"
     hideToggle>
     <mat-expansion-panel-header>
