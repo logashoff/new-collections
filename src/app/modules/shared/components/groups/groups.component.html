@@ -1,10 +1,10 @@
 <mat-accordion>
   <mat-expansion-panel
     *ngFor="let group of groups; trackBy: trackByGroupId"
-    [expanded]="(activeGroupId$ | async) === group.id && (activeTabId$ | async)"
+    [expanded]="(activeGroupId$ | async) === group.id && !isNaN(activeTabId$ | async)"
     hideToggle>
     <mat-expansion-panel-header>
-      <app-ripple [focused]="(activeGroupId$ | async) === group.id && isNil(activeTabId$ | async)"></app-ripple>
+      <app-ripple [focused]="(activeGroupId$ | async) === group.id && isNaN(activeTabId$ | async)"></app-ripple>
       <div class="collapsed">
         <app-panel-header
           *ngIf="tabsByHostname$ | async as tabsByHostname"
@@ -22,7 +22,8 @@
     <app-tab-list>
       <app-list-item
         *ngFor="let tab of group.tabs$ | async; trackBy: trackByTabId"
-        [tab]="tab">
+        [tab]="tab"
+        [focused]="(activeGroupId$ | async) === group.id && (activeTabId$ | async) === tab.id">
       </app-list-item>
     </app-tab-list>
   </mat-expansion-panel>

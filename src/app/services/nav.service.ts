@@ -18,9 +18,9 @@ export class NavService {
   /**
    * Group ID set by URL query params
    */
-  readonly paramsTabId$: Observable<string> = this.activeRoute.queryParams.pipe(
+  readonly paramsTabId$: Observable<number> = this.activeRoute.queryParams.pipe(
     distinctUntilChanged((prev, curr) => prev.tabId === curr.tabId),
-    map((params) => params.tabId),
+    map((params) => +params.tabId),
     shareReplay(1)
   );
 

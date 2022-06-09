@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
-import { isNil } from 'lodash';
-import { BehaviorSubject, Observable, shareReplay } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { NavService, TabService } from 'src/app/services';
 import { TabGroup, TabGroups, TabsByHostname, trackByGroupId, trackByTabId } from 'src/app/utils';
 
@@ -26,12 +25,12 @@ export class GroupsComponent {
   /**
    * Expand and collapse panels based on query params groupId
    */
-  readonly activeGroupId$: Observable<string> = this.navService.paramsGroupId$.pipe(shareReplay(1));
+  readonly activeGroupId$: Observable<string> = this.navService.paramsGroupId$;
 
   /**
    * Active tab ID from query params
    */
-  readonly activeTabId$: Observable<string> = this.navService.paramsTabId$.pipe(shareReplay(1));
+  readonly activeTabId$: Observable<number> = this.navService.paramsTabId$;
 
   private readonly groups$ = new BehaviorSubject<TabGroups>(null);
 
@@ -53,7 +52,7 @@ export class GroupsComponent {
    */
   readonly trackByGroupId = trackByGroupId;
   readonly trackByTabId = trackByTabId;
-  readonly isNil = isNil;
+  readonly isNaN = isNaN;
 
   constructor(private navService: NavService, private tabService: TabService) {}
 

@@ -50,13 +50,18 @@ export class ListItemComponent {
     return this.tab$.value;
   }
 
+  readonly focused$ = new BehaviorSubject<boolean>(false);
+
   /**
-   * Plays ripple animation when router param tab ID matches this list item ID
+   * Plays ripple animation when set to true
    */
-  readonly focused$: Observable<boolean> = this.nav.paramsTabId$.pipe(
-    switchMap((tabId) => this.tab$.pipe(map((tab) => tab.id === Number(tabId)))),
-    shareReplay(1)
-  );
+  @Input() set focused(value: boolean) {
+    this.focused$.next(value);
+  }
+
+  get focused(): boolean {
+    return this.focused$.value;
+  }
 
   /**
    * Disables item menu
