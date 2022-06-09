@@ -1,5 +1,5 @@
 import { MatFabMenu } from '@angular-material-extensions/fab-menu';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MenuService } from 'src/app/services';
 import { HomeService } from '../../services';
@@ -14,6 +14,7 @@ import { HomeService } from '../../services';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class HomeComponent {
   readonly hasAnyData$ = this.homeService.hasAnyData$;
