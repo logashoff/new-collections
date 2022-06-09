@@ -1,6 +1,16 @@
+/**
+ * Complete event delay
+ */
 const callbackTimeout = 75;
+
+/**
+ * Clear complete event timeout to prevent promise resolve before scrolling has finished
+ */
 let scrollTimeoutId: any;
 
+/**
+ * Scrolls specified element into view and resolves promise when scrolling is complete
+ */
 export function scrollIntoView(element: HTMLElement): Promise<HTMLElement> {
   return new Promise((resolve) => {
     function handleScroll() {
