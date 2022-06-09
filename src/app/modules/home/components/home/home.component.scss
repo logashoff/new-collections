@@ -1,24 +1,28 @@
 @import 'common';
 
-:host {
+html {
+  scrollbar-gutter: stable;
+}
+
+app-home {
   display: block;
-}
 
-.content {
-  margin: 2rem auto;
-  width: 80vw;
-  max-width: 75rem;
-}
+  .content {
+    margin: 2rem auto;
+    width: 80vw;
+    max-width: 75rem;
+  }
 
-app-empty {
-  z-index: -1;
-}
+  app-empty {
+    z-index: -1;
+  }
 
-app-menu {
-  $padding: 1rem;
+  app-menu {
+    $padding: 1rem;
 
-  position: fixed;
-  right: $scrollbar-width + $padding;
-  bottom: $padding;
-  z-index: 1;
+    position: fixed;
+    right: $scrollbar-width + $padding;
+    bottom: $padding;
+    z-index: 1;
+  }
 }
