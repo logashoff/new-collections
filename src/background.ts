@@ -1,10 +1,10 @@
 import { getCollections } from './app/utils';
 
-const updateGroupCount = async () => {
+const updateBadgeText = async () => {
   const collections = await getCollections();
   chrome.action.setBadgeText({ text: collections?.length.toString() ?? '' });
 };
 
-chrome.runtime.onInstalled.addListener(() => updateGroupCount());
-chrome.runtime.onStartup.addListener(() => updateGroupCount());
-chrome.storage.onChanged.addListener(() => updateGroupCount());
+chrome.runtime.onInstalled.addListener(updateBadgeText);
+chrome.runtime.onStartup.addListener(updateBadgeText);
+chrome.storage.onChanged.addListener(updateBadgeText);

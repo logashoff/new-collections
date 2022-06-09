@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
+import isUndefined from 'lodash/isUndefined';
 import uniqBy from 'lodash/unionBy';
 import { BehaviorSubject, from, Observable, shareReplay, switchMap } from 'rxjs';
-import { getSettings, MostVisitedURL, Settings, settingsStorageKey } from '../utils';
+import { copyStorage, getSettings, MostVisitedURL, Settings, settingsStorageKey, StorageArea } from '../utils';
 
 /**
  * @description
@@ -46,6 +47,14 @@ export class SettingsService {
     this.saveSettings(newSettings);
 
     this.settingsSource$.next(newSettings);
+
+    if (!isUndefined(newSettings.syncStorage)) {
+      const { sync, local } = chrome.storage;
+      const source: StorageArea = !newSettings.syncStorage ? sync : local;
+      const target: StorageArea = !newSettings.syncStorage ? local : sync;
+      
+      await copyStorage(source, target);
+    }
 
     return newSettings;
   }

@@ -1,17 +1,23 @@
 <form [formGroup]="formGroup">
   <mat-card>
-    <section class="storage-usage" *ngIf="storageUsage$ | async as storageUsage">
-      <h4 class="storage-heading">Sync usage</h4>
-      <mat-hint>
-        Data used to store synced collections ({{ 100 - storageUsage | number: '1.0-0' }}% remaining)
-      </mat-hint>
-      <mat-progress-bar
-        mode="determinate"
-        [value]="storageUsage"
-        [color]="storageUsage > 80 ? 'warn' : 'primary'"
-      ></mat-progress-bar>
-    </section>
+    <ng-container *ngIf="syncStorage.value">
+      <section class="storage-usage" *ngIf="storageUsage$ | async as storageUsage">
+        <h4 class="storage-heading">Sync usage</h4>
+        <mat-hint>
+          Data used to store synced collections ({{ 100 - storageUsage | number: '1.0-0' }}% remaining)
+        </mat-hint>
+        <mat-progress-bar
+          mode="determinate"
+          [value]="storageUsage"
+          [color]="storageUsage > 80 ? 'warn' : 'primary'">
+        </mat-progress-bar>
+      </section>
+    </ng-container>
     <section class="toggles">
+      <mat-slide-toggle formControlName="syncStorage">
+        <div>Sync Collections</div>
+        <mat-hint>Synchronizes collection across devices</mat-hint>
+      </mat-slide-toggle>
       <mat-slide-toggle formControlName="enableDevices">
         <div>Enable Devices</div>
         <mat-hint>Show synced devices on New Tab page</mat-hint>

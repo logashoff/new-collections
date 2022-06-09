@@ -17,8 +17,9 @@ import { SettingsService } from 'src/app/services';
   encapsulation: ViewEncapsulation.None,
 })
 export class OptionsComponent implements OnInit {
-  private readonly sitesControl = new FormControl(true);
   private readonly devicesControl = new FormControl(true);
+  private readonly sitesControl = new FormControl(true);
+  readonly syncStorage = new FormControl(true);
   readonly ignoreSitesControl = new FormArray([]);
 
   /**
@@ -34,6 +35,7 @@ export class OptionsComponent implements OnInit {
     enableDevices: this.devicesControl,
     enableTopSites: this.sitesControl,
     ignoreTopSites: this.ignoreSitesControl,
+    syncStorage: this.syncStorage,
   });
 
   constructor(private settings: SettingsService) {}
@@ -46,6 +48,12 @@ export class OptionsComponent implements OnInit {
         }
 
         this.sitesControl.setValue(settings.enableTopSites);
+        
+        if (isUndefined(settings.syncStorage)) {
+          settings.syncStorage = true;
+        }
+        
+        this.syncStorage.setValue(settings.syncStorage);
 
         if (isUndefined(settings.enableDevices)) {
           settings.enableDevices = true;

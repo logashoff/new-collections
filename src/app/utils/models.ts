@@ -30,6 +30,7 @@ export type Tabs = Tab[];
 export type TabIconDetails = chrome.browserAction.TabIconDetails;
 export type Device = chrome.sessions.Device;
 export type MostVisitedURL = chrome.topSites.MostVisitedURL;
+export type StorageArea = chrome.storage.StorageArea;
 export type Session = chrome.sessions.Session;
 export type Sessions = Session[];
 export type Devices = Device[];
@@ -49,6 +50,7 @@ export interface Settings {
   enableDevices?: boolean;
   enableTopSites?: boolean;
   ignoreTopSites?: MostVisitedURL[];
+  syncStorage?: boolean;
 }
 
 /**
