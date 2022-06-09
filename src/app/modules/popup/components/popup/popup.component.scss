@@ -8,19 +8,16 @@ body {
   min-height: $popup-height;
 }
 
-html.cdk-global-scrollblock {
-  position: relative;
+html {
+  scrollbar-gutter: stable;
+
+  &.cdk-global-scrollblock {
+    position: relative;
+  }
 }
 
 app-popup {
   display: block;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: 0;
-  overflow: hidden;
-  overflow-y: auto;
 
   .content {
     padding: $padding $padding 4rem;
