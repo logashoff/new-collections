@@ -272,8 +272,9 @@ export class TabService {
     if (filteredTabs.length === 0) {
       this.message.open('Tab list is invalid');
     } else {
-      const existingUrls = keyBy(group.tabs, 'url');
-      filteredTabs = filteredTabs.filter(({ url }) => !existingUrls[url]);
+      const tabsByUrl = keyBy(group.tabs, 'url');
+      const tabsById = keyBy(group.tabs, 'id');
+      filteredTabs = filteredTabs.filter(({ id, url }) => !tabsByUrl[url] && !tabsById[id]);
 
       if (filteredTabs?.length > 0) {
         const bottomSheetRef = this.openTabsSelector(filteredTabs);
