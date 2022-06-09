@@ -1,8 +1,7 @@
 import groupBy from 'lodash/groupBy';
 import { from, Observable } from 'rxjs';
 import scrollIntoView from 'scroll-into-view';
-import { getHostname } from './collections';
-import { BrowserTabs, HostnameGroup, Settings, settingsStorageKey } from './models';
+import { BrowserTabs, HostnameGroup, Settings, settingsStorageKey, Tab } from './models';
 
 /**
  * Returns BrowserTab array grouped by hostnames
@@ -36,3 +35,24 @@ export const scrollToElement = (element: any): Observable<unknown> =>
       )
     )
   );
+
+/**
+ * Returns hostname from URL.
+ */
+export function getUrlHostname(url: string): string {
+  return new URL(url).hostname;
+}
+
+/**
+ * Get origin from URL
+ */
+export function getUrlOrigin(url: string): string {
+  return new URL(url).origin;
+}
+
+/**
+ * Returns hostname from tab's url
+ */
+export function getHostname(tab: Tab): string {
+  return getUrlHostname(tab.url);
+}

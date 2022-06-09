@@ -5,9 +5,9 @@ import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { firstValueFrom } from 'rxjs';
 import { getBrowserTabsMock, getTabGroupMock, getTabGroupsMock } from 'src/mocks';
 import { v4 as uuidv4 } from 'uuid';
-import { getHostname, getUrlHostname, syncToTabs, tabsToSync } from '../utils/collections';
+import { syncToTabs, tabsToSync } from '../utils/collections';
 import { ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
-import { getHostnameGroup } from '../utils/utils';
+import { getHostname, getHostnameGroup, getUrlHostname } from '../utils/utils';
 import { NavService } from './nav.service';
 import { TabService } from './tab.service';
 

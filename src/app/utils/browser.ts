@@ -1,4 +1,4 @@
-import { QueryInfo, TabIconDetails, Tabs } from './models';
+import { BrowserTabs, QueryInfo, TabIconDetails, Tabs } from './models';
 
 /**
  * Returns tabs promise based on provided config.
@@ -35,4 +35,19 @@ export function usesDarkMode(): boolean {
  */
 export function setIcon(details: TabIconDetails): Promise<void> {
   return new Promise((resolve) => chrome.action.setIcon(details, () => resolve()));
+}
+
+/**
+ * Restores all tabs from specified tab group.
+ */
+export async function restoreTabs(tabs: BrowserTabs) {
+  await Promise.all(
+    tabs.map(({ url, pinned }) =>
+      chrome.tabs.create({
+        pinned,
+        url,
+        active: false,
+      })
+    )
+  );
 }
