@@ -1,5 +1,5 @@
-import { getBrowserTabMock, getTabGroupMock, getTabGroupsMock } from 'src/mocks';
-import { getCollections, getHostname, getUrlOrigin, saveCollections, syncToTabs, tabsToSync } from './collections';
+import { getTabGroupMock, getTabGroupsMock } from 'src/mocks';
+import { getCollections, saveCollections, syncToTabs, tabsToSync } from './collections';
 import { SyncData } from './models';
 
 describe('collections.ts', () => {
@@ -86,26 +86,10 @@ describe('collections.ts', () => {
         'GitHub: Where the world builds software · GitHub',
         false,
       ],
-      [
-        52,
-        'https://duckduckgo.com/',
-        'https://duckduckgo.com/favicon.ico',
-        'DuckDuckGo — Privacy, simplified.',
-        false,
-      ],
+      [52, 'https://duckduckgo.com/', 'https://duckduckgo.com/favicon.ico', 'DuckDuckGo — Privacy, simplified.', false],
     ]);
 
     expect(syncToTabs(tabs)).toEqual(collection.tabs);
-  });
-
-  it('should return hostname', () => {
-    expect(getHostname(getBrowserTabMock())).toBe('getfedora.org');
-  });
-
-  it('should return origin', () => {
-    expect(getUrlOrigin('https://developer.chrome.com/docs/extensions/mv3/manifest/')).toBe(
-      'https://developer.chrome.com'
-    );
   });
 
   it('should save tab groups to storage', async () => {

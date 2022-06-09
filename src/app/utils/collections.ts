@@ -1,6 +1,6 @@
 import keyBy from 'lodash/keyBy';
 import { validate as uuidValidate } from 'uuid';
-import { BrowserTabs, Collection, Collections, SyncData, SyncTabs, Tab } from './models';
+import { BrowserTabs, Collection, Collections, SyncData, SyncTabs } from './models';
 
 /**
  * Saves specified tab groups to local storage.
@@ -60,34 +60,4 @@ export function syncToTabs(sync: SyncTabs): BrowserTabs {
     title,
     pinned,
   }));
-}
-
-/**
- * Restores all tabs from specified tab group.
- */
-export function restoreTabs(tabs: BrowserTabs) {
-  tabs.forEach(({ url, pinned }) =>
-    chrome.tabs.create({
-      pinned,
-      url,
-    })
-  );
-}
-
-/**
- * Returns hostname from URL.
- */
-export function getUrlHostname(url: string): string {
-  return new URL(url).hostname;
-}
-
-export function getUrlOrigin(url: string): string {
-  return new URL(url).origin;
-}
-
-/**
- * Returns hostname from tab's url
- */
-export function getHostname(tab: Tab): string {
-  return getUrlHostname(tab.url);
 }
