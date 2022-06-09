@@ -116,8 +116,10 @@ a {
 }
 
 .mat-accordion {
+  .mat-expansion-panel-content,
   .mat-expansion-panel-body {
     padding: 0;
+    overflow: hidden;
   }
 
   .mat-expansion-panel-header {

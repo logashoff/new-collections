@@ -33,7 +33,6 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.3",
     "rxjs": "^7.5.5",
-    "scroll-into-view": "^1.16.0",
     "select-files": "^1.0.1",
     "tslib": "^2.4.0",
     "uuid": "^8.3.2",
