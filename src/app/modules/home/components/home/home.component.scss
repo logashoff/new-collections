@@ -1,11 +1,15 @@
 @import 'common';
 
-html {
-  scrollbar-gutter: stable;
-}
-
 app-home {
   display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
 
   .content {
     margin: 2rem auto;
@@ -18,11 +22,13 @@ app-home {
   }
 
   app-menu {
-    $padding: 1rem;
-
+    display: flex;
+    justify-content: flex-end;
     position: fixed;
-    right: $scrollbar-width + $padding;
-    bottom: $padding;
+    bottom: 0;
     z-index: 1;
+    margin: 0 2rem 1rem 0;
+    left: 0;
+    right: 0;
   }
 }
