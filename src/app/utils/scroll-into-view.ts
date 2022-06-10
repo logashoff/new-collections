@@ -9,21 +9,40 @@ const callbackTimeout = 75;
 let scrollTimeoutId: any;
 
 /**
+ * Checks if element is scrollable
+ */
+const isScrollable = (element: HTMLElement): boolean =>
+  element.scrollHeight > element.clientHeight && getComputedStyle(element).overflow !== 'hidden';
+
+/**
  * Scrolls specified element into view and resolves promise when scrolling is complete
  */
 export function scrollIntoView(element: HTMLElement): Promise<HTMLElement> {
-  return new Promise((resolve) => {
-    function handleScroll() {
-      clearInterval(scrollTimeoutId);
+  let scrollElement: HTMLElement = element;
+  while (scrollElement) {
+    scrollElement = scrollElement.parentElement;
 
-      scrollTimeoutId = setTimeout(() => {
-        window.removeEventListener('scroll', handleScroll);
-        resolve(element);
-      }, callbackTimeout);
+    if (!scrollElement || isScrollable(scrollElement)) {
+      break;
     }
+  }
 
-    window.addEventListener('scroll', handleScroll);
-    element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
-    handleScroll();
+  return new Promise((resolve) => {
+    if (scrollElement) {
+      function handleScroll() {
+        clearInterval(scrollTimeoutId);
+
+        scrollTimeoutId = setTimeout(() => {
+          scrollElement.removeEventListener('scroll', handleScroll);
+          resolve(element);
+        }, callbackTimeout);
+      }
+
+      scrollElement.addEventListener('scroll', handleScroll);
+      element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+      handleScroll();
+    } else {
+      resolve(element);
+    }
   });
 }

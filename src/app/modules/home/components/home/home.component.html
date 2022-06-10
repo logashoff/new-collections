@@ -4,8 +4,8 @@
     <app-devices></app-devices>
     <app-timeline></app-timeline>
   </app-search>
-  <app-menu [menuItems]="menuItems$ | async"></app-menu>
 </div>
+<app-menu [menuItems]="menuItems$ | async"></app-menu>
 <ng-template #empty>
   <app-empty>home</app-empty>
 </ng-template>
