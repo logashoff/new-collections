@@ -5,19 +5,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { MessageComponent } from '../modules/shared';
 
 /**
- * Storage key used to store tab groups in local storage.
- */
-export const tabsStorageKey = 'tabs';
-
-/**
  * Local storage key for saving app settings
  */
 export const settingsStorageKey = 'settings';
-
-/**
- * Matches domain name.
- */
-export const domainRegExp = new RegExp('([^.]*).([^.]*)$');
 
 /**
  * URLs to ignore when saving tabs.
