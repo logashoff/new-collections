@@ -9,23 +9,13 @@ chrome = {
   },
   storage: {
     local: {
-      set: function (config, callback) {
-        callback();
-      },
-      get: function (key, callback) {
-        callback({});
-      },
+      set: (config) => new Promise((resolve) => resolve(config)),
+      get: (key) => new Promise((resolve) => resolve(key)),
     },
     sync: {
-      set: function (config, callback) {
-        if (callback) {
-          callback();
-        }
-      },
-      get: function (key, callback) {
-        callback({});
-      },
-      remove: function (key) {},
+      set: (config) => new Promise((resolve) => resolve(config)),
+      get: (key) => new Promise((resolve) => resolve(key)),
+      remove(key) {},
     },
     onChanged: {
       addListener: function (callback) {

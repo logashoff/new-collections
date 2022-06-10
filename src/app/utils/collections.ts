@@ -9,7 +9,7 @@ import { getSettings } from './utils';
  */
 export async function getStorage(): Promise<StorageArea> {
   const settings: Settings = await getSettings();
-  return isUndefined(settings.syncStorage) || settings.syncStorage ? chrome.storage.sync : chrome.storage.local;
+  return isUndefined(settings?.syncStorage) || settings?.syncStorage ? chrome.storage.sync : chrome.storage.local;
 }
 
 /**
