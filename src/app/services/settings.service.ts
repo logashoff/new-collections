@@ -52,8 +52,12 @@ export class SettingsService {
       const { sync, local } = chrome.storage;
       const source: StorageArea = !newSettings.syncStorage ? sync : local;
       const target: StorageArea = !newSettings.syncStorage ? local : sync;
-      
+
       await copyStorage(source, target);
+
+      if (source === sync) {
+        sync.clear();
+      }
     }
 
     return newSettings;

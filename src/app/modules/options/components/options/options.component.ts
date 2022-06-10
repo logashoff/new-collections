@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import isUndefined from 'lodash/isUndefined';
-import { from, map, Observable, shareReplay, startWith, take } from 'rxjs';
+import { BehaviorSubject, map, Observable, shareReplay, startWith, take } from 'rxjs';
 import { SettingsService } from 'src/app/services';
 
 /**
@@ -23,9 +23,14 @@ export class OptionsComponent implements OnInit {
   readonly ignoreSitesControl = new FormArray([]);
 
   /**
+   * Sync storage used
+   */
+  private readonly storageUsageSource$ = new BehaviorSubject<number>(0);
+
+  /**
    * Chrome sync storage has limited quota (~100KB), this will show how much storage is currently inuse.
    */
-  readonly storageUsage$: Observable<number> = from(chrome.storage.sync.getBytesInUse()).pipe(
+  readonly storageUsage$: Observable<number> = this.storageUsageSource$.pipe(
     startWith(0),
     map((usage) => (usage / chrome.storage.sync.QUOTA_BYTES) * 100),
     shareReplay(1)
@@ -40,7 +45,9 @@ export class OptionsComponent implements OnInit {
 
   constructor(private settings: SettingsService) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    this.storageUsageSource$.next(await chrome.storage.sync.getBytesInUse());
+
     this.settings.settings$.pipe(take(1)).subscribe((settings) => {
       if (settings) {
         if (isUndefined(settings.enableTopSites)) {
@@ -48,11 +55,11 @@ export class OptionsComponent implements OnInit {
         }
 
         this.sitesControl.setValue(settings.enableTopSites);
-        
+
         if (isUndefined(settings.syncStorage)) {
           settings.syncStorage = true;
         }
-        
+
         this.syncStorage.setValue(settings.syncStorage);
 
         if (isUndefined(settings.enableDevices)) {
@@ -67,6 +74,12 @@ export class OptionsComponent implements OnInit {
       }
     });
 
-    this.formGroup.valueChanges.subscribe((settings) => this.settings.update(settings));
+    this.formGroup.valueChanges.subscribe(async (settings) => {
+      await this.settings.update(settings);
+
+      if (settings.syncStorage) {
+        this.storageUsageSource$.next(await chrome.storage.sync.getBytesInUse());
+      }
+    });
   }
 }
