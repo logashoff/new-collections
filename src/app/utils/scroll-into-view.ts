@@ -1,7 +1,7 @@
 /**
- * Complete event delay
+ * Scroll complete event delay targets worst case 15 FPS animation
  */
-const callbackTimeout = 75;
+const callbackTimeout = 1 / 15 * 1000;
 
 /**
  * Clear complete event timeout to prevent promise resolve before scrolling has finished
@@ -40,7 +40,6 @@ export function scrollIntoView(element: HTMLElement): Promise<HTMLElement> {
 
       scrollElement.addEventListener('scroll', handleScroll);
       element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
-      handleScroll();
     } else {
       resolve(element);
     }
