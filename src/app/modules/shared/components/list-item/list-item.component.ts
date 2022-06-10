@@ -50,18 +50,10 @@ export class ListItemComponent {
     return this.tab$.value;
   }
 
-  readonly focused$ = new BehaviorSubject<boolean>(false);
-
   /**
    * Plays ripple animation when set to true
    */
-  @Input() set focused(value: boolean) {
-    this.focused$.next(value);
-  }
-
-  get focused(): boolean {
-    return this.focused$.value;
-  }
+  @Input() focused = false;
 
   /**
    * Disables item menu

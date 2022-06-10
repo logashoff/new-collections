@@ -32,3 +32,10 @@ app-home {
     right: 0;
   }
 }
+
+@media (max-width: 60rem) {
+  app-home .content {
+    width: auto;
+    margin: 2rem;
+  }
+}
