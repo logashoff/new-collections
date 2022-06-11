@@ -1,24 +1,3 @@
-@import 'common';
-
-.timeline-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0.5rem 0;
-
-  &:first-of-type {
-    margin-top: 0;
-  }
-}
-
-h3.timeline-label {
-  margin: 0;
-}
-
-@include theme using($theme) {
-  :host {
-    .timeline-header {
-      color: getPaletteColor(getForegroundPalette($theme), hint-text);
-    }
-  }
+app-timeline-element:not(:last-child) {
+  margin-bottom: 0.5rem;
 }

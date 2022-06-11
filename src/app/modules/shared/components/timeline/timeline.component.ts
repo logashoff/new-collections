@@ -1,6 +1,4 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import isNil from 'lodash/isNil';
-import { map, Observable, shareReplay } from 'rxjs';
 import { TabService } from 'src/app/services';
 import { TabGroups, TimelineElement } from 'src/app/utils';
 
@@ -17,11 +15,6 @@ import { TabGroups, TimelineElement } from 'src/app/utils';
 })
 export class TimelineComponent {
   readonly timeline$ = this.tabService.groupsTimeline$;
-
-  readonly timelineLabels$: Observable<string[]> = this.timeline$.pipe(
-    map((timeline) => (!isNil(timeline) ? Object.keys(timeline) : null)),
-    shareReplay(1)
-  );
 
   constructor(private tabService: TabService) {}
 
