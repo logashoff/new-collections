@@ -13,4 +13,5 @@ export * from './ripple/ripple.component';
 export * from './search/search.component';
 export * from './tab-list/tab-list.component';
 export * from './tabs-selector/tabs-selector.component';
+export * from './timeline-element/timeline-element.component';
 export * from './timeline/timeline.component';

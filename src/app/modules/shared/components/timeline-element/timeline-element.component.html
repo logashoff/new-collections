@@ -1,0 +1,7 @@
+<div class="timeline-header">
+  <h3 class="timeline-label">{{ timelineLabel }}</h3>
+  <button mat-icon-button (click)="remove()">
+    <mat-icon>done_all</mat-icon>
+  </button>
+</div>
+<app-groups [groups]="timelineGroups"></app-groups>

@@ -34,6 +34,7 @@ import {
   TabListComponent,
   TabsSelectorComponent,
   TimelineComponent,
+  TimelineElementComponent,
 } from './components/index';
 import { StopPropagationDirective } from './directives/index';
 import { HostnamePipe } from './pipes/index';
@@ -58,6 +59,7 @@ const declarations = [
   TabListComponent,
   TabsSelectorComponent,
   TimelineComponent,
+  TimelineElementComponent,
 ];
 
 const materialModules = [
