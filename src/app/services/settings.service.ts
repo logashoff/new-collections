@@ -54,12 +54,6 @@ export class SettingsService {
       const target: StorageArea = !newSettings.syncStorage ? local : sync;
 
       await copyStorage(source, target);
-
-      if (source === sync) {
-        await sync.clear();
-      } else if (source === local) {
-        await Promise.all(Object.keys(newSettings).map((key) => source.remove(key)));
-      }
     }
 
     return newSettings;

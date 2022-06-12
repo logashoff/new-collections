@@ -81,9 +81,8 @@ export async function copyStorage(source: StorageArea, target: StorageArea) {
   const newData: SyncData = {};
   const sourceData: SyncData = await source.get();
 
-  Object.keys(sourceData)
-    .filter((groupId) => uuidValidate(groupId))
-    .forEach(async (groupId) => (newData[groupId] = sourceData[groupId]));
-
+  const sourceKeys = Object.keys(sourceData).filter((groupId) => uuidValidate(groupId));
+  sourceKeys.forEach((key) => (newData[key] = sourceData[key]));
+  await Promise.all(sourceKeys.map((key) => source.remove(key)));
   await target.set(newData);
 }
