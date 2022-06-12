@@ -11,6 +11,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class OrderkeysPipe implements PipeTransform {
   transform(object: any): { [key in string]: any }[] {
-    return Object.keys(object).map((key) => ({ key, value: object[key] }));
+    try {
+      return Object.keys(object).map((key) => ({ key, value: object[key] }));
+    } catch (e) {
+      return [];
+    }
   }
 }

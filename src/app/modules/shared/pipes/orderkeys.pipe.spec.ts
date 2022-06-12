@@ -12,11 +12,16 @@ describe('OrderkeysPipe', () => {
       c: 1,
       o: 2,
       l: 3,
+      1: 10,
       e: 4,
       t: 5,
     };
 
     expect(orderkeys.transform(object)).toEqual([
+      {
+        key: '1',
+        value: 10,
+      },
       {
         key: 'c',
         value: 1,
@@ -38,5 +43,9 @@ describe('OrderkeysPipe', () => {
         value: 5,
       },
     ]);
+  });
+
+  it('should handle null value', () => {
+    expect(orderkeys.transform(null)).toEqual([]);
   });
 });
