@@ -1,5 +1,9 @@
 @import 'common';
 
+:host {
+  display: block;
+}
+
 .timeline-header {
   display: flex;
   align-items: center;

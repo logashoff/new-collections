@@ -1,6 +1,10 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { TabGroups } from 'src/app/utils';
 
+/**
+ * @description
+ *
+ * Component for rendering timeline elements
+ */
 @Component({
   selector: 'app-timeline-element',
   templateUrl: './timeline-element.component.html',
@@ -8,13 +12,25 @@ import { TabGroups } from 'src/app/utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimelineElementComponent {
+  /**
+   * Header label
+   */
   @Input() timelineLabel: string;
 
-  @Input() timelineGroups: TabGroups;
+  /**
+   * Display controls
+   */
+  @Input() controls = true;
 
-  @Output() readonly removed = new EventEmitter<TabGroups>();
+  /**
+   * Emits event when remove button clicked
+   */
+  @Output() readonly removed = new EventEmitter();
 
+  /**
+   * Handles remove button
+   */
   remove() {
-    this.removed.emit(this.timelineGroups);
+    this.removed.emit();
   }
 }

@@ -1,5 +1,6 @@
-<div class="container" *ngIf="devices$ | async as devices">
-  <h3 class="header">Devices</h3>
+<app-timeline-element *ngIf="devices$ | async as devices" 
+  timelineLabel="Devices"
+  [controls]="false">
   <mat-accordion>
     <mat-expansion-panel hideToggle *ngFor="let device of devices; trackBy: trackByDevice">
       <mat-expansion-panel-header>
@@ -26,4 +27,4 @@
       </app-tab-list>
     </mat-expansion-panel>
   </mat-accordion>
-</div>
+</app-timeline-element>

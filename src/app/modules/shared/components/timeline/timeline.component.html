@@ -1,6 +1,6 @@
 <app-timeline-element
-  *ngFor="let item of timeline$ | async | keyvalue"
-  [timelineGroups]="item.value"
+  *ngFor="let item of timeline$ | async | orderkeys; trackBy: trackByKey"
   [timelineLabel]="item.key"
   (removed)="removeGroups(item.value)">
+  <app-groups [groups]="item.value"></app-groups>
 </app-timeline-element>

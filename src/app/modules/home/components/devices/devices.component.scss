@@ -1,7 +1,9 @@
 @import 'common';
 
 app-devices {
-  $height: 3rem;
+  $header-height: 3rem;
+
+  display: block;
 
   .mat-expansion-panel-header {
     &.mat-expanded {
@@ -20,7 +22,7 @@ app-devices {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: $height;
+      height: $header-height;
       gap: 0.5rem;
       padding: 0 0.5rem;
 
@@ -38,26 +40,15 @@ app-devices {
         display: none;
         align-items: center;
         justify-content: space-between;
-        height: $height;
+        height: $header-height;
       }
     }
   }
 
-  h3.header {
-    margin-bottom: 0.5rem;
-    line-height: 2.5rem;
-  }
-
-  .container {
-    margin-bottom: 0.5rem;
-  }
 }
 
 @include theme using($theme) {
   app-devices {
-    .header {
-      color: getPaletteColor(getForegroundPalette($theme), hint-text);
-    }
 
     .header-controls {
       color: getPaletteColor(getForegroundPalette($theme), secondary-text);
