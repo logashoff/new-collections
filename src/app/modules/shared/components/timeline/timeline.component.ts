@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import isNil from 'lodash/isNil';
-import { filter } from 'rxjs';
 import { TabService } from 'src/app/services';
-import { TabGroups, TimelineElement, trackByKey } from 'src/app/utils';
+import { TabGroups, TimelineElements, trackByKey } from 'src/app/utils';
 
 /**
  * @description
@@ -16,7 +14,7 @@ import { TabGroups, TimelineElement, trackByKey } from 'src/app/utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimelineComponent {
-  readonly timeline$ = this.tabService.groupsTimeline$.pipe(filter((timeline) => !isNil(timeline)));
+  readonly timeline$ = this.tabService.groupsTimeline$;
 
   readonly trackByKey = trackByKey;
 
@@ -25,7 +23,7 @@ export class TimelineComponent {
   /**`
    * Removes all items in timeline section
    */
-  async removeGroups(groups: TimelineElement[]) {
+  async removeGroups(groups: TimelineElements) {
     await this.tabService.removeTabGroups(groups as TabGroups);
   }
 }

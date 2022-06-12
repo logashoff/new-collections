@@ -26,6 +26,7 @@ import {
   TabsByHostname,
   Timeline,
   TimelineElement,
+  TimelineElements,
 } from 'src/app/utils';
 import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
 import { MessageComponent, RenameDialogComponent, TabsSelectorComponent } from '../modules/shared';
@@ -146,7 +147,7 @@ export class TabService {
   /**
    * Creates timeline array and hashmap that maps each timeline item to groups by their timestamp.
    */
-  private createTimeline(timelineItems: TimelineElement[]): Timeline {
+  private createTimeline(timelineItems: TimelineElements): Timeline {
     const timeline: Timeline = {};
 
     timelineItems.forEach((timelineItem) => {
