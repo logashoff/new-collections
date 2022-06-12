@@ -28,13 +28,10 @@ app-popup {
   }
 
   .menu {
-    display: flex;
-    justify-content: flex-end;
+    display: block;
     position: fixed;
     bottom: 0;
     z-index: 1;
-    left: 0;
-    right: 0;
-    margin-right: 1rem;
+    right: 1.3125rem;
   }
 }
