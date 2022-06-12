@@ -235,5 +235,5 @@ export type TimelineElements = TimelineElement[];
  * Group tab groups by time label in hashmap.
  */
 export interface Timeline {
-  [label: string]: TimelineElement[];
+  [label: string]: TimelineElements;
 }

@@ -1,7 +1,6 @@
 import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import isNil from 'lodash/isNil';
-import { filter, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { MenuService, TabService } from 'src/app/services';
 import { TabGroups, trackByKey } from 'src/app/utils';
 import { HomeService } from '../../services';
@@ -20,7 +19,7 @@ import { HomeService } from '../../services';
 })
 export class HomeComponent {
   readonly hasAnyData$ = this.homeService.hasAnyData$;
-  readonly timeline$ = this.homeService.timeline$.pipe(filter((timeline) => !isNil(timeline)));
+  readonly timeline$ = this.homeService.timeline$;
   readonly topSites$ = this.homeService.topSites$;
   readonly searchSource$ = this.homeService.searchSource$;
 
@@ -37,6 +36,6 @@ export class HomeComponent {
    * Removes all items in timeline section
    */
   async removeGroups(groups: TabGroups) {
-    await this.tabService.removeTabGroups(groups as TabGroups);
+    await this.tabService.removeTabGroups(groups);
   }
 }
