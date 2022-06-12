@@ -1,8 +1,15 @@
 <div class="content">
   <app-search *ngIf="hasAnyData$ | async; else empty" [source]="searchSource$ | async">
     <app-top-sites [topSites]="topSites$ | async"></app-top-sites>
-    <app-devices></app-devices>
-    <app-timeline></app-timeline>
+    <div class="layout-container">
+      <app-devices class="layout-item"></app-devices>
+      <app-timeline-element class="layout-item"
+        *ngFor="let item of timeline$ | async | orderkeys; trackBy: trackByKey"
+        [timelineLabel]="item.key"
+        (removed)="removeGroups(item.value)">
+        <app-groups [groups]="item.value"></app-groups>
+      </app-timeline-element>
+    </div>
   </app-search>
 </div>
 <app-menu [menuItems]="menuItems$ | async"></app-menu>

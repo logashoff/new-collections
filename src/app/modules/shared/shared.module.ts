@@ -37,7 +37,7 @@ import {
   TimelineElementComponent,
 } from './components/index';
 import { StopPropagationDirective } from './directives/index';
-import { HostnamePipe } from './pipes/index';
+import { HostnamePipe, OrderkeysPipe } from './pipes/index';
 
 const declarations = [
   ChipComponent,
@@ -51,6 +51,7 @@ const declarations = [
   ListItemComponent,
   MenuComponent,
   MessageComponent,
+  OrderkeysPipe,
   PanelHeaderComponent,
   RenameDialogComponent,
   RippleComponent,

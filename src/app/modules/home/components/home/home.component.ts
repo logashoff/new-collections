@@ -1,7 +1,9 @@
 import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { Observable } from 'rxjs';
-import { MenuService } from 'src/app/services';
+import isNil from 'lodash/isNil';
+import { filter, Observable } from 'rxjs';
+import { MenuService, TabService } from 'src/app/services';
+import { TabGroups, trackByKey } from 'src/app/utils';
 import { HomeService } from '../../services';
 
 /**
@@ -18,14 +20,23 @@ import { HomeService } from '../../services';
 })
 export class HomeComponent {
   readonly hasAnyData$ = this.homeService.hasAnyData$;
-  readonly timeline$ = this.homeService.timeline$;
+  readonly timeline$ = this.homeService.timeline$.pipe(filter((timeline) => !isNil(timeline)));
   readonly topSites$ = this.homeService.topSites$;
   readonly searchSource$ = this.homeService.searchSource$;
+
+  readonly trackByKey = trackByKey;
 
   /**
    * Main menu items.
    */
   readonly menuItems$: Observable<MatFabMenu[]> = this.menuService.menuItems$;
 
-  constructor(private menuService: MenuService, private homeService: HomeService) {}
+  constructor(private menuService: MenuService, private homeService: HomeService, private tabService: TabService) {}
+
+  /**`
+   * Removes all items in timeline section
+   */
+  async removeGroups(groups: TabGroups) {
+    await this.tabService.removeTabGroups(groups as TabGroups);
+  }
 }

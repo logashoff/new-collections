@@ -229,6 +229,8 @@ export interface TimelineElement {
   timestamp: number;
 }
 
+export type TimelineElements = TimelineElement[];
+
 /**
  * Group tab groups by time label in hashmap.
  */
