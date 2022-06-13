@@ -37,7 +37,8 @@
     </ng-container>
   </ng-container>
   <ng-container *ngSwitchCase="false">
-    <ng-content></ng-content>
+    <ng-content select="app-top-sites"></ng-content>
+    <ng-content select=".layout-container"></ng-content>
   </ng-container>
 </ng-container>
 <ng-template #empty>

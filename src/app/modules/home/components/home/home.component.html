@@ -1,8 +1,8 @@
 <div class="content">
   <app-search *ngIf="hasAnyData$ | async; else empty" [source]="searchSource$ | async">
-    <app-top-sites [topSites]="topSites$ | async"></app-top-sites>
+    <app-top-sites *ngIf="topSites$ | async as topSites" [topSites]="topSites"></app-top-sites>
     <div class="layout-container">
-      <app-devices class="layout-item"></app-devices>
+      <app-devices *ngIf="devices$ | async" class="layout-item"></app-devices>
       <app-timeline-element class="layout-item"
         *ngFor="let item of timeline$ | async | orderkeys; trackBy: trackByKey"
         [timelineLabel]="item.key"
