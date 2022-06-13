@@ -18,10 +18,11 @@ import { HomeService } from '../../services';
   encapsulation: ViewEncapsulation.None,
 })
 export class HomeComponent {
+  readonly devices$ = this.homeService.devices$;
   readonly hasAnyData$ = this.homeService.hasAnyData$;
+  readonly searchSource$ = this.homeService.searchSource$;
   readonly timeline$ = this.homeService.timeline$;
   readonly topSites$ = this.homeService.topSites$;
-  readonly searchSource$ = this.homeService.searchSource$;
 
   readonly trackByKey = trackByKey;
 

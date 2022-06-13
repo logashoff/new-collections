@@ -55,6 +55,14 @@ app-search {
     line-height: 2.5rem;
     margin-bottom: 0.5rem;
   }
+
+  app-top-sites {
+    margin: 1rem 0;
+  }
+
+  .layout-container > .layout-item:not(:last-child) {
+    margin-bottom: 0.5rem;
+  }
 }
 
 @include theme using($theme) {

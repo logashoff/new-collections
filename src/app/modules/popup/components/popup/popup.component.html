@@ -1,6 +1,6 @@
 <div class="content">
   <app-search *ngIf="groupsTimeline$ | async; else empty" [source]="searchSource$ | async">
-    <app-timeline></app-timeline>
+    <app-timeline class="layout-container"></app-timeline>
   </app-search>
 </div>
 <app-menu class="menu" [menuItems]="menuItems$ | async"></app-menu>

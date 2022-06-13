@@ -61,7 +61,6 @@ export class TabService {
    * Tab list source from all tab groups.
    */
   readonly tabs$: Observable<BrowserTabs> = this.tabGroups$.pipe(
-    filter((tabGroups) => tabGroups?.length > 0),
     map((tabGroups) => flatMap(tabGroups, (tabGroup) => tabGroup.tabs)),
     shareReplay(1)
   );

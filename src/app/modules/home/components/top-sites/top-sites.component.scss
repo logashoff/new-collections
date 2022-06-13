@@ -5,8 +5,6 @@ app-top-sites {
   position: relative;
 
   .container {
-    margin: 1rem 0;
-
     .site-container {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
