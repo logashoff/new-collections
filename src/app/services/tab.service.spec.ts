@@ -101,40 +101,6 @@ describe('TabService', () => {
     const tabGroups = await firstValueFrom(spectator.service.tabGroups$);
 
     expect(tabGroups.length).toBe(3);
-
-    const [g1, g2, g3] = tabGroups;
-
-    const hostnameGroups = await firstValueFrom(spectator.service.tabsByHostname$);
-
-    expect(hostnameGroups[g1.id].length).toBe(4);
-    expect(hostnameGroups[g2.id].length).toBe(2);
-    expect(hostnameGroups[g3.id].length).toBe(4);
-  });
-
-  it('should update tab and icon groups list when tab is removed', async () => {
-    const groups = await firstValueFrom(spectator.service.tabGroups$);
-    const [group1] = groups;
-    const [ubuntuTab1, ubuntuTab2, mintTab] = group1.tabs;
-
-    let hostnameGroups = await firstValueFrom(spectator.service.tabsByHostname$);
-    expect(hostnameGroups[group1.id].length).toBe(4);
-
-    await spectator.service.removeTab(ubuntuTab1);
-    hostnameGroups = await firstValueFrom(spectator.service.tabsByHostname$);
-    expect(hostnameGroups[group1.id].length).toBe(4);
-    expect(group1.tabs.length).toBe(4);
-
-    await spectator.service.removeTab(ubuntuTab2);
-    spectator.service['tabGroupsSource$'].next(groups);
-    hostnameGroups = await firstValueFrom(spectator.service.tabsByHostname$);
-    expect(hostnameGroups[group1.id].length).toBe(3);
-    expect(group1.tabs.length).toBe(3);
-
-    await spectator.service.removeTab(mintTab);
-    spectator.service['tabGroupsSource$'].next(groups);
-    hostnameGroups = await firstValueFrom(spectator.service.tabsByHostname$);
-    expect(hostnameGroups[group1.id].length).toBe(2);
-    expect(group1.tabs.length).toBe(2);
   });
 
   it('should merge new tab groups with current ones', async () => {

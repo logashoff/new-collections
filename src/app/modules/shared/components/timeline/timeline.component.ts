@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TabService } from 'src/app/services';
-import { TabGroups, TimelineElements, trackByKey } from 'src/app/utils';
+import { TabGroups, trackByLabel } from 'src/app/utils';
 
 /**
  * @description
@@ -16,14 +16,14 @@ import { TabGroups, TimelineElements, trackByKey } from 'src/app/utils';
 export class TimelineComponent {
   readonly timeline$ = this.tabService.groupsTimeline$;
 
-  readonly trackByKey = trackByKey;
+  readonly trackByLabel = trackByLabel;
 
   constructor(private tabService: TabService) {}
 
   /**`
    * Removes all items in timeline section
    */
-  async removeGroups(groups: TimelineElements) {
-    await this.tabService.removeTabGroups(groups as TabGroups);
+  async removeGroups(groups: TabGroups) {
+    await this.tabService.removeTabGroups(groups);
   }
 }

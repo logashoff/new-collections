@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatAccordion } from '@angular/material/expansion';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
+import { BehaviorSubject, map, Observable, shareReplay } from 'rxjs';
 import { NavService, TabService } from 'src/app/services';
 import { TabGroup, TabGroups, TabsByHostname, trackByGroupId, trackByTabId } from 'src/app/utils';
 
@@ -18,11 +17,6 @@ import { TabGroup, TabGroups, TabsByHostname, trackByGroupId, trackByTabId } fro
 })
 export class GroupsComponent {
   /**
-   * MatAccordion ref
-   */
-  @ViewChild(MatAccordion) accordion: MatAccordion;
-
-  /**
    * Expand and collapse panels based on query params groupId
    */
   readonly activeGroupId$: Observable<string> = this.navService.paramsGroupId$;
@@ -34,7 +28,10 @@ export class GroupsComponent {
 
   private readonly groups$ = new BehaviorSubject<TabGroups>(null);
 
-  readonly tabsByHostname$: Observable<TabsByHostname> = this.tabService.tabsByHostname$;
+  readonly tabsByHostname$: Observable<TabsByHostname> = this.groups$.pipe(
+    map((tabGroups) => (tabGroups?.length > 0 ? this.tabService.createHostnameGroups(tabGroups) : null)),
+    shareReplay(1)
+  );
 
   /**
    * List of tab groups to render.
@@ -58,5 +55,9 @@ export class GroupsComponent {
 
   favGroup(group: TabGroup) {
     this.tabService.favGroupToggle(group);
+  }
+
+  hasTabGroup(group: TabGroup): boolean {
+    return this.tabService.hasTabGroup(group);
   }
 }

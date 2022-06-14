@@ -2,10 +2,10 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../shared';
-import { DevicesComponent, HomeComponent, TopSitesComponent } from './components/index';
+import { HomeComponent, TopSitesComponent } from './components/index';
 import { HomeService } from './services';
 
-const components = [HomeComponent, TopSitesComponent, DevicesComponent];
+const components = [HomeComponent, TopSitesComponent];
 
 const routes: Routes = [{ path: '', component: HomeComponent }];
 

@@ -19,7 +19,11 @@ $typography: mat.define-typography-config();
   gap: 1rem;
   min-height: 3rem;
 
-  &:hover {
+  &.disabled {
+    pointer-events: none;
+  }
+
+  &:not(.disabled):hover {
     .description {
       .fav {
         display: flex;
@@ -64,8 +68,7 @@ $typography: mat.define-typography-config();
     .description {
       color: getPaletteColor(getForegroundPalette($theme), secondary-text);
 
-      .total,
-      .fav {
+      .total {
         background: getPaletteColor(getBackgroundPalette($theme), disabled-button-toggle);
       }
     }
