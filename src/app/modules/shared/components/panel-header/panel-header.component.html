@@ -1,4 +1,4 @@
-<div class="header-container">
+<div class="header-container" [ngClass]="{ disabled: readOnly }">
   <app-icons-container [icons]="icons"></app-icons-container>
   <div class="description" *ngIf="total > 0">
     <div class="fav" [appStopPropagation] (click)="favClicked()">

@@ -7,11 +7,8 @@ import { combineLatest, from, map, Observable, of, shareReplay, switchMap, take 
 import { SettingsService, TabService } from 'src/app/services';
 import {
   BrowserTabs,
-  Device,
   Devices,
-  getHostnameGroup,
   getUrlHostname,
-  HostnameGroup,
   MostVisitedURL,
   Sessions,
   Tabs,
@@ -74,16 +71,21 @@ export class HomeService {
   /**
    * Icons shown in panel header
    */
-  readonly deviceHostnameGroup$: Observable<WeakMap<Device, HostnameGroup>> = this.devices$.pipe(
+  readonly devicesTimeline$: Observable<Timeline> = this.devices$.pipe(
     take(1),
     map((devices) => {
-      const mapByDeviceName = new WeakMap<Device, HostnameGroup>();
+      if (devices?.length > 0) {
+        return devices.map((device) => ({
+          elements: device.sessions.map((session) => {
+            const group = this.tabsService.createTabGroup(session.window?.tabs);
+            group.timestamp = session.lastModified * 1000;
+            return group;
+          }),
+          label: device.deviceName,
+        }));
+      }
 
-      devices?.forEach((device) =>
-        mapByDeviceName.set(device, getHostnameGroup(this.getTabsFromSessions(device.sessions)))
-      );
-
-      return mapByDeviceName;
+      return null;
     }),
     shareReplay(1)
   );

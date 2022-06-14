@@ -2,7 +2,7 @@ import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MenuService, TabService } from 'src/app/services';
-import { TabGroups, trackByKey } from 'src/app/utils';
+import { TabGroups, trackByLabel } from 'src/app/utils';
 import { HomeService } from '../../services';
 
 /**
@@ -18,13 +18,13 @@ import { HomeService } from '../../services';
   encapsulation: ViewEncapsulation.None,
 })
 export class HomeComponent {
-  readonly devices$ = this.homeService.devices$;
+  readonly devicesTimeline$ = this.homeService.devicesTimeline$;
   readonly hasAnyData$ = this.homeService.hasAnyData$;
   readonly searchSource$ = this.homeService.searchSource$;
   readonly timeline$ = this.homeService.timeline$;
   readonly topSites$ = this.homeService.topSites$;
 
-  readonly trackByKey = trackByKey;
+  readonly trackByLabel = trackByLabel;
 
   /**
    * Main menu items.

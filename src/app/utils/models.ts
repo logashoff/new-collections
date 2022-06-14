@@ -226,14 +226,11 @@ export type IconSize = 'small' | 'medium' | 'large';
  * Timeline-like element.
  */
 export interface TimelineElement {
-  timestamp: number;
+  label: string;
+  elements: TabGroups;
 }
-
-export type TimelineElements = TimelineElement[];
 
 /**
  * Group tab groups by time label in hashmap.
  */
-export interface Timeline {
-  [label: string]: TimelineElements;
-}
+export type Timeline = TimelineElement[];

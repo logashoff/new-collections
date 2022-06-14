@@ -11,11 +11,12 @@
           [icons]="tabsByHostname[group.id]"
           [total]="group.tabs.length"
           [pinned]="group.timestamp < 0"
+          [readOnly]="!hasTabGroup(group)"
           (starred)="favGroup(group)">
         </app-panel-header>
       </div>
       <div class="expanded">
-        <app-group-controls [group]="group"></app-group-controls>
+        <app-group-controls [group]="group" [readOnly]="!hasTabGroup(group)"></app-group-controls>
       </div>
     </mat-expansion-panel-header>
     <mat-divider></mat-divider>

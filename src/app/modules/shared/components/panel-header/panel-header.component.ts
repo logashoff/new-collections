@@ -30,6 +30,8 @@ export class PanelHeaderComponent {
    */
   @Output() readonly starred = new EventEmitter();
 
+  @Input() readOnly = false;
+
   favClicked() {
     this.starred.emit();
   }

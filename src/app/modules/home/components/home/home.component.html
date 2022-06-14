@@ -2,12 +2,17 @@
   <app-search *ngIf="hasAnyData$ | async; else empty" [source]="searchSource$ | async">
     <app-top-sites *ngIf="topSites$ | async as topSites" [topSites]="topSites"></app-top-sites>
     <div class="layout-container">
-      <app-devices *ngIf="devices$ | async" class="layout-item"></app-devices>
       <app-timeline-element class="layout-item"
-        *ngFor="let item of timeline$ | async | orderkeys; trackBy: trackByKey"
-        [timelineLabel]="item.key"
-        (removed)="removeGroups(item.value)">
-        <app-groups [groups]="item.value"></app-groups>
+        *ngFor="let item of devicesTimeline$ | async; trackBy: trackByLabel"
+        [timelineLabel]="item.label"
+        [controls]="false">
+        <app-groups [groups]="item.elements"></app-groups>
+      </app-timeline-element>
+      <app-timeline-element class="layout-item"
+        *ngFor="let item of timeline$ | async; trackBy: trackByLabel"
+        [timelineLabel]="item.label"
+        (removed)="removeGroups(item.elements)">
+        <app-groups [groups]="item.elements"></app-groups>
       </app-timeline-element>
     </div>
   </app-search>

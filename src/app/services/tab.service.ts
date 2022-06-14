@@ -7,7 +7,7 @@ import keyBy from 'lodash/keyBy';
 import remove from 'lodash/remove';
 import moment from 'moment';
 import { BehaviorSubject, firstValueFrom, lastValueFrom, Observable } from 'rxjs';
-import { filter, map, shareReplay } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import {
   ActionIcon,
   BrowserTab,
@@ -26,7 +26,6 @@ import {
   TabsByHostname,
   Timeline,
   TimelineElement,
-  TimelineElements,
 } from 'src/app/utils';
 import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
 import { MessageComponent, RenameDialogComponent, TabsSelectorComponent } from '../modules/shared';
@@ -62,14 +61,6 @@ export class TabService {
    */
   readonly tabs$: Observable<BrowserTabs> = this.tabGroups$.pipe(
     map((tabGroups) => flatMap(tabGroups, (tabGroup) => tabGroup.tabs)),
-    shareReplay(1)
-  );
-
-  /**
-   * Group icons by hostname and map each icons group to their `TabGroup`.
-   */
-  readonly tabsByHostname$: Observable<TabsByHostname> = this.tabGroups$.pipe(
-    map((tabGroups) => (tabGroups?.length > 0 ? this.createHostnameGroups(tabGroups) : null)),
     shareReplay(1)
   );
 
@@ -135,7 +126,7 @@ export class TabService {
   /**
    * Generates icon group based on tab group specified.
    */
-  private createHostnameGroups(tabGroups: TabGroups): TabsByHostname {
+  createHostnameGroups(tabGroups: TabGroups): TabsByHostname {
     const ret: TabsByHostname = {};
 
     tabGroups.forEach((tabGroup) => (ret[tabGroup.id] = getHostnameGroup(tabGroup.tabs)));
@@ -146,26 +137,29 @@ export class TabService {
   /**
    * Creates timeline array and hashmap that maps each timeline item to groups by their timestamp.
    */
-  private createTimeline(timelineItems: TimelineElements): Timeline {
-    const timeline: Timeline = {};
+  private createTimeline(tabGroups: TabGroups): Timeline {
+    const timeline: { [label in string]: TimelineElement } = {};
 
-    timelineItems.forEach((timelineItem) => {
+    tabGroups.forEach((timelineItem) => {
       const timeLabel = this.getTimelineLabel(timelineItem);
       if (!timeline[timeLabel]) {
-        timeline[timeLabel] = [];
+        timeline[timeLabel] = {
+          elements: [],
+          label: timeLabel,
+        };
       }
 
-      timeline[timeLabel].push(timelineItem);
+      timeline[timeLabel].elements.push(timelineItem);
     });
 
-    return timeline;
+    return Object.values(timeline);
   }
 
   /**
    * Returns timeline label based on group timestamp.
    */
-  private getTimelineLabel(timelineItem: TimelineElement): string {
-    const { timestamp } = timelineItem;
+  private getTimelineLabel(tabGroup: TabGroup): string {
+    const { timestamp } = tabGroup;
     const date = moment(timestamp);
     const now = moment();
 
@@ -445,5 +439,9 @@ export class TabService {
       data: tabs,
       panelClass: 'bottom-sheet',
     });
+  }
+
+  hasTabGroup(tabGroup: TabGroup): boolean {
+    return this.tabGroupsSource$.value?.includes(tabGroup);
   }
 }
