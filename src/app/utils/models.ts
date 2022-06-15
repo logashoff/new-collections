@@ -9,6 +9,8 @@ import { MessageComponent } from '../modules/shared';
  */
 export const settingsStorageKey = 'settings';
 
+export const faviconStorageKey = 'favicon';
+
 /**
  * URLs to ignore when saving tabs.
  */
@@ -46,7 +48,7 @@ export interface Settings {
 /**
  * BrowserTab structure used in storing in sync storage
  */
-export type SyncTab = [number, string, string, string, boolean];
+export type SyncTab = [number, string, string, boolean];
 export type SyncTabs = SyncTab[];
 
 /**
