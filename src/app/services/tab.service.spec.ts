@@ -5,7 +5,7 @@ import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { firstValueFrom } from 'rxjs';
 import { getBrowserTabsMock, getTabGroupMock, getTabGroupsMock } from 'src/mocks';
 import { v4 as uuidv4 } from 'uuid';
-import { syncToTabs, tabsToSync } from '../utils/collections';
+import { getFaviconStore, syncToTabs, tabsToSync } from '../utils/collections';
 import { ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
 import { getHostname, getHostnameGroup, getUrlHostname } from '../utils/utils';
 import { NavService } from './nav.service';
@@ -19,6 +19,7 @@ jest.mock('src/app/utils', () => ({
   saveCollections: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   usesDarkMode: jest.fn().mockImplementation(() => {}),
   ActionIcon,
+  getFaviconStore,
   getHostname,
   getHostnameGroup,
   getUrlHostname,
@@ -234,10 +235,9 @@ describe('TabService', () => {
 
     expect(timeline).toBeDefined();
 
-    const [label] = Object.keys(timeline);
-
-    expect(timeline[label]).toBeDefined();
-    expect(timeline[label].length).toBeGreaterThan(0);
+    expect(timeline.length).toBeGreaterThan(0);
+    expect(timeline[0].elements.length).toBeGreaterThan(0);
+    expect(timeline[0].label).toBeDefined();
   });
 
   it('should remove groups', async () => {

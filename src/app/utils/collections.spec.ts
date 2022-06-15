@@ -1,9 +1,18 @@
 import { getTabGroupMock, getTabGroupsMock } from 'src/mocks';
 import { getCollections, saveCollections, syncToTabs, tabsToSync } from './collections';
-import { SyncData } from './models';
 
 describe('collections.ts', () => {
-  const syncedData: SyncData = {
+  const syncedData = {
+    favicon: {
+      'duckduckgo.com': 'https://duckduckgo.com/favicon.ico',
+      'getfedora.org': 'https://getfedora.org/static/images/favicon.ico',
+      'github.com': 'https://github.githubassets.com/favicons/favicon.svg',
+      'linuxmint.com': 'https://linuxmint.com/web/img/favicon.ico',
+      'ubuntu.com': 'https://assets.ubuntu.com/v1/49a1a858-favicon-32x32.png',
+      'www.apple.com': 'https://www.apple.com/favicon.ico',
+      'www.google.com': 'https://www.google.com/favicon.ico',
+      'www.microsoft.com': 'https://c.s-microsoft.com/favicon.ico?v2',
+    },
     '6ab9c99e-8942-4236-ad6e-7e38c51da810': [
       1650847781791,
       [
@@ -43,10 +52,23 @@ describe('collections.ts', () => {
 
     expect(tabs).toEqual([
       [51, 'https://github.com/', 'GitHub: Where the world builds software · GitHub', false],
-      [52, 'https://duckduckgo.com/', 'https://duckduckgo.com/favicon.ico', 'DuckDuckGo — Privacy, simplified.', false],
+      [52, 'https://duckduckgo.com/', 'DuckDuckGo — Privacy, simplified.', false],
     ]);
 
-    expect(syncToTabs(tabs)).toEqual(collection.tabs);
+    expect(syncToTabs(tabs)).toEqual([
+      {
+        id: 51,
+        title: 'GitHub: Where the world builds software · GitHub',
+        url: 'https://github.com/',
+        pinned: false,
+      },
+      {
+        id: 52,
+        title: 'DuckDuckGo — Privacy, simplified.',
+        url: 'https://duckduckgo.com/',
+        pinned: false,
+      },
+    ]);
   });
 
   it('should save tab groups to storage', async () => {
@@ -59,7 +81,7 @@ describe('collections.ts', () => {
     await saveCollections(getTabGroupsMock());
 
     expect(remSyncSpy).toHaveBeenCalled();
-    expect(setSyncSpy).toHaveBeenCalledWith(syncedData);
+    expect(setSyncSpy).toHaveBeenCalledWith(expect.objectContaining(syncedData));
   });
 
   it('should return tab groups from storage', async () => {
@@ -128,7 +150,7 @@ describe('collections.ts', () => {
             url: 'https://linuxmint.com/',
           },
           {
-            favIconUrl: 'https://c.s-microsoft.com/favicon.ico',
+            favIconUrl: 'https://c.s-microsoft.com/favicon.ico?v2',
             id: 63,
             pinned: false,
             title: 'Explore Windows 11 OS, Computers, Apps, & More | Microsoft',
