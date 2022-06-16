@@ -129,7 +129,7 @@ a {
     height: 3rem;
 
     &.mat-expanded {
-      height: 4rem;
+      height: 3rem;
     }
 
     .mat-content {
@@ -153,11 +153,6 @@ a {
     justify-content: flex-end;
     align-items: center;
     margin-right: 1rem;
-  }
-
-  .mat-expansion-panel.mat-expanded {
-    @include mat.elevation(8);
-    margin: 2rem 0;
   }
 }
 
