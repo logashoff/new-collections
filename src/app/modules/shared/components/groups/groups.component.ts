@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { BehaviorSubject, map, Observable, shareReplay } from 'rxjs';
-import { NavService, TabService } from 'src/app/services';
+import { NavService, SettingsService, TabService } from 'src/app/services';
 import { TabGroup, TabGroups, TabsByHostname, trackByGroupId, trackByTabId } from 'src/app/utils';
 
 /**
@@ -45,13 +45,18 @@ export class GroupsComponent {
   }
 
   /**
+   * Hashmap of expanded panel states by group ID
+   */
+  readonly panelStates$ = this.settings.panelStates$.pipe(map((states) => states ?? {}));
+
+  /**
    * Group list ngFor trackBy function.
    */
   readonly trackByGroupId = trackByGroupId;
   readonly trackByTabId = trackByTabId;
   readonly isNaN = isNaN;
 
-  constructor(private navService: NavService, private tabService: TabService) {}
+  constructor(private navService: NavService, private tabService: TabService, private settings: SettingsService) {}
 
   favGroup(group: TabGroup) {
     this.tabService.favGroupToggle(group);
@@ -59,5 +64,13 @@ export class GroupsComponent {
 
   hasTabGroup(group: TabGroup): boolean {
     return this.tabService.hasTabGroup(group);
+  }
+
+  opened(groupId: string) {
+    this.settings.savePanelState(groupId, true);
+  }
+
+  closed(groupId: string) {
+    this.settings.savePanelState(groupId, false);
   }
 }
