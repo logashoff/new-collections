@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { MostVisitedURL, Settings } from '../utils';
 import { SettingsService } from './settings.service';
@@ -18,6 +19,14 @@ describe('SettingsService', () => {
   let spectator: SpectatorService<SettingsService>;
   const createService = createServiceFactory({
     service: SettingsService,
+    providers: [
+      {
+        provide: Router,
+        useValue: {
+          url: '/home',
+        },
+      },
+    ],
   });
 
   beforeEach(() => {
