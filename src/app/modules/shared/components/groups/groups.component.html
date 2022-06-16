@@ -1,7 +1,9 @@
-<mat-accordion>
+<mat-accordion [multi]="true">
   <mat-expansion-panel
     *ngFor="let group of groups; trackBy: trackByGroupId"
-    [expanded]="(activeGroupId$ | async) === group.id && !isNaN(activeTabId$ | async)"
+    [expanded]="(panelStates$ | async)[group.id] || (activeGroupId$ | async) === group.id && !isNaN(activeTabId$ | async)"
+    (opened)="opened(group.id)"
+    (closed)="closed(group.id)"
     hideToggle>
     <mat-expansion-panel-header>
       <app-ripple [focused]="(activeGroupId$ | async) === group.id && isNaN(activeTabId$ | async)"></app-ripple>

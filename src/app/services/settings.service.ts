@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import isUndefined from 'lodash/isUndefined';
 import uniqBy from 'lodash/unionBy';
-import { BehaviorSubject, from, Observable, shareReplay, switchMap } from 'rxjs';
+import { BehaviorSubject, from, map, Observable, shareReplay, switchMap } from 'rxjs';
 import { copyStorage, getSettings, MostVisitedURL, Settings, settingsStorageKey, StorageArea } from '../utils';
 
 /**
@@ -22,6 +23,16 @@ export class SettingsService {
     switchMap(() => from(getSettings())),
     shareReplay(1)
   );
+
+  /**
+   * Hashmap of expanded panel states by group ID
+   */
+  readonly panelStates$ = this.settings$.pipe(
+    map((settings) => settings?.panels?.[this.router.url]),
+    shareReplay(1)
+  );
+
+  constructor(private router: Router) {}
 
   private saveSettings(settings: Settings): Promise<void> {
     return new Promise((resolve) => {
@@ -72,5 +83,29 @@ export class SettingsService {
     }
 
     return this.update(settings);
+  }
+
+  /**
+   * Saves expanded panel state to local storage by group ID
+   * 
+   * @param groupId Panel group ID to save state for
+   * @param state True if panel is expanded
+   */
+  async savePanelState(groupId: string, state: boolean) {
+    const { url } = this.router;
+
+    const settings = (await getSettings()) ?? {};
+
+    if (!settings.panels) {
+      settings.panels = {};
+    }
+
+    if (!settings.panels[url]) {
+      settings.panels[url] = {};
+    }
+
+    settings.panels[url][groupId] = state;
+
+    this.update(settings);
   }
 }

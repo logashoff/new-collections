@@ -43,6 +43,7 @@ export interface Settings {
   enableTopSites?: boolean;
   ignoreTopSites?: MostVisitedURL[];
   syncStorage?: boolean;
+  panels?: { [url in string]: { [groupId in string]: boolean } };
 }
 
 /**
