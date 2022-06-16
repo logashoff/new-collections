@@ -1,8 +1,10 @@
 <a class="container" matRipple href="{{ tab.url }}" [target]="target">
-  <app-chip [source]="tab.favIconUrl"></app-chip>
+  <app-chip class="icon normal" [source]="tab.favIconUrl"></app-chip>
+  <app-chip class="icon small" [source]="tab.favIconUrl" size="small"></app-chip>
   <div class="text-container">
     <div class="title">{{ tab.title }}</div>
-    <span class="link">{{ tab.url }}</span>
+    <span class="subtitle normal">{{ tab.url }}</span>
+    <span class="subtitle short">{{ tab.url | hostname }}</span>
   </div>
   <div class="controls">
     <button

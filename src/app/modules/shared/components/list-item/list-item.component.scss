@@ -33,6 +33,11 @@ app-list-item {
     align-items: center;
   }
 
+  .icon.small,
+  .subtitle.short {
+    display: none;
+  }
+
   .text-container {
     flex-grow: 1;
 
@@ -44,7 +49,7 @@ app-list-item {
     }
 
     .title,
-    .link {
+    .subtitle {
       line-height: 1rem;
     }
 
@@ -52,7 +57,7 @@ app-list-item {
       @include mat.typography-level($typography, subheading-1);
     }
 
-    .link {
+    .subtitle {
       @include mat.typography-level($typography, body-1);
     }
   }
@@ -72,8 +77,34 @@ app-list-item {
       border-top: 1px solid getPaletteColor(getForegroundPalette($theme), divider);
     }
 
-    .link {
+    .subtitle {
       color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+    }
+  }
+}
+
+@media (max-width: 50rem) {
+  app-list-item {
+    .icon,
+    .subtitle {
+      &.normal {
+        display: none;
+      }
+    }
+
+    .icon.small,
+    .subtitle.short {
+      display: block;
+    }
+
+    .text-container {
+      .title {
+        @include mat.typography-level($typography, body-1);
+      }
+
+      .subtitle {
+        @include mat.typography-level($typography, caption);
+      }
     }
   }
 }
