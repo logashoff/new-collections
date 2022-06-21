@@ -1,10 +1,8 @@
 <a class="container" matRipple href="{{ tab.url }}" [target]="target">
-  <app-chip class="icon normal" [source]="tab.favIconUrl"></app-chip>
-  <app-chip class="icon small" [source]="tab.favIconUrl" size="small"></app-chip>
+  <app-chip [source]="tab.favIconUrl"></app-chip>
   <div class="text-container">
     <div class="title">{{ tab.title }}</div>
-    <span class="subtitle normal">{{ tab.url }}</span>
-    <span class="subtitle short">{{ tab.url | hostname }}</span>
+    <span class="subtitle">{{ tab.url }}</span>
   </div>
   <div class="controls">
     <button
@@ -15,7 +13,12 @@
       (click)="scrollToTimeline()">
       <mat-icon>read_more</mat-icon>
     </button>
-    <button *ngIf="(readOnly$ | async) === false" mat-icon-button [appStopPropagation] [matMenuTriggerFor]="tabMenu">
+    <button
+      class="menu-button"
+      *ngIf="(readOnly$ | async) === false"
+      mat-icon-button
+      [appStopPropagation]
+      [matMenuTriggerFor]="tabMenu">
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #tabMenu="matMenu">

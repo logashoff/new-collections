@@ -62,14 +62,23 @@ export class GroupsComponent {
     this.tabService.favGroupToggle(group);
   }
 
+  /**
+   * Checks if tab group exists in timeline
+   */
   hasTabGroup(group: TabGroup): boolean {
     return this.tabService.hasTabGroup(group);
   }
 
+  /**
+   * Saves open panel state to local storage
+   */
   opened(groupId: string) {
     this.settings.savePanelState(groupId, true);
   }
 
+  /**
+   * Removes open panel state from storage
+   */
   closed(groupId: string) {
     this.settings.savePanelState(groupId, false);
   }
