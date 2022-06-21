@@ -11,6 +11,7 @@ import {
   getUrlHostname,
   MostVisitedURL,
   Sessions,
+  TabGroup,
   Tabs,
   Timeline,
   TopSite,
@@ -76,12 +77,17 @@ export class HomeService {
     map((devices) => {
       if (devices?.length > 0) {
         return devices.map((device) => ({
-          elements: device.sessions.map((session) => {
-            const group = this.tabsService.createTabGroup(session.window?.tabs);
-            group.timestamp = session.lastModified * 1000;
-            return group;
-          }),
           label: device.deviceName,
+          elements: device.sessions
+            .filter((session) => session?.window?.tabs?.length > 0)
+            .map(
+              (session) =>
+                new TabGroup({
+                  id: session.window.sessionId,
+                  timestamp: session.lastModified * 1000,
+                  tabs: session.window.tabs,
+                })
+            ),
         }));
       }
 
