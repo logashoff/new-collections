@@ -30,6 +30,9 @@ export class PanelHeaderComponent {
    */
   @Output() readonly starred = new EventEmitter();
 
+  /**
+   * Disables edit buttons
+   */
   @Input() readOnly = false;
 
   favClicked() {

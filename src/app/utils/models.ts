@@ -9,6 +9,9 @@ import { MessageComponent } from '../modules/shared';
  */
 export const settingsStorageKey = 'settings';
 
+/**
+ * Storage key to store tabs favicon URLs by hostname in separate object
+ */
 export const faviconStorageKey = 'favicon';
 
 /**
