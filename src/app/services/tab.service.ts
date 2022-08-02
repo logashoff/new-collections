@@ -17,7 +17,7 @@ import {
   getCollections,
   getFaviconStore,
   getHostnameGroup,
-  getUrlHostname,
+  getUrlHost,
   ignoreUrlsRegExp,
   saveCollections,
   StorageChanges,
@@ -114,7 +114,7 @@ export class TabService {
             id: groupId,
             timestamp: newValue[0],
             tabs: syncToTabs(newValue[1]).map((tab) => {
-              tab.favIconUrl = favicon[getUrlHostname(tab.url)];
+              tab.favIconUrl = favicon[getUrlHost(tab.url)];
               return tab;
             }),
           });
@@ -123,7 +123,7 @@ export class TabService {
           group.timestamp = newValue[0];
           group.mergeTabs(
             syncToTabs(newValue[1]).map((tab) => {
-              tab.favIconUrl = favicon[getUrlHostname(tab.url)];
+              tab.favIconUrl = favicon[getUrlHost(tab.url)];
               return tab;
             }),
             true

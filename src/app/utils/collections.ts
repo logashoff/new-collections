@@ -11,7 +11,7 @@ import {
   SyncData,
   SyncTabs,
 } from './models';
-import { getSettings, getUrlHostname } from './utils';
+import { getSettings, getUrlHost } from './utils';
 
 /**
  * Returns storage in use.
@@ -46,7 +46,7 @@ export async function saveCollections(collections: Collections): Promise<void> {
 
     const favicon: { [host in string]: string } = {};
     collections.forEach(({ tabs }) =>
-      tabs.filter(({ favIconUrl }) => favIconUrl).forEach((tab) => (favicon[getUrlHostname(tab.url)] = tab.favIconUrl))
+      tabs.filter(({ favIconUrl }) => favIconUrl).forEach((tab) => (favicon[getUrlHost(tab.url)] = tab.favIconUrl))
     );
 
     return storage.set({
@@ -78,7 +78,7 @@ export const getCollections = async (): Promise<Collections> => {
         id: groupId,
         timestamp: syncData[groupId][0],
         tabs: syncToTabs(syncData[groupId][1]).map((tab) => {
-          tab.favIconUrl = favicon[getUrlHostname(tab.url)];
+          tab.favIconUrl = favicon[getUrlHost(tab.url)];
           return tab;
         }),
       }));

@@ -15,7 +15,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import {} from './components/icons-container/icons-container.component';
 import {
   ChipComponent,
   EmptyComponent,
@@ -36,8 +35,7 @@ import {
   TimelineElementComponent,
 } from './components/index';
 import { StopPropagationDirective } from './directives/index';
-import { HostnamePipe, FaviconPipe } from './pipes/index';
-
+import { FaviconPipe, HostnamePipe } from './pipes/index';
 
 const declarations = [
   ChipComponent,
