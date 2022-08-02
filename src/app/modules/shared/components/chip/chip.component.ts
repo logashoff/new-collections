@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { getFaviconUrl, IconSize, ImageSource } from 'src/app/utils';
+import { IconSize, ImageSource } from 'src/app/utils';
 
 /**
  * @description
@@ -17,7 +16,7 @@ export class ChipComponent {
   /**
    * Image source URL
    */
-  @Input() source: ImageSource
+  @Input() source: ImageSource;
 
   /**
    * Image size

@@ -5,7 +5,7 @@ import { BrowserTabs, HostnameGroup, Settings, settingsStorageKey, Tab } from '.
  * Returns BrowserTab array grouped by hostnames
  */
 export function getHostnameGroup(tabs: BrowserTabs): HostnameGroup {
-  const groupByHostname = groupBy(tabs, getHostname);
+  const groupByHostname = groupBy(tabs, getHost);
   const values = Object.values(groupByHostname);
   return values.sort((a, b) => b.length - a.length);
 }
@@ -26,6 +26,13 @@ export function getUrlHostname(url: string): string {
 }
 
 /**
+ * Returns host from URL.
+ */
+export function getUrlHost(url: string): string {
+  return new URL(url).host;
+}
+
+/**
  * Get origin from URL
  */
 export function getUrlOrigin(url: string): string {
@@ -37,4 +44,11 @@ export function getUrlOrigin(url: string): string {
  */
 export function getHostname(tab: Tab): string {
   return getUrlHostname(tab.url);
+}
+
+/**
+ * Returns host from tab's url
+ */
+export function getHost(tab: Tab): string {
+  return getUrlHost(tab.url);
 }
