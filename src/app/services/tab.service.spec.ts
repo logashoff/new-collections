@@ -7,7 +7,7 @@ import { getBrowserTabsMock, getTabGroupMock, getTabGroupsMock } from 'src/mocks
 import { v4 as uuidv4 } from 'uuid';
 import { getFaviconStore, syncToTabs, tabsToSync } from '../utils/collections';
 import { ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
-import { getHostname, getHostnameGroup, getUrlHostname } from '../utils/utils';
+import { getHost, getHostname, getHostnameGroup, getUrlHost, getUrlHostname } from '../utils/utils';
 import { NavService } from './nav.service';
 import { TabService } from './tab.service';
 
@@ -20,8 +20,10 @@ jest.mock('src/app/utils', () => ({
   usesDarkMode: jest.fn().mockImplementation(() => {}),
   ActionIcon,
   getFaviconStore,
+  getHost,
   getHostname,
   getHostnameGroup,
+  getUrlHost,
   getUrlHostname,
   ignoreUrlsRegExp,
   syncToTabs,
