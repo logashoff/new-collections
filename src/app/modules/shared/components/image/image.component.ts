@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
-import { IconSize, ImageSource } from 'src/app/utils';
+import { DomSanitizer } from '@angular/platform-browser';
+import { getFaviconUrl, IconSize, ImageSource } from 'src/app/utils';
 
 /**
  * @description
@@ -29,5 +30,18 @@ export class ImageComponent {
 
   @HostBinding('class.small') get small(): boolean {
     return this.size === 'small';
+  }
+
+  constructor(private sanitizer: DomSanitizer) {}
+
+  /**
+   * Handles image loading error
+   */
+  onError() {
+    if (typeof this.source === 'string') {
+      try {
+        this.source = this.sanitizer.bypassSecurityTrustUrl(getFaviconUrl(this.source));
+      } catch (e) {}
+    }
   }
 }
