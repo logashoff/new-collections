@@ -26,7 +26,8 @@
             "style": "kebab-case"
           }
         ],
-        "no-console": ["error", { "allow": ["warn", "error"] }]
+        "no-console": ["error", { "allow": ["warn", "error"] }],
+        "no-unused-private-class-members": "error"
       }
     },
     {
