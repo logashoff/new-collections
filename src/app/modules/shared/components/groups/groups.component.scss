@@ -5,6 +5,10 @@ app-groups {
     .expanded {
       display: none;
     }
+    
+    .mat-content-hide-toggle {
+      margin-right: 0;
+    }
 
     &.mat-expanded {
       .expanded {

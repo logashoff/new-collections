@@ -7,6 +7,13 @@ import { filter, map, Observable, shareReplay, startWith, withLatestFrom } from 
 import { Tabs, trackByTabId } from 'src/app/utils';
 
 /**
+ * Form for selecting new tabs to add to existing or new group.
+ */
+interface TabSelectorForm {
+  list: FormControl<Tabs>;
+}
+
+/**
  * @description
  *
  * Bottom sheet for selecting specified tabs.
@@ -22,7 +29,7 @@ export class TabsSelectorComponent {
   /**
    * Root group form.
    */
-  readonly formGroup = new FormGroup({
+  readonly formGroup = new FormGroup<TabSelectorForm>({
     list: new FormControl([], [Validators.required, Validators.minLength(1)]),
   });
 

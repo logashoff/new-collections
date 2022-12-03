@@ -27,7 +27,7 @@ import {
   Tabs,
   TabsByHostname,
   Timeline,
-  TimelineElement,
+  TimelineElement
 } from 'src/app/utils';
 import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
 import { MessageComponent, RenameDialogComponent, TabsSelectorComponent } from '../modules/shared';

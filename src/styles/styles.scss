@@ -53,7 +53,7 @@ a {
     background: getPaletteColor(getBackgroundPalette($theme), background);
   }
 
-  .bottom-sheet.mat-bottom-sheet-container {
+  .cdk-dialog-container.mat-bottom-sheet-container {
     background: getPaletteColor(getBackgroundPalette($theme), background);
     overflow: hidden;
   }
@@ -110,7 +110,7 @@ a {
   }
 }
 
-.bottom-sheet.mat-bottom-sheet-container {
+.cdk-dialog-container.mat-bottom-sheet-container {
   min-width: auto;
   padding: 0;
 }
