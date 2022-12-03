@@ -4,6 +4,14 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BrowserTab } from 'src/app/utils';
 
 /**
+ * Rename form
+ */
+interface RenameForm {
+  title: FormControl<string>;
+  url: FormControl<string>;
+}
+
+/**
  * @description
  *
  * Popup modal dialog for renaming tab title.
@@ -15,7 +23,7 @@ import { BrowserTab } from 'src/app/utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RenameDialogComponent implements OnInit {
-  formGroup: FormGroup;
+  formGroup: FormGroup<RenameForm>;
 
   constructor(
     public dialogRef: MatDialogRef<RenameDialogComponent>,
@@ -23,9 +31,9 @@ export class RenameDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.formGroup = new FormGroup({
-      title: new FormControl(this.tab.title, Validators.required),
-      url: new FormControl(this.tab.url, Validators.required),
+    this.formGroup = new FormGroup<RenameForm>({
+      title: new FormControl<string>(this.tab.title, Validators.required),
+      url: new FormControl<string>(this.tab.url, Validators.required),
     });
   }
 

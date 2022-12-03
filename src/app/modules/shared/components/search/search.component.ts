@@ -10,7 +10,7 @@ import {
   Observable,
   shareReplay,
   tap,
-  withLatestFrom,
+  withLatestFrom
 } from 'rxjs';
 import { NavService } from 'src/app/services';
 import { BrowserTab, BrowserTabs, TabDelete, trackByTabId } from 'src/app/utils';
@@ -19,6 +19,13 @@ const fuseOptions: Fuse.IFuseOptions<BrowserTab> = {
   keys: ['title', 'url'],
   threshold: 0.5,
 };
+
+/**
+ * Search input form.
+ */
+interface SearchForm {
+  search: FormControl<string>;
+}
 
 /**
  * @description
@@ -42,8 +49,8 @@ export class SearchComponent implements OnInit {
     return this.source$.value;
   }
 
-  readonly formGroup = new FormGroup({
-    search: new FormControl(''),
+  readonly formGroup = new FormGroup<SearchForm>({
+    search: new FormControl<string>(''),
   });
 
   readonly trackByTabId = trackByTabId;

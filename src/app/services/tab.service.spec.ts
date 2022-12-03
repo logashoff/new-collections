@@ -4,7 +4,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { firstValueFrom } from 'rxjs';
 import { getBrowserTabsMock, getTabGroupMock, getTabGroupsMock } from 'src/mocks';
-import { v4 as uuidv4 } from 'uuid';
 import { getFaviconStore, syncToTabs, tabsToSync } from '../utils/collections';
 import { ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
 import { getHost, getHostname, getHostnameGroup, getUrlHost, getUrlHostname } from '../utils/utils';
@@ -191,7 +190,7 @@ describe('TabService', () => {
     // should add new group
     await spectator.service.addTabGroups([
       new TabGroup({
-        id: uuidv4(),
+        id: '0c7b96b3-b457-4208-bff9-a249177c1e03',
         tabs: [
           {
             favIconUrl: 'https://github.githubassets.com/favicons/favicon.svg',
