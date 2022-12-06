@@ -19,17 +19,13 @@ app-list-item {
     gap: 1rem;
     cursor: pointer;
 
-    &:hover .locate-button {
-      display: block;
+    &:hover .controls {
+      display: flex;
     }
   }
-
-  .locate-button {
-    display: none;
-  }
-
+  
   .controls {
-    display: flex;
+    display: none;
     align-items: center;
   }
 
@@ -69,7 +65,7 @@ app-list-item {
     }
 
     .subtitle,
-    .menu-button {
+    .controls {
       color: getPaletteColor(getForegroundPalette($theme), secondary-text);
     }
   }

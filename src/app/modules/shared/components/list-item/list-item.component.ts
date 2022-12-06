@@ -6,7 +6,7 @@ import {
   HostBinding,
   Input,
   Output,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { EXPANSION_PANEL_ANIMATION_TIMING } from '@angular/material/expansion';
 import { BehaviorSubject, map, Observable, shareReplay, switchMap } from 'rxjs';
@@ -58,8 +58,8 @@ export class ListItemComponent {
   /**
    * Disables item menu
    */
-  readonly readOnly$: Observable<boolean> = this.tab$.pipe(
-    switchMap((tab) => this.tabService.tabs$.pipe(map((tabs) => !tabs.includes(tab)))),
+  readonly notReadOnly$: Observable<boolean> = this.tab$.pipe(
+    switchMap((tab) => this.tabService.tabs$.pipe(map((tabs) => tabs.includes(tab)))),
     shareReplay(1)
   );
 
