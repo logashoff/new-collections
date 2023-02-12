@@ -1,3 +1,3 @@
-<mat-list>
+<mat-list cdkDropList (cdkDropListDropped)="drop($event)">
   <ng-content select="app-list-item"></ng-content>
 </mat-list>
