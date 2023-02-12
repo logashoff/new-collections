@@ -1,10 +1,21 @@
 import { Injectable } from '@angular/core';
+import { uniqBy } from 'lodash';
 import flatMap from 'lodash/flatMap';
 import isNil from 'lodash/isNil';
 import isUndefined from 'lodash/isUndefined';
 import { combineLatest, from, map, Observable, of, shareReplay, switchMap, take } from 'rxjs';
 import { SettingsService, TabService } from 'src/app/services';
-import { BrowserTabs, Devices, MostVisitedURL, Sessions, TabGroup, Tabs, Timeline, TopSites } from 'src/app/utils';
+import {
+  BrowserTabs,
+  Devices,
+  getTopSitesStore,
+  saveTopSites,
+  Sessions,
+  TabGroup,
+  Tabs,
+  Timeline,
+  TopSites,
+} from 'src/app/utils';
 
 /**
  * @description
@@ -108,8 +119,23 @@ export class HomeService {
     return new Promise((resolve) => chrome.sessions.getDevices((devices) => resolve(devices)));
   }
 
-  private getTopSites(): Promise<MostVisitedURL[]> {
-    return new Promise((resolve) => chrome.topSites.get((data) => resolve(data)));
+  private async getTopSites(): Promise<TopSites> {
+    const topSites: TopSites = await new Promise((resolve) => chrome.topSites.get((data) => resolve(data)));
+    const topSitesStore = await getTopSitesStore();
+
+    let res: TopSites = [];
+
+    if (topSitesStore?.length) {
+      res = [...topSitesStore];
+    }
+
+    if (topSites?.length) {
+      res = [...res, ...topSites];
+    }
+
+    await saveTopSites(uniqBy(res, site => site.url));
+
+    return res;
   }
 
   /**

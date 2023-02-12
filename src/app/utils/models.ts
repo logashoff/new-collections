@@ -16,6 +16,11 @@ export const settingsStorageKey = 'settings';
 export const faviconStorageKey = 'favicon';
 
 /**
+ * Storage key to store tabs favicon URLs by hostname in separate object
+ */
+export const topSitesStorageKey = 'topSites';
+
+/**
  * URLs to ignore when saving tabs.
  */
 export const ignoreUrlsRegExp = new RegExp('^(about:|chrome:|file:|wss:|ws:|chrome-extension:)');
