@@ -24,6 +24,7 @@
     <mat-divider></mat-divider>
     <app-tab-list>
       <app-list-item
+        cdkDrag
         *ngFor="let tab of group.tabs$ | async; trackBy: trackByTabId"
         [tab]="tab"
         [focused]="(activeGroupId$ | async) === group.id && (activeTabId$ | async) === tab.id">

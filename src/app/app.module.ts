@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NgModule } from '@angular/core';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,7 +10,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-const materialModules = [MatBottomSheetModule, MatSnackBarModule, MatDialogModule, MatTooltipModule, MatButtonModule];
+const materialModules = [
+  DragDropModule,
+  MatBottomSheetModule,
+  MatButtonModule,
+  MatDialogModule,
+  MatSnackBarModule,
+  MatTooltipModule,
+];
 
 @NgModule({
   bootstrap: [AppComponent],
