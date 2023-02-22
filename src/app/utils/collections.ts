@@ -10,8 +10,6 @@ import {
   StorageArea,
   SyncData,
   SyncTabs,
-  TopSites,
-  topSitesStorageKey,
 } from './models';
 import { getSettings, getUrlHost } from './utils';
 
@@ -62,19 +60,6 @@ export async function getFaviconStore(): Promise<{ [hostname in string]: string 
   const storage = await getStorage();
   const favicon = await storage.get(faviconStorageKey);
   return favicon[faviconStorageKey] ?? {};
-}
-
-export async function getTopSitesStore(): Promise<TopSites> {
-  const storage = await getStorage();
-  const topSites = await storage.get(topSitesStorageKey);
-  return topSites[topSitesStorageKey] ?? {};
-}
-
-export async function saveTopSites(topSites: TopSites) {
-  const storage = await getStorage();
-  storage.set({
-    [topSitesStorageKey]: topSites,
-  });
 }
 
 /**
