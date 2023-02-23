@@ -26,6 +26,7 @@
       <app-list-item
         cdkDrag
         *ngFor="let tab of tabs; trackBy: trackByTabId"
+        [cdkDragDisabled]="dragDisabled"
         [tab]="tab"
         [focused]="(activeGroupId$ | async) === group.id && (activeTabId$ | async) === tab.id">
       </app-list-item>
