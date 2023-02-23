@@ -1,6 +1,4 @@
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, ViewEncapsulation } from '@angular/core';
-import { BrowserTabs } from 'src/app/utils';
 
 /**
  * @description
@@ -15,7 +13,4 @@ import { BrowserTabs } from 'src/app/utils';
 })
 export class TabListComponent {
 
-  drop(event: CdkDragDrop<BrowserTabs>) {
-    moveItemInArray(tabs, event.previousIndex, event.currentIndex);
-  }
 }

@@ -1,4 +1,5 @@
 import { MatFabMenuModule } from '@angular-material-extensions/fab-menu';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -31,7 +32,7 @@ import {
   TabListComponent,
   TabsSelectorComponent,
   TimelineComponent,
-  TimelineElementComponent,
+  TimelineElementComponent
 } from './components/index';
 import { StopPropagationDirective } from './directives/index';
 import { FaviconPipe, HostnamePipe } from './pipes/index';
@@ -60,6 +61,7 @@ const declarations = [
 ];
 
 const materialModules = [
+  DragDropModule,
   MatBadgeModule,
   MatButtonModule,
   MatCardModule,
