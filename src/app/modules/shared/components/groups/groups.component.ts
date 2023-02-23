@@ -1,7 +1,8 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { BehaviorSubject, map, Observable, shareReplay } from 'rxjs';
 import { NavService, SettingsService, TabService } from 'src/app/services';
-import { TabGroup, TabGroups, TabsByHostname, trackByGroupId, trackByTabId } from 'src/app/utils';
+import { BrowserTabs, TabGroup, TabGroups, TabsByHostname, trackByGroupId, trackByTabId } from 'src/app/utils';
 
 /**
  * @description
@@ -81,5 +82,12 @@ export class GroupsComponent {
    */
   closed(groupId: string) {
     this.settings.savePanelState(groupId, false);
+  }
+
+  /**
+   * Handles tab group drag and drop event
+   */
+  drop(event: CdkDragDrop<BrowserTabs>, tabs: BrowserTabs) {
+    moveItemInArray(tabs, event.previousIndex, event.currentIndex);
   }
 }

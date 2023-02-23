@@ -22,10 +22,10 @@
       </div>
     </mat-expansion-panel-header>
     <mat-divider></mat-divider>
-    <app-tab-list>
+    <app-tab-list *ngIf="group.tabs$ | async as tabs" cdkDropList (cdkDropListDropped)="drop($event, tabs)">
       <app-list-item
         cdkDrag
-        *ngFor="let tab of group.tabs$ | async; trackBy: trackByTabId"
+        *ngFor="let tab of tabs; trackBy: trackByTabId"
         [tab]="tab"
         [focused]="(activeGroupId$ | async) === group.id && (activeTabId$ | async) === tab.id">
       </app-list-item>
