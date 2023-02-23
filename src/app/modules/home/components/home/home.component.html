@@ -12,7 +12,7 @@
         *ngFor="let item of timeline$ | async; trackBy: trackByLabel"
         [timelineLabel]="item.label"
         (removed)="removeGroups(item.elements)">
-        <app-groups [groups]="item.elements"></app-groups>
+        <app-groups [groups]="item.elements" [dragDisabled]="false"></app-groups>
       </app-timeline-element>
     </div>
   </app-search>

@@ -46,6 +46,11 @@ export class GroupsComponent {
   }
 
   /**
+   * Disable list items drag and drop
+   */
+  @Input() dragDisabled = true;
+
+  /**
    * Hashmap of expanded panel states by group ID
    */
   readonly panelStates$ = this.settings.panelStates$.pipe(map((states) => states ?? {}));
@@ -89,5 +94,6 @@ export class GroupsComponent {
    */
   drop(event: CdkDragDrop<BrowserTabs>, tabs: BrowserTabs) {
     moveItemInArray(tabs, event.previousIndex, event.currentIndex);
+    this.tabService.save();
   }
 }
