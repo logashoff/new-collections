@@ -1,7 +1,7 @@
 /**
  * Scroll complete event delay targets worst case 15 FPS animation
  */
-const callbackTimeout = 1 / 15 * 1000;
+const callbackTimeout = (1 / 15) * 1000;
 
 /**
  * Clear complete event timeout to prevent promise resolve before scrolling has finished
@@ -29,17 +29,24 @@ export function scrollIntoView(element: HTMLElement): Promise<HTMLElement> {
 
   return new Promise((resolve) => {
     if (scrollElement) {
-      function handleScroll() {
-        clearInterval(scrollTimeoutId);
+      const innerHeight = window.innerHeight;
+      const elBounds = element.getBoundingClientRect();
 
-        scrollTimeoutId = setTimeout(() => {
-          scrollElement.removeEventListener('scroll', handleScroll);
-          resolve(element);
-        }, callbackTimeout);
+      if (elBounds.y > 0 && (elBounds.y + elBounds.height / 2) < innerHeight / 2) {
+        resolve(element);
+      } else {
+        function handleScroll() {
+          clearInterval(scrollTimeoutId);
+
+          scrollTimeoutId = setTimeout(() => {
+            scrollElement.removeEventListener('scroll', handleScroll);
+            resolve(element);
+          }, callbackTimeout);
+        }
+
+        scrollElement.addEventListener('scroll', handleScroll);
+        element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
       }
-
-      scrollElement.addEventListener('scroll', handleScroll);
-      element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
     } else {
       resolve(element);
     }
