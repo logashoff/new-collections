@@ -11,6 +11,4 @@ import { Component, ViewEncapsulation } from '@angular/core';
   styleUrls: ['./tab-list.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class TabListComponent {
-
-}
+export class TabListComponent {}

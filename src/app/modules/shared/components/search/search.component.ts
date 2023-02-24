@@ -10,14 +10,13 @@ import {
   Observable,
   shareReplay,
   tap,
-  withLatestFrom
+  withLatestFrom,
 } from 'rxjs';
 import { NavService } from 'src/app/services';
 import { BrowserTab, BrowserTabs, TabDelete, trackByTabId } from 'src/app/utils';
 
 const fuseOptions: Fuse.IFuseOptions<BrowserTab> = {
   keys: ['title', 'url'],
-  threshold: 0.5,
 };
 
 /**
