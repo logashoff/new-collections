@@ -1,5 +1,16 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewEncapsulation } from '@angular/core';
-import { BehaviorSubject, concat, from, map, Observable, of, switchMap, timer } from 'rxjs';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostBinding,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
+import { BehaviorSubject, concat, from, map, of, switchMap, timer } from 'rxjs';
 import { scrollIntoView } from 'src/app/utils';
 
 /**
@@ -9,12 +20,12 @@ import { scrollIntoView } from 'src/app/utils';
  */
 @Component({
   selector: 'app-ripple',
-  templateUrl: './ripple.component.html',
+  template: '',
   styleUrls: ['./ripple.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RippleComponent {
+export class RippleComponent implements OnInit, OnDestroy {
   private readonly focused$ = new BehaviorSubject<boolean>(false);
 
   /**
@@ -28,19 +39,35 @@ export class RippleComponent {
     return this.focused$.value;
   }
 
-  /**
-   * Waits for element to scroll into view before setting focus animation
-   */
-  readonly isFocused$: Observable<boolean> = this.focused$.pipe(
-    switchMap((focused) =>
-      focused
-        ? concat(
-            timer(225).pipe(switchMap(() => from(scrollIntoView(this.el.nativeElement)).pipe(map(() => true)))),
-            timer(1000).pipe(map(() => false))
-          )
-        : of(false)
-    )
-  );
+  @HostBinding('class.focused')
+  private _focused = false;
 
-  constructor(private el: ElementRef) {}
+  @HostListener('mousedown')
+  mousedown() {
+    this.focused = false;
+  }
+
+  constructor(private el: ElementRef, private cdr: ChangeDetectorRef) {}
+
+  ngOnInit() {
+    this.focused$
+      .pipe(
+        switchMap((focused) =>
+          focused
+            ? concat(
+                timer(225).pipe(switchMap(() => from(scrollIntoView(this.el.nativeElement)).pipe(map(() => true)))),
+                timer(1000).pipe(map(() => false))
+              )
+            : of(false)
+        )
+      )
+      .subscribe((focused) => {
+        this._focused = focused;
+        this.cdr.markForCheck();
+      });
+  }
+
+  ngOnDestroy() {
+    this.focused$.complete();
+  }
 }
