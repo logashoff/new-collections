@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewEncapsulation } from '@angular/core';
-import { BehaviorSubject, from, map, Observable, of, switchMap, timer } from 'rxjs';
+import { BehaviorSubject, concat, from, map, Observable, of, switchMap, timer } from 'rxjs';
 import { scrollIntoView } from 'src/app/utils';
 
 /**
@@ -34,8 +34,11 @@ export class RippleComponent {
   readonly isFocused$: Observable<boolean> = this.focused$.pipe(
     switchMap((focused) =>
       focused
-        ? timer(225).pipe(switchMap(() => from(scrollIntoView(this.el.nativeElement)).pipe(map(() => focused))))
-        : of(focused)
+        ? concat(
+            timer(225).pipe(switchMap(() => from(scrollIntoView(this.el.nativeElement)).pipe(map(() => true)))),
+            timer(1000).pipe(map(() => false))
+          )
+        : of(false)
     )
   );
 
