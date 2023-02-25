@@ -29,10 +29,11 @@ export function scrollIntoView(element: HTMLElement): Promise<HTMLElement> {
 
   return new Promise((resolve) => {
     if (scrollElement) {
-      const innerHeight = window.innerHeight;
+      const viewHeight = window.innerHeight;
+      const centerY = viewHeight / 2;
       const elBounds = element.getBoundingClientRect();
 
-      if (elBounds.y > 0 && (elBounds.y + elBounds.height / 2) < innerHeight / 2) {
+      if (elBounds.y > 0 && elBounds.bottom < centerY) {
         resolve(element);
       } else {
         function handleScroll() {
