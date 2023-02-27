@@ -6,7 +6,9 @@
     (closed)="closed(group.id)"
     hideToggle>
     <mat-expansion-panel-header>
-      <app-ripple [focused]="(activeGroupId$ | async) === group.id && isNaN(activeTabId$ | async)"></app-ripple>
+      <app-ripple *ngIf="(activeGroupId$ | async) === group.id && isNaN(activeTabId$ | async) as focused" 
+        [focused]="focused">
+      </app-ripple>
       <div class="collapsed">
         <app-panel-header
           *ngIf="tabsByHostname$ | async as tabsByHostname"

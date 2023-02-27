@@ -37,8 +37,11 @@ app-groups {
 .cdk-drag-preview {
   box-sizing: border-box;
   border-radius: 0.25rem;
-  box-shadow: 0 0.25rem 0.25rem -0.25rem rgba(0, 0, 0, 0.2), 0 0.5rem 1rem 0.25rem rgba(0, 0, 0, 0.14),
-    0 0.25rem 1rem 0.25rem rgba(0, 0, 0, 0.12);
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+
+  .mat-ripple-element {
+    display: none;
+  }
 }
 
 .cdk-drag-placeholder {
@@ -51,6 +54,6 @@ app-groups {
 
 @include theme using($theme) {
   .cdk-drag-preview {
-    background: getPaletteColor(getBackgroundPalette($theme), background);
+    background-color: getPaletteColor(getBackgroundPalette($theme), card);
   }
 }
