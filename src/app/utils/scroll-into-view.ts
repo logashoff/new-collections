@@ -30,10 +30,11 @@ export function scrollIntoView(element: HTMLElement): Promise<HTMLElement> {
   return new Promise((resolve) => {
     if (scrollElement) {
       const viewHeight = window.innerHeight;
-      const centerY = viewHeight / 2;
+      const viewCenterY = viewHeight / 2;
       const elBounds = element.getBoundingClientRect();
+      const elCenterY = elBounds.y + elBounds.height / 2;
 
-      if (elBounds.y > 0 && elBounds.bottom < centerY) {
+      if (elBounds.y > 0 && elCenterY < viewCenterY) {
         resolve(element);
       } else {
         function handleScroll() {
