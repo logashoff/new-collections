@@ -4,6 +4,8 @@ import Fuse from 'fuse.js';
 import isNil from 'lodash/isNil';
 import {
   BehaviorSubject,
+  combineLatest,
+  delay,
   firstValueFrom,
   lastValueFrom,
   map,
@@ -73,13 +75,12 @@ export class SearchComponent implements OnInit {
   /**
    * Source for search results.
    */
-  readonly searchResults$: Observable<BrowserTabs> = this.navService.paramsSearch$.pipe(
-    tap((search) => {
+  readonly searchResults$: Observable<BrowserTabs> = combineLatest([this.navService.paramsSearch$, this.fuse$]).pipe(
+    tap(([search]) => {
       this.formGroup.get('search').setValue(search, {
         emitEvent: false,
       });
     }),
-    withLatestFrom(this.fuse$),
     map(([search, fuse]) => (search?.length > 0 ? fuse.search(search)?.map(({ item }) => item) : null)),
     shareReplay(1)
   );
