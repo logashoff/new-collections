@@ -36,6 +36,13 @@ $typography: mat.define-typography-config();
   }
 }
 
+.title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1 1 0;
+}
+
 .description {
   white-space: nowrap;
 
@@ -65,6 +72,10 @@ $typography: mat.define-typography-config();
 
 @include theme using($theme) {
   :host {
+    .title {
+      color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+    }
+
     .description {
       color: getPaletteColor(getForegroundPalette($theme), secondary-text);
 

@@ -35,6 +35,11 @@ export class PanelHeaderComponent {
    */
   @Input() readOnly = false;
 
+  /**
+   * Optional text to display
+   */
+  @Input() title: string;
+
   favClicked() {
     this.starred.emit();
   }

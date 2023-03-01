@@ -1,4 +1,4 @@
 <div class="icon-container {{ size }}">
   <app-image [source]="source" [size]="size"></app-image>
-  <span class="icon-label" *ngIf="!labelHidden">{{ label }}</span>
+  <span class="icon-label" *ngIf="label && !labelHidden">{{ label }}</span>
 </div>
