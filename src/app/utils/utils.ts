@@ -7,7 +7,7 @@ import { BrowserTabs, HostnameGroup, Settings, settingsStorageKey, Tab } from '.
 export function getHostnameGroup(tabs: BrowserTabs): HostnameGroup {
   const groupByHostname = groupBy(tabs, getHost);
   const values = Object.values(groupByHostname);
-  return values.sort((a, b) => b.length - a.length);
+  return values;
 }
 
 /**
