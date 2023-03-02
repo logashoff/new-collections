@@ -3,7 +3,7 @@
 app-search {
   .search-field {
     width: 100%;
-    font-size: 1.15rem;
+    font-size: 1rem;
     margin-bottom: 1rem;
 
     .mat-form-field-wrapper {
@@ -12,14 +12,13 @@ app-search {
     }
 
     .mat-form-field-prefix {
-      top: -0.2rem;
-      left: 0.75rem;
+      left: 0.5rem;
     }
 
     .mat-form-field-flex {
       padding: 0;
       border-radius: 4rem;
-      height: 3rem;
+      height: 2.5rem;
       align-items: center;
       background-color: transparent;
       border-width: 2px;
@@ -28,12 +27,12 @@ app-search {
     }
 
     .mat-input-element {
-      height: 3rem;
+      height: 2.5rem;
     }
 
     .mat-form-field-infix {
       border: none;
-      margin-left: 1.5rem;
+      margin-left: 1rem;
       padding: 0;
     }
 
