@@ -13,6 +13,10 @@ app-search {
 
     .mat-form-field-prefix {
       left: 0.5rem;
+
+      .mat-icon {
+        line-height: 1.5rem;
+      }
     }
 
     .mat-form-field-flex {
@@ -34,10 +38,6 @@ app-search {
       border: none;
       margin-left: 1rem;
       padding: 0;
-    }
-
-    .mat-form-field-suffix {
-      right: 0.5rem;
     }
 
     .mat-form-field-underline,
