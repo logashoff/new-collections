@@ -35,12 +35,12 @@ export class GroupsComponent {
   );
 
   /**
-   * Map group ID to group's tabs titles joint by comma
+   * Maps group ID to list of group's tab titles
    */
   readonly titlesMap$: Observable<{ [groupId in string]: string }> = this.groups$.pipe(
     map((tabGroups) =>
       tabGroups.reduce((ret, group) => {
-        ret[group.id] = group.tabs.map((tab) => tab.title).join(', ');
+        ret[group.id] = group.tabs.map((tab) => tab.title);
         return ret;
       }, {})
     ),

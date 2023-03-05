@@ -14,7 +14,7 @@
           *ngIf="tabsByHostname$ | async as tabsByHostname"
           [icons]="tabsByHostname[group.id]"
           [total]="group.tabs.length"
-          [title]="(titlesMap$ | async)[group.id]"
+          [titleText]="(titlesMap$ | async)[group.id]"
           [pinned]="group.timestamp < 0"
           [readOnly]="!hasTabGroup(group)"
           (starred)="favGroup(group)">

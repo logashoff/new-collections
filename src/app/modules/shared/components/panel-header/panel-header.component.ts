@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { HostnameGroup } from 'src/app/utils';
 
 /**
@@ -8,6 +8,7 @@ import { HostnameGroup } from 'src/app/utils';
   selector: 'app-panel-header',
   templateUrl: './panel-header.component.html',
   styleUrls: ['./panel-header.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PanelHeaderComponent {
   /**
@@ -38,7 +39,7 @@ export class PanelHeaderComponent {
   /**
    * Optional text to display
    */
-  @Input() title: string;
+  @Input() titleText: string[];
 
   favClicked() {
     this.starred.emit();
