@@ -1,6 +1,8 @@
 # New Collections
 
-New Collections is a browser extension that allows to quickly save and restore open tabs. It's similar to browser's default "Bookmark all tabs..." behavior, but it doesn't create bookmark entries and all data is stored offline within extension. It doesn't use any online services or connections except Chrome's default storage sync service to sync collections between browsers. Import and export is done by saving and loading generated JSON file locally.
+New Collections is a browser extension that allows to quickly save and restore open tabs without creating new bookmark entries. It doesn't use any online services or connections except Chrome's default storage sync service to optionally sync data between browsers. Import and export can be done by saving and loading generated JSON file.
+
+Extension can be used as a popup or New Tab page. New Tab page can optionally display top sites and open tabs from synced devices.
 
 ### Features
 
@@ -8,12 +10,14 @@ New Collections is a browser extension that allows to quickly save and restore o
 - [x] Import/export saved tabs using JSON file
 - [x] Automatic theme adjustment based on browser colors
 - [x] Remove individual tabs or entire tab group
-- [x] Edit tab titles
-- [x] Search tab lists
-- [x] Add new links to existing lists
+- [x] Edit tab title and URL
+- [x] Search saved tabs and open tabs from synced devices
+- [x] New tabs can be added to existing tab groups
+- [x] Display top sites on New Tab page
+- [x] Display synced tabs from other devices on New Tab page
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.
 ## Running unit tests
 
 Run `npm run test` or `npm run test:watch` to execute the unit tests.

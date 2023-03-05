@@ -1,6 +1,8 @@
 <div class="header-container" [ngClass]="{ disabled: readOnly }">
   <app-icons-container [icons]="icons"></app-icons-container>
-  <div class="title" *ngIf="title">{{ title }}</div>
+  <div class="title" *ngIf="titleText?.length > 0">
+    <span class="text" *ngFor="let text of titleText">{{ text }}</span>
+  </div>
   <div class="description" *ngIf="total > 0">
     <div class="fav" [appStopPropagation] (click)="favClicked()">
       <ng-container [ngSwitch]="pinned">
