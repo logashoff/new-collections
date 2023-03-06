@@ -41,7 +41,7 @@ export function setIcon(details: TabIconDetails): Promise<void> {
  * Restores all tabs from specified tab group.
  */
 export async function restoreTabs(tabs: BrowserTabs) {
-  await Promise.all(
+  const createdTabs = await Promise.all(
     tabs.map(({ url, pinned }) =>
       chrome.tabs.create({
         pinned,
@@ -50,6 +50,13 @@ export async function restoreTabs(tabs: BrowserTabs) {
       })
     )
   );
+
+  const nonPinnedTabs = createdTabs.filter(({ pinned }) => !pinned);
+  if (nonPinnedTabs.length > 1) {
+    chrome.tabs.group({
+      tabIds: nonPinnedTabs.map(({ id }) => id),
+    });
+  }
 }
 
 /**

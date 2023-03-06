@@ -9,6 +9,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { EXPANSION_PANEL_ANIMATION_TIMING } from '@angular/material/expansion';
+import Fuse from 'fuse.js';
 import { BehaviorSubject, map, Observable, shareReplay, switchMap } from 'rxjs';
 import { NavService, TabService } from 'src/app/services';
 import { BrowserTab, TabDelete } from 'src/app/utils';
@@ -48,6 +49,27 @@ export class ListItemComponent {
 
   get tab(): BrowserTab {
     return this.tab$.value;
+  }
+
+  /**
+   * Fuse match results for title and url properties
+   */
+  @Input() searchMatches: Fuse.FuseResultMatch[];
+
+  /**
+   * Fuse match indices for title property
+   */
+  get titleMatchIndices(): Readonly<Fuse.RangeTuple[]> {
+    return this.searchMatches?.find((match) => match.key === 'title')?.indices;
+  }
+
+  /**
+   * Fuse match indices for url property
+   */
+  get urlMatchIndices(): Readonly<Fuse.RangeTuple[]> {
+    if (this.searchMatches?.length) {
+      return this.searchMatches?.find((match) => match.key === 'url')?.indices;
+    }
   }
 
   /**

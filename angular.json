@@ -19,7 +19,8 @@
           "options": {
             "allowedCommonJsDependencies": [
               "file-saver",
-              "lodash"
+              "lodash",
+              "moment"
             ],
             "outputPath": "dist/new-collections",
             "index": "src/index.html",

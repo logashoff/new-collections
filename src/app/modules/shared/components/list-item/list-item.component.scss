@@ -23,7 +23,7 @@ app-list-item {
       display: flex;
     }
   }
-  
+
   .controls {
     display: none;
     align-items: center;
@@ -31,6 +31,10 @@ app-list-item {
 
   .text-container {
     flex-grow: 1;
+
+    mark {
+      background: none;
+    }
 
     &,
     .title {
@@ -67,6 +71,10 @@ app-list-item {
     .subtitle,
     .controls {
       color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+    }
+
+    .text-container mark {
+      color: getPaletteColor(getPrimaryPalette($theme), darker);
     }
   }
 }

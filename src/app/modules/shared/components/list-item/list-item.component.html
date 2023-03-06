@@ -1,8 +1,14 @@
 <a class="container" matRipple href="{{ tab.url }}" [target]="target">
   <app-chip [source]="tab.favIconUrl | favicon: tab.url"></app-chip>
-  <div class="text-container">
-    <div class="title">{{ tab.title }}</div>
-    <span class="subtitle">{{ tab.url }}</span>
+  <div class="text-container" [ngSwitch]="searchMatches?.length > 0">
+    <ng-container *ngSwitchCase="true">
+      <div class="title" [innerHTML]="tab.title | match: titleMatchIndices"></div>
+      <span class="subtitle" [innerHTML]="tab.url | match: urlMatchIndices"></span>
+    </ng-container>
+    <ng-container *ngSwitchCase="false">
+      <div class="title">{{ tab.title }}</div>
+      <span class="subtitle">{{ tab.url }}</span>
+    </ng-container>
   </div>
   <div class="controls" *ngIf="timelineButton && (inTimeline$ | async) || (notReadOnly$ | async)">
     <button
