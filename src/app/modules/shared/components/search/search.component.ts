@@ -17,6 +17,7 @@ import { BrowserTab, BrowserTabs, TabDelete, trackByTabId } from 'src/app/utils'
 
 const fuseOptions: Fuse.IFuseOptions<BrowserTab> = {
   keys: ['title', 'url'],
+  includeMatches: true,
 };
 
 /**
@@ -73,14 +74,36 @@ export class SearchComponent implements OnInit {
   /**
    * Source for search results.
    */
-  readonly searchResults$: Observable<BrowserTabs> = this.navService.paramsSearch$.pipe(
+  readonly searchResults$: Observable<Fuse.FuseResult<BrowserTab>[]> = this.navService.paramsSearch$.pipe(
     tap((search) => {
       this.formGroup.get('search').setValue(search, {
         emitEvent: false,
       });
     }),
     withLatestFrom(this.fuse$),
-    map(([search, fuse]) => (search?.length > 0 ? fuse.search(search)?.map(({ item }) => item) : null)),
+    map(([search, fuse]) => (search?.length > 0 ? fuse.search(search) : null)),
+    shareReplay(1)
+  );
+
+  /**
+   * Tabs data from search results
+   */
+  readonly tabs$ = this.searchResults$.pipe(
+    map((searchResults) => searchResults?.map(({ item }) => item)),
+    shareReplay(1)
+  );
+
+  /**
+   * Maps tab to search matches indices.
+   */
+  readonly matches$: Observable<WeakMap<BrowserTab, Readonly<Fuse.FuseResultMatch[]>>> = this.searchResults$.pipe(
+    map((searchResults) => {
+      const weakMap = new WeakMap();
+
+      searchResults?.forEach(({ item, matches }) => weakMap.set(item, matches));
+
+      return weakMap;
+    }),
     shareReplay(1)
   );
 
@@ -96,7 +119,7 @@ export class SearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.navService.reset();
-    
+
     this.formGroup.valueChanges.subscribe(({ search }) => {
       if (search) {
         this.navService.search(search);
@@ -117,7 +140,7 @@ export class SearchComponent implements OnInit {
    * Handles tab update
    */
   async itemModified(updatedTab: BrowserTab) {
-    const tabs = await firstValueFrom(this.searchResults$);
+    const tabs = await firstValueFrom(this.tabs$);
 
     if (updatedTab && !tabs.includes(updatedTab)) {
       const index = tabs.findIndex((t) => t.id === updatedTab.id);
@@ -132,7 +155,7 @@ export class SearchComponent implements OnInit {
    * Handles tab deletion
    */
   async itemDeleted({ deletedTab, revertDelete }: TabDelete) {
-    const tabs = await firstValueFrom(this.searchResults$);
+    const tabs = await firstValueFrom(this.tabs$);
 
     let index = tabs.findIndex((tab) => tab === deletedTab);
     if (revertDelete && index > -1) {

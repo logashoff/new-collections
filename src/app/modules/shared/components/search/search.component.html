@@ -25,8 +25,9 @@
         <mat-card class="search-container">
           <app-tab-list>
             <app-list-item
-              *ngFor="let tab of searchResults$ | async; trackBy: trackByTabId"
+              *ngFor="let tab of tabs$ | async; trackBy: trackByTabId"
               [tab]="tab"
+              [searchMatches]="(matches$ | async).get(tab)"
               (deleted)="itemDeleted($event)"
               (modified)="itemModified($event)"
               [timelineButton]="true">
