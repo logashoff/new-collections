@@ -12,6 +12,7 @@ import {
   ignoreUrlsRegExp,
   queryCurrentWindow,
   TabGroup,
+  translate,
 } from 'src/app/utils';
 import { MessageService } from './message.service';
 import { NavService } from './nav.service';
@@ -26,6 +27,8 @@ export const tooltipPosition: TooltipPosition = 'left';
   providedIn: 'root',
 })
 export class MenuService {
+  readonly translate = translate();
+
   /**
    * All available FAB menu items.
    */
@@ -33,31 +36,31 @@ export class MenuService {
     {
       id: Action.Save,
       icon: ActionIcon.Save,
-      tooltip: 'Add Bookmarks',
+      tooltip: this.translate('addBookmarks'),
       tooltipPosition,
       color: 'accent',
     },
     {
       id: Action.Export,
       icon: ActionIcon.Export,
-      tooltip: 'Export Collections',
+      tooltip: this.translate('exportCollections'),
       tooltipPosition,
     },
     {
       id: Action.Import,
       icon: ActionIcon.Import,
-      tooltip: 'Import Collections',
+      tooltip: this.translate('importCollections'),
       tooltipPosition,
     },
     {
       id: Action.Settings,
       icon: ActionIcon.Settings,
-      tooltip: 'Settings',
+      tooltip: this.translate('settings'),
       tooltipPosition,
     },
   ]);
 
-  constructor(private tabsService: TabService, private nav: NavService, private message: MessageService) {}
+  constructor(private message: MessageService, private nav: NavService, private tabsService: TabService) {}
 
   /**
    * Navigates to options page.
@@ -112,7 +115,7 @@ export class MenuService {
               this.nav.setParams(tabGroup.id);
             }
           } else {
-            this.message.open('Tab list is invalid');
+            this.message.open(this.translate('invalidTabList'));
           }
           break;
         case Action.Settings:
@@ -123,7 +126,7 @@ export class MenuService {
           if (collections?.length > 0) {
             this.exportCollections(collections);
           } else {
-            this.message.open('Empty list cannot be exported');
+            this.message.open(this.translate('emptyListError'));
           }
           break;
         case Action.Import:

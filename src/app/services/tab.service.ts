@@ -27,7 +27,8 @@ import {
   Tabs,
   TabsByHostname,
   Timeline,
-  TimelineElement
+  TimelineElement,
+  translate,
 } from 'src/app/utils';
 import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
 import { MessageComponent, RenameDialogComponent, TabsSelectorComponent } from '../modules/shared';
@@ -43,6 +44,8 @@ import { NavService } from './nav.service';
   providedIn: 'root',
 })
 export class TabService {
+  readonly translate = translate();
+
   /**
    * Behavior subject will be used to populate tabs data when managing tabs.
    */
@@ -177,13 +180,13 @@ export class TabService {
 
     switch (true) {
       case timestamp < 0:
-        return 'Pinned';
+        return this.translate('pinned');
       case date.isSame(now, 'd'):
-        return 'Today';
+        return this.translate('today');
       case date.isSame(now.subtract(1, 'd'), 'd'):
-        return 'Yesterday';
+        return this.translate('yesterday');
       case date.isSame(now, 'w'):
-        return 'Week';
+        return this.translate('week');
       case date.isSame(now, 'y'):
         return date.format('MMMM');
       default:
@@ -276,7 +279,7 @@ export class TabService {
     let filteredTabs = tabs.filter(({ url }) => !ignoreUrlsRegExp.test(url));
 
     if (filteredTabs.length === 0) {
-      this.message.open('Tab list is invalid');
+      this.message.open(this.translate('invalidTabList'));
     } else {
       const tabsByUrl = keyBy(group.tabs, 'url');
       const tabsById = keyBy(group.tabs, 'id');
@@ -291,7 +294,12 @@ export class TabService {
           await this.save();
 
           const tabsLen = tabs.length;
-          const messageRef = this.message.open(`Added ${tabsLen} tab${tabsLen > 1 ? 's' : ''}`, ActionIcon.Undo);
+          const messageRef = this.message.open(
+            this.translate(tabsLen > 1 ? 'itemsAddedCount' : 'itemAdded', {
+              count: tabsLen,
+            }),
+            ActionIcon.Undo
+          );
           const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
 
           if (revert) {
@@ -300,7 +308,7 @@ export class TabService {
           }
         }
       } else {
-        this.message.open('All tabs are already in the list');
+        this.message.open(this.translate('tabsExistError'));
       }
     }
   }
@@ -326,7 +334,7 @@ export class TabService {
             messageRef = await this.removeTabGroup(tabGroup);
           } else if (removeIndex > -1) {
             this.save();
-            messageRef = this.message.open('Item removed', ActionIcon.Undo);
+            messageRef = this.message.open(this.translate('itemRemoved'), ActionIcon.Undo);
           }
         }
       }
@@ -376,7 +384,7 @@ export class TabService {
   async removeTabGroup(tabGroup: TabGroup): Promise<MatSnackBarRef<MessageComponent>> {
     return new Promise(async (resolve) => {
       const tabGroups = await firstValueFrom(this.tabGroups$);
-      const messageRef = this.message.open('Item removed', ActionIcon.Undo);
+      const messageRef = this.message.open(this.translate('itemRemoved'), ActionIcon.Undo);
       const removedGroups = remove(tabGroups, (tg) => tg === tabGroup);
 
       this.tabGroupsSource$.next(tabGroups);
@@ -406,7 +414,12 @@ export class TabService {
 
       if (removedGroups?.length > 0) {
         const rmLen = removedGroups.length;
-        const messageRef = this.message.open(`${rmLen} item${rmLen > 1 ? 's' : ''} removed`, ActionIcon.Undo);
+        const messageRef = this.message.open(
+          this.translate(rmLen > 1 ? 'itemsRemovedCount' : 'itemRemoved', {
+            count: rmLen,
+          }),
+          ActionIcon.Undo
+        );
 
         this.navService.reset();
         this.tabGroupsSource$.next(currentTabGroups);

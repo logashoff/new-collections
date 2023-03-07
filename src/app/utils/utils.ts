@@ -1,3 +1,5 @@
+import { inject } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import groupBy from 'lodash/groupBy';
 import { BrowserTabs, HostnameGroup, Settings, settingsStorageKey, Tab } from './models';
 
@@ -52,3 +54,13 @@ export function getHostname(tab: Tab): string {
 export function getHost(tab: Tab): string {
   return getUrlHost(tab.url);
 }
+
+/**
+ * Utility function for TranslateService `instant` method
+ *
+ * @returns Passthrough function for `instant` method
+ */
+export const translate = () => {
+  const translate = inject(TranslateService);
+  return (key: string | string[], interpolateParams?: Object): string => translate.instant(key, interpolateParams);
+};

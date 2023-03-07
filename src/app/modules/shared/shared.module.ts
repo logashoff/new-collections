@@ -15,6 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
 import {
   ChipComponent,
   EmptyComponent,
@@ -80,7 +81,7 @@ const materialModules = [
 
 @NgModule({
   declarations: [...declarations],
-  imports: [CommonModule, ReactiveFormsModule, ...materialModules],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule.forChild(), ...materialModules],
   exports: [...materialModules, ...declarations],
 })
 export class SharedModule {}

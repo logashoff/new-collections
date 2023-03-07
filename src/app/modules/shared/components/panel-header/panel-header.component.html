@@ -4,7 +4,10 @@
     <span class="text" *ngFor="let text of titleText">{{ text }}</span>
   </div>
   <div class="description" *ngIf="total > 0">
-    <div class="fav" [appStopPropagation] (click)="favClicked()">
+    <div class="fav" 
+      [appStopPropagation]
+      [matTooltip]="'pin' | translate" 
+      (click)="favClicked()">
       <ng-container [ngSwitch]="pinned">
         <mat-icon *ngSwitchCase="false">grade</mat-icon>
         <mat-icon *ngSwitchCase="true">star</mat-icon>

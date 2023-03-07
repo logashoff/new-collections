@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { RouterModule, Routes } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { OptionsComponent } from './components/intex';
 
 const components = [OptionsComponent];
@@ -27,6 +28,7 @@ const routes: Routes = [{ path: '', component: OptionsComponent }];
     MatSlideToggleModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
+    TranslateModule.forChild(),
   ],
 })
 export class OptionsModule {}

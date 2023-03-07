@@ -1,8 +1,7 @@
 import { waitForAsync } from '@angular/core/testing';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
-import { of } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { getBrowserTabMock, getBrowserTabsMock, getTabGroupMock, getTabGroupsMock } from 'src/mocks';
+import { getBrowserTabMock, getTabGroupsMock, MessageServiceMock, NavServiceMock, TabServiceMock } from 'src/mocks';
 import { Action, ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
 import { MenuService } from './menu.service';
 import { MessageService } from './message.service';
@@ -13,6 +12,7 @@ jest.mock('src/app/utils', () => ({
   getCollections: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   importTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   queryCurrentWindow: jest.fn().mockImplementation(() => new Promise((resolve) => resolve([getBrowserTabMock()]))),
+  translate: jest.fn().mockImplementation(() => (str) => str),
   usesDarkMode: jest.fn().mockImplementation(() => {}),
   Action,
   ActionIcon,
@@ -27,26 +27,15 @@ describe('MenuService', () => {
     providers: [
       {
         provide: TabService,
-        useValue: {
-          addTabGroup: () => new Promise((resolve) => resolve(0)),
-          addTabGroups() {},
-          createTabGroup: () => new Promise((resolve) => resolve(getTabGroupMock())),
-          openTabsSelector: () => ({
-            afterDismissed: () => of(getBrowserTabsMock()),
-          }),
-        },
+        useClass: TabServiceMock,
       },
       {
         provide: MessageService,
-        useValue: {
-          open() {}
-        }
+        useClass: MessageServiceMock,
       },
       {
         provide: NavService,
-        useValue: {
-          setParams() {},
-        },
+        useClass: NavServiceMock,
       },
     ],
   });
@@ -69,26 +58,26 @@ describe('MenuService', () => {
         {
           id: 4,
           icon: 'bookmark_add',
-          tooltip: 'Add Bookmarks',
+          tooltip: 'addBookmarks',
           tooltipPosition: 'left',
           color: 'accent',
         },
         {
           id: 1,
           icon: 'save_alt',
-          tooltip: 'Export Collections',
+          tooltip: 'exportCollections',
           tooltipPosition: 'left',
         },
         {
           id: 2,
           icon: 'file_upload',
-          tooltip: 'Import Collections',
+          tooltip: 'importCollections',
           tooltipPosition: 'left',
         },
         {
           id: 3,
           icon: 'settings',
-          tooltip: 'Settings',
+          tooltip: 'settings',
           tooltipPosition: 'left',
         },
       ]);
