@@ -3,10 +3,18 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { firstValueFrom } from 'rxjs';
-import { getBrowserTabsMock, getTabGroupMock, getTabGroupsMock } from 'src/mocks';
+import {
+  getBrowserTabsMock,
+  getTabGroupMock,
+  getTabGroupsMock,
+  MatDialogMock,
+  MessageServiceMock,
+  NavServiceMock,
+} from 'src/mocks';
 import { getFaviconStore, syncToTabs, tabsToSync } from '../utils/collections';
 import { ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
 import { getHost, getHostname, getHostnameGroup, getUrlHost, getUrlHostname } from '../utils/utils';
+import { MessageService } from './message.service';
 import { NavService } from './nav.service';
 import { TabService } from './tab.service';
 
@@ -16,6 +24,7 @@ jest.mock('src/app/utils', () => ({
   queryTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(getBrowserTabsMock))),
   removeTab: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   saveCollections: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
+  translate: jest.fn().mockImplementation(() => (str) => str),
   usesDarkMode: jest.fn().mockImplementation(() => {}),
   ActionIcon,
   getFaviconStore,
@@ -38,16 +47,15 @@ describe('TabService', () => {
     providers: [
       {
         provide: NavService,
-        useValue: {
-          reset() {},
-          setParams() {},
-        },
+        useClass: NavServiceMock,
       },
       {
         provide: MatDialog,
-        useValue: {
-          open() {},
-        },
+        useClass: MatDialogMock,
+      },
+      {
+        provide: MessageService,
+        useClass: MessageServiceMock,
       },
     ],
   });

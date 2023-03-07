@@ -1,17 +1,26 @@
 <form [formGroup]="formGroup" (ngSubmit)="save()">
-  <h1 mat-dialog-title>Edit</h1>
+  <h1 mat-dialog-title translate>edit</h1>
   <div mat-dialog-content>
     <mat-form-field appearance="fill">
-      <mat-label>Title</mat-label>
+      <mat-label translate>title</mat-label>
       <input type="text" formControlName="title" matInput autocomplete="off" cdkFocusInitial>
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>URL</mat-label>
+      <mat-label translate>url</mat-label>
       <input type="text" formControlName="url" matInput autocomplete="off">
     </mat-form-field>
   </div>
   <div mat-dialog-actions>
-    <button type="button" mat-stroked-button [mat-dialog-close]>Close</button>
-    <button type="submit" mat-flat-button color="primary" [disabled]="!formGroup.valid">Save</button>
+    <button type="button" 
+      mat-stroked-button 
+      [mat-dialog-close]>
+      {{ 'close' | translate }}
+    </button>
+    <button type="submit" 
+      mat-flat-button 
+      color="primary" 
+      [disabled]="!formGroup.valid">
+      {{ 'save' | translate }}
+    </button>
   </div>
 </form>

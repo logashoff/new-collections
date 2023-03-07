@@ -3,13 +3,21 @@
     {{ abs(group.timestamp) | date: 'longDate' }}
   </div>
   <div class="controls" [appStopPropagation]>
-    <button *ngIf="!readOnly" mat-icon-button (click)="removeTabs()" matTooltip="Delete">
+    <button *ngIf="!readOnly" 
+      mat-icon-button 
+      (click)="removeTabs()" 
+      [matTooltip]="'delete' | translate">
       <mat-icon>delete</mat-icon>
     </button>
-    <button mat-icon-button (click)="restoreTabs()" matTooltip="Restore">
+    <button mat-icon-button 
+      (click)="restoreTabs()" 
+      [matTooltip]="'restore' | translate">
       <mat-icon>restore</mat-icon>
     </button>
-    <button *ngIf="!readOnly" mat-icon-button (click)="addTabs()" matTooltip="Add tabs">
+    <button *ngIf="!readOnly" 
+      mat-icon-button 
+      (click)="addTabs()" 
+      [matTooltip]="'addTabs' | translate">
       <mat-icon>add</mat-icon>
     </button>
   </div>

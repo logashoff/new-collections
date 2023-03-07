@@ -14,7 +14,7 @@
     <button
       mat-icon-button
       *ngIf="timelineButton && (inTimeline$ | async)"
-      matTooltip="Find"
+      [matTooltip]="'find' | translate"
       [appStopPropagation]
       (click)="scrollToTimeline()">
       <mat-icon>manage_search</mat-icon>
@@ -22,14 +22,14 @@
     <button *ngIf="notReadOnly$ | async"
       mat-icon-button 
       (click)="editClick()" 
-      matTooltip="Edit"
+      [matTooltip]="'edit' | translate"
       [appStopPropagation]>
       <mat-icon>edit_note</mat-icon>
     </button>
     <button *ngIf="notReadOnly$ | async"
       mat-icon-button 
       (click)="deleteClick()"
-      matTooltip="Delete" 
+      [matTooltip]="'delete' | translate" 
       [appStopPropagation]>
       <mat-icon>delete</mat-icon>
     </button>

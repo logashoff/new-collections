@@ -1,15 +1,18 @@
 <form *ngIf="hasSearchData$ | async" class="search-form" [formGroup]="formGroup">
   <mat-form-field class="search-field" appearance="fill">
     <mat-icon matPrefix>search</mat-icon>
-    <input type="text" formControlName="search" matInput placeholder="Search" autocomplete="off" />
+    <input type="text" 
+      matInput 
+      formControlName="search" 
+      [placeholder]="'search' | translate" 
+      autocomplete="off" />
     <button
       *ngIf="hasSearchValue$ | async"
       matSuffix
       mat-icon-button
       [disableRipple]="true"
       tabindex="-1"
-      (click)="clearSearch()"
-    >
+      (click)="clearSearch()">
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
@@ -19,8 +22,12 @@
     <ng-container *ngIf="searchResults$ | async as searchResults">
       <ng-container *ngIf="searchResults.length > 0; else empty">
         <h3 class="results-count" [ngPlural]="searchResults.length">
-          <ng-template ngPluralCase="one">One result</ng-template>
-          <ng-template ngPluralCase="other">{{ searchResults.length }} results</ng-template>
+          <ng-template ngPluralCase="one">
+            {{ 'oneResult' | translate }}
+          </ng-template>
+          <ng-template ngPluralCase="other">
+            {{ 'resultCount' | translate: { count: searchResults.length } }}
+          </ng-template>
         </h3>
         <mat-card class="search-container">
           <app-tab-list>

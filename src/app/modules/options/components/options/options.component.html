@@ -2,9 +2,10 @@
   <mat-card>
     <ng-container *ngIf="syncStorage.value">
       <section class="storage-usage" *ngIf="storageUsage$ | async as storageUsage">
-        <h4 class="storage-heading">Sync usage</h4>
-        <mat-hint>
-          Data used to store synced collections ({{ 100 - storageUsage | number: '1.0-0' }}% remaining)
+        <h4 class="storage-heading" translate>syncUsage</h4>
+        <mat-hint translate 
+          [translateParams]="{ percent: 100 - storageUsage | number: '1.0-0' }">
+          hintDataUsage
         </mat-hint>
         <mat-progress-bar
           mode="determinate"
@@ -15,23 +16,21 @@
     </ng-container>
     <section class="toggles">
       <mat-slide-toggle formControlName="syncStorage">
-        <div>Sync Collections</div>
-        <mat-hint>Synchronizes collections across devices</mat-hint>
+        <div translate>syncCollections</div>
+        <mat-hint translate>hintSyncCollections</mat-hint>
       </mat-slide-toggle>
       <mat-slide-toggle formControlName="enableDevices">
-        <div>Enable Devices</div>
-        <mat-hint>Show synced devices on New Tab page</mat-hint>
+        <div translate>enableDevices</div>
+        <mat-hint translate>hintShowDevices</mat-hint>
       </mat-slide-toggle>
       <mat-slide-toggle formControlName="enableTopSites">
-        <div>Enable Sites</div>
-        <mat-hint>Show top sites on New Tab page</mat-hint>
+        <div translate>enableSites</div>
+        <mat-hint translate>hintShowTopSites</mat-hint>
       </mat-slide-toggle>
     </section>
     <section *ngIf="ignoreSitesControl.controls?.length > 0" class="list-container">
-      <h4 class="ignore-heading">Ignored Sites</h4>
-      <mat-hint>
-        Sites hidden from top sites list on New Tab page
-      </mat-hint>
+      <h4 class="ignore-heading" translate>ignoredSites</h4>
+      <mat-hint translate>hintHiddenSites</mat-hint>
       <div class="list">
         <div class="list-item" *ngFor="let ignoredSite of ignoreSitesControl.controls; let i = index">
           <span>

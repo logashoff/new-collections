@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 import { MessageService, SettingsService } from 'src/app/services';
-import { ActionIcon, TopSite, TopSites, trackBySite } from 'src/app/utils';
+import { ActionIcon, TopSite, TopSites, trackBySite, translate } from 'src/app/utils';
 
 /**
  * @description
@@ -19,8 +19,9 @@ export class TopSitesComponent {
   @Input() topSites: TopSites;
 
   readonly trackBySite = trackBySite;
+  readonly translate = translate();
 
-  constructor(private settings: SettingsService, private message: MessageService) {}
+  constructor(private message: MessageService, private settings: SettingsService) {}
 
   /**
    * Removes site from the list for top sites by ignoring it from the settings config
@@ -31,7 +32,7 @@ export class TopSitesComponent {
       url: site.url,
     });
 
-    const ref = this.message.open('Site moved to ignore list', ActionIcon.Settings);
+    const ref = this.message.open(this.translate('siteMovedToIgnoreList'), ActionIcon.Settings);
     const { dismissedByAction } = await lastValueFrom(ref.afterDismissed());
 
     if (dismissedByAction) {

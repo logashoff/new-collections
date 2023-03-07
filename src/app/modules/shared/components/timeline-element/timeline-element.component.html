@@ -1,7 +1,8 @@
 <div class="timeline-header">
   <h3 class="timeline-label">{{ timelineLabel }}</h3>
   <button *ngIf="controls"
-    mat-icon-button 
+    mat-icon-button
+    [matTooltip]="'deleteAll' | translate"
     (click)="remove()">
     <mat-icon>done_all</mat-icon>
   </button>

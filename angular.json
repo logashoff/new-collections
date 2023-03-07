@@ -30,6 +30,7 @@
             "aot": true,
             "assets": [
               "src/assets/icons",
+              "src/assets/i18n",
               "src/assets/workers",
               "src/manifest.json"
             ],
