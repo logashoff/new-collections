@@ -2,11 +2,17 @@
   <div class="container">
     <div class="header-container">
       <div class="header">
-        <span class="heading">
-          Tabs {{ selectionLength$ | async }} / {{ tabs.length }}
+        <span class="heading" translate [translateParams]="{
+            selected: selectionLength$ | async,
+            total: tabs.length
+          }">
+          tabsCount
         </span>
         <div class="controls">
-          <button type="submit" mat-icon-button [disabled]="!formGroup.valid" matTooltip="Add Selected">
+          <button type="submit" 
+            mat-icon-button 
+            [disabled]="!formGroup.valid" 
+            [matTooltip]="'addSelected' | translate">
             <mat-icon>add</mat-icon>
           </button>
           <div class="checkbox-container">
