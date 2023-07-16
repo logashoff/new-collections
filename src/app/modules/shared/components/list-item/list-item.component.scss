@@ -34,6 +34,8 @@ app-list-item {
 
     mark {
       background: none;
+      font-weight: bold;
+      color: inherit;
     }
 
     &,
@@ -71,10 +73,6 @@ app-list-item {
     .subtitle,
     .controls {
       color: getPaletteColor(getForegroundPalette($theme), secondary-text);
-    }
-
-    .text-container mark {
-      color: getPaletteColor(getPrimaryPalette($theme), darker);
     }
   }
 }
