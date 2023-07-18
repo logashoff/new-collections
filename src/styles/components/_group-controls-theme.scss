@@ -1,0 +1,19 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@import '../common';
+
+@mixin color($theme) {
+  app-group-controls {
+    .container {
+      color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+    }
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+}

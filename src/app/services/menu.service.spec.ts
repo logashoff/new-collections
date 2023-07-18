@@ -1,6 +1,4 @@
-import { waitForAsync } from '@angular/core/testing';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
-import { take } from 'rxjs/operators';
 import { getBrowserTabMock, getTabGroupsMock, MessageServiceMock, NavServiceMock, TabServiceMock } from 'src/mocks';
 import { Action, ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
 import { MenuService } from './menu.service';
@@ -50,39 +48,6 @@ describe('MenuService', () => {
   it('should be created', () => {
     expect(spectator.service).toBeTruthy();
   });
-
-  it('should return 4 actions', waitForAsync(() => {
-    spectator.service.menuItems$.pipe(take(1)).subscribe((actions) => {
-      expect(actions.length).toBe(4);
-      expect(actions).toEqual([
-        {
-          id: 4,
-          icon: 'bookmark_add',
-          tooltip: 'addBookmarks',
-          tooltipPosition: 'left',
-          color: 'accent',
-        },
-        {
-          id: 1,
-          icon: 'save_alt',
-          tooltip: 'exportCollections',
-          tooltipPosition: 'left',
-        },
-        {
-          id: 2,
-          icon: 'file_upload',
-          tooltip: 'importCollections',
-          tooltipPosition: 'left',
-        },
-        {
-          id: 3,
-          icon: 'settings',
-          tooltip: 'settings',
-          tooltipPosition: 'left',
-        },
-      ]);
-    });
-  }));
 
   it('should handle actions', async () => {
     const tabsService = spectator.service['tabsService'];

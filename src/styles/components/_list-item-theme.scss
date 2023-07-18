@@ -1,0 +1,47 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@import '../common';
+
+@mixin color($theme) {
+  app-list-item {
+    .container {
+      color: getPaletteColor(getForegroundPalette($theme), text);
+    }
+
+    &:hover {
+      background-color: getPaletteColor(getBackgroundPalette($theme), hover);
+    }
+
+    .subtitle,
+    .controls {
+      color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+    }
+  }
+}
+
+@mixin typography($theme) {
+  $typography-config: mat.get-typography-config($theme);
+
+  app-list-item {
+    .title {
+      @include mat.typography-level($typography-config, subtitle-1);
+    }
+
+    .subtitle {
+      @include mat.typography-level($typography-config, caption);
+    }
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+
+  $typography-config: mat.get-typography-config($theme);
+  @if $typography-config != null {
+    @include typography($theme);
+  }
+}

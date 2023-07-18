@@ -19,7 +19,7 @@ export class MessageService {
    */
   open(message: string, actionIcon?: ActionIcon, config: MatSnackBarConfig = {}) {
     return this.snackBar.openFromComponent(MessageComponent, {
-      duration: 10_000,
+      duration: 30_000,
       ...config,
       verticalPosition: 'bottom',
       horizontalPosition: 'center',

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 
 /**
  * @description
@@ -10,5 +10,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   templateUrl: './empty.component.html',
   styleUrls: ['./empty.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class EmptyComponent {}

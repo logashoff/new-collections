@@ -1,5 +1,3 @@
-@import 'common';
-
 app-top-sites {
   display: block;
   position: relative;
@@ -54,25 +52,6 @@ app-top-sites {
             width: 1rem;
           }
         }
-      }
-    }
-  }
-}
-
-@include theme using($theme) {
-  app-top-sites {
-    .site-container {
-      .site {
-        background: getPaletteColor(getBackgroundPalette($theme), disabled-list-option);
-      }
-
-      .site-title {
-        color: getPaletteColor(getForegroundPalette($theme), text);
-      }
-
-      .remove-btn {
-        color: getPaletteColor(getForegroundPalette($theme), text);
-        background: getPaletteColor(getBackgroundPalette($theme), card);
       }
     }
   }

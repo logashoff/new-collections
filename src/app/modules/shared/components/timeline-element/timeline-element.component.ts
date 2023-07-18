@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 
 /**
  * @description
@@ -10,6 +10,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
   templateUrl: './timeline-element.component.html',
   styleUrls: ['./timeline-element.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class TimelineElementComponent {
   /**

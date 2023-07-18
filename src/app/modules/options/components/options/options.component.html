@@ -1,46 +1,63 @@
 <form [formGroup]="formGroup">
   <mat-card>
-    <ng-container *ngIf="syncStorage.value">
-      <section class="storage-usage" *ngIf="storageUsage$ | async as storageUsage">
-        <h4 class="storage-heading" translate>syncUsage</h4>
-        <mat-hint translate 
-          [translateParams]="{ percent: 100 - storageUsage | number: '1.0-0' }">
-          hintDataUsage
-        </mat-hint>
-        <mat-progress-bar
-          mode="determinate"
-          [value]="storageUsage"
-          [color]="storageUsage > 80 ? 'warn' : 'primary'">
-        </mat-progress-bar>
-      </section>
-    </ng-container>
-    <section class="toggles">
-      <mat-slide-toggle formControlName="syncStorage">
-        <div translate>syncCollections</div>
-        <mat-hint translate>hintSyncCollections</mat-hint>
-      </mat-slide-toggle>
-      <mat-slide-toggle formControlName="enableDevices">
-        <div translate>enableDevices</div>
-        <mat-hint translate>hintShowDevices</mat-hint>
-      </mat-slide-toggle>
-      <mat-slide-toggle formControlName="enableTopSites">
-        <div translate>enableSites</div>
-        <mat-hint translate>hintShowTopSites</mat-hint>
-      </mat-slide-toggle>
-    </section>
-    <section *ngIf="ignoreSitesControl.controls?.length > 0" class="list-container">
-      <h4 class="ignore-heading" translate>ignoredSites</h4>
-      <mat-hint translate>hintHiddenSites</mat-hint>
-      <div class="list">
-        <div class="list-item" *ngFor="let ignoredSite of ignoreSitesControl.controls; let i = index">
-          <span>
-            {{ ignoredSite.value?.title }}
-          </span>
-          <button mat-icon-button (click)="ignoreSitesControl.removeAt(i)">
-            <mat-icon>close</mat-icon>
+    <mat-card-content>
+      <section class="storage">
+        <section class="storage-usage">
+          <h4 class="storage-heading" translate>syncUsage</h4>
+          <mat-hint translate [translateParams]="{ percent: 100 - (storageUsage$ | async) | number : '1.0-0' }">
+            hintDataUsage
+          </mat-hint>
+          <mat-progress-bar mode="determinate" 
+            [value]="storageUsage$ | async" 
+            [color]="(storageUsage$ | async) > 80 ? 'warn' : 'primary'">
+          </mat-progress-bar>
+        </section>
+        <section class="storage-controls">
+          <button *ngFor="let action of collectionActions"
+            mat-icon-button 
+            [matTooltip]="action.tooltip"
+            (click)="handleAction(action.action)"
+            [color]="action.color">
+            <mat-icon>{{ action.icon }}</mat-icon>
           </button>
-        </div>
-      </div>
-    </section>
+        </section>
+      </section>
+      <section class="toggles">
+        <mat-slide-toggle formControlName="syncStorage"
+          color="primary">
+          <div class="toggle-label" translate>syncCollections</div>
+          <mat-hint translate>hintSyncCollections</mat-hint>
+        </mat-slide-toggle>
+        <mat-slide-toggle formControlName="enableDevices"
+          color="primary">
+          <div class="toggle-label" translate>enableDevices</div>
+          <mat-hint translate>hintShowDevices</mat-hint>
+        </mat-slide-toggle>
+        <mat-slide-toggle formControlName="enableTopSites"
+          color="primary">
+          <div class="toggle-label" translate>enableSites</div>
+          <mat-hint translate>hintShowTopSites</mat-hint>
+        </mat-slide-toggle>
+      </section>
+      <section class="list-container">
+        <fieldset *ngIf="ignoreSitesControl.controls?.length > 0 && sitesControl.value" >
+          <legend>
+            <h4 class="ignore-heading" translate>ignoredSites</h4>
+          </legend>
+          <mat-list role="list" class="list">
+            <mat-list-item role="listitem" *ngFor="let ignoredSite of ignoreSitesControl.controls; let i = index">
+              <div class="list-item">
+                <span class="list-item-label">
+                  {{ ignoredSite.value?.title }}
+                </span>
+                <button mat-icon-button (click)="ignoreSitesControl.removeAt(i)">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </mat-list-item>
+          </mat-list>
+        </fieldset>
+      </section>
+    </mat-card-content>
   </mat-card>
 </form>

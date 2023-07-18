@@ -1,8 +1,6 @@
-@import 'common';
-
 $icon-size: 5rem;
 
-:host {
+app-empty {
   pointer-events: none;
   display: flex;
   position: absolute;
@@ -14,17 +12,11 @@ $icon-size: 5rem;
   left: 0;
   right: 0;
   top: 0;
-}
 
-.icon {
-  width: $icon-size;
-  height: $icon-size;
-  font-size: $icon-size;
-  line-height: $icon-size;
-}
-
-@include theme using($theme) {
-  :host {
-    color: getPaletteColor(getForegroundPalette($theme), disabled-text);
+  .icon {
+    width: $icon-size;
+    height: $icon-size;
+    font-size: $icon-size;
+    line-height: $icon-size;
   }
 }

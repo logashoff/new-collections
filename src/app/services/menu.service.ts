@@ -1,12 +1,10 @@
-import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { Injectable } from '@angular/core';
 import { TooltipPosition } from '@angular/material/tooltip';
 import saveAs from 'file-saver';
-import { lastValueFrom, Observable, of } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import selectFiles from 'select-files';
 import {
   Action,
-  ActionIcon,
   Collections,
   getCollections,
   ignoreUrlsRegExp,
@@ -28,37 +26,6 @@ export const tooltipPosition: TooltipPosition = 'left';
 })
 export class MenuService {
   readonly translate = translate();
-
-  /**
-   * All available FAB menu items.
-   */
-  readonly menuItems$: Observable<MatFabMenu[]> = of([
-    {
-      id: Action.Save,
-      icon: ActionIcon.Save,
-      tooltip: this.translate('addBookmarks'),
-      tooltipPosition,
-      color: 'accent',
-    },
-    {
-      id: Action.Export,
-      icon: ActionIcon.Export,
-      tooltip: this.translate('exportCollections'),
-      tooltipPosition,
-    },
-    {
-      id: Action.Import,
-      icon: ActionIcon.Import,
-      tooltip: this.translate('importCollections'),
-      tooltipPosition,
-    },
-    {
-      id: Action.Settings,
-      icon: ActionIcon.Settings,
-      tooltip: this.translate('settings'),
-      tooltipPosition,
-    },
-  ]);
 
   constructor(private message: MessageService, private nav: NavService, private tabsService: TabService) {}
 

@@ -1,0 +1,48 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@import '../common';
+
+@mixin color($theme) {
+  ::-webkit-scrollbar-track {
+    background: getPaletteColor(getBackgroundPalette($theme), background);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: getPaletteColor(getForegroundPalette($theme), divider);
+  }
+
+  body {
+    background: getPaletteColor(getBackgroundPalette($theme), background);
+  }
+
+  a {
+    &:link,
+    &:visited,
+    &:hover,
+    &:active {
+      color: getPaletteColor(getPrimaryPalette($theme));
+    }
+  }
+
+  .message-container.mat-snack-bar-container {
+    color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+    background: getPaletteColor(getBackgroundPalette($theme), background);
+  }
+
+  .cdk-dialog-container.mat-bottom-sheet-container {
+    background: getPaletteColor(getBackgroundPalette($theme), background);
+    overflow: hidden;
+  }
+
+  .cdk-drag-preview {
+    background-color: getPaletteColor(getBackgroundPalette($theme), card);
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+}

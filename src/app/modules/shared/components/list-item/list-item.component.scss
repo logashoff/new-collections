@@ -1,9 +1,3 @@
-@use '@angular/material' as mat;
-
-@import 'common';
-
-$typography: mat.define-typography-config();
-
 app-list-item {
   display: block;
   position: relative;
@@ -14,7 +8,7 @@ app-list-item {
     display: flex;
     align-items: center;
     height: 4rem;
-    padding: 0 0.5rem 0 1rem;
+    padding: 0 1rem;
     margin: 0;
     gap: 1rem;
     cursor: pointer;
@@ -39,40 +33,12 @@ app-list-item {
     }
 
     &,
-    .title {
+    .title,
+    .subtitle {
+      display: block;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-
-    .title,
-    .subtitle {
-      line-height: 1rem;
-    }
-
-    .title {
-      @include mat.typography-level($typography, subheading-1);
-    }
-
-    .subtitle {
-      @include mat.typography-level($typography, body-1);
-    }
-  }
-}
-
-@include theme using($theme) {
-  app-list-item {
-    .container {
-      color: getPaletteColor(getForegroundPalette($theme), text);
-    }
-
-    &:hover {
-      background-color: getPaletteColor(getBackgroundPalette($theme), hover);
-    }
-
-    .subtitle,
-    .controls {
-      color: getPaletteColor(getForegroundPalette($theme), secondary-text);
     }
   }
 }

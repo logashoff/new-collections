@@ -1,9 +1,3 @@
-@use '@angular/material' as mat;
-
-@import 'common';
-
-$typography: mat.define-typography-config();
-
 app-tabs-selector {
   $max-width: 25rem;
 
@@ -14,7 +8,7 @@ app-tabs-selector {
     max-height: 80vh;
     overflow: auto;
 
-    .mat-list-base .mat-list-option .mat-list-text {
+    .mat-mdc-list-base .mat-mdc-list-option .mat-mdc-list-text {
       display: block;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -36,14 +30,13 @@ app-tabs-selector {
       padding: 0.5rem;
 
       .heading {
-        @include mat.typography-level($typography, subheading-1);
-
         margin-left: 0.5rem;
       }
 
       .controls {
         display: flex;
         align-items: center;
+        margin-right: 0.25rem;
 
         .checkbox-container {
           align-items: center;
@@ -59,11 +52,11 @@ app-tabs-selector {
       position: relative;
       display: block;
 
-      .mat-list-item {
+      .mat-mdc-list-item {
         height: 4rem;
       }
 
-      .mat-list-base {
+      .mat-mdc-list-base {
         padding: 0;
       }
 
@@ -82,13 +75,7 @@ app-tabs-selector {
             text-overflow: ellipsis;
           }
 
-          .item-title {
-            @include mat.typography-level($typography, body-1);
-          }
-
           .item-subtitle {
-            @include mat.typography-level($typography, caption);
-
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -101,26 +88,6 @@ app-tabs-selector {
               width: auto;
             }
           }
-        }
-      }
-    }
-  }
-}
-
-@include theme using($theme) {
-  app-tabs-selector {
-    .container {
-      color: getPaletteColor(getForegroundPalette($theme), secondary-text);
-
-      .header-container {
-        background: getPaletteColor(getBackgroundPalette($theme), background);
-      }
-
-      .list-container .list-item {
-        color: getPaletteColor(getForegroundPalette($theme), secondary-text);
-
-        .item-subtitle {
-          color: getPaletteColor(getForegroundPalette($theme), hint-text);
         }
       }
     }

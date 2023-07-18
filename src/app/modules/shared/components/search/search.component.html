@@ -1,22 +1,32 @@
-<form *ngIf="hasSearchData$ | async" class="search-form" [formGroup]="formGroup">
-  <mat-form-field class="search-field" appearance="fill">
-    <mat-icon matPrefix>search</mat-icon>
-    <input type="text" 
-      matInput 
-      formControlName="search" 
-      [placeholder]="'search' | translate" 
-      autocomplete="off" />
-    <button
-      *ngIf="hasSearchValue$ | async"
-      matSuffix
-      mat-icon-button
-      [disableRipple]="true"
-      tabindex="-1"
-      (click)="clearSearch()">
-      <mat-icon>close</mat-icon>
+<section class="controls-wrapper">
+  <form class="search-form" [formGroup]="formGroup">
+    <mat-form-field class="search-field" appearance="fill">
+      <mat-icon matPrefix>search</mat-icon>
+      <input type="text" 
+        matInput 
+        formControlName="search" 
+        [placeholder]="'searchBookmarks' | translate" 
+        autocomplete="off" />
+      <button
+        *ngIf="hasSearchValue$ | async"
+        matSuffix
+        mat-icon-button
+        [disableRipple]="true"
+        tabindex="-1"
+        (click)="clearSearch()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </form>
+  <div class="controls">
+    <button mat-icon-button
+      color="primary"
+      matTooltip="{{ 'addBookmarks' | translate }}"
+      (click)="menuAction(Action.Save)">
+      <mat-icon>add</mat-icon>
     </button>
-  </mat-form-field>
-</form>
+  </div>
+</section>
 <ng-container [ngSwitch]="hasSearchValue$ | async">
   <ng-container *ngSwitchCase="true">
     <ng-container *ngIf="searchResults$ | async as searchResults">
@@ -45,7 +55,6 @@
     </ng-container>
   </ng-container>
   <ng-container *ngSwitchCase="false">
-    <ng-content select="app-top-sites"></ng-content>
     <ng-content select=".layout-container"></ng-content>
   </ng-container>
 </ng-container>

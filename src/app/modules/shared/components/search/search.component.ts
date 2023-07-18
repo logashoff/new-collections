@@ -4,20 +4,22 @@ import Fuse from 'fuse.js';
 import isNil from 'lodash/isNil';
 import {
   BehaviorSubject,
+  Observable,
   firstValueFrom,
   lastValueFrom,
   map,
-  Observable,
   shareReplay,
   tap,
   withLatestFrom,
 } from 'rxjs';
-import { NavService } from 'src/app/services';
-import { BrowserTab, BrowserTabs, TabDelete, trackByTabId } from 'src/app/utils';
+import { MenuService, NavService } from 'src/app/services';
+import { Action, BrowserTab, BrowserTabs, TabDelete, trackByTabId } from 'src/app/utils';
 
 const fuseOptions: Fuse.IFuseOptions<BrowserTab> = {
   keys: ['title', 'url'],
+  threshold: 0.33,
   includeMatches: true,
+  ignoreLocation: true,
 };
 
 /**
@@ -39,6 +41,8 @@ interface SearchForm {
   encapsulation: ViewEncapsulation.None,
 })
 export class SearchComponent implements OnInit {
+  Action = Action;
+
   private readonly source$ = new BehaviorSubject<BrowserTabs>([]);
 
   @Input() set source(value: BrowserTabs) {
@@ -74,48 +78,56 @@ export class SearchComponent implements OnInit {
   /**
    * Source for search results.
    */
-  readonly searchResults$: Observable<Fuse.FuseResult<BrowserTab>[]> = this.navService.paramsSearch$.pipe(
-    tap((search) => {
-      this.formGroup.get('search').setValue(search, {
-        emitEvent: false,
-      });
-    }),
-    withLatestFrom(this.fuse$),
-    map(([search, fuse]) => (search?.length > 0 ? fuse.search(search) : null)),
-    shareReplay(1)
-  );
+  readonly searchResults$: Observable<Fuse.FuseResult<BrowserTab>[]>;
 
   /**
    * Tabs data from search results
    */
-  readonly tabs$ = this.searchResults$.pipe(
-    map((searchResults) => searchResults?.map(({ item }) => item)),
-    shareReplay(1)
-  );
+  readonly tabs$: Observable<BrowserTab[]>;
 
   /**
    * Maps tab to search matches indices.
    */
-  readonly matches$: Observable<WeakMap<BrowserTab, Readonly<Fuse.FuseResultMatch[]>>> = this.searchResults$.pipe(
-    map((searchResults) => {
-      const weakMap = new WeakMap();
-
-      searchResults?.forEach(({ item, matches }) => weakMap.set(item, matches));
-
-      return weakMap;
-    }),
-    shareReplay(1)
-  );
+  readonly matches$: Observable<WeakMap<BrowserTab, Readonly<Fuse.FuseResultMatch[]>>>;
 
   /**
    * Indicates search results state
    */
-  readonly hasSearchValue$: Observable<boolean> = this.searchResults$.pipe(
-    map((searchResult) => !isNil(searchResult)),
-    shareReplay(1)
-  );
+  readonly hasSearchValue$: Observable<boolean>;
 
-  constructor(private navService: NavService) {}
+  constructor(private navService: NavService, private menuService: MenuService) {
+    this.searchResults$ = this.navService.paramsSearch$.pipe(
+      tap((search) => {
+        this.formGroup.get('search').setValue(search, {
+          emitEvent: false,
+        });
+      }),
+      withLatestFrom(this.fuse$),
+      map(([search, fuse]) => (search?.length > 0 ? fuse.search(search) : null)),
+      shareReplay(1)
+    );
+
+    this.tabs$ = this.searchResults$.pipe(
+      map((searchResults) => searchResults?.map(({ item }) => item)),
+      shareReplay(1)
+    );
+
+    this.matches$ = this.searchResults$.pipe(
+      map((searchResults) => {
+        const weakMap = new WeakMap();
+
+        searchResults?.forEach(({ item, matches }) => weakMap.set(item, matches));
+
+        return weakMap;
+      }),
+      shareReplay(1)
+    );
+
+    this.hasSearchValue$ = this.searchResults$.pipe(
+      map((searchResult) => !isNil(searchResult)),
+      shareReplay(1)
+    );
+  }
 
   ngOnInit(): void {
     this.navService.reset();
@@ -127,6 +139,10 @@ export class SearchComponent implements OnInit {
         this.navService.reset();
       }
     });
+  }
+
+  menuAction(action: Action) {
+    this.menuService.handleMenuAction(action);
   }
 
   /**

@@ -87,7 +87,7 @@ export class SettingsService {
 
   /**
    * Saves expanded panel state to local storage by group ID
-   * 
+   *
    * @param groupId Panel group ID to save state for
    * @param state True if panel is expanded
    */
@@ -107,5 +107,14 @@ export class SettingsService {
     settings.panels[url][groupId] = state;
 
     this.update(settings);
+  }
+
+  /**
+   * Returns sync storage usage in bytes
+   *
+   * @returns Sync storage bytes used
+   */
+  async getUsageBytes() {
+    return await chrome.storage.sync.getBytesInUse();
   }
 }

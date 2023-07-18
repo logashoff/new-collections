@@ -1,4 +1,3 @@
-import { MatFabMenuModule } from '@angular-material-extensions/fab-menu';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -9,7 +8,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRippleModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -24,7 +22,6 @@ import {
   IconsContainerComponent,
   ImageComponent,
   ListItemComponent,
-  MenuComponent,
   MessageComponent,
   PanelHeaderComponent,
   RenameDialogComponent,
@@ -49,7 +46,6 @@ const declarations = [
   ImageComponent,
   ListItemComponent,
   MatchPipe,
-  MenuComponent,
   MessageComponent,
   PanelHeaderComponent,
   RenameDialogComponent,
@@ -69,9 +65,7 @@ const materialModules = [
   MatCardModule,
   MatCheckboxModule,
   MatDialogModule,
-  MatDividerModule,
   MatExpansionModule,
-  MatFabMenuModule,
   MatIconModule,
   MatInputModule,
   MatListModule,

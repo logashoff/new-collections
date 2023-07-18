@@ -1,52 +1,36 @@
-@import 'common';
-
 @media (max-width: 50rem) {
-  .icon-container .icon-label {
+  app-chip .icon-container .icon-label {
     display: none;
   }
 }
 
-.icon-container {
-  display: flex;
-  align-items: center;
-  padding: 0.5rem;
-  border-radius: 2rem;
-  box-sizing: border-box;
-  overflow: hidden;
-  gap: 0.5rem;
-  max-width: 12rem;
-  min-width: 2rem;
-
-  &.medium {
-    max-width: 14rem;
-  }
-
-  &.large {
-    padding: 0.5rem 0.75rem;
-    max-width: 16rem;
-  }
-
-  .icon-label {
-    line-height: 1rem;
-    margin-right: 0.5rem;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+app-chip {
+  .icon-container {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 2rem;
+    box-sizing: border-box;
     overflow: hidden;
-  }
-}
+    gap: 0.5rem;
+    max-width: 12rem;
+    min-width: 2rem;
 
-@include theme using($theme) {
-  :host {
-    .icons-container .overflow {
-      color: getPaletteColor(getForegroundPalette($theme), disabled-text);
+    &.medium {
+      max-width: 14rem;
     }
 
-    .icon-container {
-      background-color: getPaletteColor(getBackgroundPalette($theme), disabled-list-option);
+    &.large {
+      padding: 0.5rem 0.75rem;
+      max-width: 16rem;
+    }
 
-      .icon-label {
-        color: getPaletteColor(getForegroundPalette($theme), text);
-      }
+    .icon-label {
+      line-height: 1rem;
+      margin-right: 0.5rem;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
   }
 }
