@@ -1,0 +1,26 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@import '../common';
+
+@mixin color($theme) {
+  app-message {
+    $background-color: getPaletteColor(getBackgroundPalette($theme), card);
+    $accent-color: getPaletteColor(getPrimaryPalette($theme));
+
+    color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+    background-color: $background-color;
+
+    .icon-container {
+      background-color: $accent-color;
+      color: $background-color;
+    }
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+}

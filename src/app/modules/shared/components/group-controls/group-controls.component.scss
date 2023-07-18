@@ -1,19 +1,11 @@
-@import 'common';
-
-.container {
-  display: flex;
-  position: relative;
-  justify-content: space-between;
-  align-items: center;
-  height: inherit;
-  margin: 0 0.5rem 0 1rem;
-  min-height: 3rem;
-}
-
-@include theme using($theme) {
-  :host {
-    .container {
-      color: getPaletteColor(getForegroundPalette($theme), secondary-text);
-    }
+app-group-controls {
+  .container {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
+    height: inherit;
+    margin: 0 0.5rem 0 1rem;
+    min-height: 3rem;
   }
 }

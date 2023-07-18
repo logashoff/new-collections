@@ -4,12 +4,7 @@
   position: relative;
 }
 
-.mat-form-field {
+.mat-mdc-form-field {
+  display: block;
   width: 100%;
-}
-
-.mat-dialog-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
 }

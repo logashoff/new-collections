@@ -1,8 +1,16 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
-import { BehaviorSubject, map, Observable, shareReplay } from 'rxjs';
+import { BehaviorSubject, Observable, map, shareReplay } from 'rxjs';
 import { NavService, SettingsService, TabService } from 'src/app/services';
-import { BrowserTabs, TabGroup, TabGroups, TabsByHostname, trackByGroupId, trackByTabId } from 'src/app/utils';
+import {
+  BrowserTabs,
+  GroupExpanded,
+  TabGroup,
+  TabGroups,
+  TabsByHostname,
+  trackByGroupId,
+  trackByTabId,
+} from 'src/app/utils';
 
 /**
  * @description
@@ -20,12 +28,12 @@ export class GroupsComponent {
   /**
    * Expand and collapse panels based on query params groupId
    */
-  readonly activeGroupId$: Observable<string> = this.navService.paramsGroupId$;
+  readonly activeGroupId$: Observable<string>;
 
   /**
    * Active tab ID from query params
    */
-  readonly activeTabId$: Observable<number> = this.navService.paramsTabId$;
+  readonly activeTabId$: Observable<number>;
 
   private readonly groups$ = new BehaviorSubject<TabGroups>(null);
 
@@ -66,7 +74,7 @@ export class GroupsComponent {
   /**
    * Hashmap of expanded panel states by group ID
    */
-  readonly panelStates$ = this.settings.panelStates$.pipe(map((states) => states ?? {}));
+  readonly panelStates$: Observable<GroupExpanded>;
 
   /**
    * Group list ngFor trackBy function.
@@ -75,7 +83,11 @@ export class GroupsComponent {
   readonly trackByTabId = trackByTabId;
   readonly isNaN = isNaN;
 
-  constructor(private navService: NavService, private tabService: TabService, private settings: SettingsService) {}
+  constructor(private navService: NavService, private tabService: TabService, private settings: SettingsService) {
+    this.panelStates$ = this.settings.panelStates$.pipe(map((states) => states ?? {}));
+    this.activeGroupId$ = this.navService.paramsGroupId$;
+    this.activeTabId$ = this.navService.paramsTabId$;
+  }
 
   favGroup(group: TabGroup) {
     this.tabService.favGroupToggle(group);

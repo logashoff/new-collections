@@ -1,8 +1,7 @@
-import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
-import { MenuService, TabService } from 'src/app/services';
-import { TabGroups, trackByLabel } from 'src/app/utils';
+import { TabService } from 'src/app/services';
+import { BrowserTabs, TabGroups, Timeline, TopSites, trackByLabel } from 'src/app/utils';
 import { HomeService } from '../../services';
 
 /**
@@ -18,20 +17,21 @@ import { HomeService } from '../../services';
   encapsulation: ViewEncapsulation.None,
 })
 export class HomeComponent {
-  readonly devicesTimeline$ = this.homeService.devicesTimeline$;
-  readonly hasAnyData$ = this.homeService.hasAnyData$;
-  readonly searchSource$ = this.homeService.searchSource$;
-  readonly timeline$ = this.homeService.timeline$;
-  readonly topSites$ = this.homeService.topSites$;
-
   readonly trackByLabel = trackByLabel;
 
-  /**
-   * Main menu items.
-   */
-  readonly menuItems$: Observable<MatFabMenu[]> = this.menuService.menuItems$;
+  readonly devicesTimeline$: Observable<Timeline>;
+  readonly hasAnyData$: Observable<boolean>;
+  readonly searchSource$: Observable<BrowserTabs>;
+  readonly timeline$: Observable<Timeline>;
+  readonly topSites$: Observable<TopSites>;
 
-  constructor(private menuService: MenuService, private homeService: HomeService, private tabService: TabService) {}
+  constructor(private homeService: HomeService, private tabService: TabService) {
+    this.devicesTimeline$ = this.homeService.devicesTimeline$;
+    this.hasAnyData$ = this.homeService.hasAnyData$;
+    this.searchSource$ = this.homeService.searchSource$;
+    this.timeline$ = this.homeService.timeline$;
+    this.topSites$ = this.homeService.topSites$;
+  }
 
   /**`
    * Removes all items in timeline section

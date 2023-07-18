@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import isUndefined from 'lodash/isUndefined';
-import { BehaviorSubject, map, Observable, shareReplay, startWith, take } from 'rxjs';
-import { SettingsService } from 'src/app/services';
-import { MostVisitedURL } from 'src/app/utils';
+import { BehaviorSubject, Observable, map, shareReplay, startWith, take } from 'rxjs';
+import { MenuService, SettingsService } from 'src/app/services';
+import { Action, ActionIcon, CollectionActions, MostVisitedURL } from 'src/app/utils';
 
 /**
  * Options form.
@@ -43,8 +44,10 @@ interface OptionsForm {
   encapsulation: ViewEncapsulation.None,
 })
 export class OptionsComponent implements OnInit {
+  readonly collectionActions: CollectionActions;
+
   private readonly devicesControl = new FormControl<boolean>(true);
-  private readonly sitesControl = new FormControl<boolean>(true);
+  readonly sitesControl = new FormControl<boolean>(true);
   readonly syncStorage = new FormControl<boolean>(true);
   readonly ignoreSitesControl = new FormArray([]);
 
@@ -69,10 +72,28 @@ export class OptionsComponent implements OnInit {
     syncStorage: this.syncStorage,
   });
 
-  constructor(private settings: SettingsService) {}
+  constructor(
+    private menuService: MenuService,
+    private settings: SettingsService,
+    private translateService: TranslateService
+  ) {
+    this.collectionActions = [
+      {
+        action: Action.Import,
+        icon: ActionIcon.Import,
+        tooltip: this.translateService.instant('importCollections'),
+      },
+      {
+        action: Action.Export,
+        icon: ActionIcon.Export,
+        tooltip: this.translateService.instant('exportCollections'),
+        color: 'primary',
+      },
+    ];
+  }
 
   async ngOnInit() {
-    this.storageUsageSource$.next(await chrome.storage.sync.getBytesInUse());
+    this.storageUsageSource$.next(await this.settings.getUsageBytes());
 
     this.settings.settings$.pipe(take(1)).subscribe((settings) => {
       if (settings) {
@@ -98,14 +119,17 @@ export class OptionsComponent implements OnInit {
           settings.ignoreTopSites.forEach((site) => this.ignoreSitesControl.push(new FormControl(site)));
         }
       }
-    });
 
-    this.formGroup.valueChanges.subscribe(async (settings) => {
-      await this.settings.update(settings);
+      this.formGroup.valueChanges.subscribe(async (settings) => {
+        await this.settings.update(settings);
 
-      if (settings.syncStorage) {
-        this.storageUsageSource$.next(await chrome.storage.sync.getBytesInUse());
-      }
+        const storageBytes = await this.settings.getUsageBytes();
+        this.storageUsageSource$.next(storageBytes);
+      });
     });
+  }
+
+  handleAction(action: Action) {
+    this.menuService.handleMenuAction(action);
   }
 }

@@ -1,0 +1,40 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@import '../common';
+
+@mixin color($theme) {
+  app-options {
+    .list-container {
+      fieldset {
+        border-color: getPaletteColor(getForegroundPalette($theme), divider);
+      }
+    }
+  }
+}
+
+@mixin typography($theme) {
+  $typography-config: mat.get-typography-config($theme);
+
+  app-options {
+    h4 {
+      @include mat.typography-level($typographyConfig, subtitle-1);
+    }
+
+    .mat-mdc-form-field-hint {
+      @include mat.typography-level($typographyConfig, caption);
+    }
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+
+  $typography-config: mat.get-typography-config($theme);
+  @if $typography-config != null {
+    @include typography($theme);
+  }
+}

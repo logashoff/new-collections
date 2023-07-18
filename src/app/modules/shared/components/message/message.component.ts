@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { MatSnackBarRef, MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
+import { ChangeDetectionStrategy, Component, Inject, ViewEncapsulation } from '@angular/core';
+import { MAT_SNACK_BAR_DATA, MatSnackBarRef } from '@angular/material/snack-bar';
 import { ActionIcon } from 'src/app/utils';
 
 /**
@@ -12,6 +12,7 @@ import { ActionIcon } from 'src/app/utils';
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class MessageComponent {
   constructor(

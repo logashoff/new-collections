@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { HostnameGroup } from 'src/app/utils';
 
 /**
@@ -9,6 +9,7 @@ import { HostnameGroup } from 'src/app/utils';
   templateUrl: './panel-header.component.html',
   styleUrls: ['./panel-header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class PanelHeaderComponent {
   /**

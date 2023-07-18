@@ -1,5 +1,22 @@
 @use '@angular/material' as mat;
 
+@use './components/app-theme' as app;
+@use './components/chip-theme' as chip;
+@use './components/empty-theme' as empty;
+@use './components/group-controls-theme' as group-controls;
+@use './components/icons-container-theme' as icons-container;
+@use './components/list-item-theme' as list-item;
+@use './components/message-theme' as message;
+@use './components/options-theme' as options;
+@use './components/panel-header-theme' as panel-header;
+@use './components/ripple-theme' as ripple;
+@use './components/search-theme' as search;
+@use './components/tabs-selector-theme' as tabs-selector;
+@use './components/timeline-element-theme' as timeline-element;
+@use './components/top-sites-theme' as top-sites;
+
+@import 'common';
+
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
@@ -17,22 +34,6 @@
   src: url('../assets/fonts/material-icons.woff2') format('woff2');
 }
 
-$fontConfig: (
-  body-1: mat.define-typography-level(14px, 20px, 400, 'Roboto', 0.0179em),
-  body-2: mat.define-typography-level(14px, 24px, 500, 'Roboto', 0.0179em),
-  button: mat.define-typography-level(14px, 14px, 500, 'Roboto', 0.0893em),
-  caption: mat.define-typography-level(12px, 20px, 400, 'Roboto', 0.0333em),
-  display-1: mat.define-typography-level(34px, 40px, 400, 'Roboto', 0.0074em),
-  display-2: mat.define-typography-level(45px, 48px, 400, 'Roboto', 0em),
-  display-3: mat.define-typography-level(56px, 56px, 400, 'Roboto', -0.0089em),
-  display-4: mat.define-typography-level(112px, 112px, 300, 'Roboto', -0.0134em),
-  headline: mat.define-typography-level(24px, 32px, 400, 'Roboto', 0em),
-  input: mat.define-typography-level(inherit, 1.125, 400, 'Roboto', 1.5px),
-  subheading-1: mat.define-typography-level(15px, 24px, 500, 'Roboto', 0.0067em),
-  subheading-2: mat.define-typography-level(16px, 28px, 400, 'Roboto', 0.0094em),
-  title: mat.define-typography-level(20px, 32px, 500, 'Roboto', 0.0075em),
-);
-
 $dark-text: black;
 $dark-primary-text: rgba($dark-text, 0.87);
 $dark-secondary-text: rgba($dark-primary-text, 0.54);
@@ -47,7 +48,7 @@ $light-disabled-text: rgba($light-primary-text, 0.5);
 $light-dividers: rgba($light-primary-text, 0.12);
 $light-focused: rgba($light-primary-text, 0.12);
 
-$mat-light-theme-foreground: (
+$light-theme-foreground-palette: (
   base: black,
   disabled-button: rgba($dark-text, 0.26),
   disabled-text: $dark-disabled-text,
@@ -65,7 +66,7 @@ $mat-light-theme-foreground: (
   text: $dark-primary-text,
 );
 
-$mat-dark-theme-foreground: (
+$dark-theme-foreground-palette: (
   base: white,
   disabled-button: rgba($light-text, 0.3),
   disabled-text: $light-disabled-text,
@@ -98,7 +99,7 @@ $dark-bg-alpha-4: rgba($dark-background-color, 0.04);
 $dark-bg-alpha-12: rgba($dark-background-color, 0.12);
 $dark-bg-alpha-24: rgba($dark-background-color, 0.24);
 
-$mat-light-theme-background: (
+$light-theme-background-palette: (
   app-bar: $light-bg-darker-5,
   background: $light-background,
   card: $light-bg-lighter-5,
@@ -127,7 +128,7 @@ $light-bg-alpha-4: rgba($light-background-color, 0.04);
 $light-bg-alpha-12: rgba($light-background-color, 0.12);
 $light-bg-alpha-24: rgba($light-background-color, 0.24);
 
-$mat-dark-theme-background: (
+$dark-theme-background-palette: (
   app-bar: $dark-bg-lighter-5,
   background: $dark-background,
   card: $dark-bg-lighter-5,
@@ -146,22 +147,28 @@ $mat-dark-theme-background: (
   ripple: $light-bg-alpha-24,
 );
 
-@include mat.core($fontConfig);
-
-body {
-  --primary-color: #86b6f9;
-  --primary-lighter-color: #dbe9fd;
-  --primary-darker-color: #699ef6;
-  --text-primary-color: #{$dark-primary-text};
-  --text-primary-lighter-color: #{$dark-primary-text};
-  --text-primary-darker-color: #{$dark-primary-text};
-}
+$dark-primary-main: #8ab4f8;
+$dark-primary-lighter: #dbe9fd;
+$dark-primary-darker: #699ef6;
 
 $dark-primary-palette: (
-  main: #8ab4f8,
-  lighter: #dbe9fd,
-  darker: #699ef6,
-  200: #86b6f9,
+  main: $dark-primary-main,
+  lighter: $dark-primary-lighter,
+  darker: $dark-primary-darker,
+  50: #f1f6fe,
+  100: #dce9fd,
+  200: #c5dafc,
+  300: #adcbfa,
+  400: #9cbff9,
+  500: #8ab4f8,
+  600: #82adf7,
+  700: #77a4f6,
+  800: #6d9cf5,
+  900: #5a8cf3,
+  A100: #ffffff,
+  A200: #ffffff,
+  A400: #f2f6ff,
+  A700: #d9e5ff,
   contrast: (
     main: $dark-primary-text,
     lighter: $light-secondary-text,
@@ -171,11 +178,28 @@ $dark-primary-palette: (
 
 $dark-theme-primary: mat.define-palette($dark-primary-palette, main, lighter, darker);
 
+$light-primary-main: #1a73e8;
+$light-primary-lighter: #bad5f8;
+$light-primary-darker: #0f56de;
+
 $light-primary-palette: (
-  main: #1a73e8,
-  lighter: #bad5f8,
-  darker: #0f56de,
-  200: #1a73e8,
+  main: $light-primary-main,
+  lighter: $light-primary-lighter,
+  darker: $light-primary-darker,
+  50: #e4eefc,
+  100: #bad5f8,
+  200: #8db9f4,
+  300: #5f9def,
+  400: #3c88eb,
+  500: #1a73e8,
+  600: #176be5,
+  700: #1360e2,
+  800: #0f56de,
+  900: #0843d8,
+  A100: #ffffff,
+  A200: #cfdaff,
+  A400: #9cb3ff,
+  A700: #829fff,
   contrast: (
     main: $light-text,
     lighter: $light-secondary-text,
@@ -185,20 +209,28 @@ $light-primary-palette: (
 
 $light-theme-primary: mat.define-palette($light-primary-palette, main, lighter, darker);
 
-body {
-  --accent-color: #86b6f9;
-  --accent-lighter-color: #dbe9fd;
-  --accent-darker-color: #699ef6;
-  --text-accent-color: #{$dark-primary-text};
-  --text-accent-lighter-color: #{$dark-primary-text};
-  --text-accent-darker-color: #{$dark-primary-text};
-}
+$dark-accent-main: hsl(340, 82%, 52%);
+$dark-accent-lighter: hsl(340, 89%, 93%);
+$dark-accent-darker: hsl(340, 82%, 52%);
 
 $dark-accent-palette: (
-  main: hsl(340, 82%, 52%),
-  lighter: hsl(340, 89%, 93%),
-  darker: hsl(340, 82%, 52%),
-  200: hsl(340, 91%, 75%),
+  main: $dark-accent-main,
+  lighter: $dark-accent-lighter,
+  darker: $dark-accent-darker,
+  50: #fce4ec,
+  100: #f8bcd0,
+  200: #f490b1,
+  300: #f06392,
+  400: #ec417a,
+  500: #e92063,
+  600: #e61c5b,
+  700: #e31851,
+  800: #df1347,
+  900: #d90b35,
+  A100: #ffffff,
+  A200: #ffd1d9,
+  A400: #ff9eae,
+  A700: #ff8599,
   contrast: (
     main: $light-text,
     lighter: $light-text,
@@ -206,13 +238,30 @@ $dark-accent-palette: (
   ),
 );
 
-$theme-accent: mat.define-palette($dark-accent-palette, main, lighter, darker);
+$dark-theme-accent: mat.define-palette($dark-accent-palette, main, lighter, darker);
+
+$light-accent-main: hsl(340, 82%, 51%);
+$light-accent-lighter: hsl(340, 82%, 85%);
+$light-accent-darker: hsl(340, 100%, 63%);
 
 $light-accent-palette: (
-  main: hsl(340, 82%, 51%),
-  lighter: hsl(340, 82%, 85%),
-  darker: hsl(340, 100%, 63%),
-  200: hsl(340, 82%, 51%),
+  main: $light-accent-main,
+  lighter: $light-accent-lighter,
+  darker: $light-accent-darker,
+  50: #fce4ec,
+  100: #f8bbcf,
+  200: #f48eb0,
+  300: #f06090,
+  400: #ec3e78,
+  500: #e91c60,
+  600: #e61958,
+  700: #e3144e,
+  800: #df1144,
+  900: #d90933,
+  A100: #ffffff,
+  A200: #ffd0d8,
+  A400: #ff9dad,
+  A700: #ff8497,
   contrast: (
     main: $light-text,
     lighter: $light-secondary-text,
@@ -222,20 +271,28 @@ $light-accent-palette: (
 
 $light-theme-accent: mat.define-palette($light-accent-palette, main, lighter, darker);
 
-body {
-  --warn-color: #f44336;
-  --warn-lighter-color: hsl(4, 92%, 85%);
-  --warn-darker-color: hsl(4, 97%, 48%);
-  --text-warn-color: #{$dark-secondary-text};
-  --text-warn-lighter-color: #{$dark-secondary-text};
-  --text-warn-darker-color: #{$dark-secondary-text};
-}
+$dark-warn-main: #f44336;
+$dark-warn-lighter: hsl(4, 92%, 85%);
+$dark-warn-darker: hsl(4, 97%, 48%);
 
 $dark-warn-palette: (
-  main: #f44336,
-  lighter: hsl(4, 92%, 85%),
-  darker: hsl(4, 97%, 48%),
-  200: hsl(4, 90%, 58%),
+  main: $dark-warn-main,
+  lighter: $dark-warn-lighter,
+  darker: $dark-warn-darker,
+  50: #fee8e7,
+  100: #fcc7c3,
+  200: #faa19b,
+  300: #f77b72,
+  400: #f65f54,
+  500: #f44336,
+  600: #f33d30,
+  700: #f13429,
+  800: #ef2c22,
+  900: #ec1e16,
+  A100: #ffffff,
+  A200: #ffe9e9,
+  A400: #ffb8b6,
+  A700: #ff9f9c,
   contrast: (
     main: $light-text,
     lighter: $light-secondary-text,
@@ -245,39 +302,94 @@ $dark-warn-palette: (
 
 $dark-theme-warn: mat.define-palette($dark-warn-palette, main, lighter, darker);
 
-$dark-theme: (
-  primary: $dark-theme-primary,
-  accent: $theme-accent,
-  warn: $dark-theme-warn,
-  is-dark: true,
-  foreground: $mat-dark-theme-foreground,
-  background: $mat-dark-theme-background,
+$dark-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $dark-theme-primary,
+      accent: $dark-theme-accent,
+      warn: $dark-theme-warn,
+      is-dark: true,
+    ),
+    typography: $typographyConfig,
+    density: 0,
+  )
 );
 
-$light-theme: (
-  primary: $light-theme-primary,
-  accent: $light-theme-accent,
-  warn: $dark-theme-warn,
-  is-dark: false,
-  foreground: $mat-light-theme-foreground,
-  background: $mat-light-theme-background,
+$dark-theme: modify-theme($dark-theme, $dark-theme-background-palette, $dark-theme-foreground-palette);
+
+$light-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $light-theme-primary,
+      accent: $light-theme-accent,
+      warn: $dark-theme-warn,
+      is-dark: false,
+    ),
+  )
 );
 
-$themes: (
-  light: $light-theme,
-  dark: $dark-theme,
-);
+$light-theme: modify-theme($light-theme, $light-theme-background-palette, $light-theme-foreground-palette);
 
-@mixin theme() {
-  @each $type, $theme in $themes {
-    @media (prefers-color-scheme: #{$type}) {
-      @content ($theme);
-    }
-  }
+.mat-raised-button.mat-warn,
+.mat-fab.mat-warn,
+.mat-mini-fab.mat-warn,
+.mat-flat-button,
+.mat-raised-button,
+.mat-fab,
+.mat-mini-fab {
+  background-color: $dark-background;
 }
 
-@include mat.all-component-themes($light-theme);
+.mat-mdc-form-field-hint {
+  color: $light-secondary-text;
+}
 
-@media (prefers-color-scheme: dark) {
-  @include mat.all-component-themes($dark-theme);
+@include mat.core();
+
+@include mat.all-component-themes($dark-theme);
+@include app.theme($dark-theme);
+@include chip.theme($dark-theme);
+@include empty.theme($dark-theme);
+@include group-controls.theme($dark-theme);
+@include icons-container.theme($dark-theme);
+@include list-item.theme($dark-theme);
+@include message.theme($dark-theme);
+@include options.theme($dark-theme);
+@include panel-header.theme($dark-theme);
+@include ripple.theme($dark-theme);
+@include search.theme($dark-theme);
+@include tabs-selector.theme($dark-theme);
+@include timeline-element.theme($dark-theme);
+@include top-sites.theme($dark-theme);
+
+@media (prefers-color-scheme: light) {
+  .mat-raised-button.mat-warn,
+  .mat-fab.mat-warn,
+  .mat-mini-fab.mat-warn,
+  .mat-flat-button,
+  .mat-raised-button,
+  .mat-fab,
+  .mat-mini-fab {
+    background-color: $light-background;
+  }
+
+  .mat-mdc-form-field-hint {
+    color: $dark-secondary-text;
+  }
+
+  @include mat.all-component-colors($light-theme);
+  @include app.theme($light-theme);
+  @include chip.theme($light-theme);
+  @include empty.theme($light-theme);
+  @include group-controls.theme($light-theme);
+  @include icons-container.theme($light-theme);
+  @include list-item.theme($light-theme);
+  @include message.theme($light-theme);
+  @include options.theme($light-theme);
+  @include panel-header.theme($light-theme);
+  @include ripple.theme($light-theme);
+  @include search.theme($light-theme);
+  @include tabs-selector.theme($light-theme);
+  @include timeline-element.theme($light-theme);
+  @include top-sites.theme($light-theme);
 }

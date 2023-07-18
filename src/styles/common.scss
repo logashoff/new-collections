@@ -1,40 +1,133 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
 
-@import 'theme';
-
 $scrollbar-width: 0.5rem;
 $popup-width: 32rem;
 $popup-height: 35rem;
 
+$typographyConfig: mat.define-typography-config(
+  $body-1: mat.define-typography-level(14px, 20px, 400, 'Roboto', 0.0179em),
+  $body-2: mat.define-typography-level(14px, 24px, 500, 'Roboto', 0.0179em),
+  $button: mat.define-typography-level(14px, 14px, 500, 'Roboto', 0.0893em),
+  $caption: mat.define-typography-level(12px, 20px, 400, 'Roboto', 0.0333em),
+  $headline-1: mat.define-typography-level(24px, 32px, 400, 'Roboto', 0em),
+  $headline-2: mat.define-typography-level(34px, 40px, 400, 'Roboto', 0.0074em),
+  $headline-3: mat.define-typography-level(45px, 48px, 400, 'Roboto', 0em),
+  $headline-4: mat.define-typography-level(56px, 56px, 400, 'Roboto', -0.0089em),
+  $headline-5: mat.define-typography-level(112px, 112px, 300, 'Roboto', -0.0134em),
+  $subtitle-1: mat.define-typography-level(15px, 24px, 500, 'Roboto', 0.0067em),
+  $subtitle-2: mat.define-typography-level(16px, 28px, 400, 'Roboto', 0.0094em),
+);
+
 @function getForegroundPalette($config-or-theme) {
-  $config: mat.get-color-config($config-or-theme);
-  $foreground: map.get($config, foreground);
+  $colors: mat.get-color-config($config-or-theme);
+  $foreground: map.get($colors, foreground);
 
   @return $foreground;
 }
 
 @function getBackgroundPalette($config-or-theme) {
-  $config: mat.get-color-config($config-or-theme);
-  $background: map.get($config, background);
+  $colors: mat.get-color-config($config-or-theme);
+  $background: map.get($colors, background);
 
   @return $background;
 }
 
 @function getAccentPalette($config-or-theme) {
-  $config: mat.get-color-config($config-or-theme);
-  $accent: map.get($config, accent);
+  $colors: mat.get-color-config($config-or-theme);
+  $accent: map.get($colors, accent);
 
   @return $accent;
 }
 
 @function getPrimaryPalette($config-or-theme) {
-  $config: mat.get-color-config($config-or-theme);
-  $primary: map.get($config, primary);
+  $colors: mat.get-color-config($config-or-theme);
+  $primary: map.get($colors, primary);
 
   @return $primary;
 }
 
 @function getPaletteColor($palette, $hue: default) {
   @return mat.get-color-from-palette($palette, $hue);
+}
+
+@function modify-theme($theme, $background-palette, $foreground-palette) {
+  // Replace the background in the color object's background palette.
+  $theme-color: map-get($theme, color);
+  $color-background-palette: map-get($theme-color, background);
+  $color-foreground-palette: map-get($theme-color, foreground);
+
+  @each $key, $color in $background-palette {
+    $color-background-palette: map-merge(
+      $color-background-palette,
+      (
+        $key: $color,
+      )
+    );
+  }
+
+  @each $key, $color in $foreground-palette {
+    $color-foreground-palette: map-merge(
+      $color-foreground-palette,
+      (
+        $key: $color,
+      )
+    );
+  }
+
+  // Replace the background in the background palette.
+  $legacy-background-palette: map-get($theme, background);
+  $legacy-foreground-palette: map-get($theme, foreground);
+
+  @each $key, $color in $background-palette {
+    $legacy-background-palette: map-merge(
+      $legacy-background-palette,
+      (
+        $key: $color,
+      )
+    );
+  }
+
+  @each $key, $color in $foreground-palette {
+    $legacy-foreground-palette: map-merge(
+      $legacy-foreground-palette,
+      (
+        $key: $color,
+      )
+    );
+  }
+
+  // Merge the changes into a new theme.
+  $modified-theme-color: map-merge(
+    $theme-color,
+    (
+      background: $color-background-palette,
+    )
+  );
+  $modified-theme-color: map-merge(
+    $modified-theme-color,
+    (
+      foreground: $color-foreground-palette,
+    )
+  );
+  $modified-theme: map-merge(
+    $theme,
+    (
+      color: $modified-theme-color,
+    )
+  );
+  $modified-theme: map-merge(
+    $modified-theme,
+    (
+      background: $legacy-background-palette,
+    )
+  );
+  $modified-theme: map-merge(
+    $modified-theme,
+    (
+      foreground: $legacy-foreground-palette,
+    )
+  );
+
+  @return $modified-theme;
 }

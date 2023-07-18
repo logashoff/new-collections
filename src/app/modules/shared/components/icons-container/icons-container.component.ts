@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { HostnameGroup, trackByIcons } from 'src/app/utils';
 
 @Component({
@@ -6,6 +6,7 @@ import { HostnameGroup, trackByIcons } from 'src/app/utils';
   templateUrl: './icons-container.component.html',
   styleUrls: ['./icons-container.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class IconsContainerComponent {
   @Input() icons: HostnameGroup;

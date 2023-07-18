@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { TabService } from 'src/app/services';
 import { queryCurrentWindow, restoreTabs, TabGroup, Tabs } from 'src/app/utils';
 
@@ -12,6 +12,7 @@ import { queryCurrentWindow, restoreTabs, TabGroup, Tabs } from 'src/app/utils';
   templateUrl: './group-controls.component.html',
   styleUrls: ['./group-controls.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class GroupControlsComponent {
   @Input() group: TabGroup;

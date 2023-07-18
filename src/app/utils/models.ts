@@ -1,3 +1,4 @@
+import { ThemePalette } from '@angular/material/core';
 import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { SafeUrl } from '@angular/platform-browser';
 import keyBy from 'lodash/keyBy';
@@ -35,6 +36,16 @@ export type TopSites = TopSite[];
 export type MessageRef = MatSnackBarRef<MessageComponent>;
 export type ImageSource = string | SafeUrl;
 
+/**
+ * Checks if group should be expanded by group ID
+ */
+export type GroupExpanded = { [groupId in string]: boolean };
+
+/**
+ * Checks if panel group is expanded by URL
+ */
+export type ExpandedGroupsByUrl = { [url in string]: GroupExpanded };
+
 export interface TabDelete {
   deletedTab: BrowserTab;
   revertDelete: MessageRef;
@@ -48,7 +59,7 @@ export interface Settings {
   enableTopSites?: boolean;
   ignoreTopSites?: MostVisitedURL[];
   syncStorage?: boolean;
-  panels?: { [url in string]: { [groupId in string]: boolean } };
+  panels?: ExpandedGroupsByUrl;
 }
 
 /**
@@ -224,6 +235,18 @@ export enum Action {
   Settings = 3,
   Save = 4,
 }
+
+/**
+ * Collection Action
+ */
+export interface CollectionAction {
+  action: Action;
+  icon: ActionIcon;
+  tooltip?: string;
+  color?: ThemePalette;
+}
+
+export type CollectionActions = CollectionAction[];
 
 /**
  * Common icon sizes.

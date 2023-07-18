@@ -26,39 +26,6 @@ a {
   }
 }
 
-@include theme using($theme) {
-  ::-webkit-scrollbar-track {
-    background: getPaletteColor(getBackgroundPalette($theme), background);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: getPaletteColor(getForegroundPalette($theme), divider);
-  }
-
-  body {
-    background: getPaletteColor(getBackgroundPalette($theme), background);
-  }
-
-  a {
-    &:link,
-    &:visited,
-    &:hover,
-    &:active {
-      color: getPaletteColor(getPrimaryPalette($theme));
-    }
-  }
-
-  .message-container.mat-snack-bar-container {
-    color: getPaletteColor(getForegroundPalette($theme), secondary-text);
-    background: getPaletteColor(getBackgroundPalette($theme), background);
-  }
-
-  .cdk-dialog-container.mat-bottom-sheet-container {
-    background: getPaletteColor(getBackgroundPalette($theme), background);
-    overflow: hidden;
-  }
-}
-
 .mat-raised-button,
 .mat-stroked-button,
 .mat-flat-button {
@@ -93,20 +60,20 @@ a {
   }
 }
 
-.message-container.mat-snack-bar-container {
-  @include mat.elevation(8);
-
-  padding: 0;
-  border-radius: 2rem;
+.mat-mdc-snack-bar-handset {
+  .mdc-snackbar.message-container .mdc-snackbar__surface {
+    width: auto;
+  }
 }
 
-.cdk-overlay-pane.mat-snack-bar-handset {
-  width: unset;
+.mdc-snackbar.message-container {
+  .mdc-snackbar__surface {
+    background-color: unset;
+    box-shadow: none;
+  }
 
-  .mat-snack-bar-container {
-    max-width: 33vw;
-    min-width: 344px;
-    margin: 24px;
+  .mat-mdc-snack-bar-label {
+    padding: 0;
   }
 }
 
@@ -159,4 +126,13 @@ a {
 .mat-tooltip,
 .cdk-overlay-pane.mat-tooltip-panel {
   pointer-events: none;
+}
+
+.mdc-icon-button.mat-mdc-icon-button {
+  .mat-mdc-button-persistent-ripple,
+  .mat-ripple.mat-mdc-button-ripple,
+  .mat-mdc-focus-indicator,
+  .mat-mdc-button-touch-target {
+    display: none;
+  }
 }

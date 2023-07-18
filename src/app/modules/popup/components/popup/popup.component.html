@@ -1,9 +1,10 @@
 <div class="content">
-  <app-search *ngIf="groupsTimeline$ | async; else empty" [source]="searchSource$ | async">
-    <app-timeline class="layout-container"></app-timeline>
+  <app-search [source]="searchSource$ | async">
+    <app-timeline *ngIf="groupsTimeline$ | async; else empty" 
+      class="layout-container">
+    </app-timeline>
   </app-search>
 </div>
-<app-menu class="menu" [menuItems]="menuItems$ | async"></app-menu>
 <ng-template #empty>
   <app-empty>tab_unselected</app-empty>
 </ng-template>

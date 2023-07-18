@@ -1,103 +1,71 @@
-@use '@angular/material' as mat;
-
-@import 'common';
-
-$typography: mat.define-typography-config();
-
-:host {
+app-panel-header {
   display: block;
   height: inherit;
-}
 
-.header-container {
-  display: flex;
-  height: inherit;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0 0.5rem;
-  overflow: hidden;
-  gap: 1rem;
-  min-height: 3rem;
-
-  &.disabled {
-    pointer-events: none;
-  }
-
-  &:not(.disabled):hover {
-    .description {
-      .fav {
-        display: flex;
-      }
-
-      .total {
-        display: none;
-      }
-    }
-  }
-}
-
-.title {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex: 1 1 0;
-
-  .text:not(:last-of-type) {
-    margin-right: 0.625rem;
-
-    &::after {
-      content: ',';
-    }
-  }
-}
-
-.description {
-  white-space: nowrap;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  .total,
-  .fav {
-    width: 1.75rem;
-    height: 1.75rem;
+  .header-container {
+    display: flex;
+    height: inherit;
     align-items: center;
-    justify-content: center;
-    border-radius: 2rem;
+    justify-content: space-between;
+    margin: 0 0.5rem;
+    overflow: hidden;
+    gap: 1rem;
+    min-height: 3rem;
+
+    &.disabled {
+      pointer-events: none;
+    }
+
+    &:not(.disabled):hover {
+      .description {
+        .fav {
+          display: flex;
+        }
+
+        .total {
+          display: none;
+        }
+      }
+    }
   }
 
-  .total {
-    @include mat.typography-level($typography, caption);
+  .title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1 1 0;
+
+    .text:not(:last-of-type) {
+      margin-right: 0.625rem;
+
+      &::after {
+        content: ',';
+      }
+    }
+  }
+
+  .description {
+    white-space: nowrap;
 
     display: flex;
-  }
+    align-items: center;
+    justify-content: center;
 
-  .fav {
-    display: none;
-  }
-}
-
-@include theme using($theme) {
-  :host {
-    .title {
-      color: getPaletteColor(getForegroundPalette($theme), secondary-text);
-      
-      .text:first-of-type {
-        color: getPaletteColor(getForegroundPalette($theme), text);
-      }
+    .total,
+    .fav {
+      width: 1.75rem;
+      height: 1.75rem;
+      align-items: center;
+      justify-content: center;
+      border-radius: 2rem;
     }
 
-    .description {
-      color: getPaletteColor(getForegroundPalette($theme), secondary-text);
-
-      .total {
-        background: getPaletteColor(getBackgroundPalette($theme), disabled-button-toggle);
-      }
+    .total {
+      display: flex;
     }
 
-    .icons-container .overflow {
-      color: getPaletteColor(getForegroundPalette($theme), disabled-text);
+    .fav {
+      display: none;
     }
   }
 }

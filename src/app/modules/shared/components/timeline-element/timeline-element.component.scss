@@ -1,26 +1,16 @@
-@import 'common';
-
-:host {
+app-timeline-element {
   display: block;
-}
 
-.timeline-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0 0 0.5rem;
-  overflow: hidden;
-  height: 2.5rem;
-}
+  .timeline-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 0.5rem;
+    overflow: hidden;
+    height: 2.5rem;
+  }
 
-h3.timeline-label {
-  margin: 0;
-}
-
-@include theme using($theme) {
-  :host {
-    .timeline-header {
-      color: getPaletteColor(getForegroundPalette($theme), hint-text);
-    }
+  h3.timeline-label {
+    margin: 0;
   }
 }

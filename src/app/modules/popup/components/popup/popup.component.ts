@@ -1,8 +1,7 @@
-import { MatFabMenu } from '@angular-material-extensions/fab-menu';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { map, Observable } from 'rxjs';
-import { MenuService, TabService } from 'src/app/services';
-import { Action, BrowserTabs, Timeline } from 'src/app/utils';
+import { Observable } from 'rxjs';
+import { TabService } from 'src/app/services';
+import { BrowserTabs, Timeline } from 'src/app/utils';
 
 /**
  * @description
@@ -17,20 +16,15 @@ import { Action, BrowserTabs, Timeline } from 'src/app/utils';
   encapsulation: ViewEncapsulation.None,
 })
 export class PopupComponent {
-
   /**
    * Tab groups grouped by time
    */
-  readonly groupsTimeline$: Observable<Timeline> = this.tabsService.groupsTimeline$;
+  readonly groupsTimeline$: Observable<Timeline>;
 
-  /**
-   * Main menu items.
-   */
-  readonly menuItems$: Observable<MatFabMenu[]> = this.menuService.menuItems$.pipe(
-    map((menuItems) => menuItems.filter((item) => ![Action.Import].includes(item.id as Action)))
-  );
+  readonly searchSource$: Observable<BrowserTabs>;
 
-  readonly searchSource$: Observable<BrowserTabs> = this.tabsService.tabs$;
-
-  constructor(private tabsService: TabService, private menuService: MenuService) {}
+  constructor(private tabsService: TabService) {
+    this.groupsTimeline$ = this.tabsService.groupsTimeline$;
+    this.searchSource$ = this.tabsService.tabs$;
+  }
 }

@@ -1,34 +1,46 @@
-@import 'common';
+@use '@angular/material' as mat;
 
-.container {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0 0.5rem;
-  height: 3rem;
-}
+app-message {
+  @include mat.elevation(8);
 
-.message {
-  flex: 1 1 auto;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+  display: block;
+  border-radius: 1rem;
+  box-sizing: border-box;
 
-.icon {
-  line-height: 0;
-
-  mat-icon {
-    font-size: 1.75rem;
-    height: 1.75rem;
-    width: 1.75rem;
+  .container {
+    display: flex;
+    align-items: stretch;
+    gap: 1rem;
   }
-}
 
-@include theme using($theme) {
-  :host {
+  .message {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .icon-container {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 1rem;
+
     .icon {
-      color: getPaletteColor(getPrimaryPalette($theme));
+      line-height: 0;
+
+      mat-icon {
+        font-size: 1.75rem;
+        height: 1.75rem;
+        width: 1.75rem;
+      }
     }
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
   }
 }
