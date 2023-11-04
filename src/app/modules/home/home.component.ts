@@ -1,8 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TabService } from 'src/app/services';
+import { TabService, HomeService } from 'src/app/services';
 import { BrowserTabs, TabGroups, Timeline, TopSites, trackByLabel } from 'src/app/utils';
-import { HomeService } from '../../services';
+import { SharedModule } from '../shared';
 
 /**
  * @description
@@ -15,6 +16,9 @@ import { HomeService } from '../../services';
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [CommonModule, SharedModule],
+  providers: [ HomeService ]
 })
 export class HomeComponent {
   readonly trackByLabel = trackByLabel;

@@ -13,8 +13,12 @@ app-list-item {
     gap: 1rem;
     cursor: pointer;
 
-    &:hover .controls {
-      display: flex;
+    &:hover {
+      padding-right: 0.5rem;
+
+      .controls {
+        display: flex;
+      }
     }
   }
 

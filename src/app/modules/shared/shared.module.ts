@@ -31,6 +31,7 @@ import {
   TabsSelectorComponent,
   TimelineComponent,
   TimelineElementComponent,
+  TopSitesComponent,
 } from './components/index';
 import { StopPropagationDirective } from './directives/index';
 import { FaviconPipe, HostnamePipe, MatchPipe } from './pipes/index';
@@ -56,6 +57,7 @@ const declarations = [
   TabsSelectorComponent,
   TimelineComponent,
   TimelineElementComponent,
+  TopSitesComponent,
 ];
 
 const materialModules = [

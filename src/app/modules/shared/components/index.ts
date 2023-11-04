@@ -14,3 +14,4 @@ export * from './tab-list/tab-list.component';
 export * from './tabs-selector/tabs-selector.component';
 export * from './timeline-element/timeline-element.component';
 export * from './timeline/timeline.component';
+export * from './top-sites/top-sites.component'

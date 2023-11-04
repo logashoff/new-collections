@@ -1,7 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TabService } from 'src/app/services';
 import { BrowserTabs, Timeline } from 'src/app/utils';
+import { SharedModule } from '../shared';
 
 /**
  * @description
@@ -14,6 +16,8 @@ import { BrowserTabs, Timeline } from 'src/app/utils';
   styleUrls: ['./popup.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [CommonModule, SharedModule]
 })
 export class PopupComponent {
   /**

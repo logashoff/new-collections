@@ -1,6 +1,15 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import isUndefined from 'lodash/isUndefined';
 import { BehaviorSubject, Observable, map, shareReplay, startWith, take } from 'rxjs';
 import { MenuService, SettingsService } from 'src/app/services';
@@ -42,6 +51,20 @@ interface OptionsForm {
   styleUrls: ['./options.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatListModule,
+    MatProgressBarModule,
+    MatSlideToggleModule,
+    MatTooltipModule,
+    ReactiveFormsModule,
+    TranslateModule,
+  ],
 })
 export class OptionsComponent implements OnInit {
   readonly collectionActions: CollectionActions;

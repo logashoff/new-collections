@@ -1,7 +1,7 @@
 <mat-accordion [multi]="true">
   <mat-expansion-panel #panel
     *ngFor="let group of groups; trackBy: trackByGroupId"
-    [expanded]="(panelStates$ | async)[group.id] || (activeGroupId$ | async) === group.id && !isNaN(activeTabId$ | async) || panel.expanded"
+    [expanded]="(panelStates$ | async)?.[group.id] || (activeGroupId$ | async) === group.id && !isNaN(activeTabId$ | async) || panel.expanded"
     (opened)="opened(group.id)"
     (closed)="closed(group.id)"
     hideToggle>
