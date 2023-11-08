@@ -1,3 +1,26 @@
+@use '@angular/material' as mat;
+@import 'theme';
+
+
+$typography-config: mat.get-typography-config($dark-theme);
+
+@include component-theme using($theme) {
+  app-list-item {
+    .container {
+      color: getPaletteColor(getForegroundPalette($theme), text);
+    }
+
+    &:hover {
+      background-color: getPaletteColor(getBackgroundPalette($theme), hover);
+    }
+
+    .subtitle,
+    .controls {
+      color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+    }
+  }
+}
+
 app-list-item {
   display: block;
   position: relative;
@@ -34,6 +57,14 @@ app-list-item {
       background: none;
       font-weight: 300;
       color: inherit;
+    }
+
+    .title {
+      @include mat.typography-level($typography-config, subtitle-1);
+    }
+
+    .subtitle {
+      @include mat.typography-level($typography-config, caption);
     }
 
     &,

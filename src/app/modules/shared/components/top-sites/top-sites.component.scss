@@ -1,3 +1,27 @@
+@use '@angular/material' as mat;
+@import 'theme';
+
+@include component-theme using($theme) {
+  app-top-sites {
+    .site-container {
+      .site {
+        background: getPaletteColor(getBackgroundPalette($theme), disabled-list-option);
+      }
+
+      .site-title {
+        color: getPaletteColor(getForegroundPalette($theme), text);
+      }
+
+      .remove-btn {
+        color: getPaletteColor(getForegroundPalette($theme), text);
+        background: getPaletteColor(getBackgroundPalette($theme), card);
+      }
+    }
+  }
+}
+
+$typography-config: mat.get-typography-config($dark-theme);
+
 app-top-sites {
   display: block;
   position: relative;
@@ -24,6 +48,8 @@ app-top-sites {
         }
 
         .site-title {
+          @include mat.typography-level($typographyConfig, body-1);
+
           display: block;
           position: relative;
           overflow: hidden;

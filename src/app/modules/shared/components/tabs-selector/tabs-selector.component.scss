@@ -1,3 +1,28 @@
+@use '@angular/material' as mat;
+@import 'theme';
+
+@include component-theme using($theme) {
+  app-tabs-selector {
+    .container {
+      color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+
+      .header-container {
+        background: getPaletteColor(getBackgroundPalette($theme), background);
+      }
+
+      .list-container .list-item {
+        color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+
+        .item-subtitle {
+          color: getPaletteColor(getForegroundPalette($theme), hint-text);
+        }
+      }
+    }
+  }
+}
+
+$typography-config: mat.get-typography-config($dark-theme);
+
 app-tabs-selector {
   $max-width: 25rem;
 
@@ -30,6 +55,8 @@ app-tabs-selector {
       padding: 0.5rem;
 
       .heading {
+        @include mat.typography-level($typographyConfig, subtitle-1);
+
         margin-left: 0.5rem;
       }
 
@@ -69,6 +96,10 @@ app-tabs-selector {
           overflow: hidden;
           text-overflow: ellipsis;
 
+          .item-title {
+            @include mat.typography-level($typographyConfig, body-1);
+          }
+
           .item-title,
           .item-subtitle {
             overflow: hidden;
@@ -76,6 +107,8 @@ app-tabs-selector {
           }
 
           .item-subtitle {
+            @include mat.typography-level($typographyConfig, caption);
+
             display: flex;
             align-items: center;
             gap: 0.5rem;

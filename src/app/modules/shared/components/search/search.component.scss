@@ -1,3 +1,35 @@
+@use '@angular/material' as mat;
+@import 'theme';
+
+@include component-theme using($theme) {
+  app-search {
+    $border-color: getPaletteColor(getForegroundPalette($theme), divider);
+
+    color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+
+    .controls-wrapper {
+      $background-color: getPaletteColor(getBackgroundPalette($theme), card);
+      background-color: $background-color;
+      border: 1px solid $border-color;
+
+      .controls {
+        border-left: 1px solid $border-color;
+      }
+    }
+
+    .mat-mdc-form-field-icon-prefix,
+    .mat-mdc-form-field-icon-suffix {
+      color: getPaletteColor(getForegroundPalette($theme), text);
+    }
+
+    .results-count {
+      color: getPaletteColor(getForegroundPalette($theme), hint-text);
+    }
+  }
+}
+
+$typography-config: mat.get-typography-config($dark-theme);
+
 app-search {
   .controls-wrapper {
     $height: 40px;
@@ -59,6 +91,8 @@ app-search {
   }
 
   .results-count {
+    @include mat.typography-level($typographyConfig, subtitle-2);
+    
     margin: 0 0 0.5rem;
     overflow: hidden;
     height: 2.5rem;

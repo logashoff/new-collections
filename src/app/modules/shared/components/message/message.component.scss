@@ -1,5 +1,22 @@
 @use '@angular/material' as mat;
 
+@import 'theme';
+
+@include component-theme using ($theme) {
+  app-message {
+    $background-color: getPaletteColor(getBackgroundPalette($theme), card);
+    $accent-color: getPaletteColor(getPrimaryPalette($theme));
+
+    color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+    background-color: $background-color;
+
+    .icon-container {
+      background-color: $accent-color;
+      color: $background-color;
+    }
+  }
+}
+
 app-message {
   @include mat.elevation(8);
 

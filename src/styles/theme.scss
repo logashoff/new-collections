@@ -1,20 +1,5 @@
 @use '@angular/material' as mat;
 
-@use './components/app-theme' as app;
-@use './components/chip-theme' as chip;
-@use './components/empty-theme' as empty;
-@use './components/group-controls-theme' as group-controls;
-@use './components/icons-container-theme' as icons-container;
-@use './components/list-item-theme' as list-item;
-@use './components/message-theme' as message;
-@use './components/options-theme' as options;
-@use './components/panel-header-theme' as panel-header;
-@use './components/ripple-theme' as ripple;
-@use './components/search-theme' as search;
-@use './components/tabs-selector-theme' as tabs-selector;
-@use './components/timeline-element-theme' as timeline-element;
-@use './components/top-sites-theme' as top-sites;
-
 @import 'common';
 @import 'typography';
 
@@ -328,23 +313,54 @@ $light-theme: modify-theme($light-theme, $light-theme-background-palette, $light
   color: $light-secondary-text;
 }
 
+@mixin app-color($theme) {
+  ::-webkit-scrollbar-track {
+    background: getPaletteColor(getBackgroundPalette($theme), background);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: getPaletteColor(getForegroundPalette($theme), divider);
+  }
+
+  body {
+    background: getPaletteColor(getBackgroundPalette($theme), background);
+  }
+
+  a {
+    &:link,
+    &:visited,
+    &:hover,
+    &:active {
+      color: getPaletteColor(getPrimaryPalette($theme));
+    }
+  }
+
+  .message-container.mat-snack-bar-container {
+    color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+    background: getPaletteColor(getBackgroundPalette($theme), background);
+  }
+
+  .cdk-dialog-container.mat-bottom-sheet-container {
+    background: getPaletteColor(getBackgroundPalette($theme), background);
+    overflow: hidden;
+  }
+
+  .cdk-drag-preview {
+    background-color: getPaletteColor(getBackgroundPalette($theme), card);
+  }
+}
+
+@mixin app-theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include app-color($theme);
+  }
+}
+
 @include mat.core();
 
 @include mat.all-component-themes($dark-theme);
-@include app.theme($dark-theme);
-@include chip.theme($dark-theme);
-@include empty.theme($dark-theme);
-@include group-controls.theme($dark-theme);
-@include icons-container.theme($dark-theme);
-@include list-item.theme($dark-theme);
-@include message.theme($dark-theme);
-@include options.theme($dark-theme);
-@include panel-header.theme($dark-theme);
-@include ripple.theme($dark-theme);
-@include search.theme($dark-theme);
-@include tabs-selector.theme($dark-theme);
-@include timeline-element.theme($dark-theme);
-@include top-sites.theme($dark-theme);
+@include app-theme($dark-theme);
 
 @media (prefers-color-scheme: light) {
   .mat-raised-button.mat-warn,
@@ -356,24 +372,19 @@ $light-theme: modify-theme($light-theme, $light-theme-background-palette, $light
   .mat-mini-fab {
     background-color: $light-background;
   }
-
+  
   .mat-mdc-form-field-hint {
     color: $dark-secondary-text;
   }
-
+  
   @include mat.all-component-colors($light-theme);
-  @include app.theme($light-theme);
-  @include chip.theme($light-theme);
-  @include empty.theme($light-theme);
-  @include group-controls.theme($light-theme);
-  @include icons-container.theme($light-theme);
-  @include list-item.theme($light-theme);
-  @include message.theme($light-theme);
-  @include options.theme($light-theme);
-  @include panel-header.theme($light-theme);
-  @include ripple.theme($light-theme);
-  @include search.theme($light-theme);
-  @include tabs-selector.theme($light-theme);
-  @include timeline-element.theme($light-theme);
-  @include top-sites.theme($light-theme);
+  @include app-theme($light-theme);
+}
+
+@mixin component-theme() {
+  @content($dark-theme);
+
+  @media (prefers-color-scheme: light) {
+    @content($light-theme);
+  }
 }

@@ -1,3 +1,11 @@
+@import 'theme';
+
+@include component-theme using($theme) {
+  app-empty {
+    color: getPaletteColor(getForegroundPalette($theme), disabled-text);
+  }
+}
+
 $icon-size: 5rem;
 
 app-empty {

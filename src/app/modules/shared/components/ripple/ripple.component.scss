@@ -1,3 +1,15 @@
+@import 'theme';
+
+@include component-theme using($theme) {
+  app-ripple.focused {
+    $color: getPaletteColor(getBackgroundPalette($theme), ripple);
+    $alpha: rgba(0, 0, 0, 0);
+    background: radial-gradient(circle, $color 0%, $color 49%, $alpha 50%, $alpha 100%);
+    background-position: 50%;
+    background-repeat: no-repeat;
+  }
+}
+
 app-ripple {
   @keyframes ripple {
     from {

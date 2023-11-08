@@ -1,4 +1,17 @@
-@import 'common';
+@use '@angular/material' as mat;
+@import 'theme';
+
+@include component-theme using($theme) {
+  app-options {
+    .list-container {
+      fieldset {
+        border-color: getPaletteColor(getForegroundPalette($theme), divider);
+      }
+    }
+  }
+}
+
+$typography-config: mat.get-typography-config($dark-theme);
 
 html,
 body {
@@ -18,6 +31,14 @@ app-options {
   right: 0;
   overflow: hidden;
   overflow-y: auto;
+
+  h4 {
+    @include mat.typography-level($typographyConfig, subtitle-1);
+  }
+
+  .mat-mdc-form-field-hint {
+    @include mat.typography-level($typographyConfig, caption);
+  }
 
   .mdc-card {
     display: flex;

@@ -1,3 +1,17 @@
+@use '@angular/material' as mat;
+@import 'theme';
+
+
+@include component-theme using($theme) {
+  app-timeline-element {
+    .timeline-header {
+      color: getPaletteColor(getForegroundPalette($theme), hint-text);
+    }
+  }
+}
+
+$typography-config: mat.get-typography-config($dark-theme);
+
 app-timeline-element {
   display: block;
 
@@ -11,6 +25,8 @@ app-timeline-element {
   }
 
   h3.timeline-label {
+    @include mat.typography-level($typographyConfig, subtitle-2);
+
     margin: 0;
   }
 }

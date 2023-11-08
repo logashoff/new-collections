@@ -1,3 +1,13 @@
+@import 'theme';
+
+@include component-theme using($theme) {
+  app-icons-container {
+    .icons-container .overflow {
+      color: getPaletteColor(getForegroundPalette($theme), disabled-text);
+    }
+  }
+}
+
 app-icons-container {
   display: block;
   position: relative;
