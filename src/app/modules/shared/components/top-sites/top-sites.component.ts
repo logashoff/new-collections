@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 import { MessageService, SettingsService } from 'src/app/services';
-import { ActionIcon, TopSite, TopSites, trackBySite, translate } from 'src/app/utils';
+import { ActionIcon, TopSite, TopSites, translate } from 'src/app/utils';
 
 /**
  * @description
@@ -17,8 +17,7 @@ import { ActionIcon, TopSite, TopSites, trackBySite, translate } from 'src/app/u
 })
 export class TopSitesComponent {
   @Input() topSites: TopSites;
-
-  readonly trackBySite = trackBySite;
+  
   readonly translate = translate();
 
   constructor(private message: MessageService, private settings: SettingsService) {}

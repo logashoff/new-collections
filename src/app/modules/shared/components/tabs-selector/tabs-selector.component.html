@@ -30,19 +30,26 @@
     </div>
     <div class="list-container">
       <mat-selection-list formControlName="list">
-        <mat-list-option *ngFor="let tab of tabs; trackBy: trackByTabId" [value]="tab" color="primary">
-          <div class="list-item">
-            <app-chip [source]="tab.favIconUrl | favicon: tab.url" size="small"></app-chip>
-            <div class="item-text">
-              <div class="item-title">{{ tab.title }}</div>
-              <span class="item-subtitle">
-                <span>{{ tab.url | hostname }}</span>
-                <mat-icon *ngIf="tab.pinned">push_pin</mat-icon>
-                <mat-icon *ngIf="tab.active">tab</mat-icon>
-              </span>
+        @for (tab of tabs; track tab.id) {
+          <mat-list-option [value]="tab" color="primary">
+            <div class="list-item">
+              <app-chip [source]="tab.favIconUrl | favicon: tab.url" size="small"></app-chip>
+              <div class="item-text">
+                <div class="item-title">{{ tab.title }}</div>
+                <span class="item-subtitle">
+                  <span>{{ tab.url | hostname }}</span>
+                  @if (tab.pinned) {
+                    <mat-icon>push_pin</mat-icon>
+                  }
+
+                  @if (tab.active) {
+                    <mat-icon>tab</mat-icon>
+                  }
+                </span>
+              </div>
             </div>
-          </div>
-        </mat-list-option>
+          </mat-list-option>
+        }
       </mat-selection-list>
     </div>
   </div>

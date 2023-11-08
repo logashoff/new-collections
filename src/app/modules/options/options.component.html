@@ -13,13 +13,14 @@
           </mat-progress-bar>
         </section>
         <section class="storage-controls">
-          <button *ngFor="let action of collectionActions"
-            mat-icon-button 
-            [matTooltip]="action.tooltip"
-            (click)="handleAction(action.action)"
-            [color]="action.color">
-            <mat-icon>{{ action.icon }}</mat-icon>
-          </button>
+          @for (action of collectionActions; track action) {
+            <button mat-icon-button 
+              [matTooltip]="action.tooltip"
+              (click)="handleAction(action.action)"
+              [color]="action.color">
+              <mat-icon>{{ action.icon }}</mat-icon>
+            </button>
+          }
         </section>
       </section>
       <section class="toggles">
@@ -40,23 +41,27 @@
         </mat-slide-toggle>
       </section>
       <section class="list-container">
-        <fieldset *ngIf="ignoreSitesControl.controls?.length > 0 && sitesControl.value" >
-          <legend>
-            <h4 class="ignore-heading" translate>ignoredSites</h4>
-          </legend>
-          <mat-list role="list" class="list">
-            <mat-list-item role="listitem" *ngFor="let ignoredSite of ignoreSitesControl.controls; let i = index">
-              <div class="list-item">
-                <span class="list-item-label">
-                  {{ ignoredSite.value?.title }}
-                </span>
-                <button mat-icon-button (click)="ignoreSitesControl.removeAt(i)">
-                  <mat-icon>close</mat-icon>
-                </button>
-              </div>
-            </mat-list-item>
-          </mat-list>
-        </fieldset>
+        @if (ignoreSitesControl.controls?.length > 0 && sitesControl.value) {
+          <fieldset>
+            <legend>
+              <h4 class="ignore-heading" translate>ignoredSites</h4>
+            </legend>
+            <mat-list role="list" class="list">
+              @for (ignoredSite of ignoreSitesControl.controls; track ignoredSite; let i = $index) {
+                <mat-list-item role="listitem">
+                  <div class="list-item">
+                    <span class="list-item-label">
+                      {{ ignoredSite.value?.title }}
+                    </span>
+                    <button mat-icon-button (click)="ignoreSitesControl.removeAt(i)">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+                </mat-list-item>
+              }
+            </mat-list>
+          </fieldset>
+        }
       </section>
     </mat-card-content>
   </mat-card>

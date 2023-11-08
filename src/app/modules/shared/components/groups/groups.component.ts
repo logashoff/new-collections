@@ -8,8 +8,6 @@ import {
   TabGroup,
   TabGroups,
   TabsByHostname,
-  trackByGroupId,
-  trackByTabId,
 } from 'src/app/utils';
 
 /**
@@ -76,11 +74,6 @@ export class GroupsComponent {
    */
   readonly panelStates$: Observable<GroupExpanded>;
 
-  /**
-   * Group list ngFor trackBy function.
-   */
-  readonly trackByGroupId = trackByGroupId;
-  readonly trackByTabId = trackByTabId;
   readonly isNaN = isNaN;
 
   constructor(private navService: NavService, private tabService: TabService, private settings: SettingsService) {

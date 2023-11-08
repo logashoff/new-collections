@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TabService, HomeService } from 'src/app/services';
-import { BrowserTabs, TabGroups, Timeline, TopSites, trackByLabel } from 'src/app/utils';
+import { BrowserTabs, TabGroups, Timeline, TopSites } from 'src/app/utils';
 import { SharedModule } from '../shared';
 
 /**
@@ -21,8 +21,6 @@ import { SharedModule } from '../shared';
   providers: [ HomeService ]
 })
 export class HomeComponent {
-  readonly trackByLabel = trackByLabel;
-
   readonly devicesTimeline$: Observable<Timeline>;
   readonly hasAnyData$: Observable<boolean>;
   readonly searchSource$: Observable<BrowserTabs>;

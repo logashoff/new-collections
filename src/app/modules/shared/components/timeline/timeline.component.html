@@ -1,6 +1,7 @@
-<app-timeline-element
-  *ngFor="let item of timeline$ | async; trackBy: trackByLabel"
-  [timelineLabel]="item.label"
-  (removed)="removeGroups(item.elements)">
-  <app-groups [groups]="item.elements"></app-groups>
-</app-timeline-element>
+@for (item of timeline$ | async; track item.label) {
+  <app-timeline-element
+    [timelineLabel]="item.label"
+    (removed)="removeGroups(item.elements)">
+    <app-groups [groups]="item.elements"></app-groups>
+  </app-timeline-element>
+}

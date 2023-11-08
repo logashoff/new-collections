@@ -7,15 +7,17 @@
         formControlName="search" 
         [placeholder]="'searchBookmarks' | translate" 
         autocomplete="off" />
-      <button
-        *ngIf="hasSearchValue$ | async"
-        matSuffix
-        mat-icon-button
-        [disableRipple]="true"
-        tabindex="-1"
-        (click)="clearSearch()">
-        <mat-icon>close</mat-icon>
-      </button>
+
+      @if (hasSearchValue$ | async) {
+        <button
+          matSuffix
+          mat-icon-button
+          [disableRipple]="true"
+          tabindex="-1"
+          (click)="clearSearch()">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
     </mat-form-field>
   </form>
   <div class="controls">
@@ -27,37 +29,36 @@
     </button>
   </div>
 </section>
-<ng-container [ngSwitch]="hasSearchValue$ | async">
-  <ng-container *ngSwitchCase="true">
-    <ng-container *ngIf="searchResults$ | async as searchResults">
-      <ng-container *ngIf="searchResults.length > 0; else empty">
-        <h3 class="results-count" [ngPlural]="searchResults.length">
+<ng-container [ngSwitch]="">
+  @if (hasSearchValue$ | async) {
+    @if ((searchResults$ | async).length > 0) {
+      <ng-container>
+        <h3 class="results-count" [ngPlural]="(searchResults$ | async).length">
           <ng-template ngPluralCase="one">
             {{ 'oneResult' | translate }}
           </ng-template>
           <ng-template ngPluralCase="other">
-            {{ 'resultCount' | translate: { count: searchResults.length } }}
+            {{ 'resultCount' | translate: { count: (searchResults$ | async).length } }}
           </ng-template>
         </h3>
         <mat-card class="search-container">
           <app-tab-list>
-            <app-list-item
-              *ngFor="let tab of tabs$ | async; trackBy: trackByTabId"
-              [tab]="tab"
-              [searchMatches]="(matches$ | async).get(tab)"
-              (deleted)="itemDeleted($event)"
-              (modified)="itemModified($event)"
-              [timelineButton]="true">
-            </app-list-item>
+            @for (tab of tabs$ | async; track tab.id) {
+              <app-list-item
+                [tab]="tab"
+                [searchMatches]="(matches$ | async).get(tab)"
+                (deleted)="itemDeleted($event)"
+                (modified)="itemModified($event)"
+                [timelineButton]="true">
+              </app-list-item>
+            }
           </app-tab-list>
         </mat-card>
       </ng-container>
-    </ng-container>
-  </ng-container>
-  <ng-container *ngSwitchCase="false">
+    } @else {
+      <app-empty>search_off</app-empty>
+    }
+  } @else {
     <ng-content select=".layout-container"></ng-content>
-  </ng-container>
+  }
 </ng-container>
-<ng-template #empty>
-  <app-empty>search_off</app-empty>
-</ng-template>

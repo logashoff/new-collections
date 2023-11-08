@@ -1,10 +1,11 @@
 <div class="content">
   <app-search [source]="searchSource$ | async">
-    <app-timeline *ngIf="groupsTimeline$ | async; else empty" 
-      class="layout-container">
-    </app-timeline>
+    @if (groupsTimeline$ | async) {
+      <app-timeline 
+        class="layout-container">
+      </app-timeline>
+    } @else {
+      <app-empty>tab_unselected</app-empty>
+    }
   </app-search>
 </div>
-<ng-template #empty>
-  <app-empty>tab_unselected</app-empty>
-</ng-template>

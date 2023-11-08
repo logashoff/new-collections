@@ -13,7 +13,7 @@ import {
   withLatestFrom,
 } from 'rxjs';
 import { MenuService, NavService } from 'src/app/services';
-import { Action, BrowserTab, BrowserTabs, TabDelete, trackByTabId } from 'src/app/utils';
+import { Action, BrowserTab, BrowserTabs, TabDelete } from 'src/app/utils';
 
 const fuseOptions: Fuse.IFuseOptions<BrowserTab> = {
   keys: ['title', 'url'],
@@ -56,8 +56,6 @@ export class SearchComponent implements OnInit {
   readonly formGroup = new FormGroup<SearchForm>({
     search: new FormControl<string>(''),
   });
-
-  readonly trackByTabId = trackByTabId;
 
   /**
    * Indicates search data is present.

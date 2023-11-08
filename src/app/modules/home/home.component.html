@@ -1,22 +1,29 @@
 <div class="content">
-  <app-top-sites *ngIf="topSites$ | async as topSites" [topSites]="topSites"></app-top-sites>
+  @if (topSites$ | async) {
+    <app-top-sites [topSites]="topSites$ | async"></app-top-sites>
+  }
+
   <app-search [source]="searchSource$ | async">
-    <div class="layout-container" *ngIf="hasAnyData$ | async; else empty">
-      <app-timeline-element class="layout-item"
-        *ngFor="let item of devicesTimeline$ | async; trackBy: trackByLabel"
-        [timelineLabel]="item.label"
-        [controls]="false">
-        <app-groups [groups]="item.elements"></app-groups>
-      </app-timeline-element>
-      <app-timeline-element class="layout-item"
-        *ngFor="let item of timeline$ | async; trackBy: trackByLabel"
-        [timelineLabel]="item.label"
-        (removed)="removeGroups(item.elements)">
-        <app-groups [groups]="item.elements" [dragDisabled]="false"></app-groups>
-      </app-timeline-element>
-    </div>
+    @if (hasAnyData$ | async) {
+      <div class="layout-container">
+        @for (item of devicesTimeline$ | async; track item.label) {
+          <app-timeline-element class="layout-item"
+            [timelineLabel]="item.label"
+            [controls]="false">
+            <app-groups [groups]="item.elements"></app-groups>
+          </app-timeline-element>
+        }
+
+        @for (item of timeline$ | async; track item.label) {
+          <app-timeline-element class="layout-item"
+            [timelineLabel]="item.label"
+            (removed)="removeGroups(item.elements)">
+            <app-groups [groups]="item.elements" [dragDisabled]="false"></app-groups>
+          </app-timeline-element>
+        }
+      </div>
+    } @else {
+      <app-empty>home</app-empty>
+    }
   </app-search>
 </div>
-<ng-template #empty>
-  <app-empty>home</app-empty>
-</ng-template>

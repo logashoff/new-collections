@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TabService } from 'src/app/services';
-import { TabGroups, Timeline, trackByLabel } from 'src/app/utils';
+import { TabGroups, Timeline } from 'src/app/utils';
 
 /**
  * @description
@@ -16,8 +16,6 @@ import { TabGroups, Timeline, trackByLabel } from 'src/app/utils';
 })
 export class TimelineComponent {
   readonly timeline$: Observable<Timeline>;
-
-  readonly trackByLabel = trackByLabel;
 
   constructor(private tabService: TabService) {
     this.timeline$ = this.tabService.groupsTimeline$;

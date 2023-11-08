@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
-import { HostnameGroup, trackByIcons } from 'src/app/utils';
+import { HostnameGroup } from 'src/app/utils';
 
 @Component({
   selector: 'app-icons-container',
@@ -10,11 +10,6 @@ import { HostnameGroup, trackByIcons } from 'src/app/utils';
 })
 export class IconsContainerComponent {
   @Input() icons: HostnameGroup;
-
-  /**
-   * Track icons by icon count.
-   */
-  readonly trackByIcons = trackByIcons;
 
   /**
    * Max number of icons should be displayed in panel header.

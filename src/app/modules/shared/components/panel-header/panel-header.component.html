@@ -1,18 +1,25 @@
 <div class="header-container" [ngClass]="{ disabled: readOnly }">
   <app-icons-container [icons]="icons"></app-icons-container>
-  <div class="title" *ngIf="titleText?.length > 0">
-    <span class="text" *ngFor="let text of titleText">{{ text }}</span>
-  </div>
-  <div class="description" *ngIf="total > 0">
-    <div class="fav" 
-      [appStopPropagation]
-      [matTooltip]="'pin' | translate" 
-      (click)="favClicked()">
-      <ng-container [ngSwitch]="pinned">
-        <mat-icon *ngSwitchCase="false">grade</mat-icon>
-        <mat-icon *ngSwitchCase="true">star</mat-icon>
-      </ng-container>
+  @if (titleText?.length > 0) {
+    <div class="title">
+      @for (text of titleText; track text) {
+        <span class="text">{{ text }}</span>
+      }
     </div>
-    <div class="total">{{ total }}</div>
-  </div>
+  }
+  @if (total > 0) {
+    <div class="description">
+      <div class="fav" 
+        [appStopPropagation]
+        [matTooltip]="'pin' | translate" 
+        (click)="favClicked()">
+        @if (pinned) {
+          <mat-icon>grade</mat-icon>
+        } @else {
+          <mat-icon>star</mat-icon>
+        }
+      </div>
+      <div class="total">{{ total }}</div>
+    </div>
+  }
 </div>

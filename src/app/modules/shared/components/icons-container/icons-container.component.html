@@ -1,16 +1,22 @@
 <div class="icons-container">
-  <ng-container *ngFor="let tabs of icons; let i = index; trackBy: trackByIcons">
-    <span
-      *ngIf="i < maxIconsLength"
-      class="badged-icon"
-      matBadgeSize="small"
-      [matBadge]="tabs.length"
-      [matBadgeHidden]="tabs.length <= 1">
-      <app-chip 
-        [source]="tabs[0].favIconUrl | favicon: tabs[0].url"
-        size="small">
-      </app-chip>
+  @for (tabs of icons; let i = $index; track icons.length) {
+    @if (i < maxIconsLength) {
+      <span
+        class="badged-icon"
+        matBadgeSize="small"
+        [matBadge]="tabs.length"
+        [matBadgeHidden]="tabs.length <= 1">
+        <app-chip 
+          [source]="tabs[0].favIconUrl | favicon: tabs[0].url"
+          size="small">
+        </app-chip>
+      </span>
+    }
+  }
+
+  @if (icons.length > maxIconsLength) {
+    <span class="overflow">
+      +{{ icons.length - maxIconsLength }}
     </span>
-  </ng-container>
-  <span class="overflow" *ngIf="icons.length > maxIconsLength">+{{ icons.length - maxIconsLength }}</span>
+  }
 </div>
