@@ -11,12 +11,12 @@
     <div class="description">
       <div class="fav" 
         [appStopPropagation]
-        [matTooltip]="'pin' | translate" 
+        matTooltip="{{ (pinned ? 'unpin' : 'pin') | translate }}"
         (click)="favClicked()">
         @if (pinned) {
-          <mat-icon>grade</mat-icon>
-        } @else {
           <mat-icon>star</mat-icon>
+        } @else {
+          <mat-icon>grade</mat-icon>
         }
       </div>
       <div class="total">{{ total }}</div>
