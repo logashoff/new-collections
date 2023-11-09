@@ -34,7 +34,7 @@ import {
   TopSitesComponent,
 } from './components/index';
 import { StopPropagationDirective } from './directives/index';
-import { FaviconPipe, HostnamePipe, MatchPipe } from './pipes/index';
+import { FaviconPipe, HostnamePipe } from './pipes/index';
 
 const declarations = [
   ChipComponent,
@@ -46,7 +46,6 @@ const declarations = [
   IconsContainerComponent,
   ImageComponent,
   ListItemComponent,
-  MatchPipe,
   MessageComponent,
   PanelHeaderComponent,
   RenameDialogComponent,

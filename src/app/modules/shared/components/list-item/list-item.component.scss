@@ -6,7 +6,7 @@ $typography-config: mat.get-typography-config($dark-theme);
 
 @include component-theme using($theme) {
   app-list-item {
-    .container {
+    .container, a:link, a:visited, a:hover, a:active {
       color: getPaletteColor(getForegroundPalette($theme), text);
     }
 
@@ -52,12 +52,6 @@ app-list-item {
 
   .text-container {
     flex-grow: 1;
-
-    mark {
-      background: none;
-      font-weight: 300;
-      color: inherit;
-    }
 
     .title {
       @include mat.typography-level($typography-config, subtitle-1);

@@ -97,7 +97,7 @@ app-tabs-selector {
           text-overflow: ellipsis;
 
           .item-title {
-            @include mat.typography-level($typographyConfig, body-1);
+            @include mat.typography-level($typographyConfig, body-2);
           }
 
           .item-title,

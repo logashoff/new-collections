@@ -18,7 +18,7 @@ import { Action, BrowserTab, BrowserTabs, TabDelete } from 'src/app/utils';
 const fuseOptions: Fuse.IFuseOptions<BrowserTab> = {
   keys: ['title', 'url'],
   threshold: 0.33,
-  includeMatches: true,
+  includeMatches: false,
   ignoreLocation: true,
 };
 
@@ -84,11 +84,6 @@ export class SearchComponent implements OnInit {
   readonly tabs$: Observable<BrowserTab[]>;
 
   /**
-   * Maps tab to search matches indices.
-   */
-  readonly matches$: Observable<WeakMap<BrowserTab, Readonly<Fuse.FuseResultMatch[]>>>;
-
-  /**
    * Indicates search results state
    */
   readonly hasSearchValue$: Observable<boolean>;
@@ -107,17 +102,6 @@ export class SearchComponent implements OnInit {
 
     this.tabs$ = this.searchResults$.pipe(
       map((searchResults) => searchResults?.map(({ item }) => item)),
-      shareReplay(1)
-    );
-
-    this.matches$ = this.searchResults$.pipe(
-      map((searchResults) => {
-        const weakMap = new WeakMap();
-
-        searchResults?.forEach(({ item, matches }) => weakMap.set(item, matches));
-
-        return weakMap;
-      }),
       shareReplay(1)
     );
 

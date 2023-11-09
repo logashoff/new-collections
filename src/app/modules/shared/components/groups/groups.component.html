@@ -30,7 +30,7 @@
 
       @if (group.tabs$ | async; as tabs) {
         <app-tab-list cdkDropList (cdkDropListDropped)="drop($event, tabs)">
-          @for (tab of tabs; track tab.id) {
+          @for (tab of tabs; track tab) {
             <app-list-item
               cdkDrag
               [cdkDragDisabled]="dragDisabled"

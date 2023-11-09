@@ -30,7 +30,7 @@
     </div>
     <div class="list-container">
       <mat-selection-list formControlName="list">
-        @for (tab of tabs; track tab.id) {
+        @for (tab of tabs; track tab) {
           <mat-list-option [value]="tab" color="primary">
             <div class="list-item">
               <app-chip [source]="tab.favIconUrl | favicon: tab.url" size="small"></app-chip>
