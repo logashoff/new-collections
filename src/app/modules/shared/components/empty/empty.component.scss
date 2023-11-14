@@ -2,7 +2,7 @@
 
 @include component-theme using($theme) {
   app-empty {
-    color: getPaletteColor(getForegroundPalette($theme), disabled-text);
+    color: get-palette-color(get-foreground-palette($theme), disabled-text);
   }
 }
 

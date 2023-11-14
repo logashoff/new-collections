@@ -195,7 +195,7 @@
   src: url('../assets/fonts/material-icons.woff2') format('woff2');
 }
 
-$typographyConfig: mat.define-typography-config(
+$typography-config: mat.define-typography-config(
   $body-1: mat.define-typography-level(14px, 20px, 400, 'Roboto', 0.0179em),
   $body-2: mat.define-typography-level(14px, 24px, 500, 'Roboto', 0.0179em),
   $button: mat.define-typography-level(14px, 14px, 500, 'Roboto', 0.0893em),

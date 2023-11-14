@@ -4,23 +4,23 @@
 @include component-theme using($theme) {
   app-panel-header {
     .title {
-      color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+      color: get-palette-color(get-foreground-palette($theme), secondary-text);
 
       .text:first-of-type {
-        color: getPaletteColor(getForegroundPalette($theme), text);
+        color: get-palette-color(get-foreground-palette($theme), text);
       }
     }
 
     .description {
-      color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+      color: get-palette-color(get-foreground-palette($theme), secondary-text);
 
       .total {
-        background-color: getPaletteColor(getBackgroundPalette($theme), disabled-list-option);
+        background-color: get-palette-color(get-background-palette($theme), disabled-list-option);
       }
     }
 
     .icons-container .overflow {
-      color: getPaletteColor(getForegroundPalette($theme), disabled-text);
+      color: get-palette-color(get-foreground-palette($theme), disabled-text);
     }
   }
 }

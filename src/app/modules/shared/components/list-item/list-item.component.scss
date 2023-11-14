@@ -7,16 +7,16 @@ $typography-config: mat.get-typography-config($dark-theme);
 @include component-theme using($theme) {
   app-list-item {
     .container, a:link, a:visited, a:hover, a:active {
-      color: getPaletteColor(getForegroundPalette($theme), text);
+      color: get-palette-color(get-foreground-palette($theme), text);
     }
 
     &:hover {
-      background-color: getPaletteColor(getBackgroundPalette($theme), hover);
+      background-color: get-palette-color(get-background-palette($theme), hover);
     }
 
     .subtitle,
     .controls {
-      color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+      color: get-palette-color(get-foreground-palette($theme), secondary-text);
     }
   }
 }

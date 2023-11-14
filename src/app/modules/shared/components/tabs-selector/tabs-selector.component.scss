@@ -4,17 +4,17 @@
 @include component-theme using($theme) {
   app-tabs-selector {
     .container {
-      color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+      color: get-palette-color(get-foreground-palette($theme), secondary-text);
 
       .header-container {
-        background: getPaletteColor(getBackgroundPalette($theme), background);
+        background: get-palette-color(get-background-palette($theme), background);
       }
 
       .list-container .list-item {
-        color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+        color: get-palette-color(get-foreground-palette($theme), secondary-text);
 
         .item-subtitle {
-          color: getPaletteColor(getForegroundPalette($theme), hint-text);
+          color: get-palette-color(get-foreground-palette($theme), hint-text);
         }
       }
     }
@@ -55,7 +55,7 @@ app-tabs-selector {
       padding: 0.5rem;
 
       .heading {
-        @include mat.typography-level($typographyConfig, subtitle-1);
+        @include mat.typography-level($typography-config, subtitle-1);
 
         margin-left: 0.5rem;
       }
@@ -97,7 +97,7 @@ app-tabs-selector {
           text-overflow: ellipsis;
 
           .item-title {
-            @include mat.typography-level($typographyConfig, body-2);
+            @include mat.typography-level($typography-config, body-2);
           }
 
           .item-title,
@@ -107,7 +107,7 @@ app-tabs-selector {
           }
 
           .item-subtitle {
-            @include mat.typography-level($typographyConfig, caption);
+            @include mat.typography-level($typography-config, caption);
 
             display: flex;
             align-items: center;

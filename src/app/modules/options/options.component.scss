@@ -5,7 +5,7 @@
   app-options {
     .list-container {
       fieldset {
-        border-color: getPaletteColor(getForegroundPalette($theme), divider);
+        border-color: get-palette-color(get-foreground-palette($theme), divider);
       }
     }
   }
@@ -33,11 +33,11 @@ app-options {
   overflow-y: auto;
 
   h4 {
-    @include mat.typography-level($typographyConfig, subtitle-1);
+    @include mat.typography-level($typography-config, subtitle-1);
   }
 
   .mat-mdc-form-field-hint {
-    @include mat.typography-level($typographyConfig, caption);
+    @include mat.typography-level($typography-config, caption);
   }
 
   .mdc-card {

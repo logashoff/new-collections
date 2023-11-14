@@ -6,14 +6,14 @@
 @include component-theme using($theme) {
   app-chip {
     .icons-container .overflow {
-      color: getPaletteColor(getForegroundPalette($theme), disabled-text);
+      color: get-palette-color(get-foreground-palette($theme), disabled-text);
     }
 
     .icon-container {
-      background-color: getPaletteColor(getBackgroundPalette($theme), disabled-list-option);
+      background-color: get-palette-color(get-background-palette($theme), disabled-list-option);
 
       .icon-label {
-        color: getPaletteColor(getForegroundPalette($theme), text);
+        color: get-palette-color(get-foreground-palette($theme), text);
       }
     }
   }

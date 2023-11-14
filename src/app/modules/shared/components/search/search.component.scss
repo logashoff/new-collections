@@ -3,12 +3,12 @@
 
 @include component-theme using($theme) {
   app-search {
-    $border-color: getPaletteColor(getForegroundPalette($theme), divider);
+    $border-color: get-palette-color(get-foreground-palette($theme), divider);
 
-    color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+    color: get-palette-color(get-foreground-palette($theme), secondary-text);
 
     .controls-wrapper {
-      $background-color: getPaletteColor(getBackgroundPalette($theme), card);
+      $background-color: get-palette-color(get-background-palette($theme), card);
       background-color: $background-color;
       border: 1px solid $border-color;
 
@@ -19,11 +19,11 @@
 
     .mat-mdc-form-field-icon-prefix,
     .mat-mdc-form-field-icon-suffix {
-      color: getPaletteColor(getForegroundPalette($theme), text);
+      color: get-palette-color(get-foreground-palette($theme), text);
     }
 
     .results-count {
-      color: getPaletteColor(getForegroundPalette($theme), hint-text);
+      color: get-palette-color(get-foreground-palette($theme), hint-text);
     }
   }
 }
@@ -91,7 +91,7 @@ app-search {
   }
 
   .results-count {
-    @include mat.typography-level($typographyConfig, subtitle-2);
+    @include mat.typography-level($typography-config, subtitle-2);
     
     margin: 0 0 0.5rem;
     overflow: hidden;

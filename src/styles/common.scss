@@ -5,46 +5,46 @@ $scrollbar-width: 0.5rem;
 $popup-width: 32rem;
 $popup-height: 35rem;
 
-@function getForegroundPalette($config-or-theme) {
+@function get-foreground-palette($config-or-theme) {
   $colors: mat.get-color-config($config-or-theme);
   $foreground: map.get($colors, foreground);
 
   @return $foreground;
 }
 
-@function getBackgroundPalette($config-or-theme) {
+@function get-background-palette($config-or-theme) {
   $colors: mat.get-color-config($config-or-theme);
   $background: map.get($colors, background);
 
   @return $background;
 }
 
-@function getAccentPalette($config-or-theme) {
+@function get-accent-palette($config-or-theme) {
   $colors: mat.get-color-config($config-or-theme);
   $accent: map.get($colors, accent);
 
   @return $accent;
 }
 
-@function getPrimaryPalette($config-or-theme) {
+@function get-primary-palette($config-or-theme) {
   $colors: mat.get-color-config($config-or-theme);
   $primary: map.get($colors, primary);
 
   @return $primary;
 }
 
-@function getPaletteColor($palette, $hue: default) {
+@function get-palette-color($palette, $hue: default) {
   @return mat.get-color-from-palette($palette, $hue);
 }
 
 @function modify-theme($theme, $background-palette, $foreground-palette) {
   // Replace the background in the color object's background palette.
-  $theme-color: map-get($theme, color);
-  $color-background-palette: map-get($theme-color, background);
-  $color-foreground-palette: map-get($theme-color, foreground);
+  $theme-color: map.get($theme, color);
+  $color-background-palette: map.get($theme-color, background);
+  $color-foreground-palette: map.get($theme-color, foreground);
 
   @each $key, $color in $background-palette {
-    $color-background-palette: map-merge(
+    $color-background-palette: map.merge(
       $color-background-palette,
       (
         $key: $color,
@@ -53,7 +53,7 @@ $popup-height: 35rem;
   }
 
   @each $key, $color in $foreground-palette {
-    $color-foreground-palette: map-merge(
+    $color-foreground-palette: map.merge(
       $color-foreground-palette,
       (
         $key: $color,
@@ -62,11 +62,11 @@ $popup-height: 35rem;
   }
 
   // Replace the background in the background palette.
-  $legacy-background-palette: map-get($theme, background);
-  $legacy-foreground-palette: map-get($theme, foreground);
+  $legacy-background-palette: map.get($theme, background);
+  $legacy-foreground-palette: map.get($theme, foreground);
 
   @each $key, $color in $background-palette {
-    $legacy-background-palette: map-merge(
+    $legacy-background-palette: map.merge(
       $legacy-background-palette,
       (
         $key: $color,
@@ -75,7 +75,7 @@ $popup-height: 35rem;
   }
 
   @each $key, $color in $foreground-palette {
-    $legacy-foreground-palette: map-merge(
+    $legacy-foreground-palette: map.merge(
       $legacy-foreground-palette,
       (
         $key: $color,
@@ -84,31 +84,31 @@ $popup-height: 35rem;
   }
 
   // Merge the changes into a new theme.
-  $modified-theme-color: map-merge(
+  $modified-theme-color: map.merge(
     $theme-color,
     (
       background: $color-background-palette,
     )
   );
-  $modified-theme-color: map-merge(
+  $modified-theme-color: map.merge(
     $modified-theme-color,
     (
       foreground: $color-foreground-palette,
     )
   );
-  $modified-theme: map-merge(
+  $modified-theme: map.merge(
     $theme,
     (
       color: $modified-theme-color,
     )
   );
-  $modified-theme: map-merge(
+  $modified-theme: map.merge(
     $modified-theme,
     (
       background: $legacy-background-palette,
     )
   );
-  $modified-theme: map-merge(
+  $modified-theme: map.merge(
     $modified-theme,
     (
       foreground: $legacy-foreground-palette,

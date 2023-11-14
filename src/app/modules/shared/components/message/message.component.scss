@@ -4,10 +4,10 @@
 
 @include component-theme using ($theme) {
   app-message {
-    $background-color: getPaletteColor(getBackgroundPalette($theme), card);
-    $accent-color: getPaletteColor(getPrimaryPalette($theme));
+    $background-color: get-palette-color(get-background-palette($theme), card);
+    $accent-color: get-palette-color(get-primary-palette($theme));
 
-    color: getPaletteColor(getForegroundPalette($theme), secondary-text);
+    color: get-palette-color(get-foreground-palette($theme), secondary-text);
     background-color: $background-color;
 
     .icon-container {

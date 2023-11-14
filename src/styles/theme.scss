@@ -1,16 +1,17 @@
 @use '@angular/material' as mat;
+@use 'sass:color' as color;
 
 @import 'common';
 @import 'typography';
 
-$dark-text: black;
+$dark-text: #000000;
 $dark-primary-text: rgba($dark-text, 0.87);
 $dark-secondary-text: rgba($dark-primary-text, 0.54);
 $dark-disabled-text: rgba($dark-primary-text, 0.38);
 $dark-dividers: rgba($dark-primary-text, 0.12);
 $dark-focused: rgba($dark-primary-text, 0.12);
 
-$light-text: white;
+$light-text: #ffffff;
 $light-primary-text: #9aa0a6;
 $light-secondary-text: rgba($light-text, 0.7);
 $light-disabled-text: rgba($light-primary-text, 0.5);
@@ -58,12 +59,12 @@ $dark-background-color: #242528;
 
 $light-background: $light-background-color;
 $light-card-background: #f8f9fa;
-$light-bg-darker-5: darken($light-card-background, 5%);
-$light-bg-darker-10: darken($light-card-background, 10%);
-$light-bg-darker-20: darken($light-card-background, 20%);
-$light-bg-darker-30: darken($light-card-background, 30%);
+$light-bg-darker-5: color.adjust($light-card-background, $blackness: 5%);
+$light-bg-darker-10: color.adjust($light-card-background, $blackness: 10%);
+$light-bg-darker-20: color.adjust($light-card-background, $blackness: 20%);
+$light-bg-darker-30: color.adjust($light-card-background, $blackness: 30%);
 $light-bg-lighter-5: $light-card-background;
-$dark-bg-tooltip: lighten($dark-background-color, 20%);
+$dark-bg-tooltip: color.adjust($dark-background-color, $lightness: 20%);
 $dark-bg-alpha-4: rgba($dark-background-color, 0.04);
 $dark-bg-alpha-12: rgba($dark-background-color, 0.12);
 $dark-bg-alpha-24: rgba($dark-background-color, 0.24);
@@ -90,9 +91,9 @@ $light-theme-background-palette: (
 $dark-background: $dark-background-color;
 $dark-card-background: #303134;
 $dark-bg-lighter-5: $dark-card-background;
-$dark-bg-lighter-10: lighten($dark-card-background, 10%);
-$dark-bg-lighter-20: lighten($dark-card-background, 20%);
-$dark-bg-lighter-30: lighten($dark-card-background, 30%);
+$dark-bg-lighter-10: color.adjust($dark-card-background, $lightness: 10%);
+$dark-bg-lighter-20: color.adjust($dark-card-background, $lightness: 20%);
+$dark-bg-lighter-30: color.adjust($dark-card-background, $lightness: 30%);
 $light-bg-alpha-4: rgba($light-background-color, 0.04);
 $light-bg-alpha-12: rgba($light-background-color, 0.12);
 $light-bg-alpha-24: rgba($light-background-color, 0.24);
@@ -279,7 +280,7 @@ $dark-theme: mat.define-dark-theme(
       warn: $dark-theme-warn,
       is-dark: true,
     ),
-    typography: $typographyConfig,
+    typography: $typography-config,
     density: 0,
   )
 );
@@ -315,15 +316,15 @@ $light-theme: modify-theme($light-theme, $light-theme-background-palette, $light
 
 @mixin app-color($theme) {
   ::-webkit-scrollbar-track {
-    background: getPaletteColor(getBackgroundPalette($theme), background);
+    background: get-palette-color(get-background-palette($theme), background);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: getPaletteColor(getForegroundPalette($theme), divider);
+    background: get-palette-color(get-foreground-palette($theme), divider);
   }
 
   body {
-    background: getPaletteColor(getBackgroundPalette($theme), background);
+    background: get-palette-color(get-background-palette($theme), background);
   }
 
   a {
@@ -331,22 +332,22 @@ $light-theme: modify-theme($light-theme, $light-theme-background-palette, $light
     &:visited,
     &:hover,
     &:active {
-      color: getPaletteColor(getPrimaryPalette($theme));
+      color: get-palette-color(get-primary-palette($theme));
     }
   }
 
   .message-container.mat-snack-bar-container {
-    color: getPaletteColor(getForegroundPalette($theme), secondary-text);
-    background: getPaletteColor(getBackgroundPalette($theme), background);
+    color: get-palette-color(get-foreground-palette($theme), secondary-text);
+    background: get-palette-color(get-background-palette($theme), background);
   }
 
   .cdk-dialog-container.mat-bottom-sheet-container {
-    background: getPaletteColor(getBackgroundPalette($theme), background);
+    background: get-palette-color(get-background-palette($theme), background);
     overflow: hidden;
   }
 
   .cdk-drag-preview {
-    background-color: getPaletteColor(getBackgroundPalette($theme), card);
+    background-color: get-palette-color(get-background-palette($theme), card);
   }
 }
 

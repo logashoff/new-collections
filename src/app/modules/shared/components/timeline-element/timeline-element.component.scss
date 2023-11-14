@@ -5,7 +5,7 @@
 @include component-theme using($theme) {
   app-timeline-element {
     .timeline-header {
-      color: getPaletteColor(getForegroundPalette($theme), hint-text);
+      color: get-palette-color(get-foreground-palette($theme), hint-text);
     }
   }
 }
@@ -25,7 +25,7 @@ app-timeline-element {
   }
 
   h3.timeline-label {
-    @include mat.typography-level($typographyConfig, subtitle-2);
+    @include mat.typography-level($typography-config, subtitle-2);
 
     margin: 0;
   }

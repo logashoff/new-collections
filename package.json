@@ -11,7 +11,7 @@
     "test:coverage": "npm run test -- --coverage=true",
     "test:coverage:watch": "npm run test:coverage -- --watch",
     "ci": "npm run lint && npm run test:coverage && npm run build",
-    "lint": "ng lint"
+    "lint": "ng lint && stylelint ./src/**/*.scss"
   },
   "engines": {
     "node": "^18.12.1",
@@ -70,6 +70,8 @@
     "ng-packagr": "^17.0.0",
     "prettier": "^2.2.1",
     "protractor": "~7.0.0",
+    "stylelint": "^15.11.0",
+    "stylelint-config-sass-guidelines": "^10.0.0",
     "ts-loader": "^9.3.0",
     "ts-node": "^10.7.0",
     "typescript": "~5.2.2"
