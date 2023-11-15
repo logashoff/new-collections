@@ -1,36 +1,22 @@
 @import 'common';
 
 app-home {
-  display: block;
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-gutter: stable;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1;
 
   .content {
     margin: 2rem auto;
     width: 80vw;
     max-width: 75rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
 
   app-top-sites {
     margin: 0 0 3rem;
-  }
-
-  app-empty {
-    z-index: -1;
-  }
-
-  app-menu {
-    display: block;
-    position: fixed;
-    bottom: 1rem;
-    z-index: 1;
-    right: 2.3125rem;
   }
 }
 

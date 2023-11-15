@@ -241,9 +241,10 @@ export enum Action {
  */
 export interface CollectionAction {
   action: Action;
-  icon: ActionIcon;
+  icon?: ActionIcon;
   tooltip?: string;
   color?: ThemePalette;
+  label?: string;
 }
 
 export type CollectionActions = CollectionAction[];

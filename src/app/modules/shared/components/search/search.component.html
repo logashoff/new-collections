@@ -29,35 +29,32 @@
     </button>
   </div>
 </section>
-<ng-container [ngSwitch]="">
-  @if (hasSearchValue$ | async) {
-    @if ((searchResults$ | async).length > 0) {
-      <ng-container>
-        <h3 class="results-count" [ngPlural]="(searchResults$ | async).length">
-          <ng-template ngPluralCase="one">
-            {{ 'oneResult' | translate }}
-          </ng-template>
-          <ng-template ngPluralCase="other">
-            {{ 'resultCount' | translate: { count: (searchResults$ | async).length } }}
-          </ng-template>
-        </h3>
-        <mat-card class="search-container">
-          <app-tab-list>
-            @for (tab of tabs$ | async; track tab) {
-              <app-list-item
-                [tab]="tab"
-                (deleted)="itemDeleted($event)"
-                (modified)="itemModified($event)"
-                [timelineButton]="true">
-              </app-list-item>
-            }
-          </app-tab-list>
-        </mat-card>
-      </ng-container>
-    } @else {
-      <app-empty>search_off</app-empty>
-    }
+
+@if (hasSearchValue$ | async) {
+  @if ((searchResults$ | async).length > 0) {
+    <h3 class="results-count" [ngPlural]="(searchResults$ | async).length">
+      <ng-template ngPluralCase="one">
+        {{ 'oneResult' | translate }}
+      </ng-template>
+      <ng-template ngPluralCase="other">
+        {{ 'resultCount' | translate: { count: (searchResults$ | async).length } }}
+      </ng-template>
+    </h3>
+    <mat-card class="search-container">
+      <app-tab-list>
+        @for (tab of tabs$ | async; track tab) {
+          <app-list-item
+            [tab]="tab"
+            (deleted)="itemDeleted($event)"
+            (modified)="itemModified($event)"
+            [timelineButton]="true">
+          </app-list-item>
+        }
+      </app-tab-list>
+    </mat-card>
   } @else {
-    <ng-content select=".layout-container"></ng-content>
+    <app-empty>search_off</app-empty>
   }
-</ng-container>
+} @else {
+  <ng-content select=".layout-container"></ng-content>
+}

@@ -31,6 +31,10 @@
 $typography-config: mat.get-typography-config($dark-theme);
 
 app-search {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
   .controls-wrapper {
     $height: 40px;
     $padding: 8px;

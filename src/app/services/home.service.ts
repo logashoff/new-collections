@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import flatMap from 'lodash/flatMap';
 import isNil from 'lodash/isNil';
 import isUndefined from 'lodash/isUndefined';
-import { combineLatest, from, map, Observable, of, shareReplay, switchMap, take } from 'rxjs';
+import { combineLatest, from, map, Observable, of, shareReplay, startWith, switchMap, take } from 'rxjs';
 import { SettingsService, TabService } from 'src/app/services';
 import { BrowserTabs, Devices, MostVisitedURL, Sessions, TabGroup, Tabs, Timeline, TopSites } from 'src/app/utils';
 
@@ -39,6 +39,11 @@ export class HomeService {
    * Indicates if timeline, top sites or devices data is present
    */
   readonly hasAnyData$: Observable<boolean>;
+
+  /**
+   * Indicates no devices or saved collections found
+   */
+  readonly noData$: Observable<boolean>;
 
   constructor(private settings: SettingsService, private tabsService: TabService) {
     this.timeline$ = this.tabsService.groupsTimeline$;
@@ -110,8 +115,16 @@ export class HomeService {
       shareReplay(1)
     );
 
-    this.hasAnyData$ = combineLatest([this.devices$, this.timeline$]).pipe(
+    const homeTimeline$ = combineLatest([this.devices$, this.timeline$]).pipe(shareReplay(1));
+
+    this.hasAnyData$ = homeTimeline$.pipe(
       map(([devices, timeline]) => !isNil(timeline) || !isNil(devices)),
+      shareReplay(1)
+    );
+
+    this.noData$ = homeTimeline$.pipe(
+      startWith([null, null]),
+      map(([devices, timeline]) => isNil(timeline) && isNil(devices)),
       shareReplay(1)
     );
   }

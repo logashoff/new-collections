@@ -13,25 +13,15 @@ html.cdk-global-scrollblock {
 }
 
 app-popup {
-  display: block;
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-gutter: stable;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1;
 
   .content {
     padding: $padding;
-  }
-
-  .menu {
-    display: block;
-    position: fixed;
-    bottom: 0;
-    z-index: 1;
-    right: 1.3125rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
 }

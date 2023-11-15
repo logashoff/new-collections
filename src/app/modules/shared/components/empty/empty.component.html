@@ -1,1 +1,13 @@
 <mat-icon class="icon"><ng-content></ng-content></mat-icon>
+
+@if (actions?.length) {
+<section class="actions">
+  @for (action of actions; track action) {
+    <button mat-flat-button
+      [color]="action.color" 
+      (click)="handleAction(action.action)">
+      {{ action.label | translate }}
+    </button>
+  }
+</section>
+}

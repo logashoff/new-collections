@@ -9,22 +9,23 @@
 $icon-size: 5rem;
 
 app-empty {
-  pointer-events: none;
   display: flex;
-  position: absolute;
+  position: relative;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding: 2rem;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: 0;
+  flex: 1;
 
   .icon {
     width: $icon-size;
     height: $icon-size;
     font-size: $icon-size;
     line-height: $icon-size;
+  }
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
   }
 }

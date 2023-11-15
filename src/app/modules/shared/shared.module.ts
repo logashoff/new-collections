@@ -12,6 +12,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import {
@@ -27,6 +28,7 @@ import {
   RenameDialogComponent,
   RippleComponent,
   SearchComponent,
+  SpinnerComponent,
   TabListComponent,
   TabsSelectorComponent,
   TimelineComponent,
@@ -51,6 +53,7 @@ const declarations = [
   RenameDialogComponent,
   RippleComponent,
   SearchComponent,
+  SpinnerComponent,
   StopPropagationDirective,
   TabListComponent,
   TabsSelectorComponent,
@@ -70,6 +73,7 @@ const materialModules = [
   MatIconModule,
   MatInputModule,
   MatListModule,
+  MatProgressSpinnerModule,
   MatRippleModule,
   MatTooltipModule,
 ];

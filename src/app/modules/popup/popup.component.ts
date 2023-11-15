@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { TabService } from 'src/app/services';
-import { BrowserTabs, Timeline } from 'src/app/utils';
+import { Action, BrowserTabs, CollectionActions, Timeline } from 'src/app/utils';
 import { SharedModule } from '../shared';
 
 /**
@@ -17,9 +17,16 @@ import { SharedModule } from '../shared';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [CommonModule, SharedModule]
+  imports: [CommonModule, SharedModule],
 })
 export class PopupComponent {
+  readonly defaultActions: CollectionActions = [
+    {
+      action: Action.Save,
+      label: 'addBookmarks',
+    },
+  ];
+  
   /**
    * Tab groups grouped by time
    */
@@ -29,6 +36,6 @@ export class PopupComponent {
 
   constructor(private tabsService: TabService) {
     this.groupsTimeline$ = this.tabsService.groupsTimeline$;
-    this.searchSource$ = this.tabsService.tabs$;
+    this.searchSource$ = this.tabsService.tabs$.pipe(map((tabs) => tabs ?? []));
   }
 }
