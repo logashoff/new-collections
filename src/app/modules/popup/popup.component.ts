@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { TabService } from 'src/app/services';
-import { Action, BrowserTabs, CollectionActions, Timeline } from 'src/app/utils';
+import { Action, ActionIcon, BrowserTabs, CollectionActions, Timeline } from 'src/app/utils';
 import { SharedModule } from '../shared';
 
 /**
@@ -23,10 +23,12 @@ export class PopupComponent {
   readonly defaultActions: CollectionActions = [
     {
       action: Action.Save,
+      icon: ActionIcon.Save,
       label: 'addBookmarks',
+      color: 'primary',
     },
   ];
-  
+
   /**
    * Tab groups grouped by time
    */

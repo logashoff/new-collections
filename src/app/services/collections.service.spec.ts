@@ -1,6 +1,7 @@
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { getBrowserTabMock, getTabGroupsMock, MessageServiceMock, NavServiceMock, TabServiceMock } from 'src/mocks';
 import { Action, ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
+import { openOptions } from 'src/app/utils';
 import { CollectionsService } from './collections.service';
 import { MessageService } from './message.service';
 import { NavService } from './nav.service';
@@ -12,6 +13,7 @@ jest.mock('src/app/utils', () => ({
   queryCurrentWindow: jest.fn().mockImplementation(() => new Promise((resolve) => resolve([getBrowserTabMock()]))),
   translate: jest.fn().mockImplementation(() => (str) => str),
   usesDarkMode: jest.fn().mockImplementation(() => {}),
+  openOptions: jest.fn().mockImplementation(() => {}),
   Action,
   ActionIcon,
   TabGroup,
@@ -50,9 +52,8 @@ describe('CollectionsService', () => {
   });
 
   it('should handle actions', async () => {
-    const tabsService = spectator.service['tabsService'];
+    const tabsService = spectator.inject(TabService);
 
-    const openOptionsPageSpy = jest.spyOn(chrome.runtime, 'openOptionsPage');
     const createTabGroupSpy = jest.spyOn(tabsService, 'createTabGroup');
     const saveTabGroupsSpy = jest.spyOn(tabsService, 'addTabGroups');
     const saveTabGroupSpy = jest.spyOn(tabsService, 'addTabGroup');
@@ -61,14 +62,11 @@ describe('CollectionsService', () => {
     expect(tabsService.createTabGroup).toHaveBeenCalledTimes(1);
     expect(tabsService.addTabGroup).toHaveBeenCalledTimes(1);
 
-    openOptionsPageSpy.mockClear();
     saveTabGroupSpy.mockClear();
     createTabGroupSpy.mockClear();
 
     await spectator.service.handleAction(Action.Settings);
-    expect(chrome.runtime.openOptionsPage).toHaveBeenCalledTimes(1);
-
-    openOptionsPageSpy.mockClear();
+    expect(openOptions).toHaveBeenCalledTimes(1);
 
     await spectator.service.handleAction(Action.Import);
     expect(tabsService.addTabGroups).toHaveBeenCalledTimes(1);

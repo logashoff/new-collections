@@ -28,7 +28,7 @@ app-search {
     z-index: 1;
 
     &.stuck .controls-wrapper {
-      @include mat.elevation(12);
+      @include mat.elevation(8);
     }
   }
 

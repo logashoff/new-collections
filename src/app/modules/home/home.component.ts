@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HomeService, TabService } from 'src/app/services';
-import { Action, BrowserTabs, CollectionActions, TabGroups, Timeline, TopSites } from 'src/app/utils';
+import { Action, ActionIcon, BrowserTabs, CollectionActions, TabGroups, Timeline, TopSites } from 'src/app/utils';
 import { SharedModule } from '../shared';
 
 /**
@@ -24,7 +24,9 @@ export class HomeComponent {
   readonly defaultActions: CollectionActions = [
     {
       action: Action.Import,
+      icon: ActionIcon.Import,
       label: 'importCollections',
+      color: 'primary',
     },
   ];
 

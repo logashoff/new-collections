@@ -18,39 +18,26 @@ const isScrollable = (element: HTMLElement): boolean =>
  * Scrolls specified element into view and resolves promise when scrolling is complete
  */
 export function scrollIntoView(element: HTMLElement): Promise<HTMLElement> {
-  let scrollElement: HTMLElement = element;
-  while (scrollElement) {
-    scrollElement = scrollElement.parentElement;
-
-    if (!scrollElement || isScrollable(scrollElement)) {
-      break;
-    }
-  }
-
   return new Promise((resolve) => {
-    if (scrollElement) {
-      const viewHeight = window.innerHeight;
-      const viewCenterY = viewHeight / 2;
-      const elBounds = element.getBoundingClientRect();
-      const elCenterY = elBounds.y + elBounds.height / 2;
+    const viewHeight = window.innerHeight;
+    const viewCenterY = viewHeight / 2;
+    const elBounds = element.getBoundingClientRect();
+    const elCenterY = elBounds.y + elBounds.height / 2;
 
-      if (elBounds.y > 0 && elCenterY < viewCenterY) {
-        resolve(element);
-      } else {
-        function handleScroll() {
-          clearInterval(scrollTimeoutId);
-
-          scrollTimeoutId = setTimeout(() => {
-            scrollElement.removeEventListener('scroll', handleScroll);
-            resolve(element);
-          }, callbackTimeout);
-        }
-
-        scrollElement.addEventListener('scroll', handleScroll);
-        element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
-      }
-    } else {
+    if (elBounds.y > 0 && elCenterY < viewCenterY) {
       resolve(element);
+    } else {
+      function handleScroll() {
+        clearInterval(scrollTimeoutId);
+
+        scrollTimeoutId = setTimeout(() => {
+          document.removeEventListener('scroll', handleScroll);
+          resolve(element);
+        }, callbackTimeout);
+      }
+
+      document.addEventListener('scroll', handleScroll);
+      element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
     }
   });
 }
