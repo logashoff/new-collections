@@ -1,18 +1,8 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 import Fuse from 'fuse.js';
 import isNil from 'lodash/isNil';
-import {
-  BehaviorSubject,
-  Observable,
-  firstValueFrom,
-  lastValueFrom,
-  map,
-  shareReplay,
-  tap,
-  withLatestFrom,
-} from 'rxjs';
-import { MenuService, NavService } from 'src/app/services';
+import { BehaviorSubject, Observable, firstValueFrom, lastValueFrom, map, shareReplay, withLatestFrom } from 'rxjs';
+import { NavService } from 'src/app/services';
 import { Action, BrowserTab, BrowserTabs, TabDelete } from 'src/app/utils';
 
 const fuseOptions: Fuse.IFuseOptions<BrowserTab> = {
@@ -21,13 +11,6 @@ const fuseOptions: Fuse.IFuseOptions<BrowserTab> = {
   includeMatches: false,
   ignoreLocation: true,
 };
-
-/**
- * Search input form.
- */
-interface SearchForm {
-  search: FormControl<string>;
-}
 
 /**
  * @description
@@ -52,10 +35,6 @@ export class SearchComponent implements OnInit {
   get source(): BrowserTabs {
     return this.source$.value;
   }
-
-  readonly formGroup = new FormGroup<SearchForm>({
-    search: new FormControl<string>(''),
-  });
 
   /**
    * Indicates search data is present.
@@ -88,13 +67,12 @@ export class SearchComponent implements OnInit {
    */
   readonly hasSearchValue$: Observable<boolean>;
 
-  constructor(private navService: NavService, private menuService: MenuService) {
-    this.searchResults$ = this.navService.paramsSearch$.pipe(
-      tap((search) => {
-        this.formGroup.get('search').setValue(search, {
-          emitEvent: false,
-        });
-      }),
+  readonly searchValue$: Observable<string>;
+
+  constructor(private navService: NavService) {
+    this.searchValue$ = this.navService.paramsSearch$.pipe(shareReplay(1));
+
+    this.searchResults$ = this.searchValue$.pipe(
       withLatestFrom(this.fuse$),
       map(([search, fuse]) => (search?.length > 0 ? fuse.search(search) : null)),
       shareReplay(1)
@@ -113,25 +91,6 @@ export class SearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.navService.reset();
-
-    this.formGroup.valueChanges.subscribe(({ search }) => {
-      if (search) {
-        this.navService.search(search);
-      } else {
-        this.navService.reset();
-      }
-    });
-  }
-
-  menuAction(action: Action) {
-    this.menuService.handleMenuAction(action);
-  }
-
-  /**
-   * Clears search input
-   */
-  clearSearch() {
-    this.formGroup.get('search').setValue('');
   }
 
   /**
@@ -165,5 +124,15 @@ export class SearchComponent implements OnInit {
         tabs.splice(index, 0, deletedTab);
       }
     }
+  }
+
+  searchChange(value: string) {
+    if (value) {
+      this.navService.search(value);
+    } else {
+      this.navService.reset();
+    }
+
+    scrollTo(0, 0);
   }
 }

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { TooltipPosition } from '@angular/material/tooltip';
 import saveAs from 'file-saver';
 import { lastValueFrom } from 'rxjs';
 import selectFiles from 'select-files';
@@ -8,6 +7,7 @@ import {
   Collections,
   getCollections,
   ignoreUrlsRegExp,
+  openOptions,
   queryCurrentWindow,
   TabGroup,
   translate,
@@ -16,25 +16,13 @@ import { MessageService } from './message.service';
 import { NavService } from './nav.service';
 import { TabService } from './tab.service';
 
-/**
- * Tooltip position for menu items.
- */
-export const tooltipPosition: TooltipPosition = 'left';
-
 @Injectable({
   providedIn: 'root',
 })
-export class MenuService {
+export class CollectionsService {
   readonly translate = translate();
 
   constructor(private message: MessageService, private nav: NavService, private tabsService: TabService) {}
-
-  /**
-   * Navigates to options page.
-   */
-  private openOptions() {
-    chrome.runtime.openOptionsPage();
-  }
 
   /**
    * Writes provided tab groups to JSON file.
@@ -64,11 +52,11 @@ export class MenuService {
     });
   }
 
-  async handleMenuAction(menuAction: Action) {
+  async handleAction(action: Action) {
     try {
       let collections: Collections;
 
-      switch (menuAction) {
+      switch (action) {
         case Action.Save:
           let tabs = await queryCurrentWindow();
           tabs = tabs?.filter(({ url }) => !ignoreUrlsRegExp.test(url));
@@ -86,7 +74,7 @@ export class MenuService {
           }
           break;
         case Action.Settings:
-          this.openOptions();
+          openOptions();
           break;
         case Action.Export:
           collections = await getCollections();

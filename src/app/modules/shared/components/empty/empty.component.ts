@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
-import { MenuService } from 'src/app/services';
+import { CollectionsService } from 'src/app/services';
 import { Action, CollectionActions } from 'src/app/utils';
 
 /**
@@ -18,9 +18,9 @@ export class EmptyComponent {
 
   @Input() actions: CollectionActions;
 
-  constructor(private menuService: MenuService) {}
+  constructor(private collectionsService: CollectionsService) {}
 
   handleAction(action: Action) {
-    this.menuService.handleMenuAction(action);
+    this.collectionsService.handleAction(action);
   }
 }

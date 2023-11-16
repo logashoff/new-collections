@@ -2,7 +2,7 @@
   <div class="timestamp">
     {{ abs(group.timestamp) | date: 'longDate' }}
   </div>
-  <div class="controls" [appStopPropagation]>
+  <div class="controls" appStopPropagation>
     @if (!readOnly) {
       <button 
         mat-icon-button 

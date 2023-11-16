@@ -1,7 +1,7 @@
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { getBrowserTabMock, getTabGroupsMock, MessageServiceMock, NavServiceMock, TabServiceMock } from 'src/mocks';
 import { Action, ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
-import { MenuService } from './menu.service';
+import { CollectionsService } from './collections.service';
 import { MessageService } from './message.service';
 import { NavService } from './nav.service';
 import { TabService } from './tab.service';
@@ -18,10 +18,10 @@ jest.mock('src/app/utils', () => ({
   ignoreUrlsRegExp,
 }));
 
-describe('MenuService', () => {
-  let spectator: SpectatorService<MenuService>;
+describe('CollectionsService', () => {
+  let spectator: SpectatorService<CollectionsService>;
   const createService = createServiceFactory({
-    service: MenuService,
+    service: CollectionsService,
     providers: [
       {
         provide: TabService,
@@ -57,7 +57,7 @@ describe('MenuService', () => {
     const saveTabGroupsSpy = jest.spyOn(tabsService, 'addTabGroups');
     const saveTabGroupSpy = jest.spyOn(tabsService, 'addTabGroup');
 
-    await spectator.service.handleMenuAction(Action.Save);
+    await spectator.service.handleAction(Action.Save);
     expect(tabsService.createTabGroup).toHaveBeenCalledTimes(1);
     expect(tabsService.addTabGroup).toHaveBeenCalledTimes(1);
 
@@ -65,12 +65,12 @@ describe('MenuService', () => {
     saveTabGroupSpy.mockClear();
     createTabGroupSpy.mockClear();
 
-    await spectator.service.handleMenuAction(Action.Settings);
+    await spectator.service.handleAction(Action.Settings);
     expect(chrome.runtime.openOptionsPage).toHaveBeenCalledTimes(1);
 
     openOptionsPageSpy.mockClear();
 
-    await spectator.service.handleMenuAction(Action.Import);
+    await spectator.service.handleAction(Action.Import);
     expect(tabsService.addTabGroups).toHaveBeenCalledTimes(1);
 
     saveTabGroupsSpy.mockClear();

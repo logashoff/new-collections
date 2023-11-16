@@ -8,31 +8,28 @@
   @if (timelineButton && (inTimeline$ | async) || (notReadOnly$ | async)) {
     <div class="controls">
       @if (timelineButton && (inTimeline$ | async)) {
-        <button
+        <button appStopPropagation
           mat-icon-button
           [matTooltip]="'find' | translate"
-          [appStopPropagation]
           (click)="scrollToTimeline()">
           <mat-icon>manage_search</mat-icon>
         </button>
       }
 
       @if (notReadOnly$ | async) {
-        <button
+        <button appStopPropagation
           mat-icon-button 
           (click)="editClick()" 
-          [matTooltip]="'edit' | translate"
-          [appStopPropagation]>
+          [matTooltip]="'edit' | translate">
           <mat-icon>edit_note</mat-icon>
         </button>
       }
 
       @if (notReadOnly$ | async) {
-        <button
+        <button appStopPropagation
           mat-icon-button 
           (click)="deleteClick()"
-          [matTooltip]="'delete' | translate" 
-          [appStopPropagation]>
+          [matTooltip]="'delete' | translate">
           <mat-icon>delete</mat-icon>
         </button>
       }

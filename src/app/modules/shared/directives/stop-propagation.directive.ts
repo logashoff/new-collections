@@ -10,8 +10,6 @@ import { Directive, HostListener, Input } from '@angular/core';
 })
 export class StopPropagationDirective {
 
-  @Input() appStopPropagation;
-
   @HostListener('click', ['$event']) onClick(event: MouseEvent) {
     event.stopPropagation();
     event.preventDefault();

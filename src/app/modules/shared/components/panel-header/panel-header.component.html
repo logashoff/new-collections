@@ -9,8 +9,8 @@
   }
   @if (total > 0) {
     <div class="description">
-      <div class="fav" 
-        [appStopPropagation]
+      <div appStopPropagation
+        class="fav" 
         matTooltip="{{ (pinned ? 'unpin' : 'pin') | translate }}"
         (click)="favClicked()">
         @if (pinned) {

@@ -1,0 +1,87 @@
+@use '@angular/material' as mat;
+@import 'theme';
+
+@include component-theme using($theme) {
+  app-search-form {
+    $border-color: get-palette-color(get-foreground-palette($theme), divider);
+
+    color: get-palette-color(get-foreground-palette($theme), secondary-text);
+
+    .controls-wrapper {
+      $background-color: get-palette-color(get-background-palette($theme), card);
+      background-color: $background-color;
+      border: 1px solid $border-color;
+
+      .controls {
+        border-left: 1px solid $border-color;
+      }
+
+      &.scrolled {
+        @include mat.elevation(12);
+      }
+    }
+
+    .mat-mdc-form-field-icon-prefix,
+    .mat-mdc-form-field-icon-suffix {
+      color: get-palette-color(get-foreground-palette($theme), text);
+    }
+  }
+}
+
+$typography-config: mat.get-typography-config($dark-theme);
+
+app-search-form {
+  .controls-wrapper {
+    $height: 40px;
+    $padding: 8px;
+    
+    display: flex;
+    border-radius: 5rem;
+  
+    .search-form {
+      flex: 1 1 auto;
+  
+      .search-field {
+        width: 100%;
+        font-size: 1rem;
+  
+        .mat-mdc-form-field-infix {
+          display: flex;
+          min-height: $height;
+          padding: 0;
+        }
+  
+        .mdc-line-ripple,
+        .mat-mdc-form-field-subscript-wrapper {
+          display: none;
+        }
+  
+        .mat-mdc-text-field-wrapper,
+        .mat-mdc-form-field-focus-overlay {
+          background: none;
+        }
+      }
+    }
+  
+    .controls {
+      flex: 0 0 0;
+      padding: 0 1rem;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+    }
+  
+    .mat-mdc-form-field-icon-prefix,
+    .mat-mdc-form-field-icon-suffix {
+      & > .mat-icon {
+        padding: $padding;
+      }
+    }
+  
+    .mat-mdc-icon-button.mat-mdc-button-base {
+      width: $height;
+      height: $height;
+      padding: $padding;
+    }
+  }
+}

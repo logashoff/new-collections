@@ -28,6 +28,7 @@ import {
   RenameDialogComponent,
   RippleComponent,
   SearchComponent,
+  SearchFormComponent,
   SpinnerComponent,
   TabListComponent,
   TabsSelectorComponent,
@@ -35,7 +36,7 @@ import {
   TimelineElementComponent,
   TopSitesComponent,
 } from './components/index';
-import { StopPropagationDirective } from './directives/index';
+import { StickyDirective, StopPropagationDirective } from './directives/index';
 import { FaviconPipe, HostnamePipe } from './pipes/index';
 
 const declarations = [
@@ -53,7 +54,9 @@ const declarations = [
   RenameDialogComponent,
   RippleComponent,
   SearchComponent,
+  SearchFormComponent,
   SpinnerComponent,
+  StickyDirective,
   StopPropagationDirective,
   TabListComponent,
   TabsSelectorComponent,

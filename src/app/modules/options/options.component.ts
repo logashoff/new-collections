@@ -9,11 +9,11 @@ import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import isUndefined from 'lodash/isUndefined';
 import { BehaviorSubject, Observable, map, shareReplay, startWith, take } from 'rxjs';
-import { MenuService, SettingsService } from 'src/app/services';
-import { Action, ActionIcon, CollectionActions, MostVisitedURL } from 'src/app/utils';
+import { CollectionsService, SettingsService } from 'src/app/services';
+import { Action, ActionIcon, CollectionActions, MostVisitedURL, translate } from 'src/app/utils';
 
 /**
  * Options form.
@@ -67,6 +67,8 @@ interface OptionsForm {
   ],
 })
 export class OptionsComponent implements OnInit {
+  private readonly translate = translate();
+  
   readonly collectionActions: CollectionActions;
 
   private readonly devicesControl = new FormControl<boolean>(true);
@@ -95,21 +97,17 @@ export class OptionsComponent implements OnInit {
     syncStorage: this.syncStorage,
   });
 
-  constructor(
-    private menuService: MenuService,
-    private settings: SettingsService,
-    private translateService: TranslateService
-  ) {
+  constructor(private collectionsService: CollectionsService, private settings: SettingsService) {
     this.collectionActions = [
       {
         action: Action.Import,
         icon: ActionIcon.Import,
-        tooltip: this.translateService.instant('importCollections'),
+        tooltip: this.translate('importCollections'),
       },
       {
         action: Action.Export,
         icon: ActionIcon.Export,
-        tooltip: this.translateService.instant('exportCollections'),
+        tooltip: this.translate('exportCollections'),
         color: 'primary',
       },
     ];
@@ -153,6 +151,6 @@ export class OptionsComponent implements OnInit {
   }
 
   handleAction(action: Action) {
-    this.menuService.handleMenuAction(action);
+    this.collectionsService.handleAction(action);
   }
 }

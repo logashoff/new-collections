@@ -64,3 +64,8 @@ export const translate = () => {
   const translate = inject(TranslateService);
   return (key: string | string[], interpolateParams?: Object): string => translate.instant(key, interpolateParams);
 };
+
+/**
+ * Navigates to options page.
+ */
+export const openOptions = () => chrome.runtime.openOptionsPage();
