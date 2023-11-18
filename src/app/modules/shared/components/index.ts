@@ -11,7 +11,6 @@ export * from './rename-dialog/rename-dialog.component';
 export * from './ripple/ripple.component';
 export * from './search-form/search-form.component';
 export * from './search/search.component';
-export * from './spinner/spinner.component'
 export * from './tab-list/tab-list.component';
 export * from './tabs-selector/tabs-selector.component';
 export * from './timeline-element/timeline-element.component';

@@ -1,9 +1,18 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
 import Fuse from 'fuse.js';
 import isNil from 'lodash/isNil';
 import { BehaviorSubject, Observable, firstValueFrom, lastValueFrom, map, shareReplay, withLatestFrom } from 'rxjs';
 import { NavService } from 'src/app/services';
 import { Action, BrowserTab, BrowserTabs, TabDelete } from 'src/app/utils';
+import { StickyDirective } from '../../directives';
+import { EmptyComponent } from '../empty/empty.component';
+import { ListItemComponent } from '../list-item/list-item.component';
+import { SearchFormComponent } from '../search-form/search-form.component';
+import { TabListComponent } from '../tab-list/tab-list.component';
 
 const fuseOptions: Fuse.IFuseOptions<BrowserTab> = {
   keys: ['title', 'url'],
@@ -20,8 +29,20 @@ const fuseOptions: Fuse.IFuseOptions<BrowserTab> = {
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss'],
+  styleUrl: './search.component.scss',
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [
+    CommonModule,
+    EmptyComponent,
+    ListItemComponent,
+    MatCardModule,
+    MatIconModule,
+    SearchFormComponent,
+    StickyDirective,
+    TabListComponent,
+    TranslateModule,
+  ],
 })
 export class SearchComponent implements OnInit {
   Action = Action;

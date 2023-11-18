@@ -3,7 +3,13 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
 import { Observable } from 'rxjs';
 import { HomeService, TabService } from 'src/app/services';
 import { Action, ActionIcon, BrowserTabs, CollectionActions, TabGroups, Timeline, TopSites } from 'src/app/utils';
-import { SharedModule } from '../shared';
+import {
+  EmptyComponent,
+  GroupsComponent,
+  SearchComponent,
+  TimelineElementComponent,
+  TopSitesComponent,
+} from '../shared';
 
 /**
  * @description
@@ -17,7 +23,14 @@ import { SharedModule } from '../shared';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [CommonModule, SharedModule],
+  imports: [
+    CommonModule,
+    EmptyComponent,
+    GroupsComponent,
+    SearchComponent,
+    TimelineElementComponent,
+    TopSitesComponent,
+  ],
   providers: [HomeService],
 })
 export class HomeComponent {

@@ -1,10 +1,18 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
-import { MatSelectionList } from '@angular/material/list';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule, MatSelectionList } from '@angular/material/list';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
 import isNil from 'lodash/isNil';
-import { filter, map, Observable, shareReplay, startWith, withLatestFrom } from 'rxjs';
+import { Observable, filter, map, shareReplay, startWith, withLatestFrom } from 'rxjs';
 import { Tabs } from 'src/app/utils';
+import { FaviconPipe, HostnamePipe } from '../../pipes';
+import { ChipComponent } from '../chip/chip.component';
 
 /**
  * Form for selecting new tabs to add to existing or new group.
@@ -21,9 +29,23 @@ interface TabSelectorForm {
 @Component({
   selector: 'app-tabs-selector',
   templateUrl: './tabs-selector.component.html',
-  styleUrls: ['./tabs-selector.component.scss'],
+  styleUrl: './tabs-selector.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [
+    ChipComponent,
+    CommonModule,
+    FaviconPipe,
+    HostnamePipe,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatListModule,
+    MatTooltipModule,
+    ReactiveFormsModule,
+    TranslateModule,
+  ],
 })
 export class TabsSelectorComponent {
   /**

@@ -1,6 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
 import { TabService } from 'src/app/services';
-import { queryCurrentWindow, restoreTabs, TabGroup, Tabs } from 'src/app/utils';
+import { TabGroup, Tabs, queryCurrentWindow, restoreTabs } from 'src/app/utils';
+import { StopPropagationDirective } from '../../directives';
 
 /**
  * @description
@@ -10,9 +16,11 @@ import { queryCurrentWindow, restoreTabs, TabGroup, Tabs } from 'src/app/utils';
 @Component({
   selector: 'app-group-controls',
   templateUrl: './group-controls.component.html',
-  styleUrls: ['./group-controls.component.scss'],
+  styleUrl: './group-controls.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatTooltipModule, StopPropagationDirective, TranslateModule],
 })
 export class GroupControlsComponent {
   @Input() group: TabGroup;

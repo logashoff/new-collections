@@ -1,4 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
 import { CollectionsService } from 'src/app/services';
 import { Action, CollectionActions } from 'src/app/utils';
 
@@ -10,12 +13,13 @@ import { Action, CollectionActions } from 'src/app/utils';
 @Component({
   selector: 'app-empty',
   templateUrl: './empty.component.html',
-  styleUrls: ['./empty.component.scss'],
+  styleUrl: './empty.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [MatButtonModule, MatIconModule, TranslateModule],
 })
 export class EmptyComponent {
-
   @Input() actions: CollectionActions;
 
   constructor(private collectionsService: CollectionsService) {}

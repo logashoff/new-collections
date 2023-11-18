@@ -1,4 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,10 +9,18 @@ import {
   Output,
   ViewEncapsulation,
 } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { EXPANSION_PANEL_ANIMATION_TIMING } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
 import { BehaviorSubject, Observable, map, shareReplay, switchMap } from 'rxjs';
 import { NavService, TabService } from 'src/app/services';
 import { BrowserTab, TabDelete } from 'src/app/utils';
+import { StopPropagationDirective } from '../../directives';
+import { FaviconPipe } from '../../pipes';
+import { ChipComponent } from '../chip/chip.component';
+import { RippleComponent } from '../ripple/ripple.component';
 
 /**
  * @description
@@ -21,9 +30,21 @@ import { BrowserTab, TabDelete } from 'src/app/utils';
 @Component({
   selector: 'app-list-item',
   templateUrl: './list-item.component.html',
-  styleUrls: ['./list-item.component.scss'],
+  styleUrl: './list-item.component.scss',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    ChipComponent,
+    CommonModule,
+    FaviconPipe,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    RippleComponent,
+    StopPropagationDirective,
+    TranslateModule,
+  ],
   animations: [
     trigger('fadeAnimation', [
       state(

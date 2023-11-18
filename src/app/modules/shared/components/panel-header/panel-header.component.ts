@@ -1,5 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
 import { HostnameGroup } from 'src/app/utils';
+import { StopPropagationDirective } from '../../directives';
+import { IconsContainerComponent } from '../icons-container/icons-container.component';
 
 /**
  * Expansion panel header layout container.
@@ -7,9 +13,18 @@ import { HostnameGroup } from 'src/app/utils';
 @Component({
   selector: 'app-panel-header',
   templateUrl: './panel-header.component.html',
-  styleUrls: ['./panel-header.component.scss'],
+  styleUrl: './panel-header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [
+    CommonModule,
+    IconsContainerComponent,
+    MatIconModule,
+    MatTooltipModule,
+    StopPropagationDirective,
+    TranslateModule,
+  ],
 })
 export class PanelHeaderComponent {
   /**

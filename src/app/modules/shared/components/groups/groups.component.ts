@@ -1,14 +1,16 @@
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
 import { BehaviorSubject, Observable, map, shareReplay } from 'rxjs';
 import { NavService, SettingsService, TabService } from 'src/app/services';
-import {
-  BrowserTabs,
-  GroupExpanded,
-  TabGroup,
-  TabGroups,
-  TabsByHostname,
-} from 'src/app/utils';
+import { BrowserTabs, GroupExpanded, TabGroup, TabGroups, TabsByHostname } from 'src/app/utils';
+import { GroupControlsComponent } from '../group-controls/group-controls.component';
+import { ListItemComponent } from '../list-item/list-item.component';
+import { PanelHeaderComponent } from '../panel-header/panel-header.component';
+import { RippleComponent } from '../ripple/ripple.component';
 
 /**
  * @description
@@ -18,9 +20,21 @@ import {
 @Component({
   selector: 'app-groups',
   templateUrl: './groups.component.html',
-  styleUrls: ['./groups.component.scss'],
+  styleUrl: './groups.component.scss',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    CommonModule,
+    DragDropModule,
+    GroupControlsComponent,
+    ListItemComponent,
+    MatDividerModule,
+    MatExpansionModule,
+    MatIconModule,
+    PanelHeaderComponent,
+    RippleComponent,
+  ],
 })
 export class GroupsComponent {
   /**

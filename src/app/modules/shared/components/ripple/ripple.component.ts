@@ -21,9 +21,10 @@ import { scrollIntoView } from 'src/app/utils';
 @Component({
   selector: 'app-ripple',
   template: '',
-  styleUrls: ['./ripple.component.scss'],
+  styleUrl: './ripple.component.scss',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class RippleComponent implements OnInit, OnDestroy {
   private readonly focused$ = new BehaviorSubject<boolean>(false);

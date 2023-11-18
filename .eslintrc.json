@@ -27,7 +27,8 @@
           }
         ],
         "no-console": ["error", { "allow": ["warn", "error"] }],
-        "no-unused-private-class-members": "error"
+        "no-unused-private-class-members": "error",
+        "no-duplicate-imports": ["error"]
       }
     },
     {

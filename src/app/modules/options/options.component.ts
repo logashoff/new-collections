@@ -48,7 +48,7 @@ interface OptionsForm {
 @Component({
   selector: 'app-options',
   templateUrl: './options.component.html',
-  styleUrls: ['./options.component.scss'],
+  styleUrl: './options.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
@@ -68,7 +68,7 @@ interface OptionsForm {
 })
 export class OptionsComponent implements OnInit {
   private readonly translate = translate();
-  
+
   readonly collectionActions: CollectionActions;
 
   private readonly devicesControl = new FormControl<boolean>(true);

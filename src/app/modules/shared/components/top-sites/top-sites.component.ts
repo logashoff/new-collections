@@ -1,7 +1,12 @@
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { lastValueFrom } from 'rxjs';
 import { MessageService, SettingsService } from 'src/app/services';
 import { ActionIcon, TopSite, TopSites, translate } from 'src/app/utils';
+import { StopPropagationDirective } from '../../directives';
+import { FaviconPipe } from '../../pipes';
+import { ImageComponent } from '../image/image.component';
 
 /**
  * @description
@@ -11,13 +16,15 @@ import { ActionIcon, TopSite, TopSites, translate } from 'src/app/utils';
 @Component({
   selector: 'app-top-sites',
   templateUrl: './top-sites.component.html',
-  styleUrls: ['./top-sites.component.scss'],
+  styleUrl: './top-sites.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [FaviconPipe, ImageComponent, MatButtonModule, MatIconModule, StopPropagationDirective],
 })
 export class TopSitesComponent {
   @Input() topSites: TopSites;
-  
+
   readonly translate = translate();
 
   constructor(private message: MessageService, private settings: SettingsService) {}

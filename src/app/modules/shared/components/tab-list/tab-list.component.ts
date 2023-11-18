@@ -1,4 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
+import { MatListModule } from '@angular/material/list';
 
 /**
  * @description
@@ -8,7 +9,9 @@ import { Component, ViewEncapsulation } from '@angular/core';
 @Component({
   selector: 'app-tab-list',
   templateUrl: './tab-list.component.html',
-  styleUrls: ['./tab-list.component.scss'],
+  styleUrl: './tab-list.component.scss',
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [MatListModule],
 })
 export class TabListComponent {}

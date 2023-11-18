@@ -1,4 +1,8 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
 
 /**
  * @description
@@ -8,9 +12,11 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEn
 @Component({
   selector: 'app-timeline-element',
   templateUrl: './timeline-element.component.html',
-  styleUrls: ['./timeline-element.component.scss'],
+  styleUrl: './timeline-element.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [MatButtonModule, MatIconModule, MatTooltipModule, TranslateModule],
 })
 export class TimelineElementComponent {
   /**

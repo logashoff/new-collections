@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { IconSize, ImageSource } from 'src/app/utils';
+import { ImageComponent } from '../image/image.component';
 
 /**
  * @description
@@ -9,9 +10,11 @@ import { IconSize, ImageSource } from 'src/app/utils';
 @Component({
   selector: 'app-chip',
   templateUrl: './chip.component.html',
-  styleUrls: ['./chip.component.scss'],
+  styleUrl: './chip.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [ImageComponent],
 })
 export class ChipComponent {
   /**

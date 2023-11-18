@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { getFaviconUrl, ImageSource } from 'src/app/utils';
+import { ImageSource, getFaviconUrl } from 'src/app/utils';
 
 /**
  * @description
@@ -9,6 +9,7 @@ import { getFaviconUrl, ImageSource } from 'src/app/utils';
  */
 @Pipe({
   name: 'favicon',
+  standalone: true,
 })
 export class FaviconPipe implements PipeTransform {
   constructor(private sanitizer: DomSanitizer) {}
@@ -16,9 +17,9 @@ export class FaviconPipe implements PipeTransform {
   transform(favIconUrl: string, originUrl?: string): ImageSource {
     try {
       const url = new URL(favIconUrl);
-      
+
       return url.href;
-    } catch(e) {
+    } catch (e) {
       return this.sanitizer.bypassSecurityTrustUrl(getFaviconUrl(originUrl));
     }
   }

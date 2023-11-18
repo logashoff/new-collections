@@ -1,6 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { getFaviconUrl, IconSize, ImageSource } from 'src/app/utils';
+import { IconSize, ImageSource, getFaviconUrl } from 'src/app/utils';
 
 /**
  * @description
@@ -10,8 +11,10 @@ import { getFaviconUrl, IconSize, ImageSource } from 'src/app/utils';
 @Component({
   selector: 'app-image',
   templateUrl: './image.component.html',
-  styleUrls: ['./image.component.scss'],
+  styleUrl: './image.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [CommonModule],
 })
 export class ImageComponent {
   /**
