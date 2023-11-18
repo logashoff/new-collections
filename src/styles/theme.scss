@@ -181,7 +181,7 @@ $light-theme-primary: mat.define-palette($light-primary-palette, main, lighter, 
 
 $dark-accent-main: hsl(340, 82%, 52%);
 $dark-accent-lighter: hsl(340, 89%, 93%);
-$dark-accent-darker: hsl(340, 82%, 52%);
+$dark-accent-darker: hsl(340, 82%, 32%);
 
 $dark-accent-palette: (
   main: $dark-accent-main,
@@ -212,7 +212,7 @@ $dark-theme-accent: mat.define-palette($dark-accent-palette, main, lighter, dark
 
 $light-accent-main: hsl(340, 82%, 51%);
 $light-accent-lighter: hsl(340, 82%, 85%);
-$light-accent-darker: hsl(340, 100%, 63%);
+$light-accent-darker: hsl(340, 100%, 31%);
 
 $light-accent-palette: (
   main: $light-accent-main,

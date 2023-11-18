@@ -72,10 +72,9 @@ a {
   }
 }
 
-.mat-mdc-snack-bar-handset {
-  .mdc-snackbar.message-container .mdc-snackbar__surface {
-    width: auto;
-  }
+.mdc-snackbar.message-container .mdc-snackbar__surface {
+  width: auto;
+  min-width: auto;
 }
 
 .mdc-snackbar.message-container {

@@ -28,7 +28,7 @@ describe('MessageService', () => {
       expect.anything(),
       expect.objectContaining({
         data: { actionIcon: 'save_alt', message: 'Hello World' },
-        duration: 30_000,
+        duration: 10_000,
         horizontalPosition: 'center',
         panelClass: 'message-container',
         verticalPosition: 'bottom',

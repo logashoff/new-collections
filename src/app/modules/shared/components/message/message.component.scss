@@ -5,24 +5,37 @@
 @include component-theme using ($theme) {
   app-message {
     $background-color: get-palette-color(get-background-palette($theme), card);
-    $accent-color: get-palette-color(get-primary-palette($theme));
+    $accent-color: get-palette-color(get-accent-palette($theme), main);
+    $icon-color: get-palette-color(get-accent-palette($theme), A100);
+    $text-color: get-palette-color(get-foreground-palette($theme), text);
+    $buttons-color: get-palette-color(get-foreground-palette($theme), secondary-text);
+    $border-color: get-palette-color(get-foreground-palette($theme), divider);
 
-    color: get-palette-color(get-foreground-palette($theme), secondary-text);
+    color: $text-color;
     background-color: $background-color;
 
     .icon-container {
       background-color: $accent-color;
-      color: $background-color;
+      color: $icon-color;
+    }
+
+    .controls {
+      color: $buttons-color;
     }
   }
 }
 
+$typography-config: mat.get-typography-config($dark-theme);
+
 app-message {
   @include mat.elevation(8);
 
+  $border-radius: 5px;
+
   display: block;
-  border-radius: 1rem;
+  border-radius: $border-radius;
   box-sizing: border-box;
+  overflow: hidden;
 
   .container {
     display: flex;
@@ -31,8 +44,11 @@ app-message {
   }
 
   .message {
+    @include mat.typography-level($typography-config, subtitle-1);
+
     display: flex;
     align-items: center;
+    justify-content: center;
     flex: 1 1 auto;
     white-space: nowrap;
     overflow: hidden;
@@ -42,22 +58,24 @@ app-message {
   .icon-container {
     display: flex;
     align-items: center;
-    padding: 1rem;
-    border-radius: 1rem;
+    padding: 1rem 0.75rem;
 
     .icon {
       line-height: 0;
-
-      mat-icon {
-        font-size: 1.75rem;
-        height: 1.75rem;
-        width: 1.75rem;
-      }
     }
   }
 
   .controls {
     display: flex;
     align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-right: 0.5rem;
+
+    .mdc-icon-button {
+      padding: 0;
+      width: 24px;
+      height: 24px;
+    }
   }
 }
