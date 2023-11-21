@@ -1,7 +1,7 @@
 {
   "action.settings": "Settings",
   "action.undo": "Undo",
-  "addBookmarks": "Add Bookmarks",
+  "addCollection": "Add Collection",
   "addSelected": "Add Selected",
   "addTabs": "Add Tabs",
   "close": "Close",
@@ -33,7 +33,7 @@
   "resultCount": "{{ count }} results",
   "save": "Save",
   "search": "Search",
-  "searchBookmarks": "Search bookmarks",
+  "searchCollections": "Search collections",
   "settings": "Settings",
   "siteMovedToIgnoreList": "Site moved to ignore list",
   "syncCollections": "Sync Collections",

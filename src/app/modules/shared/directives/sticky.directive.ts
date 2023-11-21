@@ -11,7 +11,7 @@ import { AfterViewInit, Directive, ElementRef, OnDestroy } from '@angular/core';
   standalone: true,
 })
 export class StickyDirective implements OnDestroy, AfterViewInit {
-  private intersectionObservable: IntersectionObserver = new IntersectionObserver(
+  private readonly intersectionObservable = new IntersectionObserver(
     ([entry]) => entry.target.classList.toggle('stuck', entry.intersectionRatio < 1),
     {
       threshold: [1],

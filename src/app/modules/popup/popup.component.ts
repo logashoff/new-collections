@@ -24,7 +24,7 @@ export class PopupComponent {
     {
       action: Action.Save,
       icon: ActionIcon.Save,
-      label: 'addBookmarks',
+      label: 'addCollection',
       color: 'primary',
     },
   ];

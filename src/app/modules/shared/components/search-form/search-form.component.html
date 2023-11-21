@@ -5,7 +5,7 @@
       <input type="text" 
         matInput 
         formControlName="search" 
-        [placeholder]="'searchBookmarks' | translate" 
+        [placeholder]="'searchCollections' | translate" 
         autocomplete="off" />
 
       @if (search) {
@@ -22,7 +22,7 @@
   <div class="controls">
     <button mat-icon-button
       color="primary"
-      matTooltip="{{ 'addBookmarks' | translate }}"
+      matTooltip="{{ 'addCollection' | translate }}"
       (click)="handleAction(Action.Save)">
       <mat-icon>add</mat-icon>
     </button>
