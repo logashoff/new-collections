@@ -5,7 +5,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import Fuse from 'fuse.js';
 import isNil from 'lodash/isNil';
-import { BehaviorSubject, Observable, firstValueFrom, lastValueFrom, map, shareReplay, withLatestFrom } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  combineLatest,
+  firstValueFrom,
+  lastValueFrom,
+  map,
+  shareReplay,
+  withLatestFrom,
+} from 'rxjs';
 import { NavService } from 'src/app/services';
 import { Action, BrowserTab, BrowserTabs, TabDelete } from 'src/app/utils';
 import { StickyDirective } from '../../directives';
@@ -57,31 +66,35 @@ export class SearchComponent implements OnInit {
     return this.source$.value;
   }
 
-  /**
-   * Indicates search data is present.
-   */
-  readonly hasSearchData$: Observable<boolean> = this.source$.pipe(
-    map((source) => source?.length > 0),
-    shareReplay(1)
-  );
+  private readonly devices$ = new BehaviorSubject<BrowserTabs>([]);
+
+  @Input() set devices(value: BrowserTabs) {
+    this.devices$.next(value);
+  }
+
+  get devices(): BrowserTabs {
+    return this.devices$.value;
+  }
 
   /**
    * Returns Fuse search instance.
    */
-  private readonly fuse$: Observable<Fuse<BrowserTab>> = this.source$.pipe(
+  private readonly fuseSource$: Observable<Fuse<BrowserTab>> = this.source$.pipe(
     map((source) => new Fuse(source ?? [], fuseOptions)),
     shareReplay(1)
   );
 
-  /**
-   * Source for search results.
-   */
-  readonly searchResults$: Observable<Fuse.FuseResult<BrowserTab>[]>;
+  private readonly fuseDevices$: Observable<Fuse<BrowserTab>> = this.devices$.pipe(
+    map((devices) => new Fuse(devices ?? [], fuseOptions)),
+    shareReplay(1)
+  );
 
   /**
    * Tabs data from search results
    */
-  readonly tabs$: Observable<BrowserTab[]>;
+  readonly sourceTabs$: Observable<BrowserTab[]>;
+
+  readonly deviceTabs$: Observable<BrowserTab[]>;
 
   /**
    * Indicates search results state
@@ -93,19 +106,22 @@ export class SearchComponent implements OnInit {
   constructor(private navService: NavService) {
     this.searchValue$ = this.navService.paramsSearch$.pipe(shareReplay(1));
 
-    this.searchResults$ = this.searchValue$.pipe(
-      withLatestFrom(this.fuse$),
+    this.sourceTabs$ = this.searchValue$.pipe(
+      withLatestFrom(this.fuseSource$),
       map(([search, fuse]) => (search?.length > 0 ? fuse.search(search) : null)),
-      shareReplay(1)
-    );
-
-    this.tabs$ = this.searchResults$.pipe(
       map((searchResults) => searchResults?.map(({ item }) => item)),
       shareReplay(1)
     );
 
-    this.hasSearchValue$ = this.searchResults$.pipe(
-      map((searchResult) => !isNil(searchResult)),
+    this.deviceTabs$ = this.searchValue$.pipe(
+      withLatestFrom(this.fuseDevices$),
+      map(([search, fuse]) => (search?.length > 0 ? fuse.search(search) : null)),
+      map((searchResults) => searchResults?.map(({ item }) => item)),
+      shareReplay(1)
+    );
+
+    this.hasSearchValue$ = combineLatest([this.sourceTabs$, this.deviceTabs$]).pipe(
+      map(([sourceTabs, deviceTabs]) => !isNil(sourceTabs) || !isNil(deviceTabs)),
       shareReplay(1)
     );
   }
@@ -118,7 +134,7 @@ export class SearchComponent implements OnInit {
    * Handles tab update
    */
   async itemModified(updatedTab: BrowserTab) {
-    const tabs = await firstValueFrom(this.tabs$);
+    const tabs = await firstValueFrom(this.sourceTabs$);
 
     if (updatedTab && !tabs.includes(updatedTab)) {
       const index = tabs.findIndex((t) => t.id === updatedTab.id);
@@ -133,7 +149,7 @@ export class SearchComponent implements OnInit {
    * Handles tab deletion
    */
   async itemDeleted({ deletedTab, revertDelete }: TabDelete) {
-    const tabs = await firstValueFrom(this.tabs$);
+    const tabs = await firstValueFrom(this.sourceTabs$);
 
     let index = tabs.findIndex((tab) => tab === deletedTab);
     if (revertDelete && index > -1) {

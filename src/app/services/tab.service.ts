@@ -6,7 +6,7 @@ import flatMap from 'lodash/flatMap';
 import keyBy from 'lodash/keyBy';
 import remove from 'lodash/remove';
 import moment from 'moment';
-import { BehaviorSubject, firstValueFrom, lastValueFrom, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, firstValueFrom, lastValueFrom } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import {
   ActionIcon,
@@ -14,23 +14,23 @@ import {
   BrowserTabs,
   Collection,
   Collections,
-  getCollections,
-  getFaviconStore,
-  getHostnameGroup,
-  getUrlHost,
-  ignoreUrlsRegExp,
-  saveCollections,
   StorageChanges,
-  syncToTabs,
   TabGroup,
   TabGroups,
   Tabs,
   TabsByHostname,
   Timeline,
   TimelineElement,
+  getCollections,
+  getFaviconStore,
+  getHostnameGroup,
+  getUrlHost,
+  ignoreUrlsRegExp,
+  saveCollections,
+  syncToTabs,
   translate,
 } from 'src/app/utils';
-import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
+import { validate as uuidValidate, v4 as uuidv4 } from 'uuid';
 import { MessageComponent, RenameDialogComponent, TabsSelectorComponent } from '../modules/shared';
 import { MessageService } from './message.service';
 import { NavService } from './nav.service';
@@ -54,7 +54,7 @@ export class TabService {
   /**
    * Observable used by components to listen for tabs data changes.
    */
-  readonly tabGroups$ = this.tabGroupsSource$.pipe(
+  private readonly tabGroups$ = this.tabGroupsSource$.pipe(
     map((res) =>
       res?.length > 0 ? res.sort(({ timestamp: a }, { timestamp: b }) => (a < 0 || b < 0 ? a - b : b - a)) : null
     ),

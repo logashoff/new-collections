@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import flatMap from 'lodash/flatMap';
 import isNil from 'lodash/isNil';
 import isUndefined from 'lodash/isUndefined';
-import { combineLatest, from, map, Observable, of, shareReplay, startWith, switchMap, take } from 'rxjs';
+import { combineLatest, from, map, Observable, of, shareReplay, switchMap, take } from 'rxjs';
 import { SettingsService, TabService } from 'src/app/services';
-import { BrowserTabs, Devices, MostVisitedURL, Sessions, TabGroup, Tabs, Timeline, TopSites } from 'src/app/utils';
+import { Devices, MostVisitedURL, Sessions, TabGroup, Tabs, Timeline, TopSites } from 'src/app/utils';
 
 /**
  * @description
@@ -28,8 +28,6 @@ export class HomeService {
    */
   readonly devicesTimeline$: Observable<Timeline>;
 
-  readonly searchSource$: Observable<BrowserTabs>;
-
   /**
    * Tab groups grouped by time
    */
@@ -39,11 +37,6 @@ export class HomeService {
    * Indicates if timeline, top sites or devices data is present
    */
   readonly hasAnyData$: Observable<boolean>;
-
-  /**
-   * Indicates no devices or saved collections found
-   */
-  readonly noData$: Observable<boolean>;
 
   constructor(private settings: SettingsService, private tabsService: TabService) {
     this.timeline$ = this.tabsService.groupsTimeline$;
@@ -102,29 +95,10 @@ export class HomeService {
       shareReplay(1)
     );
 
-    this.searchSource$ = combineLatest([this.devices$, this.tabsService.tabs$]).pipe(
-      map(([devices, tabs]) => {
-        const ret: BrowserTabs = flatMap(devices?.map((device) => this.getTabsFromSessions(device.sessions))) ?? [];
-
-        if (tabs?.length > 0) {
-          ret.push(...tabs);
-        }
-
-        return ret;
-      }),
-      shareReplay(1)
-    );
-
     const homeTimeline$ = combineLatest([this.devices$, this.timeline$]).pipe(shareReplay(1));
 
     this.hasAnyData$ = homeTimeline$.pipe(
       map(([devices, timeline]) => !isNil(timeline) || !isNil(devices)),
-      shareReplay(1)
-    );
-
-    this.noData$ = homeTimeline$.pipe(
-      startWith([null, null]),
-      map(([devices, timeline]) => isNil(timeline) && isNil(devices)),
       shareReplay(1)
     );
   }

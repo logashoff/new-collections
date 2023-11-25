@@ -19,14 +19,14 @@ app-timeline-element {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 0 0 0.5rem;
+    margin: 0;
     overflow: hidden;
-    height: 2.5rem;
   }
 
   h3.timeline-label {
     @include mat.typography-level($typography-config, subtitle-2);
 
     margin: 0;
+    line-height: 3rem;
   }
 }

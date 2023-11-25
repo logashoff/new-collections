@@ -3,7 +3,8 @@
     <app-top-sites [topSites]="topSites$ | async"></app-top-sites>
   }
 
-  <app-search [source]="searchSource$ | async">
+  <app-search [source]="searchSource$ | async"
+    [devices]="devices$ | async">
     @if (hasAnyData$ | async) {
       <div class="layout-container">
         @for (item of devicesTimeline$ | async; track item.label) {

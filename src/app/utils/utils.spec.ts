@@ -1,5 +1,5 @@
 import { getBrowserTabMock, getTabGroupMock } from 'src/mocks';
-import { getHostname, getHostnameGroup, getUrlOrigin } from './utils';
+import { getHostname, getHostnameGroup } from './utils';
 
 describe('utils.ts', () => {
   it('should create hostname groups', () => {
@@ -28,11 +28,5 @@ describe('utils.ts', () => {
 
   it('should return hostname', () => {
     expect(getHostname(getBrowserTabMock())).toBe('getfedora.org');
-  });
-
-  it('should return origin', () => {
-    expect(getUrlOrigin('https://developer.chrome.com/docs/extensions/mv3/manifest/')).toBe(
-      'https://developer.chrome.com'
-    );
   });
 });

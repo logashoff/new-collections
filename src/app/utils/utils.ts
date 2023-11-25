@@ -35,13 +35,6 @@ export function getUrlHost(url: string): string {
 }
 
 /**
- * Get origin from URL
- */
-export function getUrlOrigin(url: string): string {
-  return new URL(url).origin;
-}
-
-/**
  * Returns hostname from tab's url
  */
 export function getHostname(tab: Tab): string {

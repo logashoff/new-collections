@@ -9,12 +9,6 @@ const callbackTimeout = (1 / 15) * 1000;
 let scrollTimeoutId: any;
 
 /**
- * Checks if element is scrollable
- */
-const isScrollable = (element: HTMLElement): boolean =>
-  element.scrollHeight > element.clientHeight && getComputedStyle(element).overflow !== 'hidden';
-
-/**
  * Scrolls specified element into view and resolves promise when scrolling is complete
  */
 export function scrollIntoView(element: HTMLElement): Promise<HTMLElement> {

@@ -69,7 +69,7 @@ describe('TabService', () => {
   });
 
   it('should initialize tabs', async () => {
-    const tabGroups = await firstValueFrom(spectator.service.tabGroups$);
+    const tabGroups = await firstValueFrom(spectator.service['tabGroups$']);
 
     expect(tabGroups.length).toBe(3);
     expect(tabGroups[0].tabs.length).toBe(5);
@@ -87,7 +87,7 @@ describe('TabService', () => {
     const tabGroup = spectator.service.createTabGroup(getBrowserTabsMock());
     await spectator.service.addTabGroup(tabGroup);
 
-    const tabGroups = await firstValueFrom(spectator.service.tabGroups$);
+    const tabGroups = await firstValueFrom(spectator.service['tabGroups$']);
 
     expect(tabGroups.length).toBe(4);
     expect(tabGroups[0].tabs.length).toBe(3);
@@ -108,13 +108,13 @@ describe('TabService', () => {
   });
 
   it('should generate icon groups', async () => {
-    const tabGroups = await firstValueFrom(spectator.service.tabGroups$);
+    const tabGroups = await firstValueFrom(spectator.service['tabGroups$']);
 
     expect(tabGroups.length).toBe(3);
   });
 
   it('should merge new tab groups with current ones', async () => {
-    let groups = await firstValueFrom(spectator.service.tabGroups$);
+    let groups = await firstValueFrom(spectator.service['tabGroups$']);
 
     expect(groups.length).toBe(3);
 
@@ -136,7 +136,7 @@ describe('TabService', () => {
     const collections = getTabGroupsMock();
     await spectator.service.addTabGroups(collections.map((collection) => new TabGroup(collection)));
 
-    groups = await firstValueFrom(spectator.service.tabGroups$);
+    groups = await firstValueFrom(spectator.service['tabGroups$']);
 
     expect(groups.length).toBe(3);
 
@@ -177,7 +177,7 @@ describe('TabService', () => {
       }),
     ]);
 
-    groups = await firstValueFrom(spectator.service.tabGroups$);
+    groups = await firstValueFrom(spectator.service['tabGroups$']);
 
     expect(groups.length).toBe(3);
 
@@ -212,7 +212,7 @@ describe('TabService', () => {
       }),
     ]);
 
-    groups = await firstValueFrom(spectator.service.tabGroups$);
+    groups = await firstValueFrom(spectator.service['tabGroups$']);
 
     expect(groups.length).toBe(4);
 
@@ -222,7 +222,7 @@ describe('TabService', () => {
   });
 
   it('should sync collections', async () => {
-    let groups = await firstValueFrom(spectator.service.tabGroups$);
+    let groups = await firstValueFrom(spectator.service['tabGroups$']);
 
     expect(groups.length).toBe(3);
 
@@ -234,7 +234,7 @@ describe('TabService', () => {
       },
     });
 
-    groups = await firstValueFrom(spectator.service.tabGroups$);
+    groups = await firstValueFrom(spectator.service['tabGroups$']);
 
     expect(groups.length).toBe(4);
   });
@@ -250,21 +250,21 @@ describe('TabService', () => {
   });
 
   it('should remove groups', async () => {
-    let groups = await firstValueFrom(spectator.service.tabGroups$);
+    let groups = await firstValueFrom(spectator.service['tabGroups$']);
 
     await spectator.service.removeTabGroups(groups);
 
-    groups = await firstValueFrom(spectator.service.tabGroups$);
+    groups = await firstValueFrom(spectator.service['tabGroups$']);
     expect(groups).toBeNull();
   });
 
   it('should remove group', async () => {
-    let groups = await firstValueFrom(spectator.service.tabGroups$);
+    let groups = await firstValueFrom(spectator.service['tabGroups$']);
 
     expect(groups.length).toBe(3);
 
     await spectator.service.removeTabGroup(groups[0]);
-    groups = await firstValueFrom(spectator.service.tabGroups$);
+    groups = await firstValueFrom(spectator.service['tabGroups$']);
 
     expect(groups.length).toBe(2);
   });
