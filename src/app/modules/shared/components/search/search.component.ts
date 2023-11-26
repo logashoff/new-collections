@@ -22,6 +22,7 @@ import { EmptyComponent } from '../empty/empty.component';
 import { ListItemComponent } from '../list-item/list-item.component';
 import { SearchFormComponent } from '../search-form/search-form.component';
 import { TabListComponent } from '../tab-list/tab-list.component';
+import { TimelineLabelComponent } from '../timeline-label/timeline-label.component';
 
 const fuseOptions: Fuse.IFuseOptions<BrowserTab> = {
   keys: ['title', 'url'],
@@ -50,6 +51,7 @@ const fuseOptions: Fuse.IFuseOptions<BrowserTab> = {
     SearchFormComponent,
     StickyDirective,
     TabListComponent,
+    TimelineLabelComponent,
     TranslateModule,
   ],
 })

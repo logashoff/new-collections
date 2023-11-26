@@ -1,0 +1,18 @@
+@use '@angular/material' as mat;
+@import 'theme';
+
+@include component-theme using($theme) {
+  :host {
+    color: get-palette-color(get-foreground-palette($theme), hint-text);
+  }
+}
+
+$typography-config: mat.get-typography-config($dark-theme);
+
+:host {
+  @include mat.typography-level($typography-config, subtitle-2);
+
+  display: block;
+  margin: 0;
+  line-height: 3rem;
+}

@@ -24,7 +24,6 @@ export const ignoreUrlsRegExp = new RegExp('^(about:|chrome:|file:|wss:|ws:|chro
 export type QueryInfo = chrome.tabs.QueryInfo;
 export type Tab = chrome.tabs.Tab;
 export type Tabs = Tab[];
-export type TabIconDetails = chrome.browserAction.TabIconDetails;
 export type Device = chrome.sessions.Device;
 export type MostVisitedURL = chrome.topSites.MostVisitedURL;
 export type StorageArea = chrome.storage.StorageArea;

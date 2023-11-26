@@ -1,7 +1,6 @@
 @use '@angular/material' as mat;
 @import 'theme';
 
-
 @include component-theme using($theme) {
   app-timeline-element {
     .timeline-header {
@@ -9,8 +8,6 @@
     }
   }
 }
-
-$typography-config: mat.get-typography-config($dark-theme);
 
 app-timeline-element {
   display: block;
@@ -21,12 +18,5 @@ app-timeline-element {
     justify-content: space-between;
     margin: 0;
     overflow: hidden;
-  }
-
-  h3.timeline-label {
-    @include mat.typography-level($typography-config, subtitle-2);
-
-    margin: 0;
-    line-height: 3rem;
   }
 }

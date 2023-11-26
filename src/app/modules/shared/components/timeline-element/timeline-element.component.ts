@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
+import { TimelineLabelComponent } from '../timeline-label/timeline-label.component';
 
 /**
  * @description
@@ -16,7 +17,7 @@ import { TranslateModule } from '@ngx-translate/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatTooltipModule, TranslateModule],
+  imports: [MatButtonModule, MatIconModule, MatTooltipModule, TimelineLabelComponent, TranslateModule],
 })
 export class TimelineElementComponent {
   /**

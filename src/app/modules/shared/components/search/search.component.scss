@@ -6,14 +6,8 @@
     $border-color: get-palette-color(get-foreground-palette($theme), divider);
 
     color: get-palette-color(get-foreground-palette($theme), secondary-text);
-
-    .results-header {
-      color: get-palette-color(get-foreground-palette($theme), hint-text);
-    }
   }
 }
-
-$typography-config: mat.get-typography-config($dark-theme);
 
 app-search {
   display: flex;
@@ -24,7 +18,7 @@ app-search {
     display: block;
     padding: 0.5rem 0;
     position: sticky;
-    top: -1px;
+    top: -0.009px;
     z-index: 1;
 
     &.stuck .controls-wrapper {
@@ -34,13 +28,5 @@ app-search {
 
   .search-container {
     padding: 0;
-  }
-
-  .results-header {
-    @include mat.typography-level($typography-config, subtitle-2);
-
-    margin: 0;
-    overflow: hidden;
-    line-height: 3rem;
   }
 }

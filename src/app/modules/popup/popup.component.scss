@@ -1,11 +1,23 @@
 @import 'common';
 
-$padding: 1rem;
+$padding: 0.5rem;
 
+html,
 body {
+  width: $popup-width;
   min-width: $popup-width;
   max-width: $popup-width;
+  height: $popup-height;
   min-height: $popup-height;
+  max-height: $popup-height;
+}
+
+html {
+  overflow: hidden;
+}
+
+body {
+  overflow: auto;
 }
 
 html.cdk-global-scrollblock {
@@ -19,7 +31,7 @@ app-popup {
   flex: 1;
 
   .content {
-    padding: 0.5rem $padding $padding;
+    padding: 0 $padding $padding;
     display: flex;
     flex-direction: column;
     flex: 1;
