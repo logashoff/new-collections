@@ -21,16 +21,18 @@ export function scrollIntoView(element: HTMLElement): Promise<HTMLElement> {
     if (elBounds.y > 0 && elCenterY < viewCenterY) {
       resolve(element);
     } else {
+      const { body } = document;
+      
       function handleScroll() {
         clearInterval(scrollTimeoutId);
 
         scrollTimeoutId = setTimeout(() => {
-          document.removeEventListener('scroll', handleScroll);
+          body.removeEventListener('scroll', handleScroll);
           resolve(element);
         }, callbackTimeout);
       }
 
-      document.addEventListener('scroll', handleScroll);
+      body.addEventListener('scroll', handleScroll);
       element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
     }
   });

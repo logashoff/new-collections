@@ -12,14 +12,6 @@ body {
   max-height: $popup-height;
 }
 
-html {
-  overflow: hidden;
-}
-
-body {
-  overflow: auto;
-}
-
 html.cdk-global-scrollblock {
   position: relative;
 }
