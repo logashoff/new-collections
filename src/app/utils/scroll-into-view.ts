@@ -22,8 +22,7 @@ export function scrollIntoView(element: HTMLElement): Promise<HTMLElement> {
       resolve(element);
     } else {
       const { body } = document;
-      
-      function handleScroll() {
+      const handleScroll = () => {
         clearInterval(scrollTimeoutId);
 
         scrollTimeoutId = setTimeout(() => {

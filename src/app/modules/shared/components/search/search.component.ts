@@ -172,6 +172,6 @@ export class SearchComponent implements OnInit {
       this.navService.reset();
     }
 
-    scrollTo(0, 0);
+    document.body.scrollTo(0, 0);
   }
 }

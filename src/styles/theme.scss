@@ -18,6 +18,51 @@ $light-disabled-text: rgba($light-primary-text, 0.5);
 $light-dividers: rgba($light-primary-text, 0.12);
 $light-focused: rgba($light-primary-text, 0.12);
 
+$light-background-color: #ffffff;
+$dark-background-color: #242528;
+
+$light-background: $light-background-color;
+$light-card-background: #f8f9fa;
+$light-bg-darker-5: color.adjust($light-card-background, $blackness: 5%);
+$light-bg-darker-10: color.adjust($light-card-background, $blackness: 10%);
+$light-bg-darker-20: color.adjust($light-card-background, $blackness: 20%);
+$light-bg-darker-30: color.adjust($light-card-background, $blackness: 30%);
+$light-bg-lighter-5: $light-card-background;
+$dark-bg-tooltip: color.adjust($dark-background-color, $lightness: 20%);
+$dark-bg-alpha-4: rgba($dark-background-color, 0.04);
+$dark-bg-alpha-12: rgba($dark-background-color, 0.12);
+$dark-bg-alpha-24: rgba($dark-background-color, 0.24);
+
+$dark-background: $dark-background-color;
+$dark-card-background: #303134;
+$dark-bg-lighter-5: $dark-card-background;
+$dark-bg-lighter-10: color.adjust($dark-card-background, $lightness: 10%);
+$dark-bg-lighter-20: color.adjust($dark-card-background, $lightness: 20%);
+$dark-bg-lighter-30: color.adjust($dark-card-background, $lightness: 30%);
+$light-bg-alpha-4: rgba($light-background-color, 0.04);
+$light-bg-alpha-12: rgba($light-background-color, 0.12);
+$light-bg-alpha-24: rgba($light-background-color, 0.24);
+
+$dark-primary-main: #8ab4f8;
+$dark-primary-lighter: #dbe9fd;
+$dark-primary-darker: #699ef6;
+
+$light-primary-main: #1a73e8;
+$light-primary-lighter: #bad5f8;
+$light-primary-darker: #0f56de;
+
+$dark-accent-main: hsl(340, 82%, 52%);
+$dark-accent-lighter: hsl(340, 89%, 93%);
+$dark-accent-darker: hsl(340, 82%, 32%);
+
+$light-accent-main: hsl(340, 82%, 51%);
+$light-accent-lighter: hsl(340, 82%, 85%);
+$light-accent-darker: hsl(340, 100%, 31%);
+
+$dark-warn-main: #f44336;
+$dark-warn-lighter: hsl(4, 92%, 85%);
+$dark-warn-darker: hsl(4, 97%, 48%);
+
 $light-theme-foreground-palette: (
   base: black,
   disabled-button: rgba($dark-text, 0.26),
@@ -54,21 +99,6 @@ $dark-theme-foreground-palette: (
   text: $light-text,
 );
 
-$light-background-color: #ffffff;
-$dark-background-color: #242528;
-
-$light-background: $light-background-color;
-$light-card-background: #f8f9fa;
-$light-bg-darker-5: color.adjust($light-card-background, $blackness: 5%);
-$light-bg-darker-10: color.adjust($light-card-background, $blackness: 10%);
-$light-bg-darker-20: color.adjust($light-card-background, $blackness: 20%);
-$light-bg-darker-30: color.adjust($light-card-background, $blackness: 30%);
-$light-bg-lighter-5: $light-card-background;
-$dark-bg-tooltip: color.adjust($dark-background-color, $lightness: 20%);
-$dark-bg-alpha-4: rgba($dark-background-color, 0.04);
-$dark-bg-alpha-12: rgba($dark-background-color, 0.12);
-$dark-bg-alpha-24: rgba($dark-background-color, 0.24);
-
 $light-theme-background-palette: (
   app-bar: $light-bg-darker-5,
   background: $light-background,
@@ -88,16 +118,6 @@ $light-theme-background-palette: (
   ripple: $dark-bg-alpha-24,
 );
 
-$dark-background: $dark-background-color;
-$dark-card-background: #303134;
-$dark-bg-lighter-5: $dark-card-background;
-$dark-bg-lighter-10: color.adjust($dark-card-background, $lightness: 10%);
-$dark-bg-lighter-20: color.adjust($dark-card-background, $lightness: 20%);
-$dark-bg-lighter-30: color.adjust($dark-card-background, $lightness: 30%);
-$light-bg-alpha-4: rgba($light-background-color, 0.04);
-$light-bg-alpha-12: rgba($light-background-color, 0.12);
-$light-bg-alpha-24: rgba($light-background-color, 0.24);
-
 $dark-theme-background-palette: (
   app-bar: $dark-bg-lighter-5,
   background: $dark-background,
@@ -116,10 +136,6 @@ $dark-theme-background-palette: (
   unselected-chip: $dark-bg-lighter-20,
   ripple: $light-bg-alpha-24,
 );
-
-$dark-primary-main: #8ab4f8;
-$dark-primary-lighter: #dbe9fd;
-$dark-primary-darker: #699ef6;
 
 $dark-primary-palette: (
   main: $dark-primary-main,
@@ -148,10 +164,6 @@ $dark-primary-palette: (
 
 $dark-theme-primary: mat.define-palette($dark-primary-palette, main, lighter, darker);
 
-$light-primary-main: #1a73e8;
-$light-primary-lighter: #bad5f8;
-$light-primary-darker: #0f56de;
-
 $light-primary-palette: (
   main: $light-primary-main,
   lighter: $light-primary-lighter,
@@ -178,10 +190,6 @@ $light-primary-palette: (
 );
 
 $light-theme-primary: mat.define-palette($light-primary-palette, main, lighter, darker);
-
-$dark-accent-main: hsl(340, 82%, 52%);
-$dark-accent-lighter: hsl(340, 89%, 93%);
-$dark-accent-darker: hsl(340, 82%, 32%);
 
 $dark-accent-palette: (
   main: $dark-accent-main,
@@ -210,10 +218,6 @@ $dark-accent-palette: (
 
 $dark-theme-accent: mat.define-palette($dark-accent-palette, main, lighter, darker);
 
-$light-accent-main: hsl(340, 82%, 51%);
-$light-accent-lighter: hsl(340, 82%, 85%);
-$light-accent-darker: hsl(340, 100%, 31%);
-
 $light-accent-palette: (
   main: $light-accent-main,
   lighter: $light-accent-lighter,
@@ -240,10 +244,6 @@ $light-accent-palette: (
 );
 
 $light-theme-accent: mat.define-palette($light-accent-palette, main, lighter, darker);
-
-$dark-warn-main: #f44336;
-$dark-warn-lighter: hsl(4, 92%, 85%);
-$dark-warn-darker: hsl(4, 97%, 48%);
 
 $dark-warn-palette: (
   main: $dark-warn-main,

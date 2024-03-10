@@ -8,17 +8,24 @@ body {
 }
 
 html {
-  min-width: $popup-width;
-  min-height: $popup-height;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
   display: flex;
+  flex: 1;
   flex-direction: column;
-  height: 100vh;
   overflow: auto;
+}
+
+html.cdk-global-scrollblock {
+  position: relative;
+  top: 0 !important;
+  overflow: hidden;
 }
 
 app-root {

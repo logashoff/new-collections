@@ -27,11 +27,6 @@ app-icons-container {
       &.mat-badge-hidden {
         overflow: hidden;
       }
-
-      .mat-badge-content.mat-badge-active {
-        top: -0.25rem;
-        right: -0.25rem;
-      }
     }
   }
 }
