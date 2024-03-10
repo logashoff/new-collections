@@ -5,15 +5,13 @@ $padding: 0.5rem;
 html,
 body {
   width: $popup-width;
-  min-width: $popup-width;
-  max-width: $popup-width;
   height: $popup-height;
-  min-height: $popup-height;
-  max-height: $popup-height;
-}
 
-html.cdk-global-scrollblock {
-  position: relative;
+  min-width: $popup-width;
+  min-height: $popup-height;
+
+  max-width: $popup-width;
+  max-height: $popup-height;
 }
 
 app-popup {

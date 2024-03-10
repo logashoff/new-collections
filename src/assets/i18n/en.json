@@ -34,7 +34,6 @@
   "resultCount": "{{ count }} results",
   "save": "Save",
   "search": "Search",
-  "searchCollections": "Search collections",
   "settings": "Settings",
   "siteMovedToIgnoreList": "Site moved to ignore list",
   "syncCollections": "Sync Collections",

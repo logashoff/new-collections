@@ -5,6 +5,7 @@
     "length-zero-no-unit": null,
     "color-hex-length": null,
     "selector-class-pattern": null,
-    "max-nesting-depth": null
+    "max-nesting-depth": null,
+    "selector-no-qualifying-type": null
   }
 }
