@@ -2,7 +2,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  HostBinding,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewEncapsulation,
@@ -14,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 import { CollectionsService } from 'src/app/services';
 import { Action } from 'src/app/utils';
 
@@ -41,19 +44,33 @@ interface SearchForm {
     TranslateModule,
   ],
 })
-export class SearchFormComponent implements OnInit {
+export class SearchFormComponent implements OnInit, OnDestroy {
   Action = Action;
 
   readonly formGroup: FormGroup<SearchForm>;
 
   private readonly searchControl = new FormControl<string>('');
 
+  private valueChanges: Subscription;
+
+  /**
+   * Emits value when search input changes
+   */
   @Output() readonly changed = new EventEmitter<string>();
 
   @Input() set search(value: string) {
     this.searchControl.setValue(value, {
       emitEvent: false,
     });
+  }
+
+  /**
+   * Indicates search input is focused
+   */
+  focused = false;
+
+  @HostBinding('class.has-value') get hasValue() {
+    return this.search?.length > 0 || this.focused;
   }
 
   get search(): string {
@@ -67,7 +84,11 @@ export class SearchFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.formGroup.valueChanges.subscribe(({ search }) => this.changed.emit(search));
+    this.valueChanges = this.formGroup.valueChanges.subscribe(({ search }) => this.changed.emit(search));
+  }
+
+  ngOnDestroy() {
+    this.valueChanges.unsubscribe();
   }
 
   /**

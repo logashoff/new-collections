@@ -15,9 +15,11 @@
       .controls {
         border-left: 1px solid $border-color;
       }
+    }
 
-      &.scrolled {
-        @include mat.elevation(12);
+    &.has-value {
+      .controls-wrapper {
+        border-color: get-palette-color(get-primary-palette($theme));
       }
     }
   }
@@ -27,12 +29,18 @@ $typography-config: mat.get-typography-config($dark-theme);
 
 app-search-form {
   .controls-wrapper {
+    transition: border 150ms ease-out;
+    
     $height: 42px;
     $padding: 8px;
     
     display: flex;
     border-radius: 5rem;
     box-sizing: border-box;
+
+    &.scrolled {
+      @include mat.elevation(12);
+    }
   
     .search-form {
       flex: 1 1 auto;

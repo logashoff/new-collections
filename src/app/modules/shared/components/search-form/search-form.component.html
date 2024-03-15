@@ -4,7 +4,9 @@
       <mat-icon matPrefix>search</mat-icon>
       <input type="text" 
         matInput 
-        formControlName="search" 
+        formControlName="search"
+        (focus)="focused = true"
+        (blur)="focused = false"
         autocomplete="off" />
 
       @if (search) {

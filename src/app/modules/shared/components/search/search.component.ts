@@ -3,7 +3,7 @@ import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
-import Fuse from 'fuse.js';
+import Fuse, { IFuseOptions } from 'fuse.js';
 import isNil from 'lodash/isNil';
 import {
   BehaviorSubject,
@@ -24,11 +24,11 @@ import { SearchFormComponent } from '../search-form/search-form.component';
 import { TabListComponent } from '../tab-list/tab-list.component';
 import { TimelineLabelComponent } from '../timeline-label/timeline-label.component';
 
-const fuseOptions: Fuse.IFuseOptions<BrowserTab> = {
+const fuseOptions: IFuseOptions<BrowserTab> = {
   keys: ['title', 'url'],
   threshold: 0.33,
-  includeMatches: false,
   ignoreLocation: true,
+  useExtendedSearch: true,
 };
 
 /**
