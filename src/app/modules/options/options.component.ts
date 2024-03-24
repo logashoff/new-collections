@@ -10,7 +10,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import isUndefined from 'lodash/isUndefined';
+import { isUndefined } from 'lodash';
 import { BehaviorSubject, Observable, map, shareReplay, startWith, take } from 'rxjs';
 import { CollectionsService, SettingsService } from 'src/app/services';
 import { Action, ActionIcon, CollectionActions, MostVisitedURL, translate } from 'src/app/utils';

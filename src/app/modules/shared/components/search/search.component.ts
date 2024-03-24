@@ -4,7 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import Fuse, { IFuseOptions } from 'fuse.js';
-import isNil from 'lodash/isNil';
+import { isNil } from 'lodash';
 import {
   BehaviorSubject,
   Observable,
@@ -94,18 +94,20 @@ export class SearchComponent implements OnInit {
   /**
    * Tabs data from search results
    */
-  readonly sourceTabs$: Observable<BrowserTab[]>;
+  sourceTabs$: Observable<BrowserTab[]>;
 
-  readonly deviceTabs$: Observable<BrowserTab[]>;
+  deviceTabs$: Observable<BrowserTab[]>;
 
   /**
    * Indicates search results state
    */
-  readonly hasSearchValue$: Observable<boolean>;
+  hasSearchValue$: Observable<boolean>;
 
-  readonly searchValue$: Observable<string>;
+  searchValue$: Observable<string>;
 
-  constructor(private navService: NavService) {
+  constructor(private navService: NavService) {}
+
+  ngOnInit() {
     this.searchValue$ = this.navService.paramsSearch$.pipe(shareReplay(1));
 
     this.sourceTabs$ = this.searchValue$.pipe(
@@ -126,9 +128,7 @@ export class SearchComponent implements OnInit {
       map(([sourceTabs, deviceTabs]) => !isNil(sourceTabs) || !isNil(deviceTabs)),
       shareReplay(1)
     );
-  }
 
-  ngOnInit(): void {
     this.navService.reset();
   }
 

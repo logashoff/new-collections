@@ -5,8 +5,8 @@
       <input type="text" 
         matInput 
         formControlName="search"
-        (focus)="focused = true"
-        (blur)="focused = false"
+        (focus)="focused$.next(true)"
+        (blur)="focused$.next(false)"
         autocomplete="off" />
 
       @if (search) {
