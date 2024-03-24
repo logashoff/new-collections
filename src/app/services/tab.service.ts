@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBarRef } from '@angular/material/snack-bar';
-import flatMap from 'lodash/flatMap';
-import keyBy from 'lodash/keyBy';
-import remove from 'lodash/remove';
+import { debounce, flatMap, keyBy, remove, uniqBy } from 'lodash';
 import moment from 'moment';
 import { BehaviorSubject, Observable, firstValueFrom, lastValueFrom } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -26,6 +24,7 @@ import {
   getHostnameGroup,
   getUrlHost,
   ignoreUrlsRegExp,
+  queryCurrentWindow,
   saveCollections,
   syncToTabs,
   translate,
@@ -77,6 +76,10 @@ export class TabService {
     shareReplay(1)
   );
 
+  private readonly _tabChanges$ = new BehaviorSubject<Tabs>(null);
+
+  readonly tabChanges$ = this._tabChanges$.asObservable();
+
   constructor(
     private bottomSheet: MatBottomSheet,
     private dialog: MatDialog,
@@ -94,7 +97,18 @@ export class TabService {
     this.tabGroupsSource$.next(collections?.map((collection) => new TabGroup(collection)));
 
     chrome.storage.onChanged.addListener((changes: StorageChanges) => this.syncCollections(changes));
+
+    chrome.tabs.onCreated.addListener(this.updateTabs);
+    chrome.tabs.onRemoved.addListener(this.updateTabs);
+    chrome.tabs.onUpdated.addListener(this.updateTabs);
+
+    this.updateTabs();
   }
+
+  private readonly updateTabs = debounce(async () => {
+    const tabs = await queryCurrentWindow();
+    this._tabChanges$.next(tabs);
+  }, 150);
 
   /**
    * Sync local storage collection with loaded UI tap groups.
@@ -276,7 +290,7 @@ export class TabService {
    * Add tab list to group specified.
    */
   async addTabs(group: TabGroup, tabs: BrowserTabs) {
-    let filteredTabs = tabs.filter(({ url }) => !ignoreUrlsRegExp.test(url));
+    let filteredTabs = uniqBy(tabs.filter(({ url }) => !ignoreUrlsRegExp.test(url)), 'url');
 
     if (filteredTabs.length === 0) {
       this.message.open(this.translate('invalidTabList'));

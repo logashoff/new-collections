@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import saveAs from 'file-saver';
+import { uniqBy } from 'lodash';
 import { lastValueFrom } from 'rxjs';
 import selectFiles from 'select-files';
 import {
@@ -59,7 +60,7 @@ export class CollectionsService {
       switch (action) {
         case Action.Save:
           let tabs = await queryCurrentWindow();
-          tabs = tabs?.filter(({ url }) => !ignoreUrlsRegExp.test(url));
+          tabs = uniqBy(tabs?.filter(({ url }) => !ignoreUrlsRegExp.test(url)), 'url');
 
           if (tabs?.length > 0) {
             const bottomSheetRef = this.tabsService.openTabsSelector(tabs);

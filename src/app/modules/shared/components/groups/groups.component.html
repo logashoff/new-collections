@@ -26,20 +26,23 @@
           <app-group-controls [group]="group" [readOnly]="!hasTabGroup(group)"></app-group-controls>
         </div>
       </mat-expansion-panel-header>
-      <mat-divider></mat-divider>
 
-      @if (group.tabs$ | async; as tabs) {
-        <app-tab-list cdkDropList (cdkDropListDropped)="drop($event, tabs)">
-          @for (tab of tabs; track tab) {
-            <app-list-item
-              cdkDrag
-              [cdkDragDisabled]="dragDisabled"
-              [tab]="tab"
-              [focused]="(activeGroupId$ | async) === group.id && (activeTabId$ | async) === tab.id">
-            </app-list-item>
-          }
-        </app-tab-list>
-      }
+      <ng-template matExpansionPanelContent>
+        <mat-divider></mat-divider>
+  
+        @if (group.tabs$ | async; as tabs) {
+          <app-tab-list cdkDropList (cdkDropListDropped)="drop($event, tabs)">
+            @for (tab of tabs; track tab) {
+              <app-list-item
+                cdkDrag
+                [cdkDragDisabled]="dragDisabled"
+                [tab]="tab"
+                [focused]="(activeGroupId$ | async) === group.id && (activeTabId$ | async) === tab.id">
+              </app-list-item>
+            }
+          </app-tab-list>
+        }
+      </ng-template>
     </mat-expansion-panel>
   }
 </mat-accordion>

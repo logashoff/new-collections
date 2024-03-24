@@ -3,16 +3,13 @@ window.matchMedia = function () {
 };
 
 window.crypto = {
-  getRandomValues: function() {
+  getRandomValues: function () {
     return new Uint32Array([
-      1929376539,  414301398,
-      3127221437, 2083965327,
-      2898567419, 3577273313,
-      1228040162, 1726248346,
-      1430000282, 1053009359
-    ])
-  }
-}
+      1929376539, 414301398, 3127221437, 2083965327, 2898567419, 3577273313, 1228040162, 1726248346, 1430000282,
+      1053009359,
+    ]);
+  },
+};
 
 chrome = {
   action: {},
@@ -43,5 +40,14 @@ chrome = {
       callback();
     },
     create: function () {},
+    onCreated: {
+      addListener: function () {},
+    },
+    onRemoved: {
+      addListener: function () {},
+    },
+    onUpdated: {
+      addListener: function () {},
+    },
   },
 };
