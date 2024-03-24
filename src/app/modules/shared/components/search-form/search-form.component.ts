@@ -16,7 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { CollectionsService } from 'src/app/services';
 import { Action } from 'src/app/utils';
 
@@ -67,10 +67,10 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   /**
    * Indicates search input is focused
    */
-  focused = false;
+  readonly focused$ = new BehaviorSubject<boolean>(false);
 
   @HostBinding('class.has-value') get hasValue() {
-    return this.search?.length > 0 || this.focused;
+    return this.search?.length > 0 || this.focused$.value;
   }
 
   get search(): string {

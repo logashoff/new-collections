@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule, MatSelectionList } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import isNil from 'lodash/isNil';
+import { isNil } from 'lodash';
 import { Observable, filter, map, shareReplay, startWith, withLatestFrom } from 'rxjs';
 import { Tabs } from 'src/app/utils';
 import { FaviconPipe, HostnamePipe } from '../../pipes';

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import flatMap from 'lodash/flatMap';
+import { flatMap } from 'lodash';
 import { Observable, map, shareReplay } from 'rxjs';
 import { HomeService, TabService } from 'src/app/services';
 import { Action, ActionIcon, BrowserTabs, CollectionActions, TabGroups, Timeline, TopSites } from 'src/app/utils';
