@@ -1,5 +1,4 @@
-import isUndefined from 'lodash/isUndefined';
-import keyBy from 'lodash/keyBy';
+import { isUndefined, keyBy } from 'lodash';
 import { validate as uuidValidate } from 'uuid';
 import {
   BrowserTabs,

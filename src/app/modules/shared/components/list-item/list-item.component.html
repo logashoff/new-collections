@@ -1,5 +1,9 @@
 <a class="container" matRipple href="{{ tab.url }}" [target]="target">
-  <app-chip [source]="tab.favIconUrl | favicon: tab.url"></app-chip>
+  <app-chip [source]="tab.favIconUrl | favicon: tab.url"
+    matBadgeSize="small"
+    [matBadge]="tabsCount$ | async"
+    [matBadgeHidden]="(tabsCount$ | async) === 0">
+  </app-chip>
   <div class="text-container">
     <div class="title">{{ tab.title }}</div>
     <span class="subtitle">{{ tab.url }}</span>

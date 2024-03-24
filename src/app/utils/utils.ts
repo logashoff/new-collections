@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import groupBy from 'lodash/groupBy';
+import { groupBy } from 'lodash';
 import { BrowserTabs, HostnameGroup, Settings, settingsStorageKey, Tab } from './models';
 
 /**

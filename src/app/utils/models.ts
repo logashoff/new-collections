@@ -1,8 +1,7 @@
 import { ThemePalette } from '@angular/material/core';
 import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { SafeUrl } from '@angular/platform-browser';
-import keyBy from 'lodash/keyBy';
-import remove from 'lodash/remove';
+import { keyBy, remove } from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { MessageComponent } from '../modules/shared';
 

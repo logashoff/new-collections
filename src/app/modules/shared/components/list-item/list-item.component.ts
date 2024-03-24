@@ -9,12 +9,13 @@ import {
   Output,
   ViewEncapsulation,
 } from '@angular/core';
+import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { EXPANSION_PANEL_ANIMATION_TIMING } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { BehaviorSubject, Observable, map, shareReplay, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, map, shareReplay, switchMap } from 'rxjs';
 import { NavService, TabService } from 'src/app/services';
 import { BrowserTab, TabDelete } from 'src/app/utils';
 import { StopPropagationDirective } from '../../directives';
@@ -38,6 +39,7 @@ import { RippleComponent } from '../ripple/ripple.component';
     ChipComponent,
     CommonModule,
     FaviconPipe,
+    MatBadgeModule,
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
@@ -114,7 +116,20 @@ export class ListItemComponent {
     return this.nav.isPopup ? '_blank' : '_self';
   }
 
-  constructor(private tabService: TabService, private nav: NavService) {}
+  /**
+   * Indicates how many tabs are currently open that match this tab's URL
+   */
+  readonly tabsCount$: Observable<number>;
+
+  constructor(
+    private tabService: TabService,
+    private nav: NavService
+  ) {
+    this.tabsCount$ = combineLatest([this.tab$, this.tabService.tabChanges$]).pipe(
+      map(([tab, tabs]) => tabs?.reduce((a, t) => a + (t.url === tab.url ? 1 : 0), 0) ?? 0),
+      shareReplay()
+    );
+  }
 
   /**
    * Opens dialog to edit specified tab.
