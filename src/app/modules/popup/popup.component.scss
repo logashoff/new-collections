@@ -4,6 +4,9 @@ $padding: 0.5rem;
 
 html,
 body {
+  margin: 0;
+  padding: 0;
+
   width: $popup-width;
   height: $popup-height;
 
@@ -12,6 +15,12 @@ body {
 
   max-width: $popup-width;
   max-height: $popup-height;
+}
+
+html {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 app-popup {

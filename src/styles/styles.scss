@@ -1,19 +1,6 @@
 @use '@angular/material' as mat;
 @import 'common';
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-
 body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
   display: flex;

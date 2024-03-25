@@ -15,17 +15,21 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "allowedCommonJsDependencies": [
               "file-saver",
               "lodash",
               "moment"
             ],
-            "outputPath": "dist/new-collections",
+            "outputPath": {
+              "base": "dist/new-collections",
+              "browser": ""
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "src/polyfills.ts"
+            ],
             "tsConfig": "tsconfig.app.json",
             "aot": true,
             "assets": [
@@ -44,7 +48,8 @@
                 "src/styles"
               ]
             },
-            "scripts": []
+            "scripts": [],
+            "browser": "src/main.ts"
           },
           "configurations": {
             "production": {
@@ -66,8 +71,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
