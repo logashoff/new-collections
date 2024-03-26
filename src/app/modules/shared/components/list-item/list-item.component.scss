@@ -18,6 +18,11 @@ $typography-config: mat.get-typography-config($dark-theme);
     .controls {
       color: get-palette-color(get-foreground-palette($theme), secondary-text);
     }
+
+    .tabs-count {
+      background-color: get-palette-color(get-background-palette($theme), disabled-list-option);
+      color: get-palette-color(get-foreground-palette($theme), text);
+    }
   }
 }
 
@@ -57,8 +62,23 @@ app-list-item {
       @include mat.typography-level($typography-config, subtitle-1);
     }
 
-    .subtitle {
+    .subtitle-container {
       @include mat.typography-level($typography-config, caption);
+
+      display: flex;
+      overflow: hidden;
+      align-items: center;
+
+      .tabs-count {
+        flex: 0 0 0;
+        border-radius: 1rem;
+        padding: 0 0.5rem;
+        margin-right: 0.5rem;
+      }
+
+      .subtitle {
+        flex: 1 0 0;
+      }
     }
 
     &,

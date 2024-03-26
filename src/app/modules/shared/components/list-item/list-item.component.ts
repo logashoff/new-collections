@@ -9,7 +9,6 @@ import {
   Output,
   ViewEncapsulation,
 } from '@angular/core';
-import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { EXPANSION_PANEL_ANIMATION_TIMING } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
@@ -39,7 +38,6 @@ import { RippleComponent } from '../ripple/ripple.component';
     ChipComponent,
     CommonModule,
     FaviconPipe,
-    MatBadgeModule,
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
@@ -127,7 +125,7 @@ export class ListItemComponent {
   ) {
     this.tabsCount$ = combineLatest([this.tab$, this.tabService.tabChanges$]).pipe(
       map(([tab, tabs]) => tabs?.reduce((a, t) => a + (t.url === tab.url ? 1 : 0), 0) ?? 0),
-      shareReplay()
+      shareReplay(1)
     );
   }
 

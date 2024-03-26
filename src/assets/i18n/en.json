@@ -28,6 +28,7 @@
   "itemsAddedCount": "Added {{ count }} items",
   "itemsRemovedCount": "Removed {{ count }} items",
   "oneResult": "One result",
+  "openTabs": "{{ count }} Open",
   "pin": "Pin",
   "pinned": "Pinned",
   "restore": "Restore",
