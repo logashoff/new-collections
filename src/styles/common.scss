@@ -41,6 +41,10 @@ $popup-height: 35rem;
   @return mat.get-contrast-color-from-palette($palette, $hue);
 }
 
+@function is-dark-theme($theme) {
+  @return mat.get-theme-type($theme) == dark;
+}
+
 @function modify-theme($theme, $background-palette, $foreground-palette) {
   // Replace the background in the color object's background palette.
   $theme-color: map.get($theme, color);

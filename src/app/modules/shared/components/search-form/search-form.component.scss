@@ -19,7 +19,9 @@
 
     &.has-value {
       .controls-wrapper {
-        background-color: $border-color;
+        $is-dark: is-dark-theme($theme);
+        $app-backgound: get-palette-color(get-background-palette($theme), background);
+        background-color: if($is-dark, $border-color, $app-backgound);
       }
     }
   }
