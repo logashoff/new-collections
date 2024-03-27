@@ -111,9 +111,20 @@ app-tabs-selector {
 
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.25rem;
             margin: 0;
             padding: 0;
+            overflow: hidden;
+
+            app-label {
+              flex: 0 0 0;
+            }
+
+            .subtitle {
+              overflow: hidden;
+              flex: 1 0 0;
+              text-overflow: ellipsis;
+            }
 
             .mat-icon {
               font-size: 1rem;

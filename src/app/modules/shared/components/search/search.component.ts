@@ -17,7 +17,6 @@ import {
 } from 'rxjs';
 import { NavService } from 'src/app/services';
 import { Action, BrowserTab, BrowserTabs, TabDelete } from 'src/app/utils';
-import { StickyDirective } from '../../directives';
 import { EmptyComponent } from '../empty/empty.component';
 import { ListItemComponent } from '../list-item/list-item.component';
 import { SearchFormComponent } from '../search-form/search-form.component';
@@ -49,7 +48,6 @@ const fuseOptions: IFuseOptions<BrowserTab> = {
     MatCardModule,
     MatIconModule,
     SearchFormComponent,
-    StickyDirective,
     TabListComponent,
     TimelineLabelComponent,
     TranslateModule,

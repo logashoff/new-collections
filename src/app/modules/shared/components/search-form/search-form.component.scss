@@ -3,14 +3,20 @@
 
 @include component-theme using($theme) {
   app-search-form {
+    $is-dark: is-dark-theme($theme);
     $border-color: get-palette-color(get-background-palette($theme), disabled-button-toggle);
+    $app-background: get-palette-color(get-background-palette($theme), background);
 
     color: get-palette-color(get-foreground-palette($theme), secondary-text);
+    background: $app-background;
 
     .controls-wrapper {
       $background-color: get-palette-color(get-background-palette($theme), card);
       background-color: $background-color;
-      border: 1px solid $border-color;
+      
+      @if not $is-dark {
+        border: 1px solid $border-color;
+      }
 
       .controls {
         border-left: 1px solid get-palette-color(get-foreground-palette($theme), divider);
@@ -19,28 +25,26 @@
 
     &.has-value {
       .controls-wrapper {
-        $is-dark: is-dark-theme($theme);
-        $app-backgound: get-palette-color(get-background-palette($theme), background);
-        background-color: if($is-dark, $border-color, $app-backgound);
+        background-color: if($is-dark, $border-color, $app-background);
       }
     }
   }
 }
 
 app-search-form {
+  $height: 42px;
+  $padding: 0.5rem;
+
+  padding: $padding;
+  margin: 0 (-$padding);
+
   .controls-wrapper {
     transition: background-color 150ms cubic-bezier(0, 0, 0.2, 1);
-    
-    $height: 42px;
-    $padding: 8px;
     
     display: flex;
     border-radius: 5rem;
     box-sizing: border-box;
-
-    &.scrolled {
-      @include mat.elevation(12);
-    }
+    z-index: 1;
   
     .search-form {
       flex: 1 1 auto;
@@ -83,7 +87,7 @@ app-search-form {
     .mat-mdc-form-field-icon-prefix,
     .mat-mdc-form-field-icon-suffix {
       & > .mat-icon {
-        padding: $padding;
+        padding: 0 0.5rem;
       }
     }
     .mat-mdc-icon-button.mat-mdc-button-base {

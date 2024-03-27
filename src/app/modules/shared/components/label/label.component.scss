@@ -1,0 +1,36 @@
+@use '@angular/material' as mat;
+@import 'theme';
+
+$typography-config: mat.get-typography-config($dark-theme);
+
+@include component-theme using($theme) {
+  app-label {
+    background-color: get-palette-color(get-background-palette($theme), disabled-list-option);
+    color: get-palette-color(get-foreground-palette($theme), text);
+
+    $primaryPalette: get-primary-palette($theme);
+    $accentPalette: get-accent-palette($theme);
+    $warnPalette: get-warn-palette($theme);
+
+    &.theme-primary {
+      background-color: get-palette-color($primaryPalette);
+      color: get-contrast-color($primaryPalette, 500);
+    }
+
+    &.theme-warn {
+      background-color: get-palette-color($warnPalette);
+      color: get-contrast-color($warnPalette, 500);
+    }
+
+    &.theme-accent {
+      background-color: get-palette-color($accentPalette);
+      color: get-contrast-color($accentPalette, 500);
+    }
+  }
+}
+
+app-label {
+  flex: 0 0 0;
+  border-radius: 1rem;
+  padding: 0 0.5rem;
+}

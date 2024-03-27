@@ -19,21 +19,17 @@ export function queryCurrentWindow(): Promise<Tabs> {
  */
 export async function restoreTabs(tabs: BrowserTabs) {
   const createdTabs = await Promise.all(
-    tabs.map(({ url, pinned }) =>
+    tabs.map(({ url }) =>
       chrome.tabs.create({
-        pinned,
         url,
         active: false,
       })
     )
   );
 
-  const nonPinnedTabs = createdTabs.filter(({ pinned }) => !pinned);
-  if (nonPinnedTabs.length > 1) {
-    chrome.tabs.group({
-      tabIds: nonPinnedTabs.map(({ id }) => id),
-    });
-  }
+  chrome.tabs.group({
+    tabIds: createdTabs.map(({ id }) => id),
+  });
 }
 
 /**

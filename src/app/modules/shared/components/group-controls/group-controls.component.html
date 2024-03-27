@@ -17,13 +17,11 @@
       <mat-icon>restore</mat-icon>
     </button>
     
-    @if (!readOnly) {
-      <button 
-        mat-icon-button 
-        (click)="addTabs()" 
-        [matTooltip]="'addTabs' | translate">
-        <mat-icon>add</mat-icon>
-      </button>
-    }
+    <button
+      mat-icon-button
+      (click)="addTabs()"
+      [matTooltip]="(readOnly ? 'save' : 'addTabs') | translate">
+      <mat-icon>add</mat-icon>
+    </button>
   </div>
 </div>

@@ -2,13 +2,36 @@
   <app-chip [source]="tab.favIconUrl | favicon: tab.url">
   </app-chip>
   <div class="text-container">
-    <div class="title">{{ tab.title }}</div>
+    <div class="title-container">
+      <span class="title">{{ tab.title }}</span>
+    </div>
     <div class="subtitle-container">
-      @if (tabsCount$ | async) {
-        <div class="tabs-count" translate 
-          [translateParams]="{ count: tabsCount$ | async }">
-          openTabs
-        </div>
+      @if (hasLabels$ | async) {
+        <span class="label-container">
+          @if (openTabs$ | async) {
+            <app-label color="primary">
+              {{ 'openTabs' | translate: { count: openTabs$ | async } }}
+            </app-label>
+          }
+    
+          @if ((dupTabs$ | async) > 1) {
+            <app-label color="accent">
+              {{ 'savedCount' | translate: { count: dupTabs$ | async } }}
+            </app-label>
+          }
+    
+          @if (activeTab$ | async) {
+            <app-label>
+              {{ 'active' | translate }}
+            </app-label>
+          }
+    
+          @if (pinnedTab$ | async) {
+            <app-label>
+              {{ 'pinned' | translate }}
+            </app-label>
+          }
+        </span>
       }
       <span class="subtitle">{{ tab.url }}</span>
     </div>
