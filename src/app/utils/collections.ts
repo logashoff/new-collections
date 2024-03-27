@@ -90,16 +90,15 @@ export const getCollections = async (): Promise<Collections> => {
  * Converts BrowserTabs to tabs structure used in storage.
  */
 export function tabsToSync(tabs: BrowserTabs): SyncTabs {
-  return tabs.map(({ id, url, title, pinned }) => [id, url, title, pinned]);
+  return tabs.map(({ id, url, title }) => [id, url, title]);
 }
 
 /**
  * Converts storage tabs to BrowserTabs.
  */
 export function syncToTabs(sync: SyncTabs): BrowserTabs {
-  return sync.map(([id, url, title, pinned]) => ({
+  return sync.map(([id, url, title]) => ({
     id,
-    pinned,
     title,
     url,
   }));

@@ -9,7 +9,6 @@ describe('utils.ts', () => {
         {
           favIconUrl: 'https://github.githubassets.com/favicons/favicon.svg',
           id: 51,
-          pinned: false,
           title: 'GitHub: Where the world builds software · GitHub',
           url: 'https://github.com/',
         },
@@ -18,7 +17,6 @@ describe('utils.ts', () => {
         {
           favIconUrl: 'https://duckduckgo.com/favicon.ico',
           id: 52,
-          pinned: false,
           title: 'DuckDuckGo — Privacy, simplified.',
           url: 'https://duckduckgo.com/',
         },

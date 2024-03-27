@@ -63,7 +63,7 @@ export interface Settings {
 /**
  * BrowserTab structure used in storing in sync storage
  */
-export type SyncTab = [number, string, string, boolean];
+export type SyncTab = [number, string, string];
 export type SyncTabs = SyncTab[];
 
 /**
@@ -84,7 +84,7 @@ export type StorageChanges = { [key: string]: chrome.storage.StorageChange };
 /**
  * Tab type.
  */
-export type BrowserTab = Pick<chrome.tabs.Tab, 'id' | 'url' | 'favIconUrl' | 'title' | 'pinned'>;
+export type BrowserTab = Pick<chrome.tabs.Tab, 'id' | 'url' | 'favIconUrl' | 'title'>;
 
 export type BrowserTabs = BrowserTab[];
 
@@ -155,7 +155,6 @@ export class TabGroup implements Collection {
       } else {
         const currTab = currTabsById[newTab.id];
         currTab.favIconUrl = newTab.favIconUrl;
-        currTab.pinned = newTab.pinned;
         currTab.title = newTab.title;
         currTab.url = newTab.url;
       }

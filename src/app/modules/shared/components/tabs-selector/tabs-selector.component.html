@@ -37,14 +37,15 @@
               <div class="item-text">
                 <div class="item-title">{{ tab.title }}</div>
                 <span class="item-subtitle">
-                  <span>{{ tab.url | hostname }}</span>
-                  @if (tab.pinned) {
-                    <mat-icon>push_pin</mat-icon>
+                  @if (tab.active) {
+                    <app-label>{{ 'active' | translate }}</app-label>
                   }
 
-                  @if (tab.active) {
-                    <mat-icon>tab</mat-icon>
+                  @if (tab.pinned) {
+                    <app-label>{{ 'pinned' | translate }}</app-label>
                   }
+
+                  <span class="subtitle">{{ tab.url | hostname }}</span>
                 </span>
               </div>
             </div>

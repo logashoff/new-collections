@@ -5,10 +5,9 @@
     <div class="title">{{ tab.title }}</div>
     <div class="subtitle-container">
       @if (tabsCount$ | async) {
-        <div class="tabs-count" translate 
-          [translateParams]="{ count: tabsCount$ | async }">
-          openTabs
-        </div>
+        <app-label>
+          {{ 'openTabs' | translate: { count: tabsCount$ | async } }}
+        </app-label>
       }
       <span class="subtitle">{{ tab.url }}</span>
     </div>

@@ -1,0 +1,18 @@
+@use '@angular/material' as mat;
+@import 'theme';
+
+
+$typography-config: mat.get-typography-config($dark-theme);
+
+@include component-theme using($theme) {
+  app-label {
+    background-color: get-palette-color(get-background-palette($theme), disabled-list-option);
+    color: get-palette-color(get-foreground-palette($theme), text);
+  }
+}
+
+app-label {
+  flex: 0 0 0;
+  border-radius: 1rem;
+  padding: 0 0.5rem;
+}

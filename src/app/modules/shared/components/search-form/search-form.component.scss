@@ -3,6 +3,7 @@
 
 @include component-theme using($theme) {
   app-search-form {
+    $is-dark: is-dark-theme($theme);
     $border-color: get-palette-color(get-background-palette($theme), disabled-button-toggle);
 
     color: get-palette-color(get-foreground-palette($theme), secondary-text);
@@ -19,7 +20,6 @@
 
     &.has-value {
       .controls-wrapper {
-        $is-dark: is-dark-theme($theme);
         $app-backgound: get-palette-color(get-background-palette($theme), background);
         background-color: if($is-dark, $border-color, $app-backgound);
       }
@@ -37,10 +37,6 @@ app-search-form {
     display: flex;
     border-radius: 5rem;
     box-sizing: border-box;
-
-    &.scrolled {
-      @include mat.elevation(12);
-    }
   
     .search-form {
       flex: 1 1 auto;

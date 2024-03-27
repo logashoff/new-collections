@@ -68,12 +68,12 @@ app-list-item {
       display: flex;
       overflow: hidden;
       align-items: center;
+      gap: 0.5rem;
 
       .tabs-count {
         flex: 0 0 0;
         border-radius: 1rem;
         padding: 0 0.5rem;
-        margin-right: 0.5rem;
       }
 
       .subtitle {
