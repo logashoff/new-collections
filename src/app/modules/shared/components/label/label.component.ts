@@ -1,0 +1,27 @@
+import { ChangeDetectionStrategy, Component, HostBinding, Input, ViewEncapsulation } from '@angular/core';
+import { ThemePalette } from '@angular/material/core';
+
+@Component({
+  selector: 'app-label',
+  standalone: true,
+  imports: [],
+  templateUrl: './label.component.html',
+  styleUrl: './label.component.scss',
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class LabelComponent {
+  @Input() color: ThemePalette;
+
+  @HostBinding('class.theme-primary') get primaryColor() {
+    return this.color === 'primary';
+  }
+
+  @HostBinding('class.theme-warn') get warnColor() {
+    return this.color === 'warn';
+  }
+
+  @HostBinding('class.theme-accent') get accentColor() {
+    return this.color === 'accent';
+  }
+}

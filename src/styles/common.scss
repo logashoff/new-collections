@@ -26,6 +26,13 @@ $popup-height: 35rem;
   @return $accent;
 }
 
+@function get-warn-palette($config-or-theme) {
+  $colors: mat.get-color-config($config-or-theme);
+  $warn: map.get($colors, warn);
+
+  @return $warn;
+}
+
 @function get-primary-palette($config-or-theme) {
   $colors: mat.get-color-config($config-or-theme);
   $primary: map.get($colors, primary);

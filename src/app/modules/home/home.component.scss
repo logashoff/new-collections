@@ -20,7 +20,7 @@ app-home {
   flex: 1;
 
   .content {
-    margin: 1rem auto;
+    margin: 0 auto 1rem;
     width: 80vw;
     max-width: 75rem;
     display: flex;
@@ -29,7 +29,7 @@ app-home {
   }
 
   app-top-sites {
-    margin: 0 0 1rem;
+    margin: 1rem 0;
   }
 }
 

@@ -13,6 +13,7 @@ import { Observable, filter, map, shareReplay, startWith, withLatestFrom } from 
 import { Tabs } from 'src/app/utils';
 import { FaviconPipe, HostnamePipe } from '../../pipes';
 import { ChipComponent } from '../chip/chip.component';
+import { LabelComponent } from '../label/label.component';
 
 /**
  * Form for selecting new tabs to add to existing or new group.
@@ -38,6 +39,7 @@ interface TabSelectorForm {
     CommonModule,
     FaviconPipe,
     HostnamePipe,
+    LabelComponent,
     MatButtonModule,
     MatCheckboxModule,
     MatIconModule,

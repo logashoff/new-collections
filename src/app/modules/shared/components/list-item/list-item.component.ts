@@ -16,10 +16,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { BehaviorSubject, Observable, combineLatest, map, shareReplay, switchMap } from 'rxjs';
 import { NavService, TabService } from 'src/app/services';
-import { BrowserTab, TabDelete } from 'src/app/utils';
+import { BrowserTab, BrowserTabs, TabDelete, Tabs } from 'src/app/utils';
 import { StopPropagationDirective } from '../../directives';
 import { FaviconPipe } from '../../pipes';
 import { ChipComponent } from '../chip/chip.component';
+import { LabelComponent } from '../label/label.component';
 import { RippleComponent } from '../ripple/ripple.component';
 
 /**
@@ -38,6 +39,7 @@ import { RippleComponent } from '../ripple/ripple.component';
     ChipComponent,
     CommonModule,
     FaviconPipe,
+    LabelComponent,
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
@@ -71,6 +73,10 @@ export class ListItemComponent {
     return this.tab$.value;
   }
 
+  get savedTabs$(): Observable<BrowserTabs> {
+    return this.tabService?.tabs$.pipe(shareReplay(1));
+  }
+
   /**
    * Plays ripple animation when set to true
    */
@@ -80,7 +86,7 @@ export class ListItemComponent {
    * Disables item menu
    */
   readonly notReadOnly$: Observable<boolean> = this.tab$.pipe(
-    switchMap((tab) => this.tabService.tabs$.pipe(map((tabs) => tabs.some((t) => t.id === tab.id)))),
+    switchMap((tab) => this.savedTabs$.pipe(map((tabs) => tabs.some((t) => t.id === tab.id)))),
     shareReplay(1)
   );
 
@@ -93,7 +99,7 @@ export class ListItemComponent {
    * Indicates if list item is part of timeline.
    */
   readonly inTimeline$: Observable<boolean> = this.tab$.pipe(
-    switchMap((tab) => this.tabService.tabs$.pipe(map((tabs) => tabs.some((t) => t.id === tab.id)))),
+    switchMap((tab) => this.savedTabs$.pipe(map((tabs) => tabs.some((t) => t.id === tab.id)))),
     shareReplay(1)
   );
 
@@ -117,14 +123,42 @@ export class ListItemComponent {
   /**
    * Indicates how many tabs are currently open that match this tab's URL
    */
-  readonly tabsCount$: Observable<number>;
+  readonly openTabs$: Observable<number>;
+
+  readonly dupTabs$: Observable<number> = this.tab$.pipe(
+    switchMap((tab) => this.savedTabs$.pipe(map((tabs) => tabs.filter((t) => t.url === tab.url)?.length)))
+  );
+
+  readonly activeTab$: Observable<boolean>;
+  readonly pinnedTab$: Observable<boolean>;
+  readonly hasLabels$: Observable<boolean>;
 
   constructor(
     private tabService: TabService,
     private nav: NavService
   ) {
-    this.tabsCount$ = combineLatest([this.tab$, this.tabService.tabChanges$]).pipe(
-      map(([tab, tabs]) => tabs?.reduce((a, t) => a + (t.url === tab.url ? 1 : 0), 0) ?? 0),
+    const openTabs$: Observable<Tabs> = combineLatest([this.tab$, this.tabService.tabChanges$]).pipe(
+      map(([tab, tabs]) => tabs?.filter((t) => t.url === tab.url)),
+      shareReplay(1)
+    );
+
+    this.activeTab$ = openTabs$.pipe(
+      map((tabs) => tabs?.some((t) => t.active)),
+      shareReplay(1)
+    );
+
+    this.pinnedTab$ = openTabs$.pipe(
+      map((tabs) => tabs?.some((t) => t.pinned)),
+      shareReplay(1)
+    );
+
+    this.openTabs$ = openTabs$.pipe(
+      map((tabs) => tabs?.length),
+      shareReplay(1)
+    );
+
+    this.hasLabels$ = combineLatest([this.activeTab$, this.pinnedTab$, this.openTabs$, this.dupTabs$]).pipe(
+      map(([active, pinned, openTabs, dupTabs]) => active || pinned || openTabs > 0 || dupTabs > 1),
       shareReplay(1)
     );
   }

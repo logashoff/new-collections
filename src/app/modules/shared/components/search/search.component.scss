@@ -16,17 +16,13 @@ app-search {
 
   app-search-form {
     display: block;
-    padding: 0.5rem 0;
     position: sticky;
-    top: -0.5px;
+    top: 0;
     z-index: 1;
-
-    &.stuck .controls-wrapper {
-      @include mat.elevation(8);
-    }
   }
 
-  .search-container {
+  .search-container,
+  .layout-container {
     padding: 0;
   }
 }

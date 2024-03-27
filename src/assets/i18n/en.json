@@ -1,6 +1,7 @@
 {
   "action.settings": "Settings",
   "action.undo": "Undo",
+  "active": "Active",
   "addCollection": "Add Collection",
   "addSelected": "Add Selected",
   "addTabs": "Add Tabs",
@@ -34,6 +35,7 @@
   "restore": "Restore",
   "resultCount": "{{ count }} results",
   "save": "Save",
+  "savedCount": "{{ count }} Saved",
   "search": "Search",
   "settings": "Settings",
   "siteMovedToIgnoreList": "Site moved to ignore list",

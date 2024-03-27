@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { TabService } from 'src/app/services';
+import { CollectionsService, TabService } from 'src/app/services';
 import { TabGroup, Tabs, queryCurrentWindow, restoreTabs } from 'src/app/utils';
 import { StopPropagationDirective } from '../../directives';
 
@@ -29,7 +29,10 @@ export class GroupControlsComponent {
 
   readonly abs = Math.abs;
 
-  constructor(private tabService: TabService) {}
+  constructor(
+    private tabService: TabService,
+    private collection: CollectionsService
+  ) {}
 
   /**
    * Removes `group` from tab group list and storage.
@@ -51,6 +54,10 @@ export class GroupControlsComponent {
   async addTabs() {
     const tabs: Tabs = await queryCurrentWindow();
 
-    this.tabService.addTabs(this.group, tabs);
+    if (this.readOnly) {
+      this.collection.selectTabs(this.group.tabs as Tabs);
+    } else {
+      this.tabService.addTabs(this.group, tabs);
+    }
   }
 }
