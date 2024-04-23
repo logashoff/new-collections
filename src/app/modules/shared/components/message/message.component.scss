@@ -4,12 +4,15 @@
 
 @include component-theme using ($theme) {
   app-message {
+    $accent-palette: get-accent-palette($theme);
+    $foreground-palette: get-foreground-palette($theme);
+
     $background-color: get-palette-color(get-background-palette($theme), card);
-    $accent-color: get-palette-color(get-accent-palette($theme), main);
-    $icon-color: get-palette-color(get-accent-palette($theme), A100);
-    $text-color: get-palette-color(get-foreground-palette($theme), text);
-    $buttons-color: get-palette-color(get-foreground-palette($theme), secondary-text);
-    $border-color: get-palette-color(get-foreground-palette($theme), divider);
+    $accent-color: get-palette-color($accent-palette);
+    $icon-color: get-contrast-color($accent-palette, 500);
+    $text-color: get-palette-color($foreground-palette, text);
+    $buttons-color: get-palette-color($foreground-palette, secondary-text);
+    $border-color: get-palette-color($foreground-palette, divider);
 
     color: $text-color;
     background-color: $background-color;

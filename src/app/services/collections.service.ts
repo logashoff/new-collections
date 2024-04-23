@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import saveAs from 'file-saver';
-import { uniqBy } from 'lodash';
+import { uniqBy } from 'lodash-es';
 import { lastValueFrom } from 'rxjs';
-import selectFiles from 'select-files';
 import {
   Action,
   Collections,
@@ -10,6 +8,8 @@ import {
   ignoreUrlsRegExp,
   openOptions,
   queryCurrentWindow,
+  saveFile,
+  selectFile,
   TabGroup,
   Tabs,
   translate,
@@ -35,7 +35,7 @@ export class CollectionsService {
    */
   private exportCollections(collections: Collections) {
     const blob = new Blob([JSON.stringify(collections, null, 2)], { type: 'text/json;charset=utf-8' });
-    saveAs(blob, `new-collections-${new Date().toISOString()}.json`);
+    saveFile(blob, `new-collections-${new Date().toISOString()}.json`);
   }
 
   /**
@@ -44,7 +44,7 @@ export class CollectionsService {
   private async importCollections(): Promise<Collections> {
     return new Promise(async (resolve, reject) => {
       try {
-        const files = await selectFiles({ accept: '.json', multiple: false });
+        const files = await selectFile();
 
         const reader = new FileReader();
         reader.readAsText(files[0], 'utf-8');

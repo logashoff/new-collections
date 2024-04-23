@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { isUndefined, uniqBy } from 'lodash';
+import { isUndefined, uniqBy } from 'lodash-es';
 import { BehaviorSubject, Observable, from, map, shareReplay, switchMap } from 'rxjs';
 import { MostVisitedURL, Settings, StorageArea, copyStorage, getSettings, settingsStorageKey } from '../utils';
 

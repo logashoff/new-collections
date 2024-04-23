@@ -1,7 +1,7 @@
 import { ThemePalette } from '@angular/material/core';
 import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { SafeUrl } from '@angular/platform-browser';
-import { keyBy, remove } from 'lodash';
+import { keyBy, remove } from 'lodash-es';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { MessageComponent } from '../modules/shared';
 
@@ -37,12 +37,12 @@ export type ImageSource = string | SafeUrl;
 /**
  * Checks if group should be expanded by group ID
  */
-export type GroupExpanded = { [groupId in string]: boolean };
+export type GroupExpanded = { [groupId: string]: boolean };
 
 /**
  * Checks if panel group is expanded by URL
  */
-export type ExpandedGroupsByUrl = { [url in string]: GroupExpanded };
+export type ExpandedGroupsByUrl = { [url: string]: GroupExpanded };
 
 export interface TabDelete {
   deletedTab: BrowserTab;
@@ -63,7 +63,7 @@ export interface Settings {
 /**
  * BrowserTab structure used in storing in sync storage
  */
-export type SyncTab = [number, string, string];
+export type SyncTab = [id: number, url: string, title: string];
 export type SyncTabs = SyncTab[];
 
 /**
@@ -73,7 +73,7 @@ export interface SyncData {
   /**
    * Map group ID to array containing group timestamp and tabs
    */
-  [groupId: string]: [number, SyncTabs];
+  [groupId: string]: [timestamp: number, tabs: SyncTabs];
 }
 
 /**
@@ -102,14 +102,17 @@ export type Collections = Collection[];
 export class TabGroup implements Collection {
   readonly id: string;
 
-  private _timestamp: number;
+  #timestamp: number;
 
+  /**
+   * Time when group was created
+   */
   get timestamp(): number {
-    return this._timestamp;
+    return this.#timestamp;
   }
 
   set timestamp(value: number) {
-    this._timestamp = value;
+    this.#timestamp = value;
   }
 
   private readonly tabsSource$ = new BehaviorSubject<BrowserTabs>(null);
@@ -122,7 +125,7 @@ export class TabGroup implements Collection {
 
   constructor({ id, timestamp, tabs }: Collection) {
     this.id = id;
-    this._timestamp = timestamp;
+    this.#timestamp = timestamp;
 
     this.tabsSource$.next(tabs);
   }
@@ -132,7 +135,7 @@ export class TabGroup implements Collection {
    * Negative timestamp value means tab group is pinned.
    */
   favToggle() {
-    this._timestamp *= -1;
+    this.#timestamp *= -1;
   }
 
   /**

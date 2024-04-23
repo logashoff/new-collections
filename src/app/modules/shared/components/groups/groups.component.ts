@@ -57,7 +57,7 @@ export class GroupsComponent {
   /**
    * Maps group ID to list of group's tab titles
    */
-  readonly titlesMap$: Observable<{ [groupId in string]: string }> = this.groups$.pipe(
+  readonly titlesMap$: Observable<{ [groupId: string]: string }> = this.groups$.pipe(
     map((tabGroups) =>
       tabGroups.reduce((ret, group) => {
         ret[group.id] = group.tabs.map((tab) => tab.title);

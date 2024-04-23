@@ -49,7 +49,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
 
   readonly formGroup: FormGroup<SearchForm>;
 
-  private readonly searchControl = new FormControl<string>('');
+  readonly #searchControl = new FormControl<string>('');
 
   private valueChanges: Subscription;
 
@@ -59,7 +59,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   @Output() readonly changed = new EventEmitter<string>();
 
   @Input() set search(value: string) {
-    this.searchControl.setValue(value, {
+    this.#searchControl.setValue(value, {
       emitEvent: false,
     });
   }
@@ -74,12 +74,12 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   }
 
   get search(): string {
-    return this.searchControl.value;
+    return this.#searchControl.value;
   }
 
   constructor(private collectionsService: CollectionsService) {
     this.formGroup = new FormGroup<SearchForm>({
-      search: this.searchControl,
+      search: this.#searchControl,
     });
   }
 
@@ -95,7 +95,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
    * Clears search input
    */
   clearSearch() {
-    this.searchControl.setValue('');
+    this.#searchControl.setValue('');
   }
 
   handleAction(action: Action) {

@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import { Collection, Collections } from 'src/app/utils';
 
 const tabGroupMock: Collection = {

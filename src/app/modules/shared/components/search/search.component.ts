@@ -4,7 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import Fuse, { IFuseOptions } from 'fuse.js';
-import { isNil } from 'lodash';
+import { isNil } from 'lodash-es';
 import {
   BehaviorSubject,
   Observable,

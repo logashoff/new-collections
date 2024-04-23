@@ -1,4 +1,4 @@
-import { isUndefined, keyBy } from 'lodash';
+import { isUndefined, keyBy } from 'lodash-es';
 import { validate as uuidValidate } from 'uuid';
 import {
   BrowserTabs,
@@ -43,7 +43,7 @@ export async function saveCollections(collections: Collections): Promise<void> {
   if (collections?.length > 0) {
     collections.forEach(({ tabs, timestamp, id }) => (syncData[id] = [timestamp, tabsToSync(tabs)]));
 
-    const favicon: { [host in string]: string } = {};
+    const favicon: { [host: string]: string } = {};
     collections.forEach(({ tabs }) =>
       tabs.filter(({ favIconUrl }) => favIconUrl).forEach((tab) => (favicon[getUrlHost(tab.url)] = tab.favIconUrl))
     );
@@ -55,7 +55,7 @@ export async function saveCollections(collections: Collections): Promise<void> {
   }
 }
 
-export async function getFaviconStore(): Promise<{ [hostname in string]: string }> {
+export async function getFaviconStore(): Promise<{ [hostname: string]: string }> {
   const storage = await getStorage();
   const favicon = await storage.get(faviconStorageKey);
   return favicon[faviconStorageKey] ?? {};

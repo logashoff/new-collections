@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBarRef } from '@angular/material/snack-bar';
-import { debounce, flatMap, keyBy, remove, uniqBy } from 'lodash';
-import moment from 'moment';
+import { format, isSameDay, isSameWeek, isSameYear, subDays } from 'date-fns';
+import { debounce, flatMap, keyBy, remove, uniqBy } from 'lodash-es';
 import { BehaviorSubject, Observable, firstValueFrom, lastValueFrom } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import {
@@ -98,14 +98,14 @@ export class TabService {
 
     chrome.storage.onChanged.addListener((changes: StorageChanges) => this.syncCollections(changes));
 
-    chrome.tabs.onCreated.addListener(this.updateTabs);
-    chrome.tabs.onRemoved.addListener(this.updateTabs);
-    chrome.tabs.onUpdated.addListener(this.updateTabs);
+    chrome.tabs.onCreated.addListener(this.#updateTabs);
+    chrome.tabs.onRemoved.addListener(this.#updateTabs);
+    chrome.tabs.onUpdated.addListener(this.#updateTabs);
 
-    this.updateTabs();
+    this.#updateTabs();
   }
 
-  private readonly updateTabs = debounce(async () => {
+  readonly #updateTabs = debounce(async () => {
     const tabs = await queryCurrentWindow();
     this._tabChanges$.next(tabs);
   }, 150);
@@ -167,7 +167,7 @@ export class TabService {
    * Creates timeline array and hashmap that maps each timeline item to groups by their timestamp.
    */
   private createTimeline(tabGroups: TabGroups): Timeline {
-    const timeline: { [label in string]: TimelineElement } = {};
+    const timeline: { [label: string]: TimelineElement } = {};
 
     tabGroups.forEach((timelineItem) => {
       const timeLabel = this.getTimelineLabel(timelineItem);
@@ -189,22 +189,22 @@ export class TabService {
    */
   private getTimelineLabel(tabGroup: TabGroup): string {
     const { timestamp } = tabGroup;
-    const date = moment(timestamp);
-    const now = moment();
+    const date = new Date(timestamp);
+    const now = new Date();
 
     switch (true) {
       case timestamp < 0:
         return this.translate('pinned');
-      case date.isSame(now, 'd'):
+      case isSameDay(now, date):
         return this.translate('today');
-      case date.isSame(now.subtract(1, 'd'), 'd'):
+      case isSameDay(subDays(now, 1), 'd'):
         return this.translate('yesterday');
-      case date.isSame(now, 'w'):
+      case isSameWeek(now, date):
         return this.translate('week');
-      case date.isSame(now, 'y'):
-        return date.format('MMMM');
+      case isSameYear(now, date):
+        return format(date, 'MMMM');
       default:
-        return date.format('MMMM YYYY');
+        return format(date, 'MMMM yyyy');
     }
   }
 

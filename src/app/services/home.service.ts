@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { flatMap, isNil, isUndefined } from 'lodash';
+import { flatMap, isNil, isUndefined } from 'lodash-es';
 import { Observable, combineLatest, from, map, of, shareReplay, switchMap, take } from 'rxjs';
 import { SettingsService, TabService } from 'src/app/services';
 import { Devices, MostVisitedURL, Sessions, TabGroup, Tabs, Timeline, TopSites } from 'src/app/utils';

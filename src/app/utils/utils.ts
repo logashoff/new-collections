@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { groupBy } from 'lodash';
+import { groupBy } from 'lodash-es';
 import { BrowserTabs, HostnameGroup, Settings, settingsStorageKey, Tab } from './models';
 
 /**
@@ -62,3 +62,33 @@ export const translate = () => {
  * Navigates to options page.
  */
 export const openOptions = () => chrome.runtime.openOptionsPage();
+
+/**
+ * Saves specified data to a file
+ */
+export const saveFile = (blob: Blob, fileName: string) => {
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+
+  link.href = url;
+  link.download = fileName;
+  link.click();
+
+  window.URL.revokeObjectURL(url);
+};
+
+/**
+ * Opens dialog to select JSON file
+ */
+export const selectFile = () =>
+  new Promise((resolve) => {
+    const input = document.createElement('input');
+    
+    input.type = 'file';
+    input.accept = '.json';
+    input.multiple = false;
+
+    input.addEventListener('change', () => resolve(input.files || null));
+
+    setTimeout(() => input.click());
+  });

@@ -10,7 +10,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { isUndefined } from 'lodash';
+import { isUndefined } from 'lodash-es';
 import { BehaviorSubject, Observable, map, shareReplay, startWith, take } from 'rxjs';
 import { CollectionsService, SettingsService } from 'src/app/services';
 import { Action, ActionIcon, CollectionActions, MostVisitedURL, translate } from 'src/app/utils';
@@ -67,11 +67,11 @@ interface OptionsForm {
   ],
 })
 export class OptionsComponent implements OnInit {
-  private readonly translate = translate();
+  readonly #translate = translate();
 
   readonly collectionActions: CollectionActions;
 
-  private readonly devicesControl = new FormControl<boolean>(true);
+  readonly #devicesControl = new FormControl<boolean>(true);
   readonly sitesControl = new FormControl<boolean>(true);
   readonly syncStorage = new FormControl<boolean>(true);
   readonly ignoreSitesControl = new FormArray([]);
@@ -91,7 +91,7 @@ export class OptionsComponent implements OnInit {
   );
 
   readonly formGroup = new FormGroup<OptionsForm>({
-    enableDevices: this.devicesControl,
+    enableDevices: this.#devicesControl,
     enableTopSites: this.sitesControl,
     ignoreTopSites: this.ignoreSitesControl,
     syncStorage: this.syncStorage,
@@ -102,12 +102,12 @@ export class OptionsComponent implements OnInit {
       {
         action: Action.Import,
         icon: ActionIcon.Import,
-        tooltip: this.translate('importCollections'),
+        tooltip: this.#translate('importCollections'),
       },
       {
         action: Action.Export,
         icon: ActionIcon.Export,
-        tooltip: this.translate('exportCollections'),
+        tooltip: this.#translate('exportCollections'),
         color: 'primary',
       },
     ];
@@ -134,7 +134,7 @@ export class OptionsComponent implements OnInit {
           settings.enableDevices = true;
         }
 
-        this.devicesControl.setValue(settings.enableDevices);
+        this.#devicesControl.setValue(settings.enableDevices);
 
         if (settings.ignoreTopSites?.length > 0) {
           settings.ignoreTopSites.forEach((site) => this.ignoreSitesControl.push(new FormControl(site)));
