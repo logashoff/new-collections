@@ -8,6 +8,8 @@ import {
   EmptyComponent,
   GroupsComponent,
   SearchComponent,
+  SearchFormComponent,
+  StickyDirective,
   TimelineElementComponent,
   TopSitesComponent,
 } from '../shared';
@@ -29,6 +31,8 @@ import {
     EmptyComponent,
     GroupsComponent,
     SearchComponent,
+    SearchFormComponent,
+    StickyDirective,
     TimelineElementComponent,
     TopSitesComponent,
   ],
@@ -51,16 +55,19 @@ export class HomeComponent {
   readonly timeline$: Observable<Timeline>;
   readonly topSites$: Observable<TopSites>;
 
-  constructor(private homeService: HomeService, private tabService: TabService) {
-    this.devicesTimeline$ = this.homeService.devicesTimeline$;
-    this.hasAnyData$ = this.homeService.hasAnyData$;
-    this.searchSource$ = this.tabService.tabs$;
-    this.devices$ = this.homeService.devices$.pipe(
-      map((devices) => flatMap(devices?.map((device) => this.homeService.getTabsFromSessions(device.sessions)))),
+  constructor(
+    private homeService: HomeService,
+    private tabService: TabService
+  ) {
+    this.devicesTimeline$ = homeService.devicesTimeline$;
+    this.hasAnyData$ = homeService.hasAnyData$;
+    this.searchSource$ = tabService.tabs$;
+    this.devices$ = homeService.devices$.pipe(
+      map((devices) => flatMap(devices?.map((device) => homeService.getTabsFromSessions(device.sessions)))),
       shareReplay(1)
     );
-    this.timeline$ = this.homeService.timeline$;
-    this.topSites$ = this.homeService.topSites$;
+    this.timeline$ = homeService.timeline$;
+    this.topSites$ = homeService.topSites$.pipe(shareReplay(1));
   }
 
   /**`

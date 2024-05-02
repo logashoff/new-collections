@@ -1,8 +1,3 @@
-<app-search-form
-  (changed)="searchChange($event)"
-  [search]="searchValue$ | async">
-</app-search-form>
-
 @if (hasSearchValue$ | async) {
   @if ((sourceTabs$ | async).length > 0 || (deviceTabs$ | async).length > 0) {
     @if((deviceTabs$ | async).length > 0) {

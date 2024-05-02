@@ -28,11 +28,13 @@ app-popup {
   flex-direction: column;
   position: relative;
   flex: 1;
+  
 
-  .content {
+  app-search-form .controls-wrapper {
+    margin: 0 $padding;
+  }
+
+  app-search {
     padding: 0 $padding $padding;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
   }
 }

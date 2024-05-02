@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
 import { Observable, map } from 'rxjs';
 import { TabService } from 'src/app/services';
 import { Action, ActionIcon, BrowserTabs, CollectionActions, Timeline } from 'src/app/utils';
-import { EmptyComponent, SearchComponent, TimelineComponent } from '../shared';
+import { EmptyComponent, SearchComponent, SearchFormComponent, StickyDirective, TimelineComponent } from '../shared';
 
 /**
  * @description
@@ -17,7 +17,7 @@ import { EmptyComponent, SearchComponent, TimelineComponent } from '../shared';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [CommonModule, EmptyComponent, SearchComponent, TimelineComponent],
+  imports: [CommonModule, EmptyComponent, SearchComponent, SearchFormComponent, StickyDirective, TimelineComponent],
 })
 export class PopupComponent {
   readonly defaultActions: CollectionActions = [

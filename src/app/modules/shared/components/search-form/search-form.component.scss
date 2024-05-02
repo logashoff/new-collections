@@ -1,4 +1,5 @@
 @use '@angular/material' as mat;
+@import 'common';
 @import 'theme';
 
 @include component-theme using($theme) {
@@ -8,12 +9,12 @@
     $app-background: get-palette-color(get-background-palette($theme), background);
 
     color: get-palette-color(get-foreground-palette($theme), secondary-text);
-    background: $app-background;
+    background-color: $app-background;
 
     .controls-wrapper {
       $background-color: get-palette-color(get-background-palette($theme), card);
       background-color: $background-color;
-      
+
       @if not $is-dark {
         border: 1px solid $border-color;
       }
@@ -23,7 +24,7 @@
       }
     }
 
-    &.has-value {
+    &.is-active {
       .controls-wrapper {
         background-color: if($is-dark, $border-color, $app-background);
       }
@@ -35,42 +36,62 @@ app-search-form {
   $height: 42px;
   $padding: 0.5rem;
 
-  padding: $padding;
-  margin: 0 (-$padding);
+  display: block;
+  position: sticky;
+  padding: $padding 0;
+  z-index: 1;
+  top: 0;
+
+  transition: transform $cubic-ease;
+
+  &.sticky {
+    &:not(.is-active) {
+      transform: translate(0, -100%);
+
+      &.stuck {
+        @include mat.elevation(2);
+        transform: translate(0, 0);
+      }
+    }
+
+    &.is-active {
+      @include mat.elevation(2);
+    }
+  }
 
   .controls-wrapper {
-    transition: background-color 150ms cubic-bezier(0, 0, 0.2, 1);
-    
+    transition: background-color $cubic-ease;
+
     display: flex;
     border-radius: 5rem;
     box-sizing: border-box;
     z-index: 1;
-  
+
     .search-form {
       flex: 1 1 auto;
-  
+
       .search-field {
         width: 100%;
         font-size: 1rem;
-  
+
         .mat-mdc-form-field-infix {
           display: flex;
           min-height: $height;
           padding: 0;
         }
-  
+
         .mdc-line-ripple,
         .mat-mdc-form-field-subscript-wrapper {
           display: none;
         }
-  
+
         .mat-mdc-text-field-wrapper,
         .mat-mdc-form-field-focus-overlay {
           background: none;
         }
       }
     }
-  
+
     .controls {
       flex: 0 0 0;
       padding: 0 0.5rem;
@@ -83,7 +104,7 @@ app-search-form {
     .mat-mdc-form-field-icon-prefix {
       padding: 0 0.25rem;
     }
-  
+
     .mat-mdc-form-field-icon-prefix,
     .mat-mdc-form-field-icon-suffix {
       & > .mat-icon {

@@ -1,14 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  HostBinding,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,8 +7,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { CollectionsService } from 'src/app/services';
+import { CollectionsService, NavService } from 'src/app/services';
 import { Action } from 'src/app/utils';
+import { StopPropagationDirective } from '../../directives';
 
 /**
  * Search input form.
@@ -41,35 +32,25 @@ interface SearchForm {
     MatInputModule,
     MatTooltipModule,
     ReactiveFormsModule,
+    StopPropagationDirective,
     TranslateModule,
   ],
 })
 export class SearchFormComponent implements OnInit, OnDestroy {
-  Action = Action;
-
-  readonly formGroup: FormGroup<SearchForm>;
-
+  readonly Action = Action;
   readonly #searchControl = new FormControl<string>('');
+  readonly formGroup = new FormGroup<SearchForm>({
+    search: this.#searchControl,
+  });
 
-  private valueChanges: Subscription;
-
-  /**
-   * Emits value when search input changes
-   */
-  @Output() readonly changed = new EventEmitter<string>();
-
-  @Input() set search(value: string) {
-    this.#searchControl.setValue(value, {
-      emitEvent: false,
-    });
-  }
+  #valueChanges: Subscription;
 
   /**
    * Indicates search input is focused
    */
   readonly focused$ = new BehaviorSubject<boolean>(false);
 
-  @HostBinding('class.has-value') get hasValue() {
+  @HostBinding('class.is-active') get hasValue() {
     return this.search?.length > 0 || this.focused$.value;
   }
 
@@ -77,18 +58,17 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     return this.#searchControl.value;
   }
 
-  constructor(private collectionsService: CollectionsService) {
-    this.formGroup = new FormGroup<SearchForm>({
-      search: this.#searchControl,
-    });
-  }
+  constructor(
+    private collectionsService: CollectionsService,
+    private navService: NavService
+  ) {}
 
   ngOnInit() {
-    this.valueChanges = this.formGroup.valueChanges.subscribe(({ search }) => this.changed.emit(search));
+    this.#valueChanges = this.formGroup.valueChanges.subscribe(({ search }) => this.searchChange(search));
   }
 
   ngOnDestroy() {
-    this.valueChanges.unsubscribe();
+    this.#valueChanges.unsubscribe();
   }
 
   /**
@@ -100,5 +80,15 @@ export class SearchFormComponent implements OnInit, OnDestroy {
 
   handleAction(action: Action) {
     this.collectionsService.handleAction(action);
+  }
+
+  searchChange(value: string) {
+    if (value) {
+      this.navService.search(value);
+    } else {
+      this.navService.reset();
+    }
+
+    document.body.scrollTo(0, 0);
   }
 }
