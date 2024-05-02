@@ -1,13 +1,12 @@
-<div class="content">
-  @if (searchSource$) {
-    <app-search [source]="searchSource$ | async">
-      @if (groupsTimeline$ | async) {
-        <app-timeline 
-          class="layout-container">
-        </app-timeline>
-      } @else {
-        <app-empty [actions]="defaultActions">tab_unselected</app-empty>
-      }
-    </app-search>
-  }
-</div>
+@if (searchSource$) {
+  <app-search-form appSticky></app-search-form>
+  <app-search [source]="searchSource$ | async">
+    @if (groupsTimeline$ | async) {
+      <app-timeline 
+        class="layout-container">
+      </app-timeline>
+    } @else {
+      <app-empty [actions]="defaultActions">tab_unselected</app-empty>
+    }
+  </app-search>
+}

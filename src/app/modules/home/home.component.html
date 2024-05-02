@@ -1,30 +1,30 @@
-<div class="content">
-  @if (topSites$ | async) {
-    <app-top-sites [topSites]="topSites$ | async"></app-top-sites>
+@if (topSites$ | async) {
+  <app-top-sites [topSites]="topSites$ | async"></app-top-sites>
+}
+<app-search-form appSticky 
+  [ngClass]="{ 'search-margin': (topSites$ | async) === null }">
+</app-search-form>
+<app-search [source]="searchSource$ | async"
+  [devices]="devices$ | async">
+  @if (hasAnyData$ | async) {
+    <div class="layout-container">
+      @for (item of devicesTimeline$ | async; track item.label) {
+        <app-timeline-element class="layout-item"
+          [timelineLabel]="item.label"
+          [controls]="false">
+          <app-groups [groups]="item.elements"></app-groups>
+        </app-timeline-element>
+      }
+
+      @for (item of timeline$ | async; track item.label) {
+        <app-timeline-element class="layout-item"
+          [timelineLabel]="item.label"
+          (removed)="removeGroups(item.elements)">
+          <app-groups [groups]="item.elements" [dragDisabled]="false"></app-groups>
+        </app-timeline-element>
+      }
+    </div>
+  } @else {
+    <app-empty [actions]="defaultActions">home</app-empty>
   }
-
-  <app-search [source]="searchSource$ | async"
-    [devices]="devices$ | async">
-    @if (hasAnyData$ | async) {
-      <div class="layout-container">
-        @for (item of devicesTimeline$ | async; track item.label) {
-          <app-timeline-element class="layout-item"
-            [timelineLabel]="item.label"
-            [controls]="false">
-            <app-groups [groups]="item.elements"></app-groups>
-          </app-timeline-element>
-        }
-
-        @for (item of timeline$ | async; track item.label) {
-          <app-timeline-element class="layout-item"
-            [timelineLabel]="item.label"
-            (removed)="removeGroups(item.elements)">
-            <app-groups [groups]="item.elements" [dragDisabled]="false"></app-groups>
-          </app-timeline-element>
-        }
-      </div>
-    } @else {
-      <app-empty [actions]="defaultActions">home</app-empty>
-    }
-  </app-search>
-</div>
+</app-search>

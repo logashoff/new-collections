@@ -18,24 +18,29 @@ app-home {
   flex-direction: column;
   position: relative;
   flex: 1;
+  margin-bottom: 1rem;
 
-  .content {
-    margin: 0 auto 1rem;
+  app-top-sites,
+  app-search,
+  app-search-form .controls-wrapper {
+    margin: 0 auto;
     width: 80vw;
     max-width: 75rem;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
   }
 
-  app-top-sites {
-    margin: 1rem 0;
+  app-search-form.search-margin {
+    margin-top: 2rem;
   }
 }
 
 @media (max-width: 60rem) {
-  app-home .content {
-    width: auto;
-    margin: 2rem;
+  app-home {
+    app-top-sites,
+    app-search,
+    app-search-form .controls-wrapper {
+      margin: 0 2rem;
+      width: auto;
+      max-width: auto;
+    }
   }
 }

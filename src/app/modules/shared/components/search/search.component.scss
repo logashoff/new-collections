@@ -14,13 +14,6 @@ app-search {
   flex-direction: column;
   flex: 1;
 
-  app-search-form {
-    display: block;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-  }
-
   .search-container,
   .layout-container {
     padding: 0;

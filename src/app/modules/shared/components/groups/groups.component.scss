@@ -1,4 +1,4 @@
-$drag-transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
+@import 'common';
 
 app-groups {
   display: block;
@@ -27,7 +27,7 @@ app-groups {
     pointer-events: none;
 
     app-list-item.cdk-drag:not(.cdk-drag-placeholder) {
-      transition: $drag-transition;
+      transition: transform $cubic-ease;
     }
   }
 }
@@ -35,7 +35,10 @@ app-groups {
 .cdk-drag-preview {
   box-sizing: border-box;
   border-radius: 0.25rem;
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  box-shadow:
+    0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
 
   .mat-ripple-element {
     display: none;
@@ -47,5 +50,5 @@ app-groups {
 }
 
 .cdk-drag-animating {
-  transition: $drag-transition;
+  transition: transform $cubic-ease;
 }

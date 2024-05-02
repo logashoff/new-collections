@@ -54,40 +54,39 @@ const fuseOptions: IFuseOptions<BrowserTab> = {
   ],
 })
 export class SearchComponent implements OnInit {
-  Action = Action;
+  readonly Action = Action;
 
-  private readonly source$ = new BehaviorSubject<BrowserTabs>([]);
-
-  @Input() set source(value: BrowserTabs) {
-    this.source$.next(value);
-  }
-
-  get source(): BrowserTabs {
-    return this.source$.value;
-  }
-
-  private readonly devices$ = new BehaviorSubject<BrowserTabs>([]);
-
-  @Input() set devices(value: BrowserTabs) {
-    this.devices$.next(value);
-  }
-
-  get devices(): BrowserTabs {
-    return this.devices$.value;
-  }
+  readonly #devices$ = new BehaviorSubject<BrowserTabs>([]);
+  readonly #source$ = new BehaviorSubject<BrowserTabs>([]);
 
   /**
    * Returns Fuse search instance.
    */
-  private readonly fuseSource$: Observable<Fuse<BrowserTab>> = this.source$.pipe(
+  readonly #fuseSource$: Observable<Fuse<BrowserTab>> = this.#source$.pipe(
     map((source) => new Fuse(source ?? [], fuseOptions)),
     shareReplay(1)
   );
 
-  private readonly fuseDevices$: Observable<Fuse<BrowserTab>> = this.devices$.pipe(
+  readonly #fuseDevices$: Observable<Fuse<BrowserTab>> = this.#devices$.pipe(
     map((devices) => new Fuse(devices ?? [], fuseOptions)),
     shareReplay(1)
   );
+
+  @Input() set source(value: BrowserTabs) {
+    this.#source$.next(value);
+  }
+
+  get source(): BrowserTabs {
+    return this.#source$.value;
+  }
+
+  @Input() set devices(value: BrowserTabs) {
+    this.#devices$.next(value);
+  }
+
+  get devices(): BrowserTabs {
+    return this.#devices$.value;
+  }
 
   /**
    * Tabs data from search results
@@ -101,22 +100,20 @@ export class SearchComponent implements OnInit {
    */
   hasSearchValue$: Observable<boolean>;
 
-  searchValue$: Observable<string>;
-
   constructor(private navService: NavService) {}
 
   ngOnInit() {
-    this.searchValue$ = this.navService.paramsSearch$.pipe(shareReplay(1));
+    const searchValue$ = this.navService.paramsSearch$.pipe(shareReplay(1));
 
-    this.sourceTabs$ = this.searchValue$.pipe(
-      withLatestFrom(this.fuseSource$),
+    this.sourceTabs$ = searchValue$.pipe(
+      withLatestFrom(this.#fuseSource$),
       map(([search, fuse]) => (search?.length > 0 ? fuse.search(search) : null)),
       map((searchResults) => searchResults?.map(({ item }) => item)),
       shareReplay(1)
     );
 
-    this.deviceTabs$ = this.searchValue$.pipe(
-      withLatestFrom(this.fuseDevices$),
+    this.deviceTabs$ = searchValue$.pipe(
+      withLatestFrom(this.#fuseDevices$),
       map(([search, fuse]) => (search?.length > 0 ? fuse.search(search) : null)),
       map((searchResults) => searchResults?.map(({ item }) => item)),
       shareReplay(1)
@@ -163,13 +160,4 @@ export class SearchComponent implements OnInit {
     }
   }
 
-  searchChange(value: string) {
-    if (value) {
-      this.navService.search(value);
-    } else {
-      this.navService.reset();
-    }
-
-    document.body.scrollTo(0, 0);
-  }
 }
