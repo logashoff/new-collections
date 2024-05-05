@@ -1,0 +1,16 @@
+@if (topSites$ | async) {
+  <app-top-sites 
+    class="top-sites"
+    [ngClass]="{ hidden: hideTopSites$ | async }"
+    [topSites]="topSites$ | async" />
+}
+<app-search-form
+  class="search-form"
+  appSticky
+  [ngClass]="{ 'search-margin': hideTopSites$ | async }"
+  (activated)="navigate(['new-tab', 'search'])"
+  (canceled)="navigate(['new-tab', 'main'])"
+/>
+<section class="content">
+  <router-outlet />
+</section>

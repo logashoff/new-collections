@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, distinctUntilChanged, map, shareReplay } from 'rxjs';
+import { ActivatedRoute, EventType, Router, RouterEvent } from '@angular/router';
+import { Observable, distinctUntilChanged, filter, map, shareReplay, startWith } from 'rxjs';
+import { RouterExtras } from '../utils/index';
 
 @Injectable({
   providedIn: 'root',
@@ -22,14 +23,32 @@ export class NavService {
   readonly paramsSearch$: Observable<string>;
 
   /**
+   * URL changes
+   */
+  readonly url$: Observable<string>;
+
+  /**
    * Checks is current nav state is popup.
    * TODO: Does chrome API has extension type indicator?
    */
   get isPopup(): boolean {
-    return this.router.url.match(/popup/gi)?.length > 0;
+    return this.isActive('popup');
   }
 
-  constructor(private activeRoute: ActivatedRoute, private router: Router) {
+  constructor(
+    private activeRoute: ActivatedRoute,
+    private router: Router
+  ) {
+    const url$ = this.router.events.pipe(
+      filter((events) => events?.type === EventType.NavigationEnd),
+      map((events) => {
+        const e: RouterEvent = events as RouterEvent;
+        return e.url;
+      })
+    );
+
+    this.url$ = url$.pipe(startWith(this.router.url), distinctUntilChanged(), shareReplay(1));
+
     this.paramsGroupId$ = this.activeRoute.queryParams.pipe(
       distinctUntilChanged((prev, curr) => prev.groupId === curr.groupId),
       map((params) => params.groupId),
@@ -43,46 +62,57 @@ export class NavService {
     );
 
     this.paramsSearch$ = this.activeRoute.queryParams.pipe(
-      distinctUntilChanged((prev, curr) => prev.search === curr.search),
-      map((params) => params.search as string),
+      distinctUntilChanged((prev, curr) => prev.query === curr.query),
+      map((params) => params.query as string),
       shareReplay(1)
     );
   }
 
+  /**
+   * Check if URL contains path
+   */
+  isActive(path: string | RegExp) {
+    return this.router.url.match(new RegExp(path, 'gi'))?.length > 0;
+  }
+
   reset() {
-    this.router.navigate([], {
+    return this.navigate([], {
       relativeTo: this.activeRoute,
       queryParams: {
         groupId: undefined,
         tabId: undefined,
-        search: undefined,
+        query: undefined,
       },
       queryParamsHandling: 'merge',
-      replaceUrl: true,
     });
   }
 
   search(value: string) {
-    this.router.navigate([], {
+    return this.navigate([], {
       relativeTo: this.activeRoute,
       queryParams: {
         groupId: undefined,
         tabId: undefined,
-        search: value,
+        query: value,
       },
-      replaceUrl: true,
     });
   }
 
   setParams(groupId: string, tabId?: number) {
-    this.router.navigate([], {
+    return this.navigate([], {
       relativeTo: this.activeRoute,
       queryParams: {
         groupId,
         tabId,
-        search: undefined,
+        query: undefined,
       },
+    });
+  }
+
+  navigate(commands: any[], extras: RouterExtras = {}): Promise<boolean> {
+    return this.router.navigate(commands, {
       replaceUrl: true,
+      ...extras,
     });
   }
 }

@@ -1,0 +1,110 @@
+@use '@angular/material' as mat;
+@import 'theme';
+
+@include component-theme using($theme) {
+  app-options {
+    h4,
+    h3,
+    h2,
+    h1 {
+      color: get-palette-color(get-foreground-palette($theme), text);
+    }
+  }
+}
+
+$typography-config: mat.get-typography-config($dark-theme);
+
+html,
+body {
+  min-width: 25rem;
+  min-height: 30rem;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+app-options {
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  overflow-y: auto;
+
+  h4,
+  h3,
+  h2,
+  h1 {
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .mat-mdc-form-field-hint {
+    @include mat.typography-level($typography-config, caption);
+    margin-bottom: 1rem;
+    position: relative;
+    display: block;
+  }
+
+  .mdc-card {
+    display: flex;
+    flex-direction: column;
+    width: 90vw;
+    margin: 1rem auto;
+    box-sizing: border-box;
+
+    .section:not(:last-child) {
+      margin-bottom: 2rem;
+    }
+
+    .storage-controls {
+      align-items: center;
+      display: flex;
+      flex: 1 1 auto;
+      gap: 1rem;
+    }
+
+    .toggles {
+      .toggle-label {
+        line-height: 1rem;
+      }
+
+      .mat-mdc-slide-toggle {
+        margin-bottom: 1rem;
+
+        .mdc-label {
+          margin-left: 1rem;
+
+          .mat-mdc-form-field-hint {
+            margin: 0;
+          }
+        }
+      }
+    }
+
+    .list {
+      padding: 0;
+
+      .list-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .list-item-label {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          margin-right: 1rem;
+        }
+
+        .mdc-icon-button {
+          padding: 0;
+          width: unset;
+          height: unset;
+          line-height: 0;
+        }
+      }
+    }
+  }
+}

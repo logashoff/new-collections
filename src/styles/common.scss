@@ -6,6 +6,13 @@ $popup-width: 32rem;
 $popup-height: 35rem;
 $cubic-ease: 150ms cubic-bezier(0, 0, 0.2, 1);
 
+@mixin vertical-flex() {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1;
+}
+
 @function get-foreground-palette($config-or-theme) {
   $colors: mat.get-color-config($config-or-theme);
   $foreground: map.get($colors, foreground);

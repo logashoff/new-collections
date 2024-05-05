@@ -1,4 +1,4 @@
-import { getCollections } from './app/utils';
+import { getCollections } from './app/utils/collections';
 
 const updateBadgeText = async () => {
   const collections = await getCollections();

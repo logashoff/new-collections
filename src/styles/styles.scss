@@ -2,10 +2,9 @@
 @import 'common';
 
 body {
+  @include vertical-flex;
+
   font-family: Roboto, 'Helvetica Neue', sans-serif;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
   overflow: auto;
 }
 
@@ -13,12 +12,6 @@ html.cdk-global-scrollblock {
   position: relative;
   top: 0 !important;
   overflow: hidden;
-}
-
-app-root {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
 }
 
 ::-webkit-scrollbar {
