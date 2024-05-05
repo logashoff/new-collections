@@ -1,0 +1,18 @@
+@if (actions?.length) {
+  <section class="actions">
+    @for (action of actions; track action) {
+      <button mat-fab extended
+        [color]="action.color" 
+        (click)="handleAction(action.action)">
+        @if (action.icon) {
+          <mat-icon>{{ action.icon }}</mat-icon>
+        }
+        {{ action.label | translate }}
+      </button>
+    }
+  </section>
+} @else {
+  <mat-icon class="icon">
+    <ng-content />
+  </mat-icon>
+}

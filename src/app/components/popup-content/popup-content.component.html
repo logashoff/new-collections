@@ -1,0 +1,5 @@
+@if (groupsTimeline$ | async) {
+  <app-timeline class="main-content" />
+} @else {
+  <app-empty [actions]="defaultActions">tab_unselected</app-empty>
+}

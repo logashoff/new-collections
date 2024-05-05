@@ -6,6 +6,7 @@ import { format, isSameDay, isSameWeek, isSameYear, subDays } from 'date-fns';
 import { debounce, flatMap, keyBy, remove, uniqBy } from 'lodash-es';
 import { BehaviorSubject, Observable, firstValueFrom, lastValueFrom } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { validate as uuidValidate, v4 as uuidv4 } from 'uuid';
 import {
   ActionIcon,
   BrowserTab,
@@ -28,9 +29,9 @@ import {
   saveCollections,
   syncToTabs,
   translate,
-} from 'src/app/utils';
-import { validate as uuidValidate, v4 as uuidv4 } from 'uuid';
-import { MessageComponent, RenameDialogComponent, TabsSelectorComponent } from '../modules/shared';
+} from '../utils/index';
+
+import { MessageComponent, RenameDialogComponent, TabsSelectorComponent } from '../components';
 import { MessageService } from './message.service';
 import { NavService } from './nav.service';
 
@@ -111,7 +112,7 @@ export class TabService {
   }, 150);
 
   /**
-   * Sync local storage collection with loaded UI tap groups.
+   * Sync local storage collection with loaded UI tab groups.
    */
   private async syncCollections(changes: StorageChanges) {
     const changedGroupIds = Object.keys(changes).filter((groupId) => uuidValidate(groupId));
@@ -224,9 +225,9 @@ export class TabService {
     const filteredTabs: BrowserTabs = tabs
       .filter((tab) => !ignoreUrlsRegExp.test(tab.url))
       .map(
-        ({ id, url, title, favIconUrl }, index): BrowserTab => ({
+        ({ id, url, title, favIconUrl }): BrowserTab => ({
           favIconUrl,
-          id: id ?? index,
+          id: id ?? Math.round(Math.random() * 100_000),
           title,
           url,
         })
@@ -289,7 +290,10 @@ export class TabService {
    * Add tab list to group specified.
    */
   async addTabs(group: TabGroup, tabs: BrowserTabs) {
-    let filteredTabs = uniqBy(tabs.filter(({ url }) => !ignoreUrlsRegExp.test(url)), 'url');
+    let filteredTabs = uniqBy(
+      tabs.filter(({ url }) => !ignoreUrlsRegExp.test(url)),
+      'url'
+    );
 
     if (filteredTabs.length === 0) {
       this.message.open(this.translate('invalidTabList'));

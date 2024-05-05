@@ -83,7 +83,7 @@ export const saveFile = (blob: Blob, fileName: string) => {
 export const selectFile = () =>
   new Promise((resolve) => {
     const input = document.createElement('input');
-    
+
     input.type = 'file';
     input.accept = '.json';
     input.multiple = false;
@@ -92,3 +92,12 @@ export const selectFile = () =>
 
     setTimeout(() => input.click());
   });
+
+export const scrollTop = (
+  scrollOptions: ScrollToOptions = {
+    top: 0,
+    behavior: 'smooth',
+  }
+) => {
+  document.body.scrollTo(scrollOptions);
+};

@@ -1,0 +1,57 @@
+@import 'common';
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  @include vertical-flex;
+
+  overflow: hidden;
+  height: 100vh;
+}
+
+app-new-tab {
+  @include vertical-flex;
+
+  margin-bottom: 1rem;
+
+  .content {
+    @include vertical-flex;
+  }
+
+  .top-sites {
+    overflow: hidden;
+
+    &.hidden {
+      visibility: hidden;
+      height: 0;
+    }
+  }
+
+  .content,
+  .top-sites,
+  .search-form .controls-wrapper {
+    margin: 0 auto;
+    width: 80vw;
+    max-width: 75rem;
+  }
+
+  .search-form.search-margin {
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 60rem) {
+  app-new-tab {
+    .content,
+    .top-sites,
+    .search-form .controls-wrapper {
+      margin: 0 2rem;
+      width: auto;
+      max-width: auto;
+    }
+  }
+}

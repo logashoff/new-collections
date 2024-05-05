@@ -1,0 +1,36 @@
+@import 'common';
+
+$padding: 0.5rem;
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+
+  width: $popup-width;
+  height: $popup-height;
+
+  min-width: $popup-width;
+  min-height: $popup-height;
+
+  max-width: $popup-width;
+  max-height: $popup-height;
+}
+
+html {
+  @include vertical-flex;
+  overflow: hidden;
+}
+
+app-popup {
+  @include vertical-flex;
+
+  .content {
+    @include vertical-flex;
+    padding: 0 $padding $padding;
+  }
+
+  .search-form .controls-wrapper {
+    margin: 0 $padding;
+  }
+}

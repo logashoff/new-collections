@@ -1,0 +1,98 @@
+@use '@angular/material' as mat;
+@import 'theme';
+
+
+$typography-config: mat.get-typography-config($dark-theme);
+
+@include component-theme using($theme) {
+  app-list-item {
+    .container, a:link, a:visited, a:hover, a:active {
+      color: get-palette-color(get-foreground-palette($theme), text);
+    }
+
+    &:hover {
+      background-color: get-palette-color(get-background-palette($theme), hover);
+    }
+
+    .subtitle,
+    .controls {
+      color: get-palette-color(get-foreground-palette($theme), secondary-text);
+    }
+  }
+}
+
+app-list-item {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  .container {
+    display: flex;
+    align-items: center;
+    height: 4rem;
+    padding: 0 1rem;
+    margin: 0;
+    gap: 1rem;
+    cursor: pointer;
+
+    &:hover {
+      padding-right: 0.5rem;
+
+      .controls {
+        display: flex;
+      }
+    }
+  }
+
+  .controls {
+    display: none;
+    align-items: center;
+  }
+
+  .text-container {
+    flex-grow: 1;
+
+    .title-container {
+      @include mat.typography-level($typography-config, subtitle-1);
+      
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      gap: 0.5rem;
+
+      .title {
+        flex: 0 1 auto;
+      }
+    }
+
+    .label-container {
+      @include mat.typography-level($typography-config, caption);
+
+      display: flex;
+      overflow: hidden;
+      align-items: center;
+      gap: 0.25rem;
+      flex: 0 0 auto;
+    }
+
+
+    .subtitle-container {
+      @include mat.typography-level($typography-config, caption);
+
+      display: flex;
+      overflow: hidden;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    &,
+    .title,
+    .subtitle {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

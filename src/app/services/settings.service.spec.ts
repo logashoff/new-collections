@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
-import { MostVisitedURL, Settings } from '../utils';
+import { MostVisitedURL, Settings } from '../utils/index';
 import { SettingsService } from './settings.service';
 
 jest.mock('src/app/utils', () => ({
@@ -23,7 +23,7 @@ describe('SettingsService', () => {
       {
         provide: Router,
         useValue: {
-          url: '/home',
+          url: '/new-tab',
         },
       },
     ],

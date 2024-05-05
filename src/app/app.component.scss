@@ -1,0 +1,5 @@
+@import 'common';
+
+:host {
+  @include vertical-flex;
+}

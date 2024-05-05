@@ -1,0 +1,47 @@
+<mat-accordion [multi]="true">
+  @for (group of groups; track group.id) {
+    <mat-expansion-panel #panel
+      [expanded]="(panelStates$ | async)?.[group.id] || (activeGroupId$ | async) === group.id && !isNaN(activeTabId$ | async) || panel.expanded"
+      (opened)="opened(group.id)"
+      (closed)="closed(group.id)"
+      hideToggle>
+      <mat-expansion-panel-header>
+        @if ((activeGroupId$ | async) === group.id && isNaN(activeTabId$ | async)) {
+          <app-ripple [focused]="true"></app-ripple>
+        }
+
+        <div class="collapsed">
+          @if (tabsByHostname$ | async; as tabsByHostname) {
+            <app-panel-header
+              [icons]="tabsByHostname[group.id]"
+              [total]="group.tabs.length"
+              [titleText]="(titlesMap$ | async)[group.id]"
+              [pinned]="group.timestamp < 0"
+              [readOnly]="!hasTabGroup(group)"
+              (starred)="favGroup(group)">
+            </app-panel-header>
+          }
+        </div>
+        <div class="expanded">
+          <app-group-controls [group]="group" [readOnly]="!hasTabGroup(group)"></app-group-controls>
+        </div>
+      </mat-expansion-panel-header>
+
+      <ng-template matExpansionPanelContent>
+        <mat-divider></mat-divider>
+  
+        @if (group.tabs$ | async; as tabs) {
+          <app-tab-list cdkDropList (cdkDropListDropped)="drop($event, tabs)">
+            @for (tab of tabs; track tab) {
+              <app-list-item
+                cdkDrag
+                [cdkDragDisabled]="dragDisabled"
+                [tab]="tab"
+                [focused]="(activeGroupId$ | async) === group.id && (activeTabId$ | async) === tab.id" />
+            }
+          </app-tab-list>
+        }
+      </ng-template>
+    </mat-expansion-panel>
+  }
+</mat-accordion>

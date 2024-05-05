@@ -23,6 +23,8 @@ describe('NavService', () => {
       {
         provide: Router,
         useValue: {
+          url: '/',
+          events: of(null),
           navigate() {},
         },
       },

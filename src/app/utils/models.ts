@@ -3,7 +3,9 @@ import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { SafeUrl } from '@angular/platform-browser';
 import { keyBy, remove } from 'lodash-es';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { MessageComponent } from '../modules/shared';
+import { MessageComponent } from '../components';
+import { NavigationExtras, Params } from '@angular/router';
+
 
 /**
  * Local storage key for saving app settings
@@ -47,6 +49,16 @@ export type ExpandedGroupsByUrl = { [url: string]: GroupExpanded };
 export interface TabDelete {
   deletedTab: BrowserTab;
   revertDelete: MessageRef;
+}
+
+export interface RouterParams extends Params {
+  groupId?: string;
+  tabId?: number;
+  query?: string;
+}
+
+export interface RouterExtras extends NavigationExtras {
+  queryParams?: RouterParams;
 }
 
 /**

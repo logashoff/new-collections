@@ -1,0 +1,7 @@
+<app-search-form class="search-form" 
+  appSticky
+  (activated)="navigate(['popup', 'search'])"
+  (canceled)="navigate(['popup', 'main'])" />
+<div class="content">
+  <router-outlet />
+</div>

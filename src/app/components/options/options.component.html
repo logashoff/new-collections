@@ -1,0 +1,75 @@
+<form [formGroup]="formGroup">
+  <mat-card>
+    <mat-card-content>
+      <section class="section">
+        <h3 translate>manageCollections</h3>
+        <mat-hint translate> hintCollections </mat-hint>
+        <section class="storage-controls">
+          @for (action of collectionActions; track action) {
+            @if (action.color) {
+              <button mat-flat-button
+                [matTooltip]="action.tooltip"
+                (click)="handleAction(action.action)"
+                [color]="action.color">
+                {{ action.label }}
+              </button>
+            } @else {
+              <button mat-stroked-button
+                [matTooltip]="action.tooltip"
+                (click)="handleAction(action.action)"
+                [color]="action.color">
+                {{ action.label }}
+              </button>
+            }
+          }
+        </section>
+      </section>
+      <section class="section">
+        <h3 class="storage-heading" translate>syncUsage</h3>
+        <mat-hint translate [translateParams]="{ percent: 100 - (storageUsage$ | async) | number: '1.0-0' }">
+          hintDataUsage
+        </mat-hint>
+        <mat-progress-bar
+          mode="determinate"
+          [value]="storageUsage$ | async"
+          [color]="(storageUsage$ | async) > 80 ? 'warn' : 'primary'" />
+      </section>
+      <section class="section toggles">
+        <mat-slide-toggle formControlName="syncStorage" color="primary">
+          <div class="toggle-label" translate>syncCollections</div>
+          <mat-hint translate>hintSyncCollections</mat-hint>
+        </mat-slide-toggle>
+        <mat-slide-toggle formControlName="enableDevices" color="primary">
+          <div class="toggle-label" translate>enableDevices</div>
+          <mat-hint translate>hintShowDevices</mat-hint>
+        </mat-slide-toggle>
+        <mat-slide-toggle formControlName="enableTopSites" color="primary">
+          <div class="toggle-label" translate>enableSites</div>
+          <mat-hint translate>hintShowTopSites</mat-hint>
+        </mat-slide-toggle>
+      </section>
+      @if (ignoreSitesControl.controls?.length > 0 && sitesControl.value) {
+        <section class="section">
+          <h3 class="storage-heading" translate>ignoredSites</h3>
+          <mat-hint translate>
+            hintIgnoredSites
+          </mat-hint>
+          <mat-list role="list" class="list">
+            @for (ignoredSite of ignoreSitesControl.controls; track ignoredSite; let i = $index) {
+              <mat-list-item role="listitem">
+                <div class="list-item">
+                  <span class="list-item-label">
+                    {{ ignoredSite.value?.title }}
+                  </span>
+                  <button mat-icon-button (click)="ignoreSitesControl.removeAt(i)">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+              </mat-list-item>
+            }
+          </mat-list>
+        </section>
+      }
+    </mat-card-content>
+  </mat-card>
+</form>
