@@ -224,9 +224,9 @@ export class TabService {
     const filteredTabs: BrowserTabs = tabs
       .filter((tab) => !ignoreUrlsRegExp.test(tab.url))
       .map(
-        ({ id, url, title, favIconUrl }): BrowserTab => ({
+        ({ id, url, title, favIconUrl }, index): BrowserTab => ({
           favIconUrl,
-          id,
+          id: id ?? index,
           title,
           url,
         })
