@@ -20,10 +20,10 @@ import { SearchFormComponent } from '../search-form/search-form.component';
   imports: [RouterOutlet, SearchFormComponent, StickyDirective],
 })
 export class PopupComponent {
-  constructor(private navService: NavService) {}
+  constructor(private readonly navService: NavService) {}
 
-  async navigate(commands) {
-    await this.navService.navigate(commands);
+  async navigate(...commands: string[]) {
+    await this.navService.navigate(['/popup', ...commands]);
     scrollTop();
   }
 }

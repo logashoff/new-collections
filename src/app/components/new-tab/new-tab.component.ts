@@ -41,8 +41,8 @@ export class NewTabComponent implements OnInit {
   hideTopSites$: Observable<boolean>;
 
   constructor(
-    private homeService: HomeService,
-    private navService: NavService
+    private readonly homeService: HomeService,
+    private readonly navService: NavService
   ) {}
 
   ngOnInit() {
@@ -54,8 +54,8 @@ export class NewTabComponent implements OnInit {
     );
   }
 
-  async navigate(commands) {
-    await this.navService.navigate(commands);
+  async navigate(...command: string[]) {
+    await this.navService.navigate(['/new-tab', ...command]);
     scrollTop();
   }
 }
