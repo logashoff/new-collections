@@ -5,6 +5,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { BehaviorSubject, Observable, map, shareReplay } from 'rxjs';
+import { IsReadOnlyGroupPipe } from '../../pipes/index';
 import { NavService, SettingsService, TabService } from '../../services/index';
 import { BrowserTabs, GroupExpanded, TabGroup, TabGroups, TabsByHostname } from '../../utils/index';
 import { GroupControlsComponent } from '../group-controls/group-controls.component';
@@ -28,6 +29,7 @@ import { RippleComponent } from '../ripple/ripple.component';
     CommonModule,
     DragDropModule,
     GroupControlsComponent,
+    IsReadOnlyGroupPipe,
     ListItemComponent,
     MatDividerModule,
     MatExpansionModule,
@@ -90,7 +92,11 @@ export class GroupsComponent {
 
   readonly isNaN = isNaN;
 
-  constructor(private navService: NavService, private tabService: TabService, private settings: SettingsService) {
+  constructor(
+    private readonly navService: NavService,
+    private readonly tabService: TabService,
+    private readonly settings: SettingsService
+  ) {
     this.panelStates$ = this.settings.panelStates$.pipe(map((states) => states ?? {}));
     this.activeGroupId$ = this.navService.paramsGroupId$;
     this.activeTabId$ = this.navService.paramsTabId$;
@@ -98,13 +104,6 @@ export class GroupsComponent {
 
   favGroup(group: TabGroup) {
     this.tabService.favGroupToggle(group);
-  }
-
-  /**
-   * Checks if tab group exists in timeline
-   */
-  hasTabGroup(group: TabGroup): boolean {
-    return this.tabService.hasTabGroup(group);
   }
 
   /**
