@@ -27,7 +27,7 @@ app-popup {
 
   .content {
     @include vertical-flex;
-    padding: 0 $padding $padding;
+    margin: 0 $padding $padding;
   }
 
   .search-form .controls-wrapper {

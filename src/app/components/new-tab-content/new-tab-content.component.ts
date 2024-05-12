@@ -19,7 +19,6 @@ import { TimelineElementComponent } from '../timeline-element/timeline-element.c
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [CommonModule, EmptyComponent, GroupsComponent, TimelineElementComponent],
-  providers: [HomeService],
 })
 export class NewTabContentComponent {
   readonly defaultActions: CollectionActions = [

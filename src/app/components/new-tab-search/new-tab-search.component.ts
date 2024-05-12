@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { flatMap } from 'lodash-es';
 import { Observable, map, shareReplay } from 'rxjs';
 import { HomeService, NavService, TabService } from '../../services/index';
@@ -9,8 +9,8 @@ import { SearchComponent } from '../search/search.component';
 @Component({
   selector: 'app-new-tab-search',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, SearchComponent],
-  providers: [HomeService],
   templateUrl: './new-tab-search.component.html',
   styleUrl: './new-tab-search.component.scss',
 })

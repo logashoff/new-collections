@@ -16,7 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { BehaviorSubject, Subscription, filter, map, shareReplay } from 'rxjs';
+import { BehaviorSubject, Subject, filter, map, shareReplay, takeUntil } from 'rxjs';
 import { StopPropagationDirective } from '../../directives/index';
 import { CollectionsService, NavService } from '../../services/index';
 import { Action, scrollTop } from '../../utils/index';
@@ -57,9 +57,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     search: this.#searchControl,
   });
 
-  #valueChanges: Subscription;
-  #focusChanges: Subscription;
-  #paramChanges: Subscription;
+  readonly #destroy$ = new Subject();
 
   /**
    * Indicates search input is focused
@@ -78,7 +76,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     return this.#searchControl.value;
   }
 
-  readonly isActive$ = this.navService.url$.pipe(
+  readonly isActive$ = this.navService.pathChanges$.pipe(
     map(() => this.navService.isActive('search')),
     shareReplay(1)
   );
@@ -89,23 +87,25 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.#paramChanges = this.navService.paramsSearch$.subscribe((value) =>
+    this.navService.paramsSearch$.pipe(takeUntil(this.#destroy$)).subscribe((value) =>
       this.#searchControl.setValue(value, {
         emitEvent: false,
       })
     );
 
-    this.#focusChanges = this.focused$
-      .pipe(filter((focused) => focused && !this.isActive))
+    this.focused$
+      .pipe(
+        takeUntil(this.#destroy$),
+        filter((focused) => focused && !this.isActive)
+      )
       .subscribe(() => this.activated.emit());
 
-    this.#valueChanges = this.formGroup.valueChanges.subscribe(({ search }) => this.searchChange(search));
+    this.formGroup.valueChanges.pipe(takeUntil(this.#destroy$)).subscribe(({ search }) => this.searchChange(search));
   }
 
   ngOnDestroy() {
-    this.#valueChanges.unsubscribe();
-    this.#focusChanges.unsubscribe();
-    this.#paramChanges.unsubscribe();
+    this.#destroy$.next(null);
+    this.#destroy$.complete();
   }
 
   /**

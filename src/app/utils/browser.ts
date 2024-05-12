@@ -1,4 +1,5 @@
 import { BrowserTabs, QueryInfo, Tabs } from './models';
+import { createUrl } from './utils';
 
 /**
  * Returns tabs promise based on provided config.
@@ -37,7 +38,7 @@ export async function restoreTabs(tabs: BrowserTabs) {
  */
 export function getFaviconUrl(favIconUrl: string, size = 32) {
   try {
-    const url = new URL(chrome.runtime.getURL('_favicon'));
+    const url = new URL(createUrl('_favicon'));
 
     url.searchParams.append('pageUrl', favIconUrl);
     url.searchParams.append('size', `${size}`);

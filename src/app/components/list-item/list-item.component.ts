@@ -1,24 +1,21 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
-  HostBinding,
   Input,
+  OnInit,
   Output,
   ViewEncapsulation,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { EXPANSION_PANEL_ANIMATION_TIMING } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { BehaviorSubject, Observable, combineLatest, map, shareReplay, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, filter, map, shareReplay, switchMap } from 'rxjs';
 import { StopPropagationDirective } from '../../directives/index';
 import { FaviconPipe } from '../../pipes/index';
-import { NavService, TabService } from '../../services/index';
-import { BrowserTab, BrowserTabs, TabDelete, Tabs } from '../../utils/index';
+import { BrowserTab, BrowserTabs, Tabs } from '../../utils/index';
 import { ChipComponent } from '../chip/chip.component';
 import { LabelComponent } from '../label/label.component';
 import { RippleComponent } from '../ripple/ripple.component';
@@ -47,34 +44,29 @@ import { RippleComponent } from '../ripple/ripple.component';
     StopPropagationDirective,
     TranslateModule,
   ],
-  animations: [
-    trigger('fadeAnimation', [
-      state(
-        'void',
-        style({
-          transform: 'translateY(20%)',
-          opacity: 0,
-        })
-      ),
-      transition('void => *', animate(EXPANSION_PANEL_ANIMATION_TIMING)),
-    ]),
-  ],
 })
-export class ListItemComponent {
-  private readonly tab$ = new BehaviorSubject<BrowserTab>(null);
+export class ListItemComponent implements OnInit {
+  readonly #tab$ = new BehaviorSubject<BrowserTab>(null);
 
-  @HostBinding('@fadeAnimation')
   @Input()
   set tab(value: BrowserTab) {
-    this.tab$.next(value);
+    this.#tab$.next(value);
   }
 
   get tab(): BrowserTab {
-    return this.tab$.value;
+    return this.#tab$.value;
   }
 
-  get savedTabs$(): Observable<BrowserTabs> {
-    return this.tabService?.tabs$.pipe(shareReplay(1));
+  readonly #tabs$ = new BehaviorSubject<BrowserTabs>(null);
+
+  @Input() set tabs(value: BrowserTabs) {
+    this.#tabs$.next(value);
+  }
+
+  readonly #openTabs$ = new BehaviorSubject<Tabs>(null);
+
+  @Input() set openTabs(value: Tabs) {
+    this.#openTabs$.next(value);
   }
 
   /**
@@ -85,16 +77,26 @@ export class ListItemComponent {
   /**
    * Disables item menu
    */
-  readonly notReadOnly$: Observable<boolean> = this.tab$.pipe(
-    switchMap((tab) => this.savedTabs$.pipe(map((tabs) => tabs.some((t) => t.id === tab.id)))),
+  readonly notReadOnly$: Observable<boolean> = this.#tab$.pipe(
+    switchMap((tab) =>
+      this.#tabs$.pipe(
+        filter((tabs) => tabs?.length > 0),
+        map((tabs) => tabs.some((t) => t.id === tab.id))
+      )
+    ),
     shareReplay(1)
   );
 
   /**
    * Indicates if list item is part of timeline.
    */
-  readonly inTimeline$: Observable<boolean> = this.tab$.pipe(
-    switchMap((tab) => this.savedTabs$.pipe(map((tabs) => tabs.some((t) => t.id === tab.id)))),
+  readonly inTimeline$: Observable<boolean> = this.#tab$.pipe(
+    switchMap((tab) =>
+      this.#tabs$.pipe(
+        filter((tabs) => tabs?.length > 0),
+        map((tabs) => tabs.some((t) => t.id === tab.id))
+      )
+    ),
     shareReplay(1)
   );
 
@@ -106,7 +108,7 @@ export class ListItemComponent {
   /**
    * Dispatches event when Delete menu item is clicked
    */
-  @Output() readonly deleted = new EventEmitter<TabDelete>();
+  @Output() readonly deleted = new EventEmitter<BrowserTab>();
 
   /**
    * Scroll this list item into view
@@ -114,30 +116,31 @@ export class ListItemComponent {
   @Output() readonly find = new EventEmitter<BrowserTab>();
 
   /**
-   * Target where URL will be opened when list item is clicked
+   * Target window to open URL
    */
-  get target(): string {
-    return this.nav.isPopup ? '_blank' : '_self';
-  }
+  @Input() target: '_blank' | '_self' = '_self';
 
   /**
    * Indicates how many tabs are currently open that match this tab's URL
    */
-  readonly openTabs$: Observable<number>;
+  openTabsCount$: Observable<number>;
 
-  readonly dupTabs$: Observable<number> = this.tab$.pipe(
-    switchMap((tab) => this.savedTabs$.pipe(map((tabs) => tabs.filter((t) => t.url === tab.url)?.length)))
+  readonly dupTabs$: Observable<number> = this.#tab$.pipe(
+    switchMap((tab) =>
+      this.#tabs$.pipe(
+        filter((tabs) => tabs?.length > 0),
+        map((tabs) => tabs.filter((t) => t.url === tab.url)?.length)
+      )
+    ),
+    shareReplay(1)
   );
 
-  readonly activeTab$: Observable<boolean>;
-  readonly pinnedTab$: Observable<boolean>;
-  readonly hasLabels$: Observable<boolean>;
+  activeTab$: Observable<boolean>;
+  pinnedTab$: Observable<boolean>;
+  hasLabels$: Observable<boolean>;
 
-  constructor(
-    private tabService: TabService,
-    private nav: NavService
-  ) {
-    const openTabs$: Observable<Tabs> = combineLatest([this.tab$, this.tabService.tabChanges$]).pipe(
+  ngOnInit() {
+    const openTabs$: Observable<Tabs> = combineLatest([this.#tab$, this.#openTabs$]).pipe(
       map(([tab, tabs]) => tabs?.filter((t) => t.url === tab.url)),
       shareReplay(1)
     );
@@ -152,12 +155,12 @@ export class ListItemComponent {
       shareReplay(1)
     );
 
-    this.openTabs$ = openTabs$.pipe(
+    this.openTabsCount$ = openTabs$.pipe(
       map((tabs) => tabs?.length),
       shareReplay(1)
     );
 
-    this.hasLabels$ = combineLatest([this.activeTab$, this.pinnedTab$, this.openTabs$, this.dupTabs$]).pipe(
+    this.hasLabels$ = combineLatest([this.activeTab$, this.pinnedTab$, this.openTabsCount$, this.dupTabs$]).pipe(
       map(([active, pinned, openTabs, dupTabs]) => active || pinned || openTabs > 0 || dupTabs > 1),
       shareReplay(1)
     );
@@ -167,20 +170,13 @@ export class ListItemComponent {
    * Opens dialog to edit specified tab.
    */
   async editClick() {
-    const updatedTab = await this.tabService.updateTab(this.tab);
-
-    this.modified.emit(updatedTab);
+    this.modified.emit(this.tab);
   }
 
   /**
    * Handles delete menu item click
    */
   async deleteClick() {
-    const messageRef = await this.tabService.removeTab(this.tab);
-
-    this.deleted.emit({
-      deletedTab: this.tab,
-      revertDelete: messageRef,
-    });
+    this.deleted.emit(this.tab);
   }
 }

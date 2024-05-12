@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, EventType, Router, RouterEvent } from '@angular/router';
+import { isNil } from 'lodash-es';
 import { Observable, distinctUntilChanged, filter, map, shareReplay, startWith } from 'rxjs';
-import { RouterExtras } from '../utils/index';
+import { RouterExtras, RouterParams, createUrl } from '../utils/index';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +26,7 @@ export class NavService {
   /**
    * URL changes
    */
-  readonly url$: Observable<string>;
+  readonly pathChanges$: Observable<string>;
 
   /**
    * Checks is current nav state is popup.
@@ -47,23 +48,29 @@ export class NavService {
       })
     );
 
-    this.url$ = url$.pipe(startWith(this.router.url), distinctUntilChanged(), shareReplay(1));
+    this.pathChanges$ = url$.pipe(
+      startWith(this.router.url),
+      filter((url) => !isNil(url)),
+      map((url) => new URL(createUrl(url)).pathname),
+      distinctUntilChanged(),
+      shareReplay(1)
+    );
 
     this.paramsGroupId$ = this.activeRoute.queryParams.pipe(
-      distinctUntilChanged((prev, curr) => prev.groupId === curr.groupId),
       map((params) => params.groupId),
+      distinctUntilChanged(),
       shareReplay(1)
     );
 
     this.paramsTabId$ = this.activeRoute.queryParams.pipe(
-      distinctUntilChanged((prev, curr) => prev.tabId === curr.tabId),
       map((params) => +params.tabId),
+      distinctUntilChanged(),
       shareReplay(1)
     );
 
     this.paramsSearch$ = this.activeRoute.queryParams.pipe(
-      distinctUntilChanged((prev, curr) => prev.query === curr.query),
-      map((params) => params.query as string),
+      map((params) => params?.query as string),
+      distinctUntilChanged(),
       shareReplay(1)
     );
   }
@@ -75,14 +82,19 @@ export class NavService {
     return this.router.url.match(new RegExp(path, 'gi'))?.length > 0;
   }
 
-  reset() {
+  reset(...params: string[]) {
+    if (!params?.length) {
+      params = ['groupId', 'tabId', 'query'];
+    }
+
+    const queryParams: RouterParams = params.reduce((params, param) => {
+      params[param] = undefined;
+      return params;
+    }, {});
+
     return this.navigate([], {
       relativeTo: this.activeRoute,
-      queryParams: {
-        groupId: undefined,
-        tabId: undefined,
-        query: undefined,
-      },
+      queryParams,
       queryParamsHandling: 'merge',
     });
   }

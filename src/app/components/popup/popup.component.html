@@ -2,6 +2,6 @@
   appSticky
   (activated)="navigate('search')"
   (canceled)="navigate('main')" />
-<div class="content">
+<div class="content" [@routeAnimations]="urlChanges$ | async">
   <router-outlet />
 </div>

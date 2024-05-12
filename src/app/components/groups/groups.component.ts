@@ -7,7 +7,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { BehaviorSubject, Observable, map, shareReplay } from 'rxjs';
 import { IsReadOnlyGroupPipe } from '../../pipes/index';
 import { NavService, SettingsService, TabService } from '../../services/index';
-import { BrowserTabs, GroupExpanded, TabGroup, TabGroups, TabsByHostname } from '../../utils/index';
+import {
+  BrowserTab,
+  BrowserTabs,
+  GroupExpanded,
+  TabGroup,
+  TabGroups,
+  TabsByHostname,
+  listItemAnimation,
+} from '../../utils/index';
 import { GroupControlsComponent } from '../group-controls/group-controls.component';
 import { ListItemComponent } from '../list-item/list-item.component';
 import { PanelHeaderComponent } from '../panel-header/panel-header.component';
@@ -25,6 +33,7 @@ import { RippleComponent } from '../ripple/ripple.component';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
+  animations: [listItemAnimation],
   imports: [
     CommonModule,
     DragDropModule,
@@ -92,6 +101,10 @@ export class GroupsComponent {
 
   readonly isNaN = isNaN;
 
+  readonly openTabs$ = this.tabService.openTabChanges$.pipe(shareReplay(1));
+  readonly timelineTabs$ = this.tabService.tabs$.pipe(shareReplay(1));
+  readonly isPopup = this.navService.isPopup;
+
   constructor(
     private readonly navService: NavService,
     private readonly tabService: TabService,
@@ -126,5 +139,13 @@ export class GroupsComponent {
   drop(event: CdkDragDrop<BrowserTabs>, tabs: BrowserTabs) {
     moveItemInArray(tabs, event.previousIndex, event.currentIndex);
     this.tabService.save();
+  }
+
+  async editTab(tab: BrowserTab) {
+    await this.tabService.updateTab(tab);
+  }
+
+  async deleteTab(tab: BrowserTab) {
+    await this.tabService.removeTab(tab);
   }
 }

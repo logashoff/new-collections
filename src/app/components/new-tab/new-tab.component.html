@@ -1,7 +1,5 @@
-@if (topSites$ | async) {
-  <app-top-sites 
-    class="top-sites"
-    [ngClass]="{ hidden: hideTopSites$ | async }"
+@if ((hideTopSites$ | async) === false) {
+  <app-top-sites class="top-sites"
     [topSites]="topSites$ | async" />
 }
 <app-search-form
@@ -11,6 +9,6 @@
   (activated)="navigate('search')"
   (canceled)="navigate('main')"
 />
-<section class="content">
+<section class="content" [@routeAnimations]="urlChanges$ | async">
   <router-outlet />
 </section>

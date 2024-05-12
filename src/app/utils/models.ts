@@ -1,11 +1,10 @@
 import { ThemePalette } from '@angular/material/core';
 import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { SafeUrl } from '@angular/platform-browser';
+import { NavigationExtras, Params } from '@angular/router';
 import { keyBy, remove } from 'lodash-es';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { MessageComponent } from '../components';
-import { NavigationExtras, Params } from '@angular/router';
-
 
 /**
  * Local storage key for saving app settings
@@ -45,11 +44,6 @@ export type GroupExpanded = { [groupId: string]: boolean };
  * Checks if panel group is expanded by URL
  */
 export type ExpandedGroupsByUrl = { [url: string]: GroupExpanded };
-
-export interface TabDelete {
-  deletedTab: BrowserTab;
-  revertDelete: MessageRef;
-}
 
 export interface RouterParams extends Params {
   groupId?: string;
@@ -96,7 +90,7 @@ export type StorageChanges = { [key: string]: chrome.storage.StorageChange };
 /**
  * Tab type.
  */
-export type BrowserTab = Pick<chrome.tabs.Tab, 'id' | 'url' | 'favIconUrl' | 'title'>;
+export type BrowserTab = Pick<Tab, 'id' | 'url' | 'favIconUrl' | 'title'>;
 
 export type BrowserTabs = BrowserTab[];
 

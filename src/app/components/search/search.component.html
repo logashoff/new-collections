@@ -6,10 +6,7 @@
     <mat-card class="search-container">
       <app-tab-list>
         @for (tab of deviceTabs$ | async; track tab) {
-          <app-list-item
-            [tab]="tab"
-            (deleted)="itemDeleted($event)"
-            (modified)="itemModified($event)" />
+          <app-list-item [@listItemAnimation] [tab]="tab" />
         }
       </app-tab-list>
     </mat-card>
@@ -26,9 +23,13 @@
     </app-timeline-label>
     <mat-card class="search-container">
       <app-tab-list>
-        @for (tab of sourceTabs$ | async; track tab) {
+        @for (tab of sourceTabs$ | async; track tab.id) {
           <app-list-item
+            [@listItemAnimation]
             [tab]="tab"
+            [tabs]="timelineTabs$ | async"
+            [openTabs]="openTabs$ | async"
+            [target]="isPopup ? '_blank' : '_self'"
             (deleted)="itemDeleted($event)"
             (modified)="itemModified($event)"
             (find)="findItem.emit($event)" />

@@ -101,3 +101,5 @@ export const scrollTop = (
 ) => {
   document.body.scrollTo(scrollOptions);
 };
+
+export const createUrl = (path: string) => chrome.runtime.getURL(path);

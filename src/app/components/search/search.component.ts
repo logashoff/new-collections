@@ -1,5 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewEncapsulation,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
@@ -7,9 +16,10 @@ import Fuse, { IFuseOptions } from 'fuse.js';
 import {
   BehaviorSubject,
   Observable,
+  Subscription,
   combineLatest,
+  distinctUntilChanged,
   filter,
-  firstValueFrom,
   lastValueFrom,
   map,
   of,
@@ -17,8 +27,8 @@ import {
   switchMap,
   take,
 } from 'rxjs';
-import { NavService } from '../../services/index';
-import { Action, BrowserTab, BrowserTabs, TabDelete } from '../../utils/index';
+import { NavService, TabService } from '../../services/index';
+import { Action, BrowserTab, BrowserTabs, listItemAnimation } from '../../utils/index';
 import { EmptyComponent } from '../empty/empty.component';
 import { ListItemComponent } from '../list-item/list-item.component';
 import { SearchFormComponent } from '../search-form/search-form.component';
@@ -42,7 +52,9 @@ const fuseOptions: IFuseOptions<BrowserTab> = {
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
+  animations: [listItemAnimation],
   imports: [
     CommonModule,
     EmptyComponent,
@@ -55,16 +67,14 @@ const fuseOptions: IFuseOptions<BrowserTab> = {
     TranslateModule,
   ],
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   readonly Action = Action;
 
   readonly #devices$ = new BehaviorSubject<BrowserTabs>([]);
   readonly #source$ = new BehaviorSubject<BrowserTabs>([]);
 
   @Input() set source(value: BrowserTabs) {
-    if (value?.length) {
-      this.#source$.next([...value]);
-    }
+    this.#source$.next(value);
   }
 
   get source(): BrowserTabs {
@@ -94,37 +104,60 @@ export class SearchComponent implements OnInit {
    */
   deviceTabs$: Observable<BrowserTabs>;
 
-  constructor(private navService: NavService) {}
+  readonly #searchResults$ = new BehaviorSubject<BrowserTabs>([]);
+
+  #resultChanges: Subscription;
+
+  readonly openTabs$ = this.tabService.openTabChanges$.pipe(shareReplay(1));
+  readonly timelineTabs$ = this.tabService.tabs$.pipe(shareReplay(1));
+  readonly isPopup = this.navService.isPopup;
+
+  constructor(
+    private readonly navService: NavService,
+    private readonly tabService: TabService
+  ) {}
 
   ngOnInit() {
     const searchValue$ = this.navService.paramsSearch$.pipe(shareReplay(1));
 
-    const source$ = this.#source$.pipe(
+    const fuse = new Fuse<BrowserTab>([], fuseOptions);
+
+    const fuse$: Observable<Fuse<BrowserTab>> = this.#source$.pipe(
       filter((source) => source?.length > 0),
-      take(1),
-      shareReplay(1)
+      map((source) => {
+        fuse.setCollection(source);
+        return fuse;
+      })
     );
 
-    const fuseSource$ = source$.pipe(
-      map((source) => new Fuse(source, fuseOptions)),
-      shareReplay(1)
-    );
+    this.#resultChanges = searchValue$
+      .pipe(
+        filter((searchValue) => searchValue?.length > 0),
+        distinctUntilChanged(),
+        switchMap((searchValue) =>
+          fuse$.pipe(
+            take(1),
+            map((fuse) => fuse.search(searchValue).map(({ item }) => item))
+          )
+        )
+      )
+      .subscribe((results) => this.#searchResults$.next(results));
 
-    this.sourceTabs$ = combineLatest([searchValue$, source$]).pipe(
-      switchMap(([search, source]) => {
-        if (search) {
-          return fuseSource$.pipe(map((fuse) => fuse.search(search)?.map(({ item }) => item)));
+    this.sourceTabs$ = combineLatest([searchValue$, this.#searchResults$, this.#source$]).pipe(
+      map(([searchValue, searchResults, source]) => {
+        if (searchValue?.length) {
+          return searchResults;
         }
 
-        return of(source);
+        return source;
       }),
       shareReplay(1)
     );
 
     const fuseDevices$: Observable<Fuse<BrowserTab>> = this.#devices$.pipe(
-      filter(devices => devices?.length > 0),
+      filter((devices) => devices?.length > 0),
       map((devices) => new Fuse(devices, fuseOptions)),
-      shareReplay(1)
+      take(1)
     );
 
     this.deviceTabs$ = searchValue$.pipe(
@@ -139,17 +172,23 @@ export class SearchComponent implements OnInit {
     );
   }
 
+  ngOnDestroy() {
+    this.#resultChanges.unsubscribe();
+  }
+
   /**
    * Handles tab update
    */
-  async itemModified(updatedTab: BrowserTab) {
-    const tabs = await firstValueFrom(this.sourceTabs$);
+  async itemModified(tab: BrowserTab) {
+    const updatedTab = await this.tabService.updateTab(tab);
 
-    if (updatedTab && !tabs.includes(updatedTab)) {
-      const index = tabs.findIndex((t) => t.id === updatedTab.id);
+    if (updatedTab) {
+      const index = this.getSearchIndex(tab);
 
       if (index > -1) {
-        tabs.splice(index, 1, updatedTab);
+        const results = this.#searchResults$.value;
+        results.splice(index, 1, updatedTab);
+        this.#searchResults$.next(results);
       }
     }
   }
@@ -157,18 +196,26 @@ export class SearchComponent implements OnInit {
   /**
    * Handles tab deletion
    */
-  async itemDeleted({ deletedTab, revertDelete }: TabDelete) {
-    const tabs = await firstValueFrom(this.sourceTabs$);
+  async itemDeleted(tab: BrowserTab) {
+    const messageRef = await this.tabService.removeTab(tab);
 
-    let index = tabs.findIndex((tab) => tab === deletedTab);
-    if (revertDelete && index > -1) {
-      tabs.splice(index, 1);
+    const index = this.getSearchIndex(tab);
 
-      const { dismissedByAction: undo } = await lastValueFrom(revertDelete.afterDismissed());
+    if (index > -1) {
+      const results = this.#searchResults$.value;
+      results.splice(index, 1);
+      this.#searchResults$.next(results);
 
-      if (undo) {
-        tabs.splice(index, 0, deletedTab);
+      const { dismissedByAction } = await lastValueFrom(messageRef.afterDismissed());
+
+      if (dismissedByAction) {
+        results.splice(index, 0, tab);
+        this.#searchResults$.next(results);
       }
     }
+  }
+
+  private getSearchIndex(tab: BrowserTab): number {
+    return this.#searchResults$.value?.findIndex((t) => t === tab);
   }
 }

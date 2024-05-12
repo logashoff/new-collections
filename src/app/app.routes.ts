@@ -1,8 +1,10 @@
 import { Routes } from '@angular/router';
+import { HomeService } from './services/index';
 
 export const appRoutes: Routes = [
   {
     path: 'new-tab',
+    providers: [HomeService],
     loadComponent: () => import('./components/new-tab/new-tab.component').then((m) => m.NewTabComponent),
     loadChildren: () => import('./components/new-tab/new-tab.routes').then((m) => m.newTabRoutes),
   },

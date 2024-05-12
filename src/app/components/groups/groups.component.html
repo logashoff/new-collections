@@ -30,12 +30,19 @@
         <mat-divider />
   
         @if (group.tabs$ | async; as tabs) {
-          <app-tab-list cdkDropList (cdkDropListDropped)="drop($event, tabs)">
-            @for (tab of tabs; track tab) {
+          <app-tab-list cdkDropList 
+            (cdkDropListDropped)="drop($event, tabs)">
+            @for (tab of tabs; track tab.id) {
               <app-list-item
                 cdkDrag
+                [@listItemAnimation]
                 [cdkDragDisabled]="dragDisabled"
                 [tab]="tab"
+                [tabs]="timelineTabs$ | async"
+                [openTabs]="openTabs$ | async"
+                [target]="isPopup ? '_blank' : '_self'"
+                (modified)="editTab(tab)"
+                (deleted)="deleteTab(tab)"
                 [focused]="(activeGroupId$ | async) === group.id && (activeTabId$ | async) === tab.id" />
             }
           </app-tab-list>
