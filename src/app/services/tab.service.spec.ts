@@ -94,15 +94,15 @@ describe('TabService', () => {
 
     const [tab1, tab2, tab3] = tabGroups[0].tabs;
 
-    expect(tab1.id).toBe(48);
+    expect(tab1.id).toBeGreaterThan(0);
     expect(tab1.title).toBe('GitLab - The One DevOps Platform');
     expect(tab1.url).toBe('https://about.gitlab.com/');
 
-    expect(tab2.id).toBe(49);
+    expect(tab2.id).toBeGreaterThan(0);
     expect(tab2.title).toBe('GitHub: Where the world builds software · GitHub');
     expect(tab2.url).toBe('https://github.com/');
 
-    expect(tab3.id).toBe(50);
+    expect(tab3.id).toBeGreaterThan(0);
     expect(tab3.title).toBe('Fedora');
     expect(tab3.url).toBe('https://getfedora.org/');
   });

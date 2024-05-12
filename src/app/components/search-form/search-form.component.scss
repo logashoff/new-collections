@@ -42,9 +42,9 @@ app-search-form {
   z-index: 1;
   top: 0;
 
-  transition: transform $cubic-ease;
-
   &.sticky {
+    transition: transform $cubic-ease;
+
     &:not(.is-active) {
       transform: translate(0, -100%);
 
@@ -60,7 +60,7 @@ app-search-form {
   }
 
   .controls-wrapper {
-    transition: background-color $cubic-ease;
+    transition: background-color 250ms ease;
 
     display: flex;
     border-radius: 5rem;

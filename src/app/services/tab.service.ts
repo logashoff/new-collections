@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { format, isSameDay, isSameWeek, isSameYear, subDays } from 'date-fns';
 import { debounce, flatMap, keyBy, remove, uniqBy } from 'lodash-es';
 import { BehaviorSubject, Observable, firstValueFrom, lastValueFrom } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { validate as uuidValidate, v4 as uuidv4 } from 'uuid';
 import {
   ActionIcon,
@@ -13,6 +12,7 @@ import {
   BrowserTabs,
   Collection,
   Collections,
+  MessageRef,
   StorageChanges,
   TabGroup,
   TabGroups,
@@ -31,7 +31,7 @@ import {
   translate,
 } from '../utils/index';
 
-import { MessageComponent, RenameDialogComponent, TabsSelectorComponent } from '../components';
+import { RenameDialogComponent, TabsSelectorComponent } from '../components';
 import { MessageService } from './message.service';
 import { NavService } from './nav.service';
 
@@ -61,11 +61,13 @@ export class TabService {
     shareReplay(1)
   );
 
+  readonly #updated$ = new BehaviorSubject<boolean>(true);
+
   /**
    * Tab list source from all tab groups.
    */
-  readonly tabs$: Observable<BrowserTabs> = this.tabGroups$.pipe(
-    map((tabGroups) => flatMap(tabGroups, (tabGroup) => tabGroup.tabs)),
+  readonly tabs$: Observable<BrowserTabs> = this.#updated$.pipe(
+    switchMap(() => this.tabGroups$.pipe(map((tabGroups) => flatMap(tabGroups, (tabGroup) => tabGroup.tabs)))),
     shareReplay(1)
   );
 
@@ -77,9 +79,9 @@ export class TabService {
     shareReplay(1)
   );
 
-  private readonly _tabChanges$ = new BehaviorSubject<Tabs>(null);
+  readonly #openTabChanges$ = new BehaviorSubject<Tabs>(null);
 
-  readonly tabChanges$ = this._tabChanges$.asObservable();
+  readonly openTabChanges$ = this.#openTabChanges$.asObservable();
 
   constructor(
     private bottomSheet: MatBottomSheet,
@@ -108,7 +110,7 @@ export class TabService {
 
   readonly #updateTabs = debounce(async () => {
     const tabs = await queryCurrentWindow();
-    this._tabChanges$.next(tabs);
+    this.#openTabChanges$.next(tabs);
   }, 150);
 
   /**
@@ -222,12 +224,13 @@ export class TabService {
    * Generates tab group from browser tab list.
    */
   createTabGroup(tabs: Tabs): TabGroup {
+    const timestamp = new Date().getTime();
     const filteredTabs: BrowserTabs = tabs
       .filter((tab) => !ignoreUrlsRegExp.test(tab.url))
       .map(
-        ({ id, url, title, favIconUrl }): BrowserTab => ({
+        ({ url, title, favIconUrl }, index): BrowserTab => ({
           favIconUrl,
-          id: id ?? Math.round(Math.random() * 100_000),
+          id: (timestamp + index) * Math.random(),
           title,
           url,
         })
@@ -235,7 +238,7 @@ export class TabService {
 
     return new TabGroup({
       id: uuidv4(),
-      timestamp: new Date().getTime(),
+      timestamp,
       tabs: filteredTabs,
     });
   }
@@ -299,8 +302,7 @@ export class TabService {
       this.message.open(this.translate('invalidTabList'));
     } else {
       const tabsByUrl = keyBy(group.tabs, 'url');
-      const tabsById = keyBy(group.tabs, 'id');
-      filteredTabs = filteredTabs.filter(({ id, url }) => !tabsByUrl[url] && !tabsById[id]);
+      filteredTabs = filteredTabs.filter(({ url }) => !tabsByUrl[url]);
 
       if (filteredTabs?.length > 0) {
         const bottomSheetRef = this.openTabsSelector(filteredTabs);
@@ -333,9 +335,9 @@ export class TabService {
   /**
    * Removes tab from specified tab group.
    */
-  async removeTab(removedTab: BrowserTab): Promise<MatSnackBarRef<MessageComponent>> {
+  async removeTab(removedTab: BrowserTab): Promise<MessageRef> {
     return new Promise(async (resolve) => {
-      let messageRef: MatSnackBarRef<MessageComponent>;
+      let messageRef: MessageRef;
 
       const tabGroup = await this.getGroupByTab(removedTab);
 
@@ -345,14 +347,17 @@ export class TabService {
         removeIndex = tabGroup.tabs.findIndex((tab) => tab === removedTab);
 
         if (removeIndex > -1) {
+          this.navService.reset('groupId', 'tabId');
           tabGroup.removeTabAt(removeIndex);
 
           if (tabGroup.tabs.length === 0) {
             messageRef = await this.removeTabGroup(tabGroup);
-          } else if (removeIndex > -1) {
+          } else {
             this.save();
             messageRef = this.message.open(this.translate('itemRemoved'), ActionIcon.Undo);
           }
+
+          this.#updated$.next(true);
         }
       }
 
@@ -364,6 +369,8 @@ export class TabService {
         if (revert) {
           tabGroup.addTabAt(removeIndex, removedTab);
           this.save();
+
+          this.#updated$.next(true);
         }
       }
     });
@@ -380,6 +387,7 @@ export class TabService {
       const group = await this.getGroupByTab(tab);
       updatedTab = group.updateTab(tab, updatedTab);
 
+      this.#updated$.next(true);
       this.save();
 
       return updatedTab;
@@ -398,7 +406,7 @@ export class TabService {
   /**
    * Removed specified tab group from local storage.
    */
-  async removeTabGroup(tabGroup: TabGroup): Promise<MatSnackBarRef<MessageComponent>> {
+  async removeTabGroup(tabGroup: TabGroup): Promise<MessageRef> {
     return new Promise(async (resolve) => {
       const tabGroups = await firstValueFrom(this.tabGroups$);
       const messageRef = this.message.open(this.translate('itemRemoved'), ActionIcon.Undo);
@@ -406,7 +414,7 @@ export class TabService {
 
       this.tabGroupsSource$.next(tabGroups);
 
-      this.navService.reset();
+      this.navService.reset('groupId');
       resolve(messageRef);
 
       this.save();
@@ -424,7 +432,7 @@ export class TabService {
   /**
    * Removed multiple tab groups.
    */
-  async removeTabGroups(tabGroups: TabGroups): Promise<MatSnackBarRef<MessageComponent>> {
+  async removeTabGroups(tabGroups: TabGroups): Promise<MessageRef> {
     return new Promise(async (resolve) => {
       const currentTabGroups = await firstValueFrom(this.tabGroups$);
       const removedGroups = remove(currentTabGroups, (tabGroup) => tabGroups.includes(tabGroup));
@@ -438,7 +446,7 @@ export class TabService {
           ActionIcon.Undo
         );
 
-        this.navService.reset();
+        this.navService.reset('groupId');
         this.tabGroupsSource$.next(currentTabGroups);
 
         resolve(messageRef);

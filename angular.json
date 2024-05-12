@@ -63,7 +63,7 @@
                   "minify": true,
                   "inlineCritical": false
                 },
-                "fonts": false
+                "fonts": true
               },
               "outputHashing": "all",
               "sourceMap": false,

@@ -1,10 +1,7 @@
-@use '@angular/material' as mat;
 @import 'theme';
 
 @include component-theme using($theme) {
   app-search {
-    $border-color: get-palette-color(get-foreground-palette($theme), divider);
-
     color: get-palette-color(get-foreground-palette($theme), secondary-text);
   }
 }

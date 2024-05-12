@@ -7,9 +7,9 @@
     <div class="subtitle-container">
       @if (hasLabels$ | async) {
         <span class="label-container">
-          @if (openTabs$ | async) {
+          @if (openTabsCount$ | async) {
             <app-label color="primary">
-              {{ 'openTabs' | translate: { count: openTabs$ | async } }}
+              {{ 'openTabs' | translate: { count: openTabsCount$ | async } }}
             </app-label>
           }
     

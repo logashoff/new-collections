@@ -24,11 +24,6 @@ app-new-tab {
 
   .top-sites {
     overflow: hidden;
-
-    &.hidden {
-      visibility: hidden;
-      height: 0;
-    }
   }
 
   .content,

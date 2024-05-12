@@ -5,7 +5,7 @@ import { isNil } from 'lodash-es';
 import { Observable, combineLatest, map, shareReplay } from 'rxjs';
 import { StickyDirective } from '../../directives/index';
 import { HomeService, NavService } from '../../services/index';
-import { TopSites, scrollTop } from '../../utils/index';
+import { TopSites, routeAnimations, scrollTop } from '../../utils/index';
 import { SearchFormComponent } from '../search-form/search-form.component';
 import { TopSitesComponent } from '../top-sites/top-sites.component';
 
@@ -21,8 +21,8 @@ import { TopSitesComponent } from '../top-sites/top-sites.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
+  animations: [routeAnimations],
   imports: [RouterOutlet, CommonModule, SearchFormComponent, StickyDirective, TopSitesComponent],
-  providers: [HomeService],
 })
 export class NewTabComponent implements OnInit {
   topSites$: Observable<TopSites>;
@@ -30,7 +30,7 @@ export class NewTabComponent implements OnInit {
   /**
    * Check if search is active
    */
-  readonly isSearchActive$ = this.navService.url$.pipe(
+  readonly isSearchActive$ = this.navService.pathChanges$.pipe(
     map(() => this.navService.isActive('search')),
     shareReplay(1)
   );
@@ -40,6 +40,8 @@ export class NewTabComponent implements OnInit {
    */
   hideTopSites$: Observable<boolean>;
 
+  urlChanges$: Observable<string>;
+
   constructor(
     private readonly homeService: HomeService,
     private readonly navService: NavService
@@ -47,6 +49,7 @@ export class NewTabComponent implements OnInit {
 
   ngOnInit() {
     this.topSites$ = this.homeService.topSites$.pipe(shareReplay(1));
+    this.urlChanges$ = this.navService.pathChanges$.pipe(shareReplay(1));
 
     this.hideTopSites$ = combineLatest([this.topSites$, this.isSearchActive$]).pipe(
       map(([topSites, isSearchActive]) => isNil(topSites) || isSearchActive),
