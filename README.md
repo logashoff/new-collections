@@ -17,10 +17,10 @@ Extension can be used as a popup or New Tab page. New Tab page can optionally di
 - [x] Display synced tabs from other devices on New Tab page
 ## Build
 
-Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run `yarn build` to build the project. The build artifacts will be stored in the `dist/` directory.
 ## Running unit tests
 
-Run `npm run test` or `npm run test:watch` to execute the unit tests.
+Run `yarn test` or `yarn test:watch` to execute the unit tests.
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
