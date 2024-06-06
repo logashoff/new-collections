@@ -2,7 +2,7 @@
 @import 'theme';
 
 
-$typography-config: mat.get-typography-config($dark-theme);
+$typography-config: mat.m2-get-typography-config($dark-theme);
 
 @include component-theme using($theme) {
   app-list-item {
@@ -54,7 +54,7 @@ app-list-item {
     flex-grow: 1;
 
     .title-container {
-      @include mat.typography-level($typography-config, subtitle-1);
+      @include mat.m2-typography-level($typography-config, subtitle-1);
       
       display: flex;
       align-items: center;
@@ -67,7 +67,7 @@ app-list-item {
     }
 
     .label-container {
-      @include mat.typography-level($typography-config, caption);
+      @include mat.m2-typography-level($typography-config, caption);
 
       display: flex;
       overflow: hidden;
@@ -78,7 +78,7 @@ app-list-item {
 
 
     .subtitle-container {
-      @include mat.typography-level($typography-config, caption);
+      @include mat.m2-typography-level($typography-config, caption);
 
       display: flex;
       overflow: hidden;

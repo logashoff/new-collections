@@ -7,10 +7,10 @@
   }
 }
 
-$typography-config: mat.get-typography-config($dark-theme);
+$typography-config: mat.m2-get-typography-config($dark-theme);
 
 :host {
-  @include mat.typography-level($typography-config, subtitle-2);
+  @include mat.m2-typography-level($typography-config, subtitle-2);
 
   display: block;
   margin: 0;

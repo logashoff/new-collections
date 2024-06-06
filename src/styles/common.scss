@@ -14,46 +14,46 @@ $cubic-ease: 225ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @function get-foreground-palette($config-or-theme) {
-  $colors: mat.get-color-config($config-or-theme);
+  $colors: mat.m2-get-color-config($config-or-theme);
   $foreground: map.get($colors, foreground);
 
   @return $foreground;
 }
 
 @function get-background-palette($config-or-theme) {
-  $colors: mat.get-color-config($config-or-theme);
+  $colors: mat.m2-get-color-config($config-or-theme);
   $background: map.get($colors, background);
 
   @return $background;
 }
 
 @function get-accent-palette($config-or-theme) {
-  $colors: mat.get-color-config($config-or-theme);
+  $colors: mat.m2-get-color-config($config-or-theme);
   $accent: map.get($colors, accent);
 
   @return $accent;
 }
 
 @function get-warn-palette($config-or-theme) {
-  $colors: mat.get-color-config($config-or-theme);
+  $colors: mat.m2-get-color-config($config-or-theme);
   $warn: map.get($colors, warn);
 
   @return $warn;
 }
 
 @function get-primary-palette($config-or-theme) {
-  $colors: mat.get-color-config($config-or-theme);
+  $colors: mat.m2-get-color-config($config-or-theme);
   $primary: map.get($colors, primary);
 
   @return $primary;
 }
 
 @function get-palette-color($palette, $hue: default) {
-  @return mat.get-color-from-palette($palette, $hue);
+  @return mat.m2-get-color-from-palette($palette, $hue);
 }
 
 @function get-contrast-color($palette, $hue: default) {
-  @return mat.get-contrast-color-from-palette($palette, $hue);
+  @return mat.m2-get-contrast-color-from-palette($palette, $hue);
 }
 
 @function is-dark-theme($theme) {

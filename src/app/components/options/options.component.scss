@@ -12,7 +12,7 @@
   }
 }
 
-$typography-config: mat.get-typography-config($dark-theme);
+$typography-config: mat.m2-get-typography-config($dark-theme);
 
 html,
 body {
@@ -42,7 +42,7 @@ app-options {
   }
 
   .mat-mdc-form-field-hint {
-    @include mat.typography-level($typography-config, caption);
+    @include mat.m2-typography-level($typography-config, caption);
     margin-bottom: 1rem;
     position: relative;
     display: block;

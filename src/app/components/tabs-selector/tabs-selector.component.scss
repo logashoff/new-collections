@@ -21,7 +21,7 @@
   }
 }
 
-$typography-config: mat.get-typography-config($dark-theme);
+$typography-config: mat.m2-get-typography-config($dark-theme);
 
 app-tabs-selector {
   $max-width: 25rem;
@@ -55,7 +55,7 @@ app-tabs-selector {
       padding: 0.5rem;
 
       .heading {
-        @include mat.typography-level($typography-config, subtitle-1);
+        @include mat.m2-typography-level($typography-config, subtitle-1);
 
         margin-left: 0.5rem;
       }
@@ -97,7 +97,7 @@ app-tabs-selector {
           text-overflow: ellipsis;
 
           .item-title {
-            @include mat.typography-level($typography-config, body-2);
+            @include mat.m2-typography-level($typography-config, body-2);
           }
 
           .item-title,
@@ -107,7 +107,7 @@ app-tabs-selector {
           }
 
           .item-subtitle {
-            @include mat.typography-level($typography-config, caption);
+            @include mat.m2-typography-level($typography-config, caption);
 
             display: flex;
             align-items: center;

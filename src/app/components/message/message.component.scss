@@ -28,7 +28,7 @@
   }
 }
 
-$typography-config: mat.get-typography-config($dark-theme);
+$typography-config: mat.m2-get-typography-config($dark-theme);
 
 app-message {
   @include mat.elevation(8);
@@ -47,7 +47,7 @@ app-message {
   }
 
   .message {
-    @include mat.typography-level($typography-config, subtitle-1);
+    @include mat.m2-typography-level($typography-config, subtitle-1);
 
     display: flex;
     align-items: center;

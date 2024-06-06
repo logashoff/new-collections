@@ -20,7 +20,7 @@
   }
 }
 
-$typography-config: mat.get-typography-config($dark-theme);
+$typography-config: mat.m2-get-typography-config($dark-theme);
 
 app-top-sites {
   display: block;
@@ -50,7 +50,7 @@ app-top-sites {
         }
 
         .site-title {
-          @include mat.typography-level($typography-config, body-1);
+          @include mat.m2-typography-level($typography-config, body-1);
 
           display: block;
           position: relative;

@@ -25,7 +25,7 @@
   }
 }
 
-$typography-config: mat.get-typography-config($dark-theme);
+$typography-config: mat.m2-get-typography-config($dark-theme);
 
 app-panel-header {
   display: block;
@@ -81,7 +81,7 @@ app-panel-header {
     justify-content: center;
 
     .total {
-      @include mat.typography-level($typography-config, caption);
+      @include mat.m2-typography-level($typography-config, caption);
     }
 
     .total,

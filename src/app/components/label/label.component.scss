@@ -1,7 +1,7 @@
 @use '@angular/material' as mat;
 @import 'theme';
 
-$typography-config: mat.get-typography-config($dark-theme);
+$typography-config: mat.m2-get-typography-config($dark-theme);
 
 @include component-theme using($theme) {
   app-label {
