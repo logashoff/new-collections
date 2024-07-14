@@ -30,7 +30,7 @@
             [tabs]="timelineTabs$ | async"
             [openTabs]="openTabs$ | async"
             [target]="isPopup ? '_blank' : '_self'"
-            [useFindButton]="true"
+            [useFind]="true"
             (deleted)="itemDeleted($event)"
             (modified)="itemModified($event)"
             (find)="findItem.emit($event)"

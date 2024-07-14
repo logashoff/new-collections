@@ -53,8 +53,7 @@ export class GroupsComponent {
    * List of tab groups to render.
    */
   readonly groups = input<TabGroups>();
-  readonly groups$ = toObservable(this.groups);
-
+  readonly groups$: Observable<TabGroups>;
   /**
    * Disable list items drag and drop
    */
@@ -70,23 +69,15 @@ export class GroupsComponent {
    */
   readonly activeTabId$: Observable<number>;
 
-  readonly tabsByHostname$: Observable<TabsByHostname> = this.groups$.pipe(
-    map((tabGroups) => (tabGroups?.length > 0 ? this.tabService.createHostnameGroups(tabGroups) : null)),
-    shareReplay(1)
-  );
+  /**
+   * Groups tabs by their hostname to create header icons
+   */
+  readonly tabsByHostname$: Observable<TabsByHostname>;
 
   /**
    * Maps group ID to list of group's tab titles
    */
-  readonly titlesMap$: Observable<{ [groupId: string]: string }> = this.groups$.pipe(
-    map((tabGroups) =>
-      tabGroups.reduce((ret, group) => {
-        ret[group.id] = group.tabs.map((tab) => tab.title);
-        return ret;
-      }, {})
-    ),
-    shareReplay(1)
-  );
+  readonly titlesMap$: Observable<{ [groupId: string]: string }>;
 
   /**
    * Hashmap of expanded panel states by group ID
@@ -104,6 +95,23 @@ export class GroupsComponent {
     private readonly tabService: TabService,
     private readonly settings: SettingsService
   ) {
+    this.groups$ = toObservable(this.groups);
+
+    this.tabsByHostname$ = this.groups$.pipe(
+      map((tabGroups) => (tabGroups?.length > 0 ? this.tabService.createHostnameGroups(tabGroups) : null)),
+      shareReplay(1)
+    );
+
+    this.titlesMap$ = this.groups$.pipe(
+      map((tabGroups) =>
+        tabGroups.reduce((ret, group) => {
+          ret[group.id] = group.tabs.map((tab) => tab.title);
+          return ret;
+        }, {})
+      ),
+      shareReplay(1)
+    );
+
     this.panelStates$ = this.settings.panelStates$.pipe(map((states) => states ?? {}));
     this.activeGroupId$ = this.navService.paramsGroupId$;
     this.activeTabId$ = this.navService.paramsTabId$;

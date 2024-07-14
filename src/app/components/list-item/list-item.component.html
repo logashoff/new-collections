@@ -38,7 +38,7 @@
 
   @if ((inTimeline$ | async) || (notReadOnly$ | async)) {
     <div class="controls">
-      @if ((inTimeline$ | async) && useFindButton()) {
+      @if (inTimeline$ | async) {
         <button appStopPropagation mat-icon-button [matTooltip]="'find' | translate" (click)="find.emit(tab())">
           <mat-icon>manage_search</mat-icon>
         </button>

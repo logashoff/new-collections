@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { combineLatest, filter, map, Observable, shareReplay, switchMap } from 'rxjs';
+import { combineLatest, filter, map, Observable, shareReplay, switchMap, tap, withLatestFrom } from 'rxjs';
 import { StopPropagationDirective } from '../../directives/index';
 import { FaviconPipe } from '../../pipes/index';
 import { BrowserTab, BrowserTabs, Tabs } from '../../utils/index';
@@ -40,13 +40,13 @@ import { RippleComponent } from '../ripple/ripple.component';
 })
 export class ListItemComponent implements OnInit {
   readonly openTabs = input<Tabs>();
-  readonly #openTabs$ = toObservable(this.openTabs);
+  readonly #openTabs$: Observable<Tabs>;
 
   readonly tab = input<BrowserTab>();
-  readonly #tab$ = toObservable(this.tab);
+  readonly #tab$: Observable<BrowserTab>;
 
   readonly tabs = input<BrowserTabs>();
-  readonly #tabs$ = toObservable(this.tabs);
+  readonly #tabs$: Observable<BrowserTabs>;
 
   /**
    * Plays ripple animation when set to true
@@ -56,28 +56,12 @@ export class ListItemComponent implements OnInit {
   /**
    * Disables item menu
    */
-  readonly notReadOnly$: Observable<boolean> = this.#tab$.pipe(
-    switchMap((tab) =>
-      this.#tabs$.pipe(
-        filter((tabs) => tabs?.length > 0),
-        map((tabs) => tabs.some((t) => t.id === tab.id))
-      )
-    ),
-    shareReplay(1)
-  );
+  readonly notReadOnly$: Observable<boolean>;
 
   /**
    * Indicates if list item is part of timeline.
    */
-  readonly inTimeline$: Observable<boolean> = this.#tab$.pipe(
-    switchMap((tab) =>
-      this.#tabs$.pipe(
-        filter((tabs) => tabs?.length > 0),
-        map((tabs) => tabs.some((t) => t.id === tab.id))
-      )
-    ),
-    shareReplay(1)
-  );
+  readonly inTimeline$: Observable<boolean>;
 
   /**
    * Dispatches event when Delete menu item is clicked
@@ -99,26 +83,59 @@ export class ListItemComponent implements OnInit {
    */
   readonly target = input<'_blank' | '_self'>('_self');
 
-  readonly useFindButton = input<boolean>(false);
+  /**
+   * Display button to trigger `find` event emitter
+   */
+  readonly useFind = input<boolean>(false);
 
   /**
    * Indicates how many tabs are currently open that match this tab's URL
    */
   openTabsCount$: Observable<number>;
 
-  readonly dupTabs$: Observable<number> = this.#tab$.pipe(
-    switchMap((tab) =>
-      this.#tabs$.pipe(
-        filter((tabs) => tabs?.length > 0),
-        map((tabs) => tabs.filter((t) => t.url === tab.url)?.length)
-      )
-    ),
-    shareReplay(1)
-  );
+  readonly dupTabs$: Observable<number>;
 
   activeTab$: Observable<boolean>;
   pinnedTab$: Observable<boolean>;
   hasLabels$: Observable<boolean>;
+
+  constructor() {
+    this.#openTabs$ = toObservable(this.openTabs);
+    this.#tab$ = toObservable(this.tab);
+    this.#tabs$ = toObservable(this.tabs);
+
+    this.notReadOnly$ = this.#tab$.pipe(
+      switchMap((tab) =>
+        this.#tabs$.pipe(
+          filter((tabs) => tabs?.length > 0),
+          map((tabs) => tabs.some((t) => t.id === tab.id))
+        )
+      ),
+      shareReplay(1)
+    );
+
+    this.dupTabs$ = this.#tab$.pipe(
+      switchMap((tab) =>
+        this.#tabs$.pipe(
+          filter((tabs) => tabs?.length > 0),
+          map((tabs) => tabs.filter((t) => t.url === tab.url)?.length)
+        )
+      ),
+      shareReplay(1)
+    );
+
+    this.inTimeline$ = toObservable(this.useFind).pipe(
+      filter((useFind) => useFind),
+      withLatestFrom(this.#tab$),
+      switchMap(([_, tab]) =>
+        this.#tabs$.pipe(
+          filter((tabs) => tabs?.length > 0),
+          map((tabs) => tabs.some((t) => t.id === tab.id))
+        )
+      ),
+      shareReplay(1)
+    );
+  }
 
   ngOnInit() {
     const openTabs$: Observable<Tabs> = combineLatest([this.#tab$, this.#openTabs$]).pipe(

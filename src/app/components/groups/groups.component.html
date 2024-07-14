@@ -1,5 +1,5 @@
 <mat-accordion [multi]="true">
-  @for (group of groups(); track group.id) {
+  @for (group of groups$ | async; track group.id) {
     <mat-expansion-panel
       #panel
       [expanded]="
