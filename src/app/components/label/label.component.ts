@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostBinding, Input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, input, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 
 @Component({
@@ -11,17 +11,17 @@ import { ThemePalette } from '@angular/material/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LabelComponent {
-  @Input() color: ThemePalette;
+  readonly color = input<ThemePalette>();
 
   @HostBinding('class.theme-primary') get primaryColor() {
-    return this.color === 'primary';
+    return this.color() === 'primary';
   }
 
   @HostBinding('class.theme-warn') get warnColor() {
-    return this.color === 'warn';
+    return this.color() === 'warn';
   }
 
   @HostBinding('class.theme-accent') get accentColor() {
-    return this.color === 'accent';
+    return this.color() === 'accent';
   }
 }

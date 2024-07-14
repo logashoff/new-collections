@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { lastValueFrom } from 'rxjs';
@@ -23,11 +23,14 @@ import { ImageComponent } from '../image/image.component';
   imports: [FaviconPipe, ImageComponent, MatButtonModule, MatIconModule, StopPropagationDirective],
 })
 export class TopSitesComponent {
-  @Input() topSites: TopSites;
+  readonly topSites = input<TopSites>();
 
   readonly translate = translate();
 
-  constructor(private message: MessageService, private settings: SettingsService) {}
+  constructor(
+    private message: MessageService,
+    private settings: SettingsService
+  ) {}
 
   /**
    * Removes site from the list for top sites by ignoring it from the settings config

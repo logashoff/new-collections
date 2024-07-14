@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, ViewEncapsulation } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
@@ -31,32 +31,32 @@ export class PanelHeaderComponent {
   /**
    * Icons list.
    */
-  @Input() icons: HostnameGroup;
+  readonly icons = input<HostnameGroup>();
 
   /**
    * Total number of items in the list
    */
-  @Input() total: number;
+  readonly total = input<number>();
 
   /**
    * Indicates pinned expansion panel
    */
-  @Input() pinned = false;
+  readonly pinned = input<boolean>(false);
 
   /**
    * Emits event when star button is clicked
    */
-  @Output() readonly starred = new EventEmitter();
+  readonly starred = output();
 
   /**
    * Disables edit buttons
    */
-  @Input() readOnly = false;
+  readonly readOnly = input<boolean>(false);
 
   /**
    * Optional text to display
    */
-  @Input() titleText: string[];
+  readonly titleText = input<string[]>();
 
   favClicked() {
     this.starred.emit();

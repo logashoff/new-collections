@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
@@ -20,7 +20,7 @@ import { Action, CollectionActions } from '../../utils/index';
   imports: [MatButtonModule, MatIconModule, TranslateModule],
 })
 export class EmptyComponent {
-  @Input() actions: CollectionActions;
+  readonly actions = input<CollectionActions>();
 
   constructor(private collectionsService: CollectionsService) {}
 

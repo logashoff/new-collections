@@ -1,10 +1,16 @@
 <mat-accordion [multi]="true">
-  @for (group of groups; track group.id) {
-    <mat-expansion-panel #panel
-      [expanded]="(panelStates$ | async)?.[group.id] || (activeGroupId$ | async) === group.id && !isNaN(activeTabId$ | async) || panel.expanded"
+  @for (group of groups(); track group.id) {
+    <mat-expansion-panel
+      #panel
+      [expanded]="
+        (panelStates$ | async)?.[group.id] ||
+        ((activeGroupId$ | async) === group.id && !isNaN(activeTabId$ | async)) ||
+        panel.expanded
+      "
       (opened)="opened(group.id)"
       (closed)="closed(group.id)"
-      hideToggle>
+      hideToggle
+    >
       <mat-expansion-panel-header>
         @if ((activeGroupId$ | async) === group.id && isNaN(activeTabId$ | async)) {
           <app-ripple [focused]="true" />
@@ -18,7 +24,8 @@
               [titleText]="(titlesMap$ | async)[group.id]"
               [pinned]="group.timestamp < 0"
               [readOnly]="group | isReadOnlyGroup"
-              (starred)="favGroup(group)" />
+              (starred)="favGroup(group)"
+            />
           }
         </div>
         <div class="expanded">
@@ -28,22 +35,22 @@
 
       <ng-template matExpansionPanelContent>
         <mat-divider />
-  
+
         @if (group.tabs$ | async; as tabs) {
-          <app-tab-list cdkDropList 
-            (cdkDropListDropped)="drop($event, tabs)">
+          <app-tab-list cdkDropList (cdkDropListDropped)="drop($event, tabs)">
             @for (tab of tabs; track tab.id) {
               <app-list-item
                 cdkDrag
                 [@listItemAnimation]
-                [cdkDragDisabled]="dragDisabled"
+                [cdkDragDisabled]="dragDisabled()"
                 [tab]="tab"
                 [tabs]="timelineTabs$ | async"
                 [openTabs]="openTabs$ | async"
                 [target]="isPopup ? '_blank' : '_self'"
                 (modified)="editTab(tab)"
                 (deleted)="deleteTab(tab)"
-                [focused]="(activeGroupId$ | async) === group.id && (activeTabId$ | async) === tab.id" />
+                [focused]="(activeGroupId$ | async) === group.id && (activeTabId$ | async) === tab.id"
+              />
             }
           </app-tab-list>
         }

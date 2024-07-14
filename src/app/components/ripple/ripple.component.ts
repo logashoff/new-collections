@@ -2,15 +2,18 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  effect,
   ElementRef,
   HostBinding,
   HostListener,
-  Input,
+  input,
   OnDestroy,
   OnInit,
+  signal,
   ViewEncapsulation,
 } from '@angular/core';
-import { BehaviorSubject, concat, from, map, of, switchMap, timer } from 'rxjs';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { concat, from, map, of, Subscription, switchMap, timer } from 'rxjs';
 import { scrollIntoView } from '../../utils/index';
 
 /**
@@ -27,31 +30,30 @@ import { scrollIntoView } from '../../utils/index';
   standalone: true,
 })
 export class RippleComponent implements OnInit, OnDestroy {
-  private readonly focused$ = new BehaviorSubject<boolean>(false);
+  readonly focused = input<boolean>();
 
-  /**
-   * Triggers animation when true
-   */
-  @Input() set focused(value: boolean) {
-    this.focused$.next(value);
-  }
+  readonly isFocused = signal<boolean>(false);
+  readonly isFocused$ = toObservable(this.isFocused);
 
-  get focused(): boolean {
-    return this.focused$.value;
-  }
+  #focusSub: Subscription;
 
   @HostBinding('class.focused')
   private _focused = false;
 
   @HostListener('mousedown')
   mousedown() {
-    this.focused = false;
+    this.isFocused.set(false);
   }
 
-  constructor(private el: ElementRef, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private el: ElementRef,
+    private cdr: ChangeDetectorRef
+  ) {
+    effect(() => this.isFocused.set(this.focused()), { allowSignalWrites: true });
+  }
 
   ngOnInit() {
-    this.focused$
+    this.#focusSub = this.isFocused$
       .pipe(
         switchMap((focused) =>
           focused
@@ -69,6 +71,6 @@ export class RippleComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.focused$.complete();
+    this.#focusSub.unsubscribe();
   }
 }

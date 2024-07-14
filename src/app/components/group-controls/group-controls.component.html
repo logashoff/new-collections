@@ -1,26 +1,18 @@
 <div class="container">
   <div class="timestamp">
-    {{ abs(group.timestamp) | date: 'longDate' }}
+    {{ abs(group().timestamp) | date: 'longDate' }}
   </div>
   <div class="controls" appStopPropagation>
     @if (!readOnly) {
-      <button 
-        mat-icon-button 
-        (click)="removeTabs()" 
-        [matTooltip]="'delete' | translate">
+      <button mat-icon-button (click)="removeTabs()" [matTooltip]="'delete' | translate">
         <mat-icon>delete</mat-icon>
       </button>
     }
-    <button mat-icon-button 
-      (click)="restoreTabs()" 
-      [matTooltip]="'restore' | translate">
+    <button mat-icon-button (click)="restoreTabs()" [matTooltip]="'restore' | translate">
       <mat-icon>restore</mat-icon>
     </button>
-    
-    <button
-      mat-icon-button
-      (click)="addTabs()"
-      [matTooltip]="(readOnly ? 'save' : 'addTabs') | translate">
+
+    <button mat-icon-button (click)="addTabs()" [matTooltip]="(readOnly ? 'save' : 'addTabs') | translate">
       <mat-icon>add</mat-icon>
     </button>
   </div>

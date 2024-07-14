@@ -2,11 +2,10 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
   HostBinding,
   OnDestroy,
   OnInit,
-  Output,
+  output,
   ViewEncapsulation,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -16,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { BehaviorSubject, Subject, filter, map, shareReplay, takeUntil } from 'rxjs';
+import { BehaviorSubject, filter, map, shareReplay, Subject, takeUntil } from 'rxjs';
 import { StopPropagationDirective } from '../../directives/index';
 import { CollectionsService, NavService } from '../../services/index';
 import { Action, scrollTop } from '../../utils/index';
@@ -48,8 +47,8 @@ interface SearchForm {
   ],
 })
 export class SearchFormComponent implements OnInit, OnDestroy {
-  @Output() readonly activated = new EventEmitter();
-  @Output() readonly canceled = new EventEmitter();
+  readonly activated = output();
+  readonly canceled = output();
 
   readonly Action = Action;
   readonly #searchControl = new FormControl<string>('');

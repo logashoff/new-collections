@@ -1,25 +1,27 @@
-<div class="header-container" [ngClass]="{ disabled: readOnly }">
-  <app-icons-container [icons]="icons"></app-icons-container>
-  @if (titleText?.length > 0) {
+<div class="header-container" [ngClass]="{ disabled: readOnly() }">
+  <app-icons-container [icons]="icons()"></app-icons-container>
+  @if (titleText()?.length > 0) {
     <div class="title">
-      @for (text of titleText; track text) {
+      @for (text of titleText(); track text) {
         <span class="text">{{ text }}</span>
       }
     </div>
   }
-  @if (total > 0) {
+  @if (total() > 0) {
     <div class="description">
-      <div appStopPropagation
-        class="fav" 
-        matTooltip="{{ (pinned ? 'unpin' : 'pin') | translate }}"
-        (click)="favClicked()">
-        @if (pinned) {
+      <div
+        appStopPropagation
+        class="fav"
+        matTooltip="{{ (pinned() ? 'unpin' : 'pin') | translate }}"
+        (click)="favClicked()"
+      >
+        @if (pinned()) {
           <mat-icon>star</mat-icon>
         } @else {
           <mat-icon>grade</mat-icon>
         }
       </div>
-      <div class="total">{{ total }}</div>
+      <div class="total">{{ total() }}</div>
     </div>
   }
 </div>

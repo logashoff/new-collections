@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { CollectionsService, TabService } from '../../services/index';
 import { StopPropagationDirective } from '../../directives';
-import { TabGroup, Tabs, queryCurrentWindow, restoreTabs } from '../../utils/index';
+import { CollectionsService, TabService } from '../../services/index';
+import { queryCurrentWindow, restoreTabs, TabGroup, Tabs } from '../../utils/index';
 
 /**
  * @description
@@ -23,9 +23,8 @@ import { TabGroup, Tabs, queryCurrentWindow, restoreTabs } from '../../utils/ind
   imports: [CommonModule, MatButtonModule, MatIconModule, MatTooltipModule, StopPropagationDirective, TranslateModule],
 })
 export class GroupControlsComponent {
-  @Input() group: TabGroup;
-
-  @Input() readOnly = false;
+  readonly group = input<TabGroup>();
+  readonly readOnly = input<boolean>(false);
 
   readonly abs = Math.abs;
 
@@ -38,14 +37,14 @@ export class GroupControlsComponent {
    * Removes `group` from tab group list and storage.
    */
   removeTabs() {
-    this.tabService.removeTabGroup(this.group);
+    this.tabService.removeTabGroup(this.group());
   }
 
   /**
    * Opens all tabs from `group` object.
    */
   restoreTabs() {
-    restoreTabs(this.group.tabs);
+    restoreTabs(this.group().tabs);
   }
 
   /**
@@ -55,9 +54,9 @@ export class GroupControlsComponent {
     const tabs: Tabs = await queryCurrentWindow();
 
     if (this.readOnly) {
-      this.collection.selectTabs(this.group.tabs as Tabs);
+      this.collection.selectTabs(this.group().tabs as Tabs);
     } else {
-      this.tabService.addTabs(this.group, tabs);
+      this.tabService.addTabs(this.group(), tabs);
     }
   }
 }

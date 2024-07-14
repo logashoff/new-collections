@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, Input, ViewEncapsulation } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { HostnameGroup } from '../../utils/index';
 
@@ -15,7 +15,7 @@ import { ChipComponent } from '../chip/chip.component';
   imports: [ChipComponent, FaviconPipe, MatBadgeModule],
 })
 export class IconsContainerComponent {
-  @Input() icons: HostnameGroup;
+  readonly icons = input<HostnameGroup>();
 
   /**
    * Max number of icons should be displayed in panel header.

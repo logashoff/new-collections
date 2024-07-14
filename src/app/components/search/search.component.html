@@ -1,5 +1,5 @@
 @if ((sourceTabs$ | async)?.length > 0 || (deviceTabs$ | async)?.length > 0) {
-  @if((deviceTabs$ | async)?.length > 0) {
+  @if ((deviceTabs$ | async)?.length > 0) {
     <app-timeline-label>
       {{ 'fromDevices' | translate }}
     </app-timeline-label>
@@ -12,7 +12,7 @@
     </mat-card>
   }
 
-  @if((sourceTabs$ | async)?.length > 0) {
+  @if ((sourceTabs$ | async)?.length > 0) {
     <app-timeline-label [ngPlural]="(sourceTabs$ | async).length">
       <ng-template ngPluralCase="one">
         {{ 'oneResult' | translate }}
@@ -30,9 +30,11 @@
             [tabs]="timelineTabs$ | async"
             [openTabs]="openTabs$ | async"
             [target]="isPopup ? '_blank' : '_self'"
+            [useFindButton]="true"
             (deleted)="itemDeleted($event)"
             (modified)="itemModified($event)"
-            (find)="findItem.emit($event)" />
+            (find)="findItem.emit($event)"
+          />
         }
       </app-tab-list>
     </mat-card>

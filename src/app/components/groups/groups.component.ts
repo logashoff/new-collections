@@ -1,10 +1,11 @@
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, input } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
-import { BehaviorSubject, Observable, map, shareReplay } from 'rxjs';
+import { Observable, map, shareReplay } from 'rxjs';
 import { IsReadOnlyGroupPipe } from '../../pipes/index';
 import { NavService, SettingsService, TabService } from '../../services/index';
 import {
@@ -49,6 +50,17 @@ import { RippleComponent } from '../ripple/ripple.component';
 })
 export class GroupsComponent {
   /**
+   * List of tab groups to render.
+   */
+  readonly groups = input<TabGroups>();
+  readonly groups$ = toObservable(this.groups);
+
+  /**
+   * Disable list items drag and drop
+   */
+  readonly dragDisabled = input<boolean>(true);
+
+  /**
    * Expand and collapse panels based on query params groupId
    */
   readonly activeGroupId$: Observable<string>;
@@ -57,8 +69,6 @@ export class GroupsComponent {
    * Active tab ID from query params
    */
   readonly activeTabId$: Observable<number>;
-
-  private readonly groups$ = new BehaviorSubject<TabGroups>(null);
 
   readonly tabsByHostname$: Observable<TabsByHostname> = this.groups$.pipe(
     map((tabGroups) => (tabGroups?.length > 0 ? this.tabService.createHostnameGroups(tabGroups) : null)),
@@ -77,22 +87,6 @@ export class GroupsComponent {
     ),
     shareReplay(1)
   );
-
-  /**
-   * List of tab groups to render.
-   */
-  @Input() set groups(value: TabGroups) {
-    this.groups$.next(value);
-  }
-
-  get groups(): TabGroups {
-    return this.groups$.value;
-  }
-
-  /**
-   * Disable list items drag and drop
-   */
-  @Input() dragDisabled = true;
 
   /**
    * Hashmap of expanded panel states by group ID

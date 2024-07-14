@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, HostBinding, input, signal } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { IconSize, ImageSource, getFaviconUrl } from '../../utils/index';
+import { getFaviconUrl, IconSize, ImageSource } from '../../utils/index';
 
 /**
  * @description
@@ -20,30 +20,37 @@ export class ImageComponent {
   /**
    * Image source path.
    */
-  @Input() source: ImageSource;
+  readonly source = input<ImageSource>();
 
   /**
    * Icon size.
    */
-  @Input() size: IconSize = 'medium';
+  readonly size = input<IconSize>('medium');
+
+  readonly imageSrc = signal<ImageSource>('');
 
   @HostBinding('class.medium') get medium(): boolean {
-    return this.size === 'medium';
+    return this.size() === 'medium';
   }
 
   @HostBinding('class.small') get small(): boolean {
-    return this.size === 'small';
+    return this.size() === 'small';
   }
 
-  constructor(private sanitizer: DomSanitizer) {}
+  constructor(private sanitizer: DomSanitizer) {
+    effect(() => this.imageSrc.set(this.source()), { allowSignalWrites: true });
+  }
 
   /**
    * Handles image loading error
    */
   onError() {
-    if (typeof this.source === 'string') {
+    if (typeof this.source() === 'string') {
+      const source = this.source() as string;
       try {
-        this.source = this.sanitizer.bypassSecurityTrustUrl(getFaviconUrl(this.source));
+        const favicon = getFaviconUrl(source);
+        const newSrc = this.sanitizer.bypassSecurityTrustUrl(favicon);
+        this.imageSrc.set(newSrc);
       } catch (e) {}
     }
   }

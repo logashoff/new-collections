@@ -5,6 +5,7 @@
   "scripts": {
     "ng": "ng",
     "build": "ng build --configuration production --output-hashing none",
+    "build:dev": "ng build --configuration development",
     "postbuild": "esbuild ./src/background.ts --legal-comments=none --bundle --minify --outfile=./dist/new-collections/background.js",
     "test": "jest",
     "test:watch": "jest --watch",

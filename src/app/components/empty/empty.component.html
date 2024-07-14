@@ -1,9 +1,7 @@
 @if (actions?.length) {
   <section class="actions">
-    @for (action of actions; track action) {
-      <button mat-fab extended
-        [color]="action.color" 
-        (click)="handleAction(action.action)">
+    @for (action of actions(); track action) {
+      <button mat-fab extended [color]="action.color" (click)="handleAction(action.action)">
         @if (action.icon) {
           <mat-icon>{{ action.icon }}</mat-icon>
         }

@@ -1,29 +1,21 @@
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, OnDestroy, OnInit, output, ViewEncapsulation } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import Fuse, { IFuseOptions } from 'fuse.js';
 import {
   BehaviorSubject,
-  Observable,
-  Subscription,
   combineLatest,
   distinctUntilChanged,
   filter,
   lastValueFrom,
   map,
+  Observable,
   of,
   shareReplay,
+  Subscription,
   switchMap,
   take,
 } from 'rxjs';
@@ -70,29 +62,16 @@ const fuseOptions: IFuseOptions<BrowserTab> = {
 export class SearchComponent implements OnInit, OnDestroy {
   readonly Action = Action;
 
-  readonly #devices$ = new BehaviorSubject<BrowserTabs>([]);
-  readonly #source$ = new BehaviorSubject<BrowserTabs>([]);
+  readonly source = input<BrowserTabs>();
+  readonly #source$ = toObservable(this.source);
 
-  @Input() set source(value: BrowserTabs) {
-    this.#source$.next(value);
-  }
-
-  get source(): BrowserTabs {
-    return this.#source$.value;
-  }
-
-  @Input() set devices(value: BrowserTabs) {
-    this.#devices$.next(value);
-  }
-
-  get devices(): BrowserTabs {
-    return this.#devices$.value;
-  }
+  readonly devices = input<BrowserTabs>();
+  readonly #devices$ = toObservable(this.devices);
 
   /**
    * Scroll list item into view
    */
-  @Output() readonly findItem = new EventEmitter<BrowserTab>();
+  readonly findItem = output<BrowserTab>();
 
   /**
    * Tabs data from search results

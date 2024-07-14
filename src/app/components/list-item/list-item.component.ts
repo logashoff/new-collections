@@ -1,18 +1,11 @@
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, OnInit, output, ViewEncapsulation } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { BehaviorSubject, Observable, combineLatest, filter, map, shareReplay, switchMap } from 'rxjs';
+import { combineLatest, filter, map, Observable, shareReplay, switchMap } from 'rxjs';
 import { StopPropagationDirective } from '../../directives/index';
 import { FaviconPipe } from '../../pipes/index';
 import { BrowserTab, BrowserTabs, Tabs } from '../../utils/index';
@@ -46,33 +39,19 @@ import { RippleComponent } from '../ripple/ripple.component';
   ],
 })
 export class ListItemComponent implements OnInit {
-  readonly #tab$ = new BehaviorSubject<BrowserTab>(null);
+  readonly openTabs = input<Tabs>();
+  readonly #openTabs$ = toObservable(this.openTabs);
 
-  @Input()
-  set tab(value: BrowserTab) {
-    this.#tab$.next(value);
-  }
+  readonly tab = input<BrowserTab>();
+  readonly #tab$ = toObservable(this.tab);
 
-  get tab(): BrowserTab {
-    return this.#tab$.value;
-  }
-
-  readonly #tabs$ = new BehaviorSubject<BrowserTabs>(null);
-
-  @Input() set tabs(value: BrowserTabs) {
-    this.#tabs$.next(value);
-  }
-
-  readonly #openTabs$ = new BehaviorSubject<Tabs>(null);
-
-  @Input() set openTabs(value: Tabs) {
-    this.#openTabs$.next(value);
-  }
+  readonly tabs = input<BrowserTabs>();
+  readonly #tabs$ = toObservable(this.tabs);
 
   /**
    * Plays ripple animation when set to true
    */
-  @Input() focused = false;
+  readonly focused = input<boolean>(false);
 
   /**
    * Disables item menu
@@ -103,22 +82,24 @@ export class ListItemComponent implements OnInit {
   /**
    * Dispatches event when Delete menu item is clicked
    */
-  @Output() readonly modified = new EventEmitter<BrowserTab>();
+  readonly modified = output<BrowserTab>();
 
   /**
    * Dispatches event when Delete menu item is clicked
    */
-  @Output() readonly deleted = new EventEmitter<BrowserTab>();
+  readonly deleted = output<BrowserTab>();
 
   /**
    * Scroll this list item into view
    */
-  @Output() readonly find = new EventEmitter<BrowserTab>();
+  readonly find = output<BrowserTab>();
 
   /**
    * Target window to open URL
    */
-  @Input() target: '_blank' | '_self' = '_self';
+  readonly target = input<'_blank' | '_self'>('_self');
+
+  readonly useFindButton = input<boolean>(false);
 
   /**
    * Indicates how many tabs are currently open that match this tab's URL
@@ -170,13 +151,13 @@ export class ListItemComponent implements OnInit {
    * Opens dialog to edit specified tab.
    */
   async editClick() {
-    this.modified.emit(this.tab);
+    this.modified.emit(this.tab());
   }
 
   /**
    * Handles delete menu item click
    */
   async deleteClick() {
-    this.deleted.emit(this.tab);
+    this.deleted.emit(this.tab());
   }
 }

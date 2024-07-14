@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -23,17 +23,17 @@ export class TimelineElementComponent {
   /**
    * Header label
    */
-  @Input() timelineLabel: string;
+  readonly timelineLabel = input<string>();
 
   /**
    * Display controls
    */
-  @Input() controls = true;
+  readonly controls = input<boolean>(true);
 
   /**
    * Emits event when remove button clicked
    */
-  @Output() readonly removed = new EventEmitter();
+  readonly removed = output();
 
   /**
    * Handles remove button

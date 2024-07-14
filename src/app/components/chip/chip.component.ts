@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, Input, ViewEncapsulation } from '@angular/core';
 import { IconSize, ImageSource } from '../../utils/index';
 import { ImageComponent } from '../image/image.component';
 
@@ -20,20 +20,20 @@ export class ChipComponent {
   /**
    * Image source URL
    */
-  @Input() source: ImageSource;
+  readonly source = input<ImageSource>();
 
   /**
    * Image size
    */
-  @Input() size: IconSize = 'medium';
+  readonly size = input<IconSize>('medium');
 
   /**
    * Text to display next to icon
    */
-  @Input() label: string;
+  readonly label = input<string>();
 
   /**
    * Hide label
    */
-  @Input() labelHidden = true;
+  readonly labelHidden = input<boolean>(true);
 }
