@@ -272,3 +272,7 @@ export interface TimelineElement {
  * Group tab groups by time label in hashmap.
  */
 export type Timeline = TimelineElement[];
+
+export const ESC_KEY_CODE = 'Escape';
+
+export const KEY_UP = 'keyup';

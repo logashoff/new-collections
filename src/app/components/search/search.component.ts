@@ -62,7 +62,7 @@ const fuseOptions: IFuseOptions<BrowserTab> = {
 export class SearchComponent implements OnInit, OnDestroy {
   readonly Action = Action;
 
-  readonly source = input<BrowserTabs>();
+  readonly source = input.required<BrowserTabs>();
   readonly #source$ = toObservable(this.source);
 
   readonly devices = input<BrowserTabs>();

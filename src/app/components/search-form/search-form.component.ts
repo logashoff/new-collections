@@ -2,10 +2,12 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   HostBinding,
   OnDestroy,
   OnInit,
   output,
+  viewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -15,10 +17,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { BehaviorSubject, filter, map, shareReplay, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, filter, fromEvent, map, shareReplay, Subject, takeUntil } from 'rxjs';
 import { StopPropagationDirective } from '../../directives/index';
 import { CollectionsService, NavService } from '../../services/index';
-import { Action, scrollTop } from '../../utils/index';
+import { Action, ESC_KEY_CODE, KEY_UP, scrollTop } from '../../utils/index';
 
 /**
  * Search input form.
@@ -50,6 +52,8 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   readonly activated = output();
   readonly canceled = output();
 
+  private readonly searchInput = viewChild.required<ElementRef>('searchInput');
+
   readonly Action = Action;
   readonly #searchControl = new FormControl<string>('');
   readonly formGroup = new FormGroup<SearchForm>({
@@ -76,7 +80,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   }
 
   readonly isActive$ = this.navService.pathChanges$.pipe(
-    map(() => this.navService.isActive('search')),
+    map(() => this.isActive),
     shareReplay(1)
   );
 
@@ -91,6 +95,14 @@ export class SearchFormComponent implements OnInit, OnDestroy {
         emitEvent: false,
       })
     );
+
+    const keyEvent$ = fromEvent<KeyboardEvent>(document, KEY_UP);
+
+    keyEvent$.pipe(takeUntil(this.#destroy$)).subscribe((e) => {
+      if (e.code === ESC_KEY_CODE && this.isActive) {
+        this.clearSearch();
+      }
+    });
 
     this.focused$
       .pipe(
@@ -111,7 +123,10 @@ export class SearchFormComponent implements OnInit, OnDestroy {
    * Clears search input
    */
   clearSearch() {
-    this.canceled.emit();
+    if (this.isActive) {
+      this.canceled.emit();
+      this.searchInput().nativeElement.blur();
+    }
   }
 
   handleAction(action: Action) {
