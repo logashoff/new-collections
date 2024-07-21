@@ -1,4 +1,4 @@
-<a class="container" matRipple href="{{ tab().url }}" [target]="target">
+<a class="container" matRipple href="{{ tab().url }}" [target]="target()">
   <app-chip [source]="tab().favIconUrl | favicon: tab().url" />
   <div class="text-container">
     <div class="title-container">
