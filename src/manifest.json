@@ -1,7 +1,7 @@
 {
   "name": "New Collections",
   "description": "Save and restore tabs",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "minimum_chrome_version": "104",
   "manifest_version": 3,
   "offline_enabled": true,
@@ -23,5 +23,11 @@
   "options_ui": {
     "page": "index.html#/options"
   },
-  "permissions": ["sessions", "topSites", "storage", "tabs", "favicon"]
+  "permissions": [
+    "sessions",
+    "topSites",
+    "storage",
+    "tabs",
+    "favicon"
+  ]
 }

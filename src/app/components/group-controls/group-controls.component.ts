@@ -53,7 +53,7 @@ export class GroupControlsComponent {
   async addTabs() {
     const tabs: Tabs = await queryCurrentWindow();
 
-    if (this.readOnly) {
+    if (this.readOnly()) {
       this.collection.selectTabs(this.group().tabs as Tabs);
     } else {
       this.tabService.addTabs(this.group(), tabs);

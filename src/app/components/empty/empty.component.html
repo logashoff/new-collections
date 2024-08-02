@@ -1,4 +1,4 @@
-@if (actions?.length) {
+@if (actions()?.length) {
   <section class="actions">
     @for (action of actions(); track action) {
       <button mat-fab extended [color]="action.color" (click)="handleAction(action.action)">
