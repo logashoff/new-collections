@@ -1,11 +1,15 @@
 {
-  "extends": ["stylelint-config-sass-guidelines"],
+  "extends": [
+    "stylelint-config-sass-guidelines"
+  ],
   "rules": {
-    "property-no-vendor-prefix": null,
-    "length-zero-no-unit": null,
+    "@stylistic/function-parentheses-space-inside": null,
     "color-hex-length": null,
-    "selector-class-pattern": null,
+    "length-zero-no-unit": null,
     "max-nesting-depth": null,
+    "property-no-vendor-prefix": null,
+    "selector-class-pattern": null,
+    "selector-max-compound-selectors": null,
     "selector-no-qualifying-type": null
   }
 }

@@ -8,23 +8,23 @@ $typography-config: mat.m2-get-typography-config($dark-theme);
     background-color: get-palette-color(get-background-palette($theme), disabled-list-option);
     color: get-palette-color(get-foreground-palette($theme), text);
 
-    $primaryPalette: get-primary-palette($theme);
-    $accentPalette: get-accent-palette($theme);
-    $warnPalette: get-warn-palette($theme);
+    $primary-palette: get-primary-palette($theme);
+    $accent-palette: get-accent-palette($theme);
+    $warn-palette: get-warn-palette($theme);
 
     &.theme-primary {
-      background-color: get-palette-color($primaryPalette);
-      color: get-contrast-color($primaryPalette, 500);
+      background-color: get-palette-color($primary-palette);
+      color: get-contrast-color($primary-palette, 500);
     }
 
     &.theme-warn {
-      background-color: get-palette-color($warnPalette);
-      color: get-contrast-color($warnPalette, 500);
+      background-color: get-palette-color($warn-palette);
+      color: get-contrast-color($warn-palette, 500);
     }
 
     &.theme-accent {
-      background-color: get-palette-color($accentPalette);
-      color: get-contrast-color($accentPalette, 500);
+      background-color: get-palette-color($accent-palette);
+      color: get-contrast-color($accent-palette, 500);
     }
   }
 }

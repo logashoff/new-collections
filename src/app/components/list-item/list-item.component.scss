@@ -1,12 +1,15 @@
 @use '@angular/material' as mat;
 @import 'theme';
 
-
 $typography-config: mat.m2-get-typography-config($dark-theme);
 
 @include component-theme using($theme) {
   app-list-item {
-    .container, a:link, a:visited, a:hover, a:active {
+    .container,
+    a:link,
+    a:visited,
+    a:hover,
+    a:active {
       color: get-palette-color(get-foreground-palette($theme), text);
     }
 
@@ -55,7 +58,7 @@ app-list-item {
 
     .title-container {
       @include mat.m2-typography-level($typography-config, subtitle-1);
-      
+
       display: flex;
       align-items: center;
       overflow: hidden;
@@ -75,7 +78,6 @@ app-list-item {
       gap: 0.25rem;
       flex: 0 0 auto;
     }
-
 
     .subtitle-container {
       @include mat.m2-typography-level($typography-config, caption);
