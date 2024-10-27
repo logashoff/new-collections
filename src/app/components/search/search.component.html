@@ -1,29 +1,32 @@
-@if ((sourceTabs$ | async)?.length > 0 || (deviceTabs$ | async)?.length > 0) {
-  @if ((deviceTabs$ | async)?.length > 0) {
+@let sourceTabs = sourceTabs$ | async;
+@let deviceTabs = deviceTabs$ | async;
+
+@if (sourceTabs?.length > 0 || deviceTabs?.length > 0) {
+  @if (deviceTabs?.length > 0) {
     <app-timeline-label>
       {{ 'fromDevices' | translate }}
     </app-timeline-label>
     <mat-card class="search-container">
       <app-tab-list>
-        @for (tab of deviceTabs$ | async; track tab) {
+        @for (tab of deviceTabs; track tab) {
           <app-list-item [@listItemAnimation] [tab]="tab" />
         }
       </app-tab-list>
     </mat-card>
   }
 
-  @if ((sourceTabs$ | async)?.length > 0) {
-    <app-timeline-label [ngPlural]="(sourceTabs$ | async).length">
+  @if (sourceTabs?.length > 0) {
+    <app-timeline-label [ngPlural]="sourceTabs.length">
       <ng-template ngPluralCase="one">
         {{ 'oneResult' | translate }}
       </ng-template>
       <ng-template ngPluralCase="other">
-        {{ 'resultCount' | translate: { count: (sourceTabs$ | async).length } }}
+        {{ 'resultCount' | translate: { count: sourceTabs.length } }}
       </ng-template>
     </app-timeline-label>
     <mat-card class="search-container">
       <app-tab-list>
-        @for (tab of sourceTabs$ | async; track tab.id) {
+        @for (tab of sourceTabs; track tab.id) {
           <app-list-item
             [@listItemAnimation]
             [tab]="tab"
