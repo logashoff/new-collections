@@ -1,18 +1,18 @@
 <mat-accordion [multi]="true">
   @for (group of groups$ | async; track group.id) {
+    @let activeGroupId = activeGroupId$ | async;
+    @let activeTabId = activeTabId$ | async;
+    @let hasTabId = !isNaN(activeTabId);
+
     <mat-expansion-panel
       #panel
-      [expanded]="
-        (panelStates$ | async)?.[group.id] ||
-        ((activeGroupId$ | async) === group.id && !isNaN(activeTabId$ | async)) ||
-        panel.expanded
-      "
+      [expanded]="(panelStates$ | async)?.[group.id] || (activeGroupId === group.id && hasTabId) || panel.expanded"
       (opened)="opened(group.id)"
       (closed)="closed(group.id)"
       hideToggle
     >
       <mat-expansion-panel-header>
-        @if ((activeGroupId$ | async) === group.id && isNaN(activeTabId$ | async)) {
+        @if (activeGroupId === group.id && !hasTabId) {
           <app-ripple [focused]="true" />
         }
 
@@ -49,7 +49,7 @@
                 [target]="isPopup ? '_blank' : '_self'"
                 (modified)="editTab(tab)"
                 (deleted)="deleteTab(tab)"
-                [focused]="(activeGroupId$ | async) === group.id && (activeTabId$ | async) === tab.id"
+                [focused]="activeGroupId === group.id && activeTabId === tab.id"
               />
             }
           </app-tab-list>

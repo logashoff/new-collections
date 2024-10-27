@@ -7,15 +7,18 @@
     <div class="subtitle-container">
       @if (hasLabels$ | async) {
         <span class="label-container">
-          @if (openTabsCount$ | async) {
+          @let openTabsCount = openTabsCount$ | async;
+          @let dupTabs = dupTabs$ | async;
+
+          @if (openTabsCount) {
             <app-label color="primary">
-              {{ 'openTabs' | translate: { count: openTabsCount$ | async } }}
+              {{ 'openTabs' | translate: { count: openTabsCount } }}
             </app-label>
           }
 
-          @if ((dupTabs$ | async) > 1) {
+          @if (dupTabs > 1) {
             <app-label color="accent">
-              {{ 'savedCount' | translate: { count: dupTabs$ | async } }}
+              {{ 'savedCount' | translate: { count: dupTabs } }}
             </app-label>
           }
 
@@ -36,21 +39,24 @@
     </div>
   </div>
 
-  @if ((inTimeline$ | async) || (notReadOnly$ | async)) {
+  @let inTimeline = inTimeline$ | async;
+  @let notReadOnly = notReadOnly$ | async;
+
+  @if (inTimeline || notReadOnly) {
     <div class="controls">
-      @if (inTimeline$ | async) {
+      @if (inTimeline) {
         <button appStopPropagation mat-icon-button [matTooltip]="'find' | translate" (click)="find.emit(tab())">
           <mat-icon>manage_search</mat-icon>
         </button>
       }
 
-      @if (notReadOnly$ | async) {
+      @if (notReadOnly) {
         <button appStopPropagation mat-icon-button (click)="editClick()" [matTooltip]="'edit' | translate">
           <mat-icon>edit_note</mat-icon>
         </button>
       }
 
-      @if (notReadOnly$ | async) {
+      @if (notReadOnly) {
         <button appStopPropagation mat-icon-button (click)="deleteClick()" [matTooltip]="'delete' | translate">
           <mat-icon>delete</mat-icon>
         </button>
