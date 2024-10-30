@@ -1,7 +1,4 @@
-<app-search-form class="search-form" 
-  appSticky
-  (activated)="navigate('search')"
-  (canceled)="navigate('main')" />
+<app-search-form class="search-form" (activated)="navigate('search')" (canceled)="navigate('main')" />
 <div class="content" [@routeAnimations]="urlChanges$ | async">
   <router-outlet />
 </div>

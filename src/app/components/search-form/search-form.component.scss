@@ -34,29 +34,15 @@
 
 app-search-form {
   $height: 42px;
-  $padding: 0.5rem;
 
   display: block;
-  position: sticky;
-  padding: $padding 0;
+  position: relative;
+  padding: 1rem 0;
   z-index: 1;
   top: 0;
 
-  &.sticky {
-    transition: transform $cubic-ease;
-
-    &:not(.is-active) {
-      transform: translate(0, -100%);
-
-      &.stuck {
-        @include mat.elevation(2);
-        transform: translate(0, 0);
-      }
-    }
-
-    &.is-active {
-      @include mat.elevation(2);
-    }
+  &.is-active {
+    position: sticky;
   }
 
   .controls-wrapper {

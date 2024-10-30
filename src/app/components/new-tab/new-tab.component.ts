@@ -3,7 +3,6 @@ import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@
 import { RouterOutlet } from '@angular/router';
 import { isNil } from 'lodash-es';
 import { Observable, combineLatest, map, shareReplay } from 'rxjs';
-import { StickyDirective } from '../../directives/index';
 import { HomeService, NavService } from '../../services/index';
 import { TopSites, routeAnimations, scrollTop } from '../../utils/index';
 import { SearchFormComponent } from '../search-form/search-form.component';
@@ -22,7 +21,7 @@ import { TopSitesComponent } from '../top-sites/top-sites.component';
   encapsulation: ViewEncapsulation.None,
   standalone: true,
   animations: [routeAnimations],
-  imports: [RouterOutlet, CommonModule, SearchFormComponent, StickyDirective, TopSitesComponent],
+  imports: [RouterOutlet, CommonModule, SearchFormComponent, TopSitesComponent],
 })
 export class NewTabComponent implements OnInit {
   topSites$: Observable<TopSites>;
@@ -52,7 +51,7 @@ export class NewTabComponent implements OnInit {
     this.urlChanges$ = this.navService.pathChanges$.pipe(shareReplay(1));
 
     this.hideTopSites$ = combineLatest([this.topSites$, this.isSearchActive$]).pipe(
-      map(([topSites, isSearchActive]) => isNil(topSites) || isSearchActive),
+      map(([topSites, isSearchActive]) => isNil(topSites) || topSites?.length === 0 || isSearchActive),
       shareReplay(1)
     );
   }
