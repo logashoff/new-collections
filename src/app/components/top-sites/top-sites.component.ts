@@ -25,8 +25,6 @@ import { ImageComponent } from '../image/image.component';
 export class TopSitesComponent {
   readonly topSites = input<TopSites>();
 
-  readonly translate = translate();
-
   constructor(
     private message: MessageService,
     private settings: SettingsService
@@ -41,7 +39,7 @@ export class TopSitesComponent {
       url: site.url,
     });
 
-    const ref = this.message.open(this.translate('siteMovedToIgnoreList'), ActionIcon.Settings);
+    const ref = this.message.open(translate('siteMovedToIgnoreList'), ActionIcon.Settings);
     const { dismissedByAction } = await lastValueFrom(ref.afterDismissed());
 
     if (dismissedByAction) {

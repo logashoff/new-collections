@@ -4,15 +4,15 @@
   </div>
   <div class="controls" appStopPropagation>
     @if (!readOnly()) {
-      <button mat-icon-button (click)="removeTabs()" [matTooltip]="'delete' | translate">
+      <button mat-icon-button (click)="removeTabs()" [matTooltip]="translate('delete')">
         <mat-icon>delete</mat-icon>
       </button>
     }
-    <button mat-icon-button (click)="restoreTabs()" [matTooltip]="'restore' | translate">
+    <button mat-icon-button (click)="restoreTabs()" [matTooltip]="translate('restore')">
       <mat-icon>restore</mat-icon>
     </button>
 
-    <button mat-icon-button (click)="addTabs()" [matTooltip]="(readOnly() ? 'save' : 'addTabs') | translate">
+    <button mat-icon-button (click)="addTabs()" [matTooltip]="translate(readOnly() ? 'save' : 'addTabs')">
       <mat-icon>add</mat-icon>
     </button>
   </div>

@@ -1,0 +1,205 @@
+{
+  "action_settings": {
+    "message": "Settings"
+  },
+  "action_undo": {
+    "message": "Undo"
+  },
+  "active": {
+    "message": "Active"
+  },
+  "addCollection": {
+    "message": "Add Collection"
+  },
+  "addSelected": {
+    "message": "Add Selected"
+  },
+  "addTabs": {
+    "message": "Add Tabs"
+  },
+  "cancelSearch": {
+    "message": "Cancel Search"
+  },
+  "close": {
+    "message": "Close"
+  },
+  "delete": {
+    "message": "Delete"
+  },
+  "deleteAll": {
+    "message": "Delete All"
+  },
+  "dismiss": {
+    "message": "Dismiss"
+  },
+  "edit": {
+    "message": "Edit"
+  },
+  "emptyListError": {
+    "message": "No collections to export"
+  },
+  "enableDevices": {
+    "message": "Show Synced Tabs"
+  },
+  "enableSites": {
+    "message": "Show Top Sites"
+  },
+  "export": {
+    "message": "Export"
+  },
+  "exportCollections": {
+    "message": "Export Collections"
+  },
+  "find": {
+    "message": "Find"
+  },
+  "fromDevices": {
+    "message": "From other devices"
+  },
+  "hintCollections": {
+    "message": "Save collection as JSON file or import saved file"
+  },
+  "hintDataUsage": {
+    "message": "Data used to store synced collections ($percent$% remaining)",
+    "placeholders": {
+      "percent": {
+        "content": "$1"
+      }
+    }
+  },
+  "hintHiddenSites": {
+    "message": "Sites hidden from top sites list on New Tab page"
+  },
+  "hintIgnoredSites": {
+    "message": "Sites excluded from top sites list on New Tab page"
+  },
+  "hintShowDevices": {
+    "message": "Show synced devices on New Tab page"
+  },
+  "hintShowTopSites": {
+    "message": "Show top sites on New Tab page"
+  },
+  "hintSyncCollections": {
+    "message": "Synchronizes collections across devices"
+  },
+  "ignoredSites": {
+    "message": "Ignored Sites"
+  },
+  "import": {
+    "message": "Import"
+  },
+  "importCollections": {
+    "message": "Import Collections"
+  },
+  "invalidTabList": {
+    "message": "Opened tabs list is invalid"
+  },
+  "itemAdded": {
+    "message": "Item added"
+  },
+  "itemRemoved": {
+    "message": "Item removed"
+  },
+  "itemsAddedCount": {
+    "message": "Added $count$ items",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "itemsRemovedCount": {
+    "message": "Removed $count$ items",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "manageCollections": {
+    "message": "Manage Collections"
+  },
+  "oneResult": {
+    "message": "One result"
+  },
+  "openTabs": {
+    "message": "$count$ Open",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "pin": {
+    "message": "Pin"
+  },
+  "pinned": {
+    "message": "Pinned"
+  },
+  "restore": {
+    "message": "Restore"
+  },
+  "resultCount": {
+    "message": "$count$ results",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "save": {
+    "message": "Save"
+  },
+  "savedCount": {
+    "message": "$count$ Saved",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "siteMovedToIgnoreList": {
+    "message": "Site moved to ignore list"
+  },
+  "syncCollections": {
+    "message": "Sync Collections"
+  },
+  "syncUsage": {
+    "message": "Sync Storage Usage"
+  },
+  "tabsCount": {
+    "message": "Tabs $selected$ / $total$",
+    "placeholders": {
+      "selected": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "tabsExistError": {
+    "message": "All tabs are already in the list"
+  },
+  "title": {
+    "message": "Title"
+  },
+  "today": {
+    "message": "Today"
+  },
+  "unpin": {
+    "message": "Unpin"
+  },
+  "url": {
+    "message": "URL"
+  },
+  "week": {
+    "message": "Week"
+  },
+  "yesterday": {
+    "message": "Yesterday"
+  }
+}

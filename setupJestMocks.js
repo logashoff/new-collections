@@ -50,4 +50,9 @@ chrome = {
       addListener: function () {},
     },
   },
+  i18n: {
+    getMessage(messageName) {
+      return messageName;
+    },
+  },
 };

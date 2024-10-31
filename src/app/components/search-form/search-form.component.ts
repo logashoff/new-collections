@@ -16,11 +16,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslateModule } from '@ngx-translate/core';
 import { BehaviorSubject, filter, fromEvent, map, shareReplay, Subject, takeUntil } from 'rxjs';
 import { StopPropagationDirective } from '../../directives/index';
 import { CollectionsService, NavService } from '../../services/index';
-import { Action, ESC_KEY_CODE, KEY_UP, scrollTop } from '../../utils/index';
+import { Action, ESC_KEY_CODE, KEY_UP, scrollTop, translate } from '../../utils/index';
 
 /**
  * Search input form.
@@ -45,10 +44,11 @@ interface SearchForm {
     MatTooltipModule,
     ReactiveFormsModule,
     StopPropagationDirective,
-    TranslateModule,
   ],
 })
 export class SearchFormComponent implements OnInit, OnDestroy {
+  readonly translate = translate;
+
   readonly activated = output();
   readonly canceled = output();
 

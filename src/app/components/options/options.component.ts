@@ -9,7 +9,6 @@ import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslateModule } from '@ngx-translate/core';
 import { isUndefined } from 'lodash-es';
 import { BehaviorSubject, Observable, map, shareReplay, startWith, take } from 'rxjs';
 import { CollectionsService, SettingsService } from '../../services/index';
@@ -63,25 +62,24 @@ interface OptionsForm {
     MatSlideToggleModule,
     MatTooltipModule,
     ReactiveFormsModule,
-    TranslateModule,
   ],
 })
 export class OptionsComponent implements OnInit {
-  readonly #translate = translate();
+  readonly translate = translate;
 
   readonly collectionActions: CollectionActions = [
     {
       action: Action.Export,
       color: 'primary',
       icon: ActionIcon.Export,
-      label: this.#translate('export'),
-      tooltip: this.#translate('exportCollections'),
+      label: translate('export'),
+      tooltip: translate('exportCollections'),
     },
     {
       action: Action.Import,
       icon: ActionIcon.Import,
-      label: this.#translate('import'),
-      tooltip: this.#translate('importCollections'),
+      label: translate('import'),
+      tooltip: translate('importCollections'),
     },
   ];
 

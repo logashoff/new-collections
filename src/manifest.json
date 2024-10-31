@@ -5,6 +5,7 @@
   "minimum_chrome_version": "104",
   "manifest_version": 3,
   "offline_enabled": true,
+  "default_locale": "en_US",
   "icons": {
     "16": "assets/icons/icon-16.png",
     "32": "assets/icons/icon-32.png",

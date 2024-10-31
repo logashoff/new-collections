@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslateModule } from '@ngx-translate/core';
 import { CollectionsService } from '../../services/index';
-import { Action, CollectionActions } from '../../utils/index';
+import { Action, CollectionActions, translate } from '../../utils/index';
 
 /**
  * @description
@@ -17,9 +16,11 @@ import { Action, CollectionActions } from '../../utils/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, TranslateModule],
+  imports: [MatButtonModule, MatIconModule],
 })
 export class EmptyComponent {
+  readonly translate = translate;
+
   readonly actions = input<CollectionActions>();
 
   constructor(private collectionsService: CollectionsService) {}

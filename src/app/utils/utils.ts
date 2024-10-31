@@ -1,5 +1,3 @@
-import { inject } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { groupBy } from 'lodash-es';
 import { BrowserTabs, HostnameGroup, Settings, settingsStorageKey, Tab } from './models';
 
@@ -49,16 +47,6 @@ export function getHost(tab: Tab): string {
 }
 
 /**
- * Utility function for TranslateService `instant` method
- *
- * @returns Passthrough function for `instant` method
- */
-export const translate = () => {
-  const translate = inject(TranslateService);
-  return (key: string | string[], interpolateParams?: Object): string => translate.instant(key, interpolateParams);
-};
-
-/**
  * Navigates to options page.
  */
 export const openOptions = () => chrome.runtime.openOptionsPage();
@@ -102,4 +90,20 @@ export const scrollTop = (
   document.body.scrollTo(scrollOptions);
 };
 
+/**
+ * Creates path relative to extension URL
+ *
+ * @param path Path to asset
+ * @returns Full path including extension URL
+ */
 export const createUrl = (path: string) => chrome.runtime.getURL(path);
+
+/**
+ * Gets the localized string for the specified message. If the message is missing,
+ * this method returns an empty string ('').
+ *
+ * @param messageName The name of the message, as specified in the messages.json file.
+ * @param substitutions Optional. Up to 9 substitution strings, if the message requires any.
+ */
+export const translate = (messageName: string, substitutions?: string | string[]) =>
+  chrome.i18n.getMessage(messageName, substitutions);
