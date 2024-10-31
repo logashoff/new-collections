@@ -1,7 +1,6 @@
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
-import { TranslateModule } from '@ngx-translate/core';
 import { ActionIcon } from '../utils/index';
 import { MessageService } from './message.service';
 
@@ -9,7 +8,7 @@ describe('MessageService', () => {
   let spectator: SpectatorService<MessageService>;
   const createService = createServiceFactory({
     service: MessageService,
-    imports: [MatSnackBarModule, MatTooltipModule, TranslateModule.forRoot()],
+    imports: [MatSnackBarModule, MatTooltipModule],
   });
 
   beforeEach(() => {

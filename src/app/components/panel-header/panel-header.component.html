@@ -12,7 +12,7 @@
       <div
         appStopPropagation
         class="fav"
-        matTooltip="{{ (pinned() ? 'unpin' : 'pin') | translate }}"
+        matTooltip="{{ translate(pinned() ? 'unpin' : 'pin') }}"
         (click)="favClicked()"
       >
         @if (pinned()) {

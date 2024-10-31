@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, input, output, ViewEncapsulation } 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslateModule } from '@ngx-translate/core';
 import { TimelineLabelComponent } from '../timeline-label/timeline-label.component';
+import { translate } from '../../utils';
 
 /**
  * @description
@@ -17,9 +17,11 @@ import { TimelineLabelComponent } from '../timeline-label/timeline-label.compone
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatTooltipModule, TimelineLabelComponent, TranslateModule],
+  imports: [MatButtonModule, MatIconModule, MatTooltipModule, TimelineLabelComponent],
 })
 export class TimelineElementComponent {
+  readonly translate = translate;
+
   /**
    * Header label
    */

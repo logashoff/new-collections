@@ -22,8 +22,6 @@ import { TabService } from './tab.service';
   providedIn: 'root',
 })
 export class CollectionsService {
-  readonly translate = translate();
-
   constructor(
     private message: MessageService,
     private nav: NavService,
@@ -73,7 +71,7 @@ export class CollectionsService {
         this.nav.setParams(tabGroup.id);
       }
     } else {
-      this.message.open(this.translate('invalidTabList'));
+      this.message.open(translate('invalidTabList'));
     }
   }
 
@@ -94,7 +92,7 @@ export class CollectionsService {
           if (collections?.length > 0) {
             this.exportCollections(collections);
           } else {
-            this.message.open(this.translate('emptyListError'));
+            this.message.open(translate('emptyListError'));
           }
           break;
         case Action.Import:

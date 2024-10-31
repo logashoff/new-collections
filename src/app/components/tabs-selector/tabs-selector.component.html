@@ -2,18 +2,20 @@
   <div class="container">
     <div class="header-container">
       <div class="header">
-        <span class="heading" translate [translateParams]="{
-            selected: selectionLength$ | async,
-            total: tabs.length
-          }">
-          tabsCount
+        @let selectionLength = selectionLength$ | async;
+        @let tabsLen = tabs.length;
+
+        <span class="heading">
+          {{ translate('tabsCount', [selectionLength.toString(), tabsLen.toString()]) }}
         </span>
         <div class="controls">
-          <button type="submit" 
+          <button
+            type="submit"
             mat-icon-button
             color="primary"
-            [disabled]="!formGroup.valid" 
-            [matTooltip]="'addSelected' | translate">
+            [disabled]="!formGroup.valid"
+            [matTooltip]="translate('addSelected')"
+          >
             <mat-icon>add</mat-icon>
           </button>
           <div class="checkbox-container">
@@ -21,7 +23,8 @@
               color="primary"
               [checked]="allSelected$ | async"
               [indeterminate]="someSelected$ | async"
-              (change)="selectAll($event.checked)">
+              (change)="selectAll($event.checked)"
+            >
             </mat-checkbox>
           </div>
         </div>
@@ -38,11 +41,11 @@
                 <div class="item-title">{{ tab.title }}</div>
                 <span class="item-subtitle">
                   @if (tab.active) {
-                    <app-label>{{ 'active' | translate }}</app-label>
+                    <app-label>{{ translate('active') }}</app-label>
                   }
 
                   @if (tab.pinned) {
-                    <app-label>{{ 'pinned' | translate }}</app-label>
+                    <app-label>{{ translate('pinned') }}</app-label>
                   }
 
                   <span class="subtitle">{{ tab.url | hostname }}</span>

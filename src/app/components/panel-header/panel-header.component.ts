@@ -2,8 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input, output, ViewEncapsulation } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslateModule } from '@ngx-translate/core';
-import { HostnameGroup } from '../../utils/index';
+import { HostnameGroup, translate } from '../../utils/index';
 
 import { StopPropagationDirective } from '../../directives/index';
 import { IconsContainerComponent } from '../icons-container/icons-container.component';
@@ -18,16 +17,11 @@ import { IconsContainerComponent } from '../icons-container/icons-container.comp
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [
-    CommonModule,
-    IconsContainerComponent,
-    MatIconModule,
-    MatTooltipModule,
-    StopPropagationDirective,
-    TranslateModule,
-  ],
+  imports: [CommonModule, IconsContainerComponent, MatIconModule, MatTooltipModule, StopPropagationDirective],
 })
 export class PanelHeaderComponent {
+  readonly translate = translate;
+
   /**
    * Icons list.
    */

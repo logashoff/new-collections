@@ -3,7 +3,6 @@ import { ChangeDetectionStrategy, Component, input, OnDestroy, OnInit, output, V
 import { toObservable } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslateModule } from '@ngx-translate/core';
 import Fuse, { IFuseOptions } from 'fuse.js';
 import {
   BehaviorSubject,
@@ -20,7 +19,7 @@ import {
   take,
 } from 'rxjs';
 import { NavService, TabService } from '../../services/index';
-import { Action, BrowserTab, BrowserTabs, listItemAnimation } from '../../utils/index';
+import { Action, BrowserTab, BrowserTabs, listItemAnimation, translate } from '../../utils/index';
 import { EmptyComponent } from '../empty/empty.component';
 import { ListItemComponent } from '../list-item/list-item.component';
 import { SearchFormComponent } from '../search-form/search-form.component';
@@ -56,10 +55,11 @@ const fuseOptions: IFuseOptions<BrowserTab> = {
     SearchFormComponent,
     TabListComponent,
     TimelineLabelComponent,
-    TranslateModule,
   ],
 })
 export class SearchComponent implements OnInit, OnDestroy {
+  readonly translate = translate;
+
   readonly Action = Action;
 
   readonly source = input.required<BrowserTabs>();

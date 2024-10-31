@@ -7,10 +7,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule, MatSelectionList } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslateModule } from '@ngx-translate/core';
 import { isNil } from 'lodash-es';
 import { Observable, filter, map, shareReplay, startWith, withLatestFrom } from 'rxjs';
-import { Tabs } from '../../utils/index';
+import { Tabs, translate } from '../../utils/index';
 
 import { FaviconPipe, HostnamePipe } from '../../pipes/index';
 import { ChipComponent } from '../chip/chip.component';
@@ -47,10 +46,11 @@ interface TabSelectorForm {
     MatListModule,
     MatTooltipModule,
     ReactiveFormsModule,
-    TranslateModule,
   ],
 })
 export class TabsSelectorComponent {
+  readonly translate = translate;
+
   /**
    * Root group form.
    */

@@ -3,7 +3,7 @@
     {{ timelineLabel() }}
   </app-timeline-label>
   @if (controls()) {
-    <button mat-icon-button [matTooltip]="'deleteAll' | translate" (click)="remove()">
+    <button mat-icon-button [matTooltip]="translate('deleteAll')" (click)="remove()">
       <mat-icon>done_all</mat-icon>
     </button>
   }

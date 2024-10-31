@@ -12,25 +12,25 @@
 
           @if (openTabsCount) {
             <app-label color="primary">
-              {{ 'openTabs' | translate: { count: openTabsCount } }}
+              {{ translate('openTabs') }}
             </app-label>
           }
 
           @if (dupTabs > 1) {
             <app-label color="accent">
-              {{ 'savedCount' | translate: { count: dupTabs } }}
+              {{ translate('savedCount', openTabsCount.toString()) }}
             </app-label>
           }
 
           @if (activeTab$ | async) {
             <app-label>
-              {{ 'active' | translate }}
+              {{ translate('active') }}
             </app-label>
           }
 
           @if (pinnedTab$ | async) {
             <app-label>
-              {{ 'pinned' | translate }}
+              {{ translate('pinned') }}
             </app-label>
           }
         </span>
@@ -45,19 +45,19 @@
   @if (inTimeline || notReadOnly) {
     <div class="controls">
       @if (inTimeline) {
-        <button appStopPropagation mat-icon-button [matTooltip]="'find' | translate" (click)="find.emit(tab())">
+        <button appStopPropagation mat-icon-button [matTooltip]="translate('find')" (click)="find.emit(tab())">
           <mat-icon>manage_search</mat-icon>
         </button>
       }
 
       @if (notReadOnly) {
-        <button appStopPropagation mat-icon-button (click)="editClick()" [matTooltip]="'edit' | translate">
+        <button appStopPropagation mat-icon-button (click)="editClick()" [matTooltip]="translate('edit')">
           <mat-icon>edit_note</mat-icon>
         </button>
       }
 
       @if (notReadOnly) {
-        <button appStopPropagation mat-icon-button (click)="deleteClick()" [matTooltip]="'delete' | translate">
+        <button appStopPropagation mat-icon-button (click)="deleteClick()" [matTooltip]="translate('delete')">
           <mat-icon>delete</mat-icon>
         </button>
       }
