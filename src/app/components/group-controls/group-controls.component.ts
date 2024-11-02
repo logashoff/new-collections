@@ -4,8 +4,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { StopPropagationDirective } from '../../directives';
-import { CollectionsService, TabService } from '../../services/index';
-import { queryCurrentWindow, restoreTabs, TabGroup, Tabs, translate } from '../../utils/index';
+import { TranslatePipe } from '../../pipes';
+import { CollectionsService, TabService } from '../../services';
+import { queryCurrentWindow, restoreTabs, TabGroup, Tabs } from '../../utils';
 
 /**
  * @description
@@ -19,11 +20,9 @@ import { queryCurrentWindow, restoreTabs, TabGroup, Tabs, translate } from '../.
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatTooltipModule, StopPropagationDirective],
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatTooltipModule, StopPropagationDirective, TranslatePipe],
 })
 export class GroupControlsComponent {
-  readonly translate = translate;
-
   readonly group = input<TabGroup>();
   readonly readOnly = input<boolean>(false);
 

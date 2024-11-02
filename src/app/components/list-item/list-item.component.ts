@@ -4,10 +4,11 @@ import { toObservable } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { combineLatest, filter, map, Observable, shareReplay, switchMap, tap, withLatestFrom } from 'rxjs';
-import { StopPropagationDirective } from '../../directives/index';
-import { FaviconPipe } from '../../pipes/index';
-import { BrowserTab, BrowserTabs, Tabs, translate } from '../../utils/index';
+import { combineLatest, filter, map, Observable, shareReplay, switchMap, withLatestFrom } from 'rxjs';
+
+import { StopPropagationDirective } from '../../directives';
+import { FaviconPipe, TranslatePipe } from '../../pipes';
+import { BrowserTab, BrowserTabs, Tabs } from '../../utils';
 import { ChipComponent } from '../chip/chip.component';
 import { LabelComponent } from '../label/label.component';
 import { RippleComponent } from '../ripple/ripple.component';
@@ -34,11 +35,10 @@ import { RippleComponent } from '../ripple/ripple.component';
     MatTooltipModule,
     RippleComponent,
     StopPropagationDirective,
+    TranslatePipe,
   ],
 })
 export class ListItemComponent implements OnInit {
-  readonly translate = translate;
-
   readonly openTabs = input<Tabs>();
   readonly #openTabs$: Observable<Tabs>;
 

@@ -18,8 +18,10 @@ import {
   switchMap,
   take,
 } from 'rxjs';
-import { NavService, TabService } from '../../services/index';
-import { Action, BrowserTab, BrowserTabs, listItemAnimation, translate } from '../../utils/index';
+
+import { TranslatePipe } from '../../pipes';
+import { NavService, TabService } from '../../services';
+import { Action, BrowserTab, BrowserTabs, listItemAnimation } from '../../utils';
 import { EmptyComponent } from '../empty/empty.component';
 import { ListItemComponent } from '../list-item/list-item.component';
 import { SearchFormComponent } from '../search-form/search-form.component';
@@ -55,11 +57,10 @@ const fuseOptions: IFuseOptions<BrowserTab> = {
     SearchFormComponent,
     TabListComponent,
     TimelineLabelComponent,
+    TranslatePipe,
   ],
 })
 export class SearchComponent implements OnInit, OnDestroy {
-  readonly translate = translate;
-
   readonly Action = Action;
 
   readonly source = input.required<BrowserTabs>();

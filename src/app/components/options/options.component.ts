@@ -11,8 +11,10 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { isUndefined } from 'lodash-es';
 import { BehaviorSubject, Observable, map, shareReplay, startWith, take } from 'rxjs';
-import { CollectionsService, SettingsService } from '../../services/index';
-import { Action, ActionIcon, CollectionActions, MostVisitedURL, translate } from '../../utils/index';
+
+import { TranslatePipe } from '../../pipes';
+import { CollectionsService, SettingsService } from '../../services';
+import { Action, ActionIcon, CollectionActions, MostVisitedURL, translate } from '../../utils';
 
 /**
  * Options form.
@@ -62,11 +64,10 @@ interface OptionsForm {
     MatSlideToggleModule,
     MatTooltipModule,
     ReactiveFormsModule,
+    TranslatePipe,
   ],
 })
 export class OptionsComponent implements OnInit {
-  readonly translate = translate;
-
   readonly collectionActions: CollectionActions = [
     {
       action: Action.Export,

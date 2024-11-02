@@ -3,7 +3,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MAT_SNACK_BAR_DATA, MatSnackBarRef } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ActionIcon, translate } from '../../utils/index';
+
+import { TranslatePipe } from '../../pipes';
+import { ActionIcon } from '../../utils';
 
 /**
  * @description
@@ -17,11 +19,9 @@ import { ActionIcon, translate } from '../../utils/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatTooltipModule],
+  imports: [MatButtonModule, MatIconModule, MatTooltipModule, TranslatePipe],
 })
 export class MessageComponent {
-  readonly translate = translate;
-
   constructor(
     @Inject(MAT_SNACK_BAR_DATA) readonly data: { message: string; actionIcon: ActionIcon },
     private snackBarRef: MatSnackBarRef<MessageComponent>

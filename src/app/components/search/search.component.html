@@ -4,7 +4,7 @@
 @if (sourceTabs?.length > 0 || deviceTabs?.length > 0) {
   @if (deviceTabs?.length > 0) {
     <app-timeline-label>
-      {{ translate('fromDevices') }}
+      {{ 'fromDevices' | translate }}
     </app-timeline-label>
     <mat-card class="search-container">
       <app-tab-list>
@@ -18,10 +18,10 @@
   @if (sourceTabs?.length > 0) {
     <app-timeline-label [ngPlural]="sourceTabs.length">
       <ng-template ngPluralCase="one">
-        {{ translate('oneResult') }}
+        {{ 'oneResult' | translate }}
       </ng-template>
       <ng-template ngPluralCase="other">
-        {{ translate('resultCount', sourceTabs.length.toString()) }}
+        {{ 'resultCount' | translate: sourceTabs?.length.toString() }}
       </ng-template>
     </app-timeline-label>
     <mat-card class="search-container">
