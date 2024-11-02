@@ -1,7 +1,7 @@
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
-import { ActionIcon } from '../utils/index';
+import { ActionIcon } from '../utils';
 import { MessageService } from './message.service';
 
 describe('MessageService', () => {

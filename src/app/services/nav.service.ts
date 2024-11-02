@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, EventType, Router, RouterEvent } from '@angular/router';
 import { isNil } from 'lodash-es';
 import { Observable, distinctUntilChanged, filter, map, shareReplay, startWith } from 'rxjs';
-import { RouterExtras, RouterParams, createUrl } from '../utils/index';
+import { RouterExtras, RouterParams, createUrl } from '../utils';
 
 @Injectable({
   providedIn: 'root',

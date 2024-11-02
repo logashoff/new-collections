@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { NavService, TabService } from '../../services/index';
-import { BrowserTab, BrowserTabs } from '../../utils/index';
+import { NavService, TabService } from '../../services';
+import { BrowserTab, BrowserTabs } from '../../utils';
 import { SearchComponent } from '../search/search.component';
 
 @Component({

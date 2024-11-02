@@ -105,5 +105,5 @@ export const createUrl = (path: string) => chrome.runtime.getURL(path);
  * @param messageName The name of the message, as specified in the messages.json file.
  * @param substitutions Optional. Up to 9 substitution strings, if the message requires any.
  */
-export const translate = (messageName: string, substitutions?: string | string[]) =>
+export const translate = (messageName: string, substitutions?: string | string[]): string =>
   chrome.i18n.getMessage(messageName, substitutions);

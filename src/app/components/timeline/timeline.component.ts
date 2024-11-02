@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TabService } from '../../services/index';
-import { TabGroups, Timeline } from '../../utils/index';
+import { TabService } from '../../services';
+import { TabGroups, Timeline } from '../../utils';
 import { GroupsComponent } from '../groups/groups.component';
 import { TimelineElementComponent } from '../timeline-element/timeline-element.component';
 

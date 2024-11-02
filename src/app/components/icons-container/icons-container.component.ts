@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, input, Input, ViewEncapsulation } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
-import { HostnameGroup } from '../../utils/index';
+import { HostnameGroup } from '../../utils';
 
-import { FaviconPipe } from '../../pipes/index';
+import { FaviconPipe } from '../../pipes';
 import { ChipComponent } from '../chip/chip.component';
 
 @Component({

@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ImageSource, getFaviconUrl } from '../utils/index';
+import { ImageSource, getFaviconUrl } from '../utils';
 
 /**
  * @description

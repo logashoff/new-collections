@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, effect, HostBinding, input, signal } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { getFaviconUrl, IconSize, ImageSource } from '../../utils/index';
+import { getFaviconUrl, IconSize, ImageSource } from '../../utils';
 
 /**
  * @description

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { flatMap, isNil, isUndefined } from 'lodash-es';
 import { Observable, combineLatest, from, map, of, shareReplay, switchMap, take } from 'rxjs';
-import { SettingsService, TabService } from '../services/index';
-import { Devices, MostVisitedURL, Sessions, TabGroup, Tabs, Timeline, TopSites } from '../utils/index';
+import { SettingsService, TabService } from '../services';
+import { Devices, MostVisitedURL, Sessions, TabGroup, Tabs, Timeline, TopSites } from '../utils';
 
 /**
  * @description
@@ -36,7 +36,10 @@ export class HomeService {
    */
   readonly hasAnyData$: Observable<boolean>;
 
-  constructor(private settings: SettingsService, private tabsService: TabService) {
+  constructor(
+    private settings: SettingsService,
+    private tabsService: TabService
+  ) {
     this.timeline$ = this.tabsService.groupsTimeline$;
 
     this.devices$ = this.settings.settings$.pipe(

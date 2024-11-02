@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TabService } from '../../services/index';
-import { Action, ActionIcon, CollectionActions, Timeline } from '../../utils/index';
+import { TabService } from '../../services';
+import { Action, ActionIcon, CollectionActions, Timeline } from '../../utils';
 import { EmptyComponent } from '../empty/empty.component';
 import { TimelineComponent } from '../timeline/timeline.component';
 

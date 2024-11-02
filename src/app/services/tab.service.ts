@@ -29,7 +29,7 @@ import {
   saveCollections,
   syncToTabs,
   translate,
-} from '../utils/index';
+} from '../utils';
 
 import { RenameDialogComponent, TabsSelectorComponent } from '../components';
 import { MessageService } from './message.service';
