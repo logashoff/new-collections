@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { shareReplay } from 'rxjs';
-import { NavService } from '../../services/index';
-import { routeAnimations, scrollTop } from '../../utils/index';
+import { NavService } from '../../services';
+import { routeAnimations, scrollTop } from '../../utils';
 import { SearchFormComponent } from '../search-form/search-form.component';
 
 /**

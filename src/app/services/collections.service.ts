@@ -13,7 +13,7 @@ import {
   TabGroup,
   Tabs,
   translate,
-} from '../utils/index';
+} from '../utils';
 import { MessageService } from './message.service';
 import { NavService } from './nav.service';
 import { TabService } from './tab.service';

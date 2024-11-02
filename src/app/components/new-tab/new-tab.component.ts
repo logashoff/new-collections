@@ -3,8 +3,8 @@ import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@
 import { RouterOutlet } from '@angular/router';
 import { isNil } from 'lodash-es';
 import { Observable, combineLatest, map, shareReplay } from 'rxjs';
-import { HomeService, NavService } from '../../services/index';
-import { TopSites, routeAnimations, scrollTop } from '../../utils/index';
+import { HomeService, NavService } from '../../services';
+import { TopSites, routeAnimations, scrollTop } from '../../utils';
 import { SearchFormComponent } from '../search-form/search-form.component';
 import { TopSitesComponent } from '../top-sites/top-sites.component';
 

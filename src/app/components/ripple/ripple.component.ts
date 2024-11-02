@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { concat, from, map, of, Subscription, switchMap, timer } from 'rxjs';
-import { scrollIntoView } from '../../utils/index';
+import { scrollIntoView } from '../../utils';
 
 /**
  * @description

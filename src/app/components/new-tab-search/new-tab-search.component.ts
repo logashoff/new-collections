@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { flatMap } from 'lodash-es';
 import { Observable, map, shareReplay } from 'rxjs';
-import { HomeService, NavService, TabService } from '../../services/index';
-import { BrowserTab, BrowserTabs } from '../../utils/index';
+import { HomeService, NavService, TabService } from '../../services';
+import { BrowserTab, BrowserTabs } from '../../utils';
 import { SearchComponent } from '../search/search.component';
 
 @Component({

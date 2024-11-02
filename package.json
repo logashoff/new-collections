@@ -1,9 +1,8 @@
 {
   "name": "new-collections",
   "description": "Browser extension to save and restore tabs",
-  "version": "1.6.3",
+  "version": "1.7.0",
   "scripts": {
-    "ng": "ng",
     "build": "ng build --configuration production --output-hashing none",
     "build:dev": "ng build --configuration development",
     "postbuild": "esbuild ./src/background.ts --legal-comments=none --bundle --minify --outfile=./dist/new-collections/background.js",

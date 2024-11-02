@@ -2,10 +2,10 @@ import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@a
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { lastValueFrom } from 'rxjs';
-import { StopPropagationDirective } from '../../directives/index';
-import { FaviconPipe } from '../../pipes/index';
-import { MessageService, SettingsService } from '../../services/index';
-import { ActionIcon, TopSite, TopSites, translate } from '../../utils/index';
+import { StopPropagationDirective } from '../../directives';
+import { FaviconPipe } from '../../pipes';
+import { MessageService, SettingsService } from '../../services';
+import { ActionIcon, TopSite, TopSites, translate } from '../../utils';
 import { ImageComponent } from '../image/image.component';
 
 /**

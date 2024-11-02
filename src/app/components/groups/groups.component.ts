@@ -6,8 +6,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { Observable, map, shareReplay } from 'rxjs';
-import { IsReadOnlyGroupPipe } from '../../pipes/index';
-import { NavService, SettingsService, TabService } from '../../services/index';
+import { IsReadOnlyGroupPipe } from '../../pipes';
+import { NavService, SettingsService, TabService } from '../../services';
 import {
   BrowserTab,
   BrowserTabs,
@@ -16,7 +16,7 @@ import {
   TabGroups,
   TabsByHostname,
   listItemAnimation,
-} from '../../utils/index';
+} from '../../utils';
 import { GroupControlsComponent } from '../group-controls/group-controls.component';
 import { ListItemComponent } from '../list-item/list-item.component';
 import { PanelHeaderComponent } from '../panel-header/panel-header.component';

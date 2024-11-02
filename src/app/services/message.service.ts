@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 import { MessageComponent } from '../components';
-import { ActionIcon } from '../utils/index';
+import { ActionIcon } from '../utils';
 
 /**
  * @description
