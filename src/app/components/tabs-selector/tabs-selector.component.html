@@ -6,7 +6,7 @@
         @let tabsLen = tabs.length;
 
         <span class="heading">
-          {{ translate('tabsCount', [selectionLength.toString(), tabsLen.toString()]) }}
+          {{ 'tabsCount' | translate: [selectionLength?.toString(), tabsLen.toString()] }}
         </span>
         <div class="controls">
           <button
@@ -14,7 +14,7 @@
             mat-icon-button
             color="primary"
             [disabled]="!formGroup.valid"
-            [matTooltip]="translate('addSelected')"
+            [matTooltip]="'addSelected' | translate"
           >
             <mat-icon>add</mat-icon>
           </button>
@@ -41,11 +41,11 @@
                 <div class="item-title">{{ tab.title }}</div>
                 <span class="item-subtitle">
                   @if (tab.active) {
-                    <app-label>{{ translate('active') }}</app-label>
+                    <app-label>{{ 'active' | translate }}</app-label>
                   }
 
                   @if (tab.pinned) {
-                    <app-label>{{ translate('pinned') }}</app-label>
+                    <app-label>{{ 'pinned' | translate }}</app-label>
                   }
 
                   <span class="subtitle">{{ tab.url | hostname }}</span>

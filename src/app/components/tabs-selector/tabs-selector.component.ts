@@ -9,9 +9,9 @@ import { MatListModule, MatSelectionList } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { isNil } from 'lodash-es';
 import { Observable, filter, map, shareReplay, startWith, withLatestFrom } from 'rxjs';
-import { Tabs, translate } from '../../utils/index';
 
-import { FaviconPipe, HostnamePipe } from '../../pipes/index';
+import { FaviconPipe, HostnamePipe, TranslatePipe } from '../../pipes';
+import { Tabs } from '../../utils';
 import { ChipComponent } from '../chip/chip.component';
 import { LabelComponent } from '../label/label.component';
 
@@ -46,11 +46,10 @@ interface TabSelectorForm {
     MatListModule,
     MatTooltipModule,
     ReactiveFormsModule,
+    TranslatePipe,
   ],
 })
 export class TabsSelectorComponent {
-  readonly translate = translate;
-
   /**
    * Root group form.
    */

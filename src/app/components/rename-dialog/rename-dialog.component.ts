@@ -4,7 +4,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { BrowserTab, translate } from '../../utils/index';
+
+import { TranslatePipe } from '../../pipes';
+import { BrowserTab } from '../../utils';
 
 /**
  * Rename form
@@ -25,11 +27,9 @@ interface RenameForm {
   styleUrl: './rename-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
+  imports: [MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, TranslatePipe],
 })
 export class RenameDialogComponent implements OnInit {
-  readonly translate = translate;
-
   formGroup: FormGroup<RenameForm>;
 
   constructor(

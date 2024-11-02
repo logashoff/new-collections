@@ -16,14 +16,14 @@
 
   <div class="controls">
     @if (isActive$ | async) {
-      <button mat-icon-button color="primary" matTooltip="{{ translate('cancelSearch') }}" (click)="clearSearch()">
+      <button mat-icon-button color="primary" [matTooltip]="'cancelSearch' | translate" (click)="clearSearch()">
         <mat-icon>close</mat-icon>
       </button>
     } @else {
       <button
         mat-icon-button
         color="primary"
-        matTooltip="{{ translate('addCollection') }}"
+        [matTooltip]="'addCollection' | translate"
         (click)="handleAction(Action.Save)"
       >
         <mat-icon>add</mat-icon>

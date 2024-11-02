@@ -3,16 +3,18 @@
     {{ abs(group().timestamp) | date: 'longDate' }}
   </div>
   <div class="controls" appStopPropagation>
-    @if (!readOnly()) {
-      <button mat-icon-button (click)="removeTabs()" [matTooltip]="translate('delete')">
+    @let isReadOnly = readOnly();
+
+    @if (!isReadOnly) {
+      <button mat-icon-button (click)="removeTabs()" [matTooltip]="'delete' | translate">
         <mat-icon>delete</mat-icon>
       </button>
     }
-    <button mat-icon-button (click)="restoreTabs()" [matTooltip]="translate('restore')">
+    <button mat-icon-button (click)="restoreTabs()" [matTooltip]="'restore' | translate">
       <mat-icon>restore</mat-icon>
     </button>
 
-    <button mat-icon-button (click)="addTabs()" [matTooltip]="translate(readOnly() ? 'save' : 'addTabs')">
+    <button mat-icon-button (click)="addTabs()" [matTooltip]="(isReadOnly ? 'save' : 'addTabs') | translate">
       <mat-icon>add</mat-icon>
     </button>
   </div>
