@@ -1,5 +1,7 @@
 import { groupBy } from 'lodash-es';
 import { BrowserTabs, HostnameGroup, Settings, settingsStorageKey, Tab } from './models';
+import { inject } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 /**
  * Returns BrowserTab array grouped by hostnames
@@ -97,6 +99,14 @@ export const scrollTop = (
  * @returns Full path including extension URL
  */
 export const createUrl = (path: string) => chrome.runtime.getURL(path);
+
+/**
+ * Return function to sanitize HTML in a specified value.
+ */
+export const sanitizeHtml = () => {
+  const sanitizer = inject(DomSanitizer);
+  return (value: string): SafeHtml => sanitizer.bypassSecurityTrustHtml(value);
+};
 
 /**
  * Gets the localized string for the specified message. If the message is missing,

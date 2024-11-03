@@ -1,8 +1,15 @@
+@use '@angular/material' as mat;
 @import 'theme';
 
 @include component-theme using($theme) {
   app-empty {
-    color: get-palette-color(get-foreground-palette($theme), disabled-text);
+    .icon {
+      color: get-palette-color(get-foreground-palette($theme), disabled-text);
+    }
+
+    .message {
+      color: get-palette-color(get-foreground-palette($theme), secondary-text);
+    }
   }
 }
 
@@ -18,6 +25,14 @@ app-empty {
     height: $icon-size;
     font-size: $icon-size;
     line-height: $icon-size;
+  }
+
+  .message {
+    @include mat.m2-typography-level($typography-config, body-1);
+
+    margin-bottom: 2rem;
+    text-align: center;
+    max-width: 24rem;
   }
 
   .actions {

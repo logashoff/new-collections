@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@a
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
+import { HtmlPipe } from '../../pipes/html.pipe';
 import { CollectionsService } from '../../services';
 import { Action, CollectionActions } from '../../utils';
 
@@ -17,10 +18,11 @@ import { Action, CollectionActions } from '../../utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [MatButtonModule, MatIconModule],
+  imports: [HtmlPipe, MatButtonModule, MatIconModule],
 })
 export class EmptyComponent {
   readonly actions = input<CollectionActions>();
+  readonly message = input<string>();
 
   constructor(private collectionsService: CollectionsService) {}
 

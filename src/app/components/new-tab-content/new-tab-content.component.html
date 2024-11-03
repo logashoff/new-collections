@@ -6,10 +6,14 @@
   }
 
   @for (item of timeline$ | async; track item.label) {
-    <app-timeline-element [timelineLabel]="item.label" (removed)="removeGroups(item.elements)">
+    <app-timeline-element
+      [timelineLabel]="item.label"
+      (removed)="removeGroups(item.elements)">
       <app-groups [groups]="item.elements" [dragDisabled]="false" />
     </app-timeline-element>
   }
 } @else {
-  <app-empty [actions]="defaultActions">home</app-empty>
+  <app-empty
+    [actions]="defaultActions"
+    [message]="'newTabEmptyMessage' | translate" />
 }

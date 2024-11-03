@@ -1,0 +1,211 @@
+{
+  "action_settings": {
+    "message": "Ajustes"
+  },
+  "action_undo": {
+    "message": "Deshacer"
+  },
+  "active": {
+    "message": "Activa"
+  },
+  "addCollection": {
+    "message": "Agregar colección"
+  },
+  "addSelected": {
+    "message": "Agregar seleccionada"
+  },
+  "addTabs": {
+    "message": "Agregar pestañas"
+  },
+  "cancelSearch": {
+    "message": "Cancelar búsqueda"
+  },
+  "close": {
+    "message": "Cerca"
+  },
+  "delete": {
+    "message": "Borrar"
+  },
+  "deleteAll": {
+    "message": "Eliminar todo"
+  },
+  "dismiss": {
+    "message": "Despedir"
+  },
+  "edit": {
+    "message": "Editar"
+  },
+  "emptyListError": {
+    "message": "No hay colecciones para exportar"
+  },
+  "enableDevices": {
+    "message": "Mostrar pestañas sincronizadas"
+  },
+  "enableSites": {
+    "message": "Mostrar los mejores sitios"
+  },
+  "export": {
+    "message": "Exportar"
+  },
+  "exportCollections": {
+    "message": "Colecciones de exportación"
+  },
+  "find": {
+    "message": "Encontrar"
+  },
+  "fromDevices": {
+    "message": "Desde otros dispositivos"
+  },
+  "hintCollections": {
+    "message": "Guardar la colección en un archivo o importar un archivo guardado"
+  },
+  "hintDataUsage": {
+    "message": "Datos utilizados para almacenar colecciones sincronizadas ($percent$% restante)",
+    "placeholders": {
+      "percent": {
+        "content": "$1"
+      }
+    }
+  },
+  "hintIgnoredSites": {
+    "message": "Sitios excluidos de la lista de sitios principales en la página Nueva pestaña"
+  },
+  "hintShowDevices": {
+    "message": "Mostrar dispositivos sincronizados en la página Nueva pestaña"
+  },
+  "hintShowTopSites": {
+    "message": "Mostrar los sitios más populares en la página Nueva pestaña"
+  },
+  "hintSyncCollections": {
+    "message": "Sincroniza colecciones entre dispositivos"
+  },
+  "ignoredSites": {
+    "message": "Sitios ignorados"
+  },
+  "import": {
+    "message": "Importar"
+  },
+  "importCollections": {
+    "message": "Importar colecciones"
+  },
+  "invalidTabList": {
+    "message": "Las pestañas abiertas no son válidas"
+  },
+  "itemAdded": {
+    "message": "Artículo añadido"
+  },
+  "itemRemoved": {
+    "message": "Artículo eliminado"
+  },
+  "itemsAddedCount": {
+    "message": "Se agregaron $count$ artículos",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "itemsRemovedCount": {
+    "message": "Se eliminaron $count$ elementos",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "manageCollections": {
+    "message": "Administrar colecciones"
+  },
+  "newTabEmptyMessage": {
+    "message": "Importe colecciones desde un archivo previamente guardado o use el botón <strong>Agregar colección</strong> para guardar las pestañas abiertas"
+  },
+  "oneResult": {
+    "message": "Un resultado"
+  },
+  "openTabs": {
+    "message": "$count$ abierto",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "pin": {
+    "message": "Alfiler"
+  },
+  "pinned": {
+    "message": "Fijado"
+  },
+  "popupEmptyMessage": {
+    "message": "No se encontró ninguna colección. Utilice el botón que aparece a continuación para crear una nueva colección guardando las pestañas abiertas"
+  },
+  "restore": {
+    "message": "Restaurar"
+  },
+  "resultCount": {
+    "message": "$count$ resultados",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "save": {
+    "message": "Ahorrar"
+  },
+  "savedCount": {
+    "message": "$count$ guardadas",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "searchEmptyMessage": {
+    "message": "No hay resultados de búsqueda"
+  },
+  "settings": {
+    "message": "Ajustes"
+  },
+  "siteMovedToIgnoreList": {
+    "message": "Sitio movido a la lista de ignorados"
+  },
+  "syncCollections": {
+    "message": "Sincronizar colecciones"
+  },
+  "syncUsage": {
+    "message": "Uso del almacenamiento sincronizado"
+  },
+  "tabsCount": {
+    "message": "Pestañas $selected$ / $total$",
+    "placeholders": {
+      "selected": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "tabsExistError": {
+    "message": "Todas las pestañas ya están en la lista"
+  },
+  "title": {
+    "message": "Título"
+  },
+  "today": {
+    "message": "Hoy"
+  },
+  "unpin": {
+    "message": "Desprender"
+  },
+  "url": {
+    "message": "URL"
+  },
+  "week": {
+    "message": "Semana"
+  },
+  "yesterday": {
+    "message": "Ayer"
+  }
+}
