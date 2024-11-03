@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { TranslatePipe } from '../../pipes';
 import { HomeService, TabService } from '../../services';
 import { Action, ActionIcon, CollectionActions, TabGroups, Timeline, translate } from '../../utils';
 import { EmptyComponent } from '../empty/empty.component';
@@ -19,7 +20,7 @@ import { TimelineElementComponent } from '../timeline-element/timeline-element.c
   styleUrls: ['./new-tab-content.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [CommonModule, EmptyComponent, GroupsComponent, TimelineElementComponent],
+  imports: [CommonModule, EmptyComponent, GroupsComponent, TimelineElementComponent, TranslatePipe],
 })
 export class NewTabContentComponent {
   readonly defaultActions: CollectionActions = [

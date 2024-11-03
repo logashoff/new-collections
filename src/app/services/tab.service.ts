@@ -6,6 +6,8 @@ import { debounce, flatMap, keyBy, remove, uniqBy } from 'lodash-es';
 import { BehaviorSubject, Observable, firstValueFrom, lastValueFrom } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { validate as uuidValidate, v4 as uuidv4 } from 'uuid';
+
+import { RenameDialogComponent, TabsSelectorComponent } from '../components';
 import {
   ActionIcon,
   BrowserTab,
@@ -30,8 +32,6 @@ import {
   syncToTabs,
   translate,
 } from '../utils';
-
-import { RenameDialogComponent, TabsSelectorComponent } from '../components';
 import { MessageService } from './message.service';
 import { NavService } from './nav.service';
 

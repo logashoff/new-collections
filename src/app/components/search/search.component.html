@@ -36,12 +36,11 @@
             [useFind]="true"
             (deleted)="itemDeleted($event)"
             (modified)="itemModified($event)"
-            (find)="findItem.emit($event)"
-          />
+            (find)="findItem.emit($event)" />
         }
       </app-tab-list>
     </mat-card>
   }
 } @else {
-  <app-empty>search_off</app-empty>
+  <app-empty [message]="'searchEmptyMessage' | translate">search_off</app-empty>
 }

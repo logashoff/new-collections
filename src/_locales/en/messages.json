@@ -57,7 +57,7 @@
     "message": "From other devices"
   },
   "hintCollections": {
-    "message": "Save collection as JSON file or import saved file"
+    "message": "Save collection to a file or import saved file"
   },
   "hintDataUsage": {
     "message": "Data used to store synced collections ($percent$% remaining)",
@@ -66,9 +66,6 @@
         "content": "$1"
       }
     }
-  },
-  "hintHiddenSites": {
-    "message": "Sites hidden from top sites list on New Tab page"
   },
   "hintIgnoredSites": {
     "message": "Sites excluded from top sites list on New Tab page"
@@ -92,7 +89,7 @@
     "message": "Import Collections"
   },
   "invalidTabList": {
-    "message": "Opened tabs list is invalid"
+    "message": "Open tabs are invalid"
   },
   "itemAdded": {
     "message": "Item added"
@@ -119,6 +116,9 @@
   "manageCollections": {
     "message": "Manage Collections"
   },
+  "newTabEmptyMessage": {
+    "message": "Import collections from previously saved file or use <strong>Add Collection</strong> button to save open tabs"
+  },
   "oneResult": {
     "message": "One result"
   },
@@ -135,6 +135,9 @@
   },
   "pinned": {
     "message": "Pinned"
+  },
+  "popupEmptyMessage": {
+    "message": "No collection found. Use button below to create new collection by saving open tabs"
   },
   "restore": {
     "message": "Restore"
@@ -157,6 +160,9 @@
         "content": "$1"
       }
     }
+  },
+  "searchEmptyMessage": {
+    "message": "No search results"
   },
   "settings": {
     "message": "Settings"
