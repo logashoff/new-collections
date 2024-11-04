@@ -21,6 +21,7 @@ export const faviconStorageKey = 'favicon';
  */
 export const ignoreUrlsRegExp = new RegExp('^(about:|chrome:|file:|wss:|ws:|chrome-extension:)');
 
+export type SyncStorageArea = chrome.storage.SyncStorageArea;
 export type QueryInfo = chrome.tabs.QueryInfo;
 export type Tab = chrome.tabs.Tab;
 export type Tabs = Tab[];
@@ -73,14 +74,32 @@ export type SyncTab = [id: number, url: string, title: string];
 export type SyncTabs = SyncTab[];
 
 /**
+ * Favicon data in sync storage
+ */
+export interface FaviconSync {
+  [faviconStorageKey]?: {
+    [hostname: string]: string;
+  };
+}
+
+/**
+ * Settings data in sync storage
+ */
+export interface SettingsSync {
+  [settingsStorageKey]?: Settings;
+}
+
+/**
+ * Map group ID to array containing group timestamp and tabs
+ */
+export type GroupSync = {
+  [groupId: string]: [timestamp: number, tabs: SyncTabs];
+};
+
+/**
  * Data used to store collections in sync storage
  */
-export interface SyncData {
-  /**
-   * Map group ID to array containing group timestamp and tabs
-   */
-  [groupId: string]: [timestamp: number, tabs: SyncTabs];
-}
+export type SyncData = SettingsSync & FaviconSync & GroupSync;
 
 /**
  * Storage change event
@@ -276,3 +295,5 @@ export type Timeline = TimelineElement[];
 export const ESC_KEY_CODE = 'Escape';
 
 export const KEY_UP = 'keyup';
+
+export type Timeout = ReturnType<typeof setTimeout>;

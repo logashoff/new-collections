@@ -17,7 +17,7 @@ describe('MessageService', () => {
 
   it('should open snackbar with params', async () => {
     const { service } = spectator;
-    const spy = jest.spyOn(spectator.service['snackBar'], 'openFromComponent');
+    jest.spyOn(spectator.service['snackBar'], 'openFromComponent');
 
     service.open('Hello World', ActionIcon.Export, {
       verticalPosition: 'top',

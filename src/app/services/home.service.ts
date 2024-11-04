@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { flatMap, isNil, isUndefined } from 'lodash-es';
-import { Observable, combineLatest, from, map, of, shareReplay, switchMap, take } from 'rxjs';
+import { EMPTY, Observable, combineLatest, from, map, shareReplay, switchMap, take } from 'rxjs';
+
 import { SettingsService, TabService } from '../services';
 import { Devices, MostVisitedURL, Sessions, TabGroup, Tabs, Timeline, TopSites } from '../utils';
 
@@ -49,7 +50,7 @@ export class HomeService {
           return from(this.getDevices()).pipe(map((devices) => (devices?.length > 0 ? devices : null)));
         }
 
-        return of(null);
+        return EMPTY;
       }),
       shareReplay(1)
     );
@@ -91,7 +92,7 @@ export class HomeService {
           );
         }
 
-        return of(null);
+        return EMPTY;
       }),
       shareReplay(1)
     );

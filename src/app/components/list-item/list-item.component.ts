@@ -152,7 +152,7 @@ export class ListItemComponent implements OnInit, Activatable {
     this.inTimeline$ = toObservable(this.useFind).pipe(
       filter((useFind) => useFind),
       withLatestFrom(this.#tab$),
-      switchMap(([_, tab]) =>
+      switchMap(([, tab]) =>
         this.#tabs$.pipe(
           filter((tabs) => tabs?.length > 0),
           map((tabs) => tabs.some((t) => t.id === tab.id))
