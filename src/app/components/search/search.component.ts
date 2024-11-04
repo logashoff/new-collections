@@ -1,5 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input, OnDestroy, OnInit, output, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  OnDestroy,
+  OnInit,
+  output,
+  QueryList,
+  ViewChildren,
+  ViewEncapsulation,
+} from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,7 +31,7 @@ import {
 } from 'rxjs';
 
 import { TranslatePipe } from '../../pipes';
-import { NavService, TabService } from '../../services';
+import { KeyService, NavService, TabService } from '../../services';
 import { Action, BrowserTab, BrowserTabs, listItemAnimation } from '../../utils';
 import { EmptyComponent } from '../empty/empty.component';
 import { ListItemComponent } from '../list-item/list-item.component';
@@ -60,7 +71,7 @@ const fuseOptions: IFuseOptions<BrowserTab> = {
     TranslatePipe,
   ],
 })
-export class SearchComponent implements OnInit, OnDestroy {
+export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly Action = Action;
 
   readonly source = input.required<BrowserTabs>();
@@ -92,9 +103,15 @@ export class SearchComponent implements OnInit, OnDestroy {
   readonly timelineTabs$ = this.tabService.tabs$.pipe(shareReplay(1));
   readonly isPopup = this.navService.isPopup;
 
+  @ViewChildren(ListItemComponent)
+  private listItems: QueryList<ListItemComponent>;
+
+  #itemChanges: Subscription;
+
   constructor(
     private readonly navService: NavService,
-    private readonly tabService: TabService
+    private readonly tabService: TabService,
+    private readonly keyService: KeyService<ListItemComponent>
   ) {}
 
   ngOnInit() {
@@ -152,8 +169,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     );
   }
 
+  ngAfterViewInit() {
+    this.#itemChanges = this.listItems.changes.subscribe((e) => this.keyService.setItems(this.listItems));
+  }
+
   ngOnDestroy() {
     this.#resultChanges.unsubscribe();
+    this.#itemChanges.unsubscribe();
   }
 
   /**

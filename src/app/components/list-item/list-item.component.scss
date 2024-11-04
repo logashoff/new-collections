@@ -13,8 +13,12 @@ $typography-config: mat.m2-get-typography-config($dark-theme);
       color: get-palette-color(get-foreground-palette($theme), text);
     }
 
-    &:hover {
-      background-color: get-palette-color(get-background-palette($theme), hover);
+    &:hover,
+    &.active {
+      background-color: get-palette-color(
+        get-background-palette($theme),
+        hover
+      );
     }
 
     .subtitle,

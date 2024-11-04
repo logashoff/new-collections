@@ -3,7 +3,9 @@ import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@
 import { RouterOutlet } from '@angular/router';
 import { isNil } from 'lodash-es';
 import { Observable, combineLatest, map, shareReplay } from 'rxjs';
-import { HomeService, NavService } from '../../services';
+
+import { KeyListenerDirective } from '../../directives';
+import { HomeService, KeyService, NavService } from '../../services';
 import { TopSites, routeAnimations, scrollTop } from '../../utils';
 import { SearchFormComponent } from '../search-form/search-form.component';
 import { TopSitesComponent } from '../top-sites/top-sites.component';
@@ -22,8 +24,9 @@ import { TopSitesComponent } from '../top-sites/top-sites.component';
   standalone: true,
   animations: [routeAnimations],
   imports: [RouterOutlet, CommonModule, SearchFormComponent, TopSitesComponent],
+  providers: [KeyService],
 })
-export class NewTabComponent implements OnInit {
+export class NewTabComponent extends KeyListenerDirective implements OnInit {
   topSites$: Observable<TopSites>;
 
   /**
@@ -44,7 +47,9 @@ export class NewTabComponent implements OnInit {
   constructor(
     private readonly homeService: HomeService,
     private readonly navService: NavService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit() {
     this.topSites$ = this.homeService.topSites$.pipe(shareReplay(1));
@@ -59,5 +64,9 @@ export class NewTabComponent implements OnInit {
   async navigate(...command: string[]) {
     await this.navService.navigate(['/new-tab', ...command]);
     scrollTop();
+  }
+
+  onBlur() {
+    this.clearActive();
   }
 }

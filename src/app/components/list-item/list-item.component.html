@@ -45,19 +45,31 @@
   @if (inTimeline || notReadOnly) {
     <div class="controls">
       @if (inTimeline) {
-        <button appStopPropagation mat-icon-button [matTooltip]="'find' | translate" (click)="find.emit(tab())">
+        <button
+          appStopPropagation
+          mat-icon-button
+          [matTooltip]="'find' | translate"
+          (click)="find.emit(tab())">
           <mat-icon>manage_search</mat-icon>
         </button>
       }
 
       @if (notReadOnly) {
-        <button appStopPropagation mat-icon-button (click)="editClick()" [matTooltip]="'edit' | translate">
+        <button
+          appStopPropagation
+          mat-icon-button
+          (click)="editClick()"
+          [matTooltip]="'edit' | translate">
           <mat-icon>edit_note</mat-icon>
         </button>
       }
 
       @if (notReadOnly) {
-        <button appStopPropagation mat-icon-button (click)="deleteClick()" [matTooltip]="'delete' | translate">
+        <button
+          appStopPropagation
+          mat-icon-button
+          (click)="deleteClick()"
+          [matTooltip]="'delete' | translate">
           <mat-icon>delete</mat-icon>
         </button>
       }
