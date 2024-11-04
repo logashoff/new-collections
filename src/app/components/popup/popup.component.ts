@@ -2,7 +2,9 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { shareReplay } from 'rxjs';
-import { NavService } from '../../services';
+
+import { KeyListenerDirective } from '../../directives';
+import { KeyService, NavService } from '../../services';
 import { routeAnimations, scrollTop } from '../../utils';
 import { SearchFormComponent } from '../search-form/search-form.component';
 
@@ -20,14 +22,21 @@ import { SearchFormComponent } from '../search-form/search-form.component';
   standalone: true,
   animations: [routeAnimations],
   imports: [CommonModule, RouterOutlet, SearchFormComponent],
+  providers: [KeyService],
 })
-export class PopupComponent {
+export class PopupComponent extends KeyListenerDirective {
   readonly urlChanges$ = this.navService.pathChanges$.pipe(shareReplay(1));
 
-  constructor(private readonly navService: NavService) {}
+  constructor(private readonly navService: NavService) {
+    super();
+  }
 
   async navigate(...commands: string[]) {
     await this.navService.navigate(['/popup', ...commands]);
     scrollTop();
+  }
+
+  onBlur() {
+    this.clearActive();
   }
 }

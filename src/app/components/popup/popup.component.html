@@ -1,4 +1,8 @@
-<app-search-form class="search-form" (activated)="navigate('search')" (canceled)="navigate('main')" />
+<app-search-form
+  class="search-form"
+  (activated)="navigate('search')"
+  (canceled)="navigate('main')"
+  (blur)="onBlur()" />
 <div class="content" [@routeAnimations]="urlChanges$ | async">
   <router-outlet />
 </div>

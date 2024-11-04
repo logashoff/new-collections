@@ -52,6 +52,7 @@ interface SearchForm {
 export class SearchFormComponent implements OnInit, OnDestroy {
   readonly activated = output();
   readonly canceled = output();
+  readonly blur = output();
 
   private readonly searchInput = viewChild.required<ElementRef>('searchInput');
 
@@ -132,6 +133,11 @@ export class SearchFormComponent implements OnInit, OnDestroy {
 
   handleAction(action: Action) {
     this.collectionsService.handleAction(action);
+  }
+
+  onBlur() {
+    this.focused$.next(false);
+    this.blur.emit();
   }
 
   async searchChange(value: string) {

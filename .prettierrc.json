@@ -4,7 +4,10 @@
   "endOfLine": "lf",
   "overrides": [
     {
-      "files": "*.html",
+      "files": [
+        "*.html",
+        "*.scss"
+      ],
       "options": {
         "printWidth": 80
       }

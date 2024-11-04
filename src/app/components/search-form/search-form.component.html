@@ -8,15 +8,18 @@
         matInput
         formControlName="search"
         (focus)="focused$.next(true)"
-        (blur)="focused$.next(false)"
-        autocomplete="off"
-      />
+        (blur)="onBlur()"
+        autocomplete="off" />
     </mat-form-field>
   </form>
 
   <div class="controls">
     @if (isActive$ | async) {
-      <button mat-icon-button color="primary" [matTooltip]="'cancelSearch' | translate" (click)="clearSearch()">
+      <button
+        mat-icon-button
+        color="primary"
+        [matTooltip]="'cancelSearch' | translate"
+        (click)="clearSearch()">
         <mat-icon>close</mat-icon>
       </button>
     } @else {
@@ -24,8 +27,7 @@
         mat-icon-button
         color="primary"
         [matTooltip]="'addCollection' | translate"
-        (click)="handleAction(Action.Save)"
-      >
+        (click)="handleAction(Action.Save)">
         <mat-icon>add</mat-icon>
       </button>
     }
