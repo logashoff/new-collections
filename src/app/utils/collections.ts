@@ -1,10 +1,12 @@
 import { isUndefined, keyBy } from 'lodash-es';
 import { validate as uuidValidate } from 'uuid';
+
 import {
   BrowserTabs,
   Collection,
   Collections,
   faviconStorageKey,
+  FaviconSync,
   Settings,
   StorageArea,
   SyncData,
@@ -29,7 +31,7 @@ export async function saveCollections(collections: Collections): Promise<void> {
   const collectionsById: { [id: string]: Collection } = keyBy(collections, 'id');
 
   const removeKeys = [faviconStorageKey];
-  for (let groupId in syncData) {
+  for (const groupId in syncData) {
     if (uuidValidate(groupId) && !(groupId in collectionsById)) {
       delete syncData[groupId];
       removeKeys.push(groupId);
@@ -109,9 +111,10 @@ export function syncToTabs(sync: SyncTabs): BrowserTabs {
  */
 export async function copyStorage(source: StorageArea, target: StorageArea) {
   const sourceData: SyncData = await source.get();
-  const newData: SyncData = {
+  const faviconData: FaviconSync = {
     [faviconStorageKey]: sourceData[faviconStorageKey],
   };
+  const newData = { ...faviconData };
 
   const sourceKeys = Object.keys(sourceData).filter((groupId) => uuidValidate(groupId));
   sourceKeys.forEach((key) => (newData[key] = sourceData[key]));

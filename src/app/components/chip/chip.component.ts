@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, Input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
 import { IconSize, ImageSource } from '../../utils';
 import { ImageComponent } from '../image/image.component';
 

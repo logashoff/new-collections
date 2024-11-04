@@ -170,7 +170,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.#itemChanges = this.listItems.changes.subscribe((e) => this.keyService.setItems(this.listItems));
+    this.#itemChanges = this.listItems.changes.subscribe(() => this.keyService.setItems(this.listItems));
   }
 
   ngOnDestroy() {

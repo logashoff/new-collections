@@ -1,4 +1,5 @@
 import { getTabGroupMock, getTabGroupsMock } from 'src/mocks';
+import { SyncStorageArea } from '.';
 import { getCollections, saveCollections, syncToTabs, tabsToSync } from './collections';
 
 describe('collections.ts', () => {
@@ -69,9 +70,6 @@ describe('collections.ts', () => {
   });
 
   it('should save tab groups to storage', async () => {
-    const getSyncSpy = jest.spyOn<any, any>(chrome.storage.sync, 'get');
-    getSyncSpy.mockReturnValue({ '07297efc-2629-47dc-abf3-c8612781600f': [] });
-
     const setSyncSpy = jest.spyOn(chrome.storage.sync, 'set');
     const remSyncSpy = jest.spyOn(chrome.storage.sync, 'remove');
 
@@ -82,8 +80,8 @@ describe('collections.ts', () => {
   });
 
   it('should return tab groups from storage', async () => {
-    const getSyncSpy = jest.spyOn<any, any>(chrome.storage.sync, 'get');
-    getSyncSpy.mockReturnValue(syncedData);
+    const getSyncSpy = jest.spyOn<SyncStorageArea, 'get'>(chrome.storage.sync, 'get');
+    getSyncSpy.mockImplementation(() => syncedData);
 
     const collections = await getCollections();
 

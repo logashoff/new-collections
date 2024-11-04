@@ -2,7 +2,8 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
-import { firstValueFrom, of } from 'rxjs';
+import { EMPTY, firstValueFrom, of } from 'rxjs';
+
 import { NavService } from './nav.service';
 
 describe('NavService', () => {
@@ -24,7 +25,7 @@ describe('NavService', () => {
         provide: Router,
         useValue: {
           url: '/',
-          events: of(null),
+          events: EMPTY,
           navigate() {},
         },
       },
