@@ -6,6 +6,11 @@ export interface Activatable extends Highlightable {
   activate?(): void;
 }
 
+/**
+ * @description
+ *
+ * Helper service for `KeyListenerDirective`
+ */
 @Injectable()
 export class KeyService<T extends Activatable> {
   private keyManager: ActiveDescendantKeyManager<T>;
@@ -16,12 +21,16 @@ export class KeyService<T extends Activatable> {
     if (event.keyCode === DOWN_ARROW || event.keyCode === UP_ARROW) {
       this.keyManager?.onKeydown(event);
     } else if (event.keyCode === ENTER) {
-      this.keyManager?.activeItem.activate();
+      this.keyManager?.activeItem?.activate();
     }
   }
 
   setItems(items: QueryList<T>) {
     this.keyManager = new ActiveDescendantKeyManager(items).withWrap();
+  }
+
+  setActive(index: number) {
+    this.keyManager?.setActiveItem(index);
   }
 
   clear() {

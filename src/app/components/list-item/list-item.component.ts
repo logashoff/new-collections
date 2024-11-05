@@ -210,7 +210,7 @@ export class ListItemComponent implements OnInit, Activatable {
   async setActiveStyles() {
     this._isActive = true;
 
-    await scrollIntoView(this.el.nativeElement);
+    await scrollIntoView(this.el.nativeElement, { block: 'center' });
 
     this.cdr.markForCheck();
   }

@@ -4,6 +4,8 @@
 $typography-config: mat.m2-get-typography-config($dark-theme);
 
 @include component-theme using($theme) {
+  $primary-palette: get-primary-palette($theme);
+
   app-list-item {
     .container,
     a:link,
@@ -19,6 +21,15 @@ $typography-config: mat.m2-get-typography-config($dark-theme);
         get-background-palette($theme),
         hover
       );
+    }
+
+    &.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      border-left: 3px solid get-palette-color($primary-palette);
     }
 
     .subtitle,

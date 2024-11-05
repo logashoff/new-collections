@@ -296,4 +296,6 @@ export const ESC_KEY_CODE = 'Escape';
 
 export const KEY_UP = 'keyup';
 
+export const KEY_DOWN = 'keydown';
+
 export type Timeout = ReturnType<typeof setTimeout>;
