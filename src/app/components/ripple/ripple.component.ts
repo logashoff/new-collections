@@ -7,13 +7,14 @@ import {
   HostBinding,
   HostListener,
   input,
-  OnDestroy,
   OnInit,
   signal,
   ViewEncapsulation,
 } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { concat, from, map, of, Subscription, switchMap, timer } from 'rxjs';
+import { concat, from, map, of, switchMap, timer } from 'rxjs';
+
+import { SubSinkDirective } from '../../directives';
 import { scrollIntoView } from '../../utils';
 
 /**
@@ -29,13 +30,11 @@ import { scrollIntoView } from '../../utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
 })
-export class RippleComponent implements OnInit, OnDestroy {
+export class RippleComponent extends SubSinkDirective implements OnInit {
   readonly focused = input<boolean>();
 
   readonly isFocused = signal<boolean>(false);
   readonly isFocused$ = toObservable(this.isFocused);
-
-  #focusSub: Subscription;
 
   @HostBinding('class.focused')
   private _focused = false;
@@ -49,18 +48,18 @@ export class RippleComponent implements OnInit, OnDestroy {
     private el: ElementRef,
     private cdr: ChangeDetectorRef
   ) {
+    super();
     effect(() => this.isFocused.set(this.focused()), { allowSignalWrites: true });
   }
 
   ngOnInit() {
-    this.#focusSub = this.isFocused$
+    const scrollIntoView$ = from(scrollIntoView(this.el.nativeElement)).pipe(map(() => true));
+
+    const focusSub = this.isFocused$
       .pipe(
         switchMap((focused) =>
           focused
-            ? concat(
-                timer(225).pipe(switchMap(() => from(scrollIntoView(this.el.nativeElement)).pipe(map(() => true)))),
-                timer(1000).pipe(map(() => false))
-              )
+            ? concat(timer(225).pipe(switchMap(() => scrollIntoView$)), timer(1000).pipe(map(() => false)))
             : of(false)
         )
       )
@@ -68,9 +67,7 @@ export class RippleComponent implements OnInit, OnDestroy {
         this._focused = focused;
         this.cdr.markForCheck();
       });
-  }
 
-  ngOnDestroy() {
-    this.#focusSub.unsubscribe();
+    this.subscribe(focusSub);
   }
 }

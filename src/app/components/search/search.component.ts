@@ -4,7 +4,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   input,
-  OnDestroy,
   OnInit,
   output,
   QueryList,
@@ -25,11 +24,12 @@ import {
   Observable,
   of,
   shareReplay,
-  Subscription,
   switchMap,
   take,
+  withLatestFrom,
 } from 'rxjs';
 
+import { SubSinkDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
 import { KeyService, NavService, TabService } from '../../services';
 import { Action, BrowserTab, BrowserTabs, listItemAnimation } from '../../utils';
@@ -71,7 +71,7 @@ const fuseOptions: IFuseOptions<BrowserTab> = {
     TranslatePipe,
   ],
 })
-export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
+export class SearchComponent extends SubSinkDirective implements OnInit, AfterViewInit {
   readonly Action = Action;
 
   readonly source = input.required<BrowserTabs>();
@@ -97,8 +97,6 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
 
   readonly #searchResults$ = new BehaviorSubject<BrowserTabs>([]);
 
-  #resultChanges: Subscription;
-
   readonly openTabs$ = this.tabService.openTabChanges$.pipe(shareReplay(1));
   readonly timelineTabs$ = this.tabService.tabs$.pipe(shareReplay(1));
   readonly isPopup = this.navService.isPopup;
@@ -106,17 +104,17 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChildren(ListItemComponent)
   private listItems: QueryList<ListItemComponent>;
 
-  #itemChanges: Subscription;
+  private readonly searchValue$ = this.navService.paramsSearch$.pipe(shareReplay(1));
 
   constructor(
     private readonly navService: NavService,
     private readonly tabService: TabService,
     private readonly keyService: KeyService<ListItemComponent>
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit() {
-    const searchValue$ = this.navService.paramsSearch$.pipe(shareReplay(1));
-
     const fuse = new Fuse<BrowserTab>([], fuseOptions);
 
     const fuse$: Observable<Fuse<BrowserTab>> = this.#source$.pipe(
@@ -127,7 +125,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
       })
     );
 
-    this.#resultChanges = searchValue$
+    const resultChanges = this.searchValue$
       .pipe(
         filter((searchValue) => searchValue?.length > 0),
         distinctUntilChanged(),
@@ -140,7 +138,9 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
       )
       .subscribe((results) => this.#searchResults$.next(results));
 
-    this.sourceTabs$ = combineLatest([searchValue$, this.#searchResults$, this.#source$]).pipe(
+    this.subscribe(resultChanges);
+
+    this.sourceTabs$ = combineLatest([this.searchValue$, this.#searchResults$, this.#source$]).pipe(
       map(([searchValue, searchResults, source]) => {
         if (searchValue?.length) {
           return searchResults;
@@ -157,7 +157,7 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
       take(1)
     );
 
-    this.deviceTabs$ = searchValue$.pipe(
+    this.deviceTabs$ = this.searchValue$.pipe(
       switchMap((search) => {
         if (search) {
           return fuseDevices$.pipe(map((fuse) => fuse.search(search)?.map(({ item }) => item)));
@@ -170,12 +170,16 @@ export class SearchComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.#itemChanges = this.listItems.changes.subscribe(() => this.keyService.setItems(this.listItems));
-  }
+    const itemChanges = this.listItems.changes.pipe(withLatestFrom(this.searchValue$)).subscribe(([, searchValue]) => {
+      this.keyService.clear();
+      this.keyService.setItems(this.listItems);
 
-  ngOnDestroy() {
-    this.#resultChanges.unsubscribe();
-    this.#itemChanges.unsubscribe();
+      if (searchValue?.length) {
+        this.keyService.setActive(0);
+      }
+    });
+
+    this.subscribe(itemChanges);
   }
 
   /**

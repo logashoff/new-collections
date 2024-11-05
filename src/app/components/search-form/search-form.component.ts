@@ -4,7 +4,6 @@ import {
   Component,
   ElementRef,
   HostBinding,
-  OnDestroy,
   OnInit,
   output,
   viewChild,
@@ -16,9 +15,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { BehaviorSubject, filter, fromEvent, map, shareReplay, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, filter, fromEvent, map, shareReplay } from 'rxjs';
 
-import { StopPropagationDirective } from '../../directives';
+import { StopPropagationDirective, SubSinkDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
 import { CollectionsService, NavService } from '../../services';
 import { Action, ESC_KEY_CODE, KEY_UP, scrollTop } from '../../utils';
@@ -49,7 +48,7 @@ interface SearchForm {
     TranslatePipe,
   ],
 })
-export class SearchFormComponent implements OnInit, OnDestroy {
+export class SearchFormComponent extends SubSinkDirective implements OnInit {
   readonly activated = output();
   readonly canceled = output();
   readonly blur = output();
@@ -61,8 +60,6 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   readonly formGroup = new FormGroup<SearchForm>({
     search: this.#searchControl,
   });
-
-  readonly #destroy$ = new Subject();
 
   /**
    * Indicates search input is focused
@@ -89,10 +86,12 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   constructor(
     private collectionsService: CollectionsService,
     private navService: NavService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit() {
-    this.navService.paramsSearch$.pipe(takeUntil(this.#destroy$)).subscribe((value) =>
+    const paramChanges = this.navService.paramsSearch$.subscribe((value) =>
       this.#searchControl.setValue(value, {
         emitEvent: false,
       })
@@ -100,25 +99,19 @@ export class SearchFormComponent implements OnInit, OnDestroy {
 
     const keyEvent$ = fromEvent<KeyboardEvent>(document, KEY_UP);
 
-    keyEvent$.pipe(takeUntil(this.#destroy$)).subscribe((e) => {
+    const keyChanges = keyEvent$.subscribe((e) => {
       if (e.code === ESC_KEY_CODE && this.isActive) {
         this.clearSearch();
       }
     });
 
-    this.focused$
-      .pipe(
-        takeUntil(this.#destroy$),
-        filter((focused) => focused && !this.isActive)
-      )
+    const focusChanges = this.focused$
+      .pipe(filter((focused) => focused && !this.isActive))
       .subscribe(() => this.activated.emit());
 
-    this.formGroup.valueChanges.pipe(takeUntil(this.#destroy$)).subscribe(({ search }) => this.searchChange(search));
-  }
+    this.formGroup.valueChanges.subscribe(({ search }) => this.searchChange(search));
 
-  ngOnDestroy() {
-    this.#destroy$.next(null);
-    this.#destroy$.complete();
+    this.subscribe(paramChanges, keyChanges, focusChanges);
   }
 
   /**
