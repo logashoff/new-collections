@@ -1,0 +1,211 @@
+{
+  "action_settings": {
+    "message": "設定"
+  },
+  "action_undo": {
+    "message": "元に戻す"
+  },
+  "active": {
+    "message": "アクティブ"
+  },
+  "addCollection": {
+    "message": "コレクションを追加"
+  },
+  "addSelected": {
+    "message": "選択した項目を追加"
+  },
+  "addTabs": {
+    "message": "タブを追加"
+  },
+  "cancelSearch": {
+    "message": "検索をキャンセル"
+  },
+  "close": {
+    "message": "近い"
+  },
+  "delete": {
+    "message": "消去"
+  },
+  "deleteAll": {
+    "message": "すべて削除"
+  },
+  "dismiss": {
+    "message": "却下する"
+  },
+  "edit": {
+    "message": "編集"
+  },
+  "emptyListError": {
+    "message": "エクスポートするコレクションがありません"
+  },
+  "enableDevices": {
+    "message": "同期されたタブを表示"
+  },
+  "enableSites": {
+    "message": "トップサイトを表示"
+  },
+  "export": {
+    "message": "輸出"
+  },
+  "exportCollections": {
+    "message": "コレクションをエクスポート"
+  },
+  "find": {
+    "message": "探す"
+  },
+  "fromDevices": {
+    "message": "他のデバイスから"
+  },
+  "hintCollections": {
+    "message": "コレクションをファイルに保存するか、保存したファイルをインポートします"
+  },
+  "hintDataUsage": {
+    "message": "同期されたコレクションを保存するために使用されるデータ (残り $percent$%)",
+    "placeholders": {
+      "percent": {
+        "content": "$1"
+      }
+    }
+  },
+  "hintIgnoredSites": {
+    "message": "新しいタブページのトップサイトリストから除外されたサイト"
+  },
+  "hintShowDevices": {
+    "message": "新しいタブページに同期されたデバイスを表示する"
+  },
+  "hintShowTopSites": {
+    "message": "新しいタブページにトップサイトを表示する"
+  },
+  "hintSyncCollections": {
+    "message": "デバイス間でコレクションを同期する"
+  },
+  "ignoredSites": {
+    "message": "無視されたサイト"
+  },
+  "import": {
+    "message": "輸入"
+  },
+  "importCollections": {
+    "message": "コレクションをインポート"
+  },
+  "invalidTabList": {
+    "message": "開いているタブは無効です"
+  },
+  "itemAdded": {
+    "message": "アイテムを追加しました"
+  },
+  "itemRemoved": {
+    "message": "アイテムを削除しました"
+  },
+  "itemsAddedCount": {
+    "message": "$count$ アイテムを追加しました",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "itemsRemovedCount": {
+    "message": "$count$個のアイテムを削除しました",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "manageCollections": {
+    "message": "コレクションの管理"
+  },
+  "newTabEmptyMessage": {
+    "message": "以前に保存したファイルからコレクションをインポートするか、<strong>コレクションを追加</strong>ボタンを使用して開いているタブを保存します。"
+  },
+  "oneResult": {
+    "message": "1件の結果"
+  },
+  "openTabs": {
+    "message": "$count$ オープン",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "pin": {
+    "message": "ピン"
+  },
+  "pinned": {
+    "message": "ピン留め"
+  },
+  "popupEmptyMessage": {
+    "message": "コレクションが見つかりません。下のボタンを使用して、開いているタブを保存して新しいコレクションを作成してください。"
+  },
+  "restore": {
+    "message": "復元する"
+  },
+  "resultCount": {
+    "message": "$count$件の結果",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "save": {
+    "message": "保存"
+  },
+  "savedCount": {
+    "message": "$count$ 保存済み",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "searchEmptyMessage": {
+    "message": "検索結果なし"
+  },
+  "settings": {
+    "message": "設定"
+  },
+  "siteMovedToIgnoreList": {
+    "message": "サイトを無視リストに移動しました"
+  },
+  "syncCollections": {
+    "message": "コレクションを同期"
+  },
+  "syncUsage": {
+    "message": "同期ストレージ使用量"
+  },
+  "tabsCount": {
+    "message": "$selected$ / $total$ タブ",
+    "placeholders": {
+      "selected": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "tabsExistError": {
+    "message": "すべてのタブはすでにリストに含まれています"
+  },
+  "title": {
+    "message": "タイトル"
+  },
+  "today": {
+    "message": "今日"
+  },
+  "unpin": {
+    "message": "ピンを外す"
+  },
+  "url": {
+    "message": "メールアドレス"
+  },
+  "week": {
+    "message": "週"
+  },
+  "yesterday": {
+    "message": "昨日"
+  }
+}
