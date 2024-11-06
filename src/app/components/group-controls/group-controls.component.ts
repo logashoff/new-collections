@@ -1,10 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+
 import { StopPropagationDirective } from '../../directives';
-import { TranslatePipe } from '../../pipes';
+import { DatePipe, TranslatePipe } from '../../pipes';
 import { CollectionsService, TabService } from '../../services';
 import { queryCurrentWindow, restoreTabs, TabGroup, Tabs } from '../../utils';
 
@@ -20,7 +20,7 @@ import { queryCurrentWindow, restoreTabs, TabGroup, Tabs } from '../../utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatTooltipModule, StopPropagationDirective, TranslatePipe],
+  imports: [DatePipe, MatButtonModule, MatIconModule, MatTooltipModule, StopPropagationDirective, TranslatePipe],
 })
 export class GroupControlsComponent {
   readonly group = input<TabGroup>();

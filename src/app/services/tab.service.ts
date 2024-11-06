@@ -203,9 +203,9 @@ export class TabService {
       case isSameWeek(now, date):
         return translate('week');
       case isSameYear(now, date):
-        return format(date, 'MMMM');
+        return format(date, 'LLLL');
       default:
-        return format(date, 'MMMM yyyy');
+        return format(date, 'LLLL yyyy');
     }
   }
 
