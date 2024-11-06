@@ -13,8 +13,7 @@
         appStopPropagation
         class="fav"
         [matTooltip]="(pinned() ? 'unpin' : 'pin') | translate"
-        (click)="favClicked()"
-      >
+        (click)="favClicked()">
         @if (pinned()) {
           <mat-icon>star</mat-icon>
         } @else {

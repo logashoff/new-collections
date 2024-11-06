@@ -1,0 +1,211 @@
+{
+  "action_settings": {
+    "message": "Configurações"
+  },
+  "action_undo": {
+    "message": "Desfazer"
+  },
+  "active": {
+    "message": "Ativa"
+  },
+  "addCollection": {
+    "message": "Adicionar coleção"
+  },
+  "addSelected": {
+    "message": "Adicionar selecionado"
+  },
+  "addTabs": {
+    "message": "Adicionar guias"
+  },
+  "cancelSearch": {
+    "message": "Cancelar pesquisa"
+  },
+  "close": {
+    "message": "Perto"
+  },
+  "delete": {
+    "message": "Eliminar"
+  },
+  "deleteAll": {
+    "message": "Apagar tudo"
+  },
+  "dismiss": {
+    "message": "Dispensar"
+  },
+  "edit": {
+    "message": "Editar"
+  },
+  "emptyListError": {
+    "message": "Sem coleção para exportar"
+  },
+  "enableDevices": {
+    "message": "Mostrar separadores sincronizados"
+  },
+  "enableSites": {
+    "message": "Mostrar principais sites"
+  },
+  "export": {
+    "message": "Exportar"
+  },
+  "exportCollections": {
+    "message": "Exportar coleções"
+  },
+  "find": {
+    "message": "Encontrar"
+  },
+  "fromDevices": {
+    "message": "De outros dispositivos"
+  },
+  "hintCollections": {
+    "message": "Guarde a coleção num ficheiro ou importe o ficheiro salvo"
+  },
+  "hintDataUsage": {
+    "message": "Dados utilizados para armazenar coleções sincronizadas ($percent$% restantes)",
+    "placeholders": {
+      "percent": {
+        "content": "$1"
+      }
+    }
+  },
+  "hintIgnoredSites": {
+    "message": "Sites excluídos da lista de sites principais na página Novo separador"
+  },
+  "hintShowDevices": {
+    "message": "Mostrar dispositivos sincronizados na página Novo separador"
+  },
+  "hintShowTopSites": {
+    "message": "Mostrar os principais sites na página Novo separador"
+  },
+  "hintSyncCollections": {
+    "message": "Sincroniza coleções entre dispositivos"
+  },
+  "ignoredSites": {
+    "message": "Sites ignorados"
+  },
+  "import": {
+    "message": "Importação"
+  },
+  "importCollections": {
+    "message": "Importar coleções"
+  },
+  "invalidTabList": {
+    "message": "As guias abertas são inválidas"
+  },
+  "itemAdded": {
+    "message": "Item adicionado"
+  },
+  "itemRemoved": {
+    "message": "Artigo removido"
+  },
+  "itemsAddedCount": {
+    "message": "Adicionados $count$ artigos",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "itemsRemovedCount": {
+    "message": "Removidos $count$ itens",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "manageCollections": {
+    "message": "Gerir coleções"
+  },
+  "newTabEmptyMessage": {
+    "message": "Importe coleções de ficheiros guardados anteriormente ou utilize o botão <strong>Adicionar coleção</strong> para guardar os separadores abertos"
+  },
+  "oneResult": {
+    "message": "Um resultado"
+  },
+  "openTabs": {
+    "message": "$count$ Aberto",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "pin": {
+    "message": "Pino"
+  },
+  "pinned": {
+    "message": "Fixada"
+  },
+  "popupEmptyMessage": {
+    "message": "Nenhuma coleção encontrada. Utilize o botão abaixo para criar uma nova coleção guardando os separadores abertos"
+  },
+  "restore": {
+    "message": "Restaurar"
+  },
+  "resultCount": {
+    "message": "$count$ resultados",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "save": {
+    "message": "Guardar"
+  },
+  "savedCount": {
+    "message": "$count$ salvos",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "searchEmptyMessage": {
+    "message": "Nenhum resultado de pesquisa"
+  },
+  "settings": {
+    "message": "Configurações"
+  },
+  "siteMovedToIgnoreList": {
+    "message": "Site movido para lista de ignorados"
+  },
+  "syncCollections": {
+    "message": "Sincronizar coleções"
+  },
+  "syncUsage": {
+    "message": "Sincronizar utilização de armazenamento"
+  },
+  "tabsCount": {
+    "message": "Guias $selected$ / $total$",
+    "placeholders": {
+      "selected": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "tabsExistError": {
+    "message": "Todas as guias já estão na lista"
+  },
+  "title": {
+    "message": "Título"
+  },
+  "today": {
+    "message": "Hoje"
+  },
+  "unpin": {
+    "message": "Liberar"
+  },
+  "url": {
+    "message": "URL"
+  },
+  "week": {
+    "message": "Semana"
+  },
+  "yesterday": {
+    "message": "Ontem"
+  }
+}

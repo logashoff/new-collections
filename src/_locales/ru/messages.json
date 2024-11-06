@@ -1,0 +1,211 @@
+{
+  "action_settings": {
+    "message": "Настройки"
+  },
+  "action_undo": {
+    "message": "Отменить"
+  },
+  "active": {
+    "message": "Активный"
+  },
+  "addCollection": {
+    "message": "Добавить коллекцию"
+  },
+  "addSelected": {
+    "message": "Добавить выбранное"
+  },
+  "addTabs": {
+    "message": "Добавить вкладки"
+  },
+  "cancelSearch": {
+    "message": "Отменить поиск"
+  },
+  "close": {
+    "message": "Закрывать"
+  },
+  "delete": {
+    "message": "Удалить"
+  },
+  "deleteAll": {
+    "message": "Удалить все"
+  },
+  "dismiss": {
+    "message": "Убрать"
+  },
+  "edit": {
+    "message": "Редактировать"
+  },
+  "emptyListError": {
+    "message": "Нет коллекций для экспорта"
+  },
+  "enableDevices": {
+    "message": "Показать синхронизированные вкладки"
+  },
+  "enableSites": {
+    "message": "Показать топ-сайты"
+  },
+  "export": {
+    "message": "Экспорт"
+  },
+  "exportCollections": {
+    "message": "Экспорт Коллекций"
+  },
+  "find": {
+    "message": "Найти"
+  },
+  "fromDevices": {
+    "message": "С других устройств"
+  },
+  "hintCollections": {
+    "message": "Сохранить коллекцию в файл или импортировать сохраненный файл"
+  },
+  "hintDataUsage": {
+    "message": "Данные, используемые для хранения синхронизированных коллекций (Осталось $percent$%)",
+    "placeholders": {
+      "percent": {
+        "content": "$1"
+      }
+    }
+  },
+  "hintIgnoredSites": {
+    "message": "Сайты исключены из списка сайтов на странице «Новая вкладка»"
+  },
+  "hintShowDevices": {
+    "message": "Показать синхронизированные устройства на странице новой вкладки"
+  },
+  "hintShowTopSites": {
+    "message": "Показывать популярные сайты на странице новой вкладки"
+  },
+  "hintSyncCollections": {
+    "message": "Синхронизирует коллекции на разных устройствах"
+  },
+  "ignoredSites": {
+    "message": "Игнорируемые сайты"
+  },
+  "import": {
+    "message": "Импорт"
+  },
+  "importCollections": {
+    "message": "Импорт Коллекций"
+  },
+  "invalidTabList": {
+    "message": "Открытые вкладки недействительны"
+  },
+  "itemAdded": {
+    "message": "Элемент добавлен"
+  },
+  "itemRemoved": {
+    "message": "Элемент удален"
+  },
+  "itemsAddedCount": {
+    "message": "Добавлено $count$ элементов",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "itemsRemovedCount": {
+    "message": "Удалено $count$ элементов",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "manageCollections": {
+    "message": "Управление коллекциями"
+  },
+  "newTabEmptyMessage": {
+    "message": "Импортируйте коллекции из ранее сохраненного файла или используйте кнопку <strong>Добавить коллекцию</strong>, чтобы сохранить открытые вкладки"
+  },
+  "oneResult": {
+    "message": "Один результат"
+  },
+  "openTabs": {
+    "message": "$count$ открыто",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "pin": {
+    "message": "Приколоть"
+  },
+  "pinned": {
+    "message": "Закреплено"
+  },
+  "popupEmptyMessage": {
+    "message": "Коллекции не найдены. Используйте кнопку ниже, чтобы создать новую коллекцию, сохранив открытые вкладки"
+  },
+  "restore": {
+    "message": "Восстановить"
+  },
+  "resultCount": {
+    "message": "$count$ results",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "save": {
+    "message": "Сохранить"
+  },
+  "savedCount": {
+    "message": "$count$ Сохранено",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "searchEmptyMessage": {
+    "message": "Нет результатов поиска"
+  },
+  "settings": {
+    "message": "Настройки"
+  },
+  "siteMovedToIgnoreList": {
+    "message": "Сайт перемещен в список игнорируемых"
+  },
+  "syncCollections": {
+    "message": "Синхронизировать коллекции"
+  },
+  "syncUsage": {
+    "message": "Синхронизация использования хранилища"
+  },
+  "tabsCount": {
+    "message": "Вкладки $selected$ / $total$",
+    "placeholders": {
+      "selected": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
+  "tabsExistError": {
+    "message": "Все вкладки уже в списке"
+  },
+  "title": {
+    "message": "Заголовок"
+  },
+  "today": {
+    "message": "Сегодня"
+  },
+  "unpin": {
+    "message": "Открепить"
+  },
+  "url": {
+    "message": "Ссылка"
+  },
+  "week": {
+    "message": "Неделя"
+  },
+  "yesterday": {
+    "message": "Вчера"
+  }
+}
