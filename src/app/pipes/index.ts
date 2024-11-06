@@ -1,3 +1,4 @@
+export * from './date.pipe';
 export * from './favicon.pipe';
 export * from './hostname.pipe';
 export * from './html.pipe';
