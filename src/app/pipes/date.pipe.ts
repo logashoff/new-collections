@@ -11,7 +11,7 @@ import { DateArg, format } from 'date-fns';
   standalone: true,
 })
 export class DatePipe implements PipeTransform {
-  transform(value: DateArg<Date>, formatStr = 'PPPP'): string {
+  transform(value: DateArg<Date>, formatStr = 'PP'): string {
     return format(value, formatStr);
   }
 }
