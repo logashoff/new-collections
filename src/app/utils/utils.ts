@@ -72,13 +72,18 @@ export const saveFile = (blob: Blob, fileName: string) => {
  */
 export const selectFile = () =>
   new Promise((resolve) => {
-    const input = document.createElement('input');
+    let input = document.createElement('input');
+    const onSelect = () => {
+      resolve(input.files || null);
+      input.removeEventListener('change', onSelect);
+      input = null;
+    };
 
     input.type = 'file';
     input.accept = '.json';
     input.multiple = false;
 
-    input.addEventListener('change', () => resolve(input.files || null));
+    input.addEventListener('change', onSelect);
 
     setTimeout(() => input.click());
   });

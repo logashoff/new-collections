@@ -5,14 +5,23 @@
 @include component-theme using($theme) {
   app-search-form {
     $is-dark: is-dark-theme($theme);
-    $border-color: get-palette-color(get-background-palette($theme), disabled-button-toggle);
-    $app-background: get-palette-color(get-background-palette($theme), background);
+    $border-color: get-palette-color(
+      get-background-palette($theme),
+      disabled-button-toggle
+    );
+    $app-background: get-palette-color(
+      get-background-palette($theme),
+      background
+    );
 
     color: get-palette-color(get-foreground-palette($theme), secondary-text);
     background-color: $app-background;
 
     .controls-wrapper {
-      $background-color: get-palette-color(get-background-palette($theme), card);
+      $background-color: get-palette-color(
+        get-background-palette($theme),
+        card
+      );
       background-color: $background-color;
 
       @if not $is-dark {
@@ -20,7 +29,8 @@
       }
 
       .controls {
-        border-left: 1px solid get-palette-color(get-foreground-palette($theme), divider);
+        border-left: 1px solid
+          get-palette-color(get-foreground-palette($theme), divider);
       }
     }
 
@@ -43,6 +53,10 @@ app-search-form {
 
   &.is-active {
     position: sticky;
+
+    &.scrolled {
+      @include mat.elevation(1);
+    }
   }
 
   .controls-wrapper {

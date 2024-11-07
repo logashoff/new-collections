@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   HostBinding,
+  HostListener,
   OnInit,
   output,
   viewChild,
@@ -15,7 +17,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { BehaviorSubject, filter, fromEvent, map, shareReplay } from 'rxjs';
+import { BehaviorSubject, filter, map, shareReplay } from 'rxjs';
 
 import { StopPropagationDirective, SubSinkDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
@@ -83,7 +85,14 @@ export class SearchFormComponent extends SubSinkDirective implements OnInit {
     shareReplay(1)
   );
 
+  private scrollTop: number;
+
+  @HostBinding('class.scrolled') get scrolled(): boolean {
+    return this.scrollTop > 0;
+  }
+
   constructor(
+    private cdr: ChangeDetectorRef,
     private collectionsService: CollectionsService,
     private navService: NavService
   ) {
@@ -97,21 +106,26 @@ export class SearchFormComponent extends SubSinkDirective implements OnInit {
       })
     );
 
-    const keyEvent$ = fromEvent<KeyboardEvent>(document, KEY_UP);
-
-    const keyChanges = keyEvent$.subscribe((e) => {
-      if (e.code === ESC_KEY_CODE && this.isActive) {
-        this.clearSearch();
-      }
-    });
-
     const focusChanges = this.focused$
       .pipe(filter((focused) => focused && !this.isActive))
       .subscribe(() => this.activated.emit());
 
     this.formGroup.valueChanges.subscribe(({ search }) => this.searchChange(search));
 
-    this.subscribe(paramChanges, keyChanges, focusChanges);
+    this.subscribe(paramChanges, focusChanges);
+  }
+
+  @HostListener(`document:${KEY_UP}`, ['$event'])
+  private onKeyUp(e: KeyboardEvent) {
+    if (e.code === ESC_KEY_CODE && this.isActive) {
+      this.clearSearch();
+    }
+  }
+
+  @HostListener('body:scroll', ['$event'])
+  private onScroll(e: Event) {
+    this.scrollTop = (e.target as HTMLElement).scrollTop;
+    this.cdr.markForCheck();
   }
 
   /**
