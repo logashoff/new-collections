@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, viewChild, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
@@ -94,7 +94,7 @@ export class TabsSelectorComponent {
   /**
    * Reference to list component.
    */
-  @ViewChild(MatSelectionList) private listComponent: MatSelectionList;
+  private listComponent = viewChild(MatSelectionList);
 
   constructor(
     @Inject(MAT_BOTTOM_SHEET_DATA) readonly tabs: Tabs,
@@ -105,7 +105,7 @@ export class TabsSelectorComponent {
    * Selects all items in the list.
    */
   selectAll(checked: boolean) {
-    return checked ? this.listComponent.selectAll() : this.listComponent.deselectAll();
+    return checked ? this.listComponent().selectAll() : this.listComponent().deselectAll();
   }
 
   /**
