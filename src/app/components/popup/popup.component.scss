@@ -22,7 +22,7 @@ html {
   overflow: hidden;
 }
 
-app-popup {
+nc-popup {
   @include vertical-flex;
 
   .content {

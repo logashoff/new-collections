@@ -2,16 +2,22 @@
 @import 'theme';
 
 @include component-theme using($theme) {
-  app-tabs-selector {
+  nc-tabs-selector {
     .container {
       color: get-palette-color(get-foreground-palette($theme), secondary-text);
 
       .header-container {
-        background: get-palette-color(get-background-palette($theme), background);
+        background: get-palette-color(
+          get-background-palette($theme),
+          background
+        );
       }
 
       .list-container .list-item {
-        color: get-palette-color(get-foreground-palette($theme), secondary-text);
+        color: get-palette-color(
+          get-foreground-palette($theme),
+          secondary-text
+        );
 
         .item-subtitle {
           color: get-palette-color(get-foreground-palette($theme), hint-text);
@@ -23,7 +29,7 @@
 
 $typography-config: mat.m2-get-typography-config($dark-theme);
 
-app-tabs-selector {
+nc-tabs-selector {
   $max-width: 25rem;
 
   .container {
@@ -116,7 +122,7 @@ app-tabs-selector {
             padding: 0;
             overflow: hidden;
 
-            app-label {
+            nc-label {
               flex: 0 0 0;
             }
 

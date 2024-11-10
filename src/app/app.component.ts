@@ -3,7 +3,7 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
+  selector: 'nc-root',
   standalone: true,
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

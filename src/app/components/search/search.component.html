@@ -3,33 +3,36 @@
 
 @if (sourceTabs?.length > 0 || deviceTabs?.length > 0) {
   @if (deviceTabs?.length > 0) {
-    <app-timeline-label>
+    <nc-timeline-label>
       {{ 'fromDevices' | translate }}
-    </app-timeline-label>
+    </nc-timeline-label>
     <mat-card class="search-container">
-      <app-tab-list>
+      <nc-tab-list>
         @for (tab of deviceTabs; track tab) {
-          <app-list-item [@listItemAnimation] [tab]="tab" />
+          <nc-list-item [@listItemAnimation] [tab]="tab" />
         }
-      </app-tab-list>
+      </nc-tab-list>
     </mat-card>
   }
 
   @if (sourceTabs?.length > 0) {
-    <app-timeline-label [ngPlural]="sourceTabs.length">
+    <nc-timeline-label [ngPlural]="sourceTabs.length">
       <ng-template ngPluralCase="one">
         {{ 'oneResult' | translate }}
       </ng-template>
       <ng-template ngPluralCase="other">
         {{ 'resultCount' | translate: sourceTabs?.length.toString() }}
       </ng-template>
-    </app-timeline-label>
+    </nc-timeline-label>
     <mat-card class="search-container">
-      <app-tab-list>
+      <nc-tab-list>
+        @let recentTabs = recentTabs$ | async;
+
         @for (tab of sourceTabs; track tab.id) {
-          <app-list-item
+          <nc-list-item
             [@listItemAnimation]
             [tab]="tab"
+            [isRecent]="recentTabs?.[tab.id]"
             [tabs]="timelineTabs$ | async"
             [openTabs]="openTabs$ | async"
             [target]="isPopup ? '_blank' : '_self'"
@@ -38,9 +41,9 @@
             (modified)="itemModified($event)"
             (find)="findItem.emit($event)" />
         }
-      </app-tab-list>
+      </nc-tab-list>
     </mat-card>
   }
 } @else {
-  <app-empty [message]="'searchEmptyMessage' | translate">search_off</app-empty>
+  <nc-empty [message]="'searchEmptyMessage' | translate">search_off</nc-empty>
 }

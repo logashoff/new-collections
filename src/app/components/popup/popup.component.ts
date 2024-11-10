@@ -14,7 +14,7 @@ import { SearchFormComponent } from '../search-form/search-form.component';
  * Root component for extension popup that renders stored tab groups data.
  */
 @Component({
-  selector: 'app-popup',
+  selector: 'nc-popup',
   templateUrl: './popup.component.html',
   styleUrl: './popup.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

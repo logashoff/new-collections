@@ -9,7 +9,7 @@ import { getFaviconUrl, IconSize, ImageSource } from '../../utils';
  * Displays images as small icons.
  */
 @Component({
-  selector: 'app-image',
+  selector: 'nc-image',
   templateUrl: './image.component.html',
   styleUrl: './image.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

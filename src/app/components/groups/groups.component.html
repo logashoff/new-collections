@@ -6,30 +6,34 @@
 
     <mat-expansion-panel
       #panel
-      [expanded]="(panelStates$ | async)?.[group.id] || (activeGroupId === group.id && hasTabId) || panel.expanded"
+      [expanded]="
+        (panelStates$ | async)?.[group.id] ||
+        (activeGroupId === group.id && hasTabId) ||
+        panel.expanded
+      "
       (opened)="opened(group.id)"
       (closed)="closed(group.id)"
-      hideToggle
-    >
+      hideToggle>
       <mat-expansion-panel-header>
         @if (activeGroupId === group.id && !hasTabId) {
-          <app-ripple [focused]="true" />
+          <nc-ripple [focused]="true" />
         }
 
         <div class="collapsed">
           @if (tabsByHostname$ | async; as tabsByHostname) {
-            <app-panel-header
+            <nc-panel-header
               [icons]="tabsByHostname[group.id]"
               [total]="group.tabs.length"
               [titleText]="(titlesMap$ | async)[group.id]"
               [pinned]="group.timestamp < 0"
               [readOnly]="group | isReadOnlyGroup"
-              (starred)="favGroup(group)"
-            />
+              (starred)="favGroup(group)" />
           }
         </div>
         <div class="expanded">
-          <app-group-controls [group]="group" [readOnly]="group | isReadOnlyGroup" />
+          <nc-group-controls
+            [group]="group"
+            [readOnly]="group | isReadOnlyGroup" />
         </div>
       </mat-expansion-panel-header>
 
@@ -37,9 +41,9 @@
         <mat-divider />
 
         @if (group.tabs$ | async; as tabs) {
-          <app-tab-list cdkDropList (cdkDropListDropped)="drop($event, tabs)">
+          <nc-tab-list cdkDropList (cdkDropListDropped)="drop($event, tabs)">
             @for (tab of tabs; track tab.id) {
-              <app-list-item
+              <nc-list-item
                 cdkDrag
                 [@listItemAnimation]
                 [cdkDragDisabled]="dragDisabled()"
@@ -49,10 +53,11 @@
                 [target]="isPopup ? '_blank' : '_self'"
                 (modified)="editTab(tab)"
                 (deleted)="deleteTab(tab)"
-                [focused]="activeGroupId === group.id && activeTabId === tab.id"
-              />
+                [focused]="
+                  activeGroupId === group.id && activeTabId === tab.id
+                " />
             }
-          </app-tab-list>
+          </nc-tab-list>
         }
       </ng-template>
     </mat-expansion-panel>

@@ -7,7 +7,7 @@ import { rankUrl } from '../utils';
  * Ranks links based on number of list items clicks
  */
 @Directive({
-  selector: 'a[href][appRankUrl]',
+  selector: 'a[href][rankUrl]',
   standalone: true,
 })
 export class RankUrlDirective {

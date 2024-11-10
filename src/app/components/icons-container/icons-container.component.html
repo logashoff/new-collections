@@ -1,8 +1,15 @@
 <div class="icons-container">
   @for (tabs of icons(); let i = $index; track icons.length) {
     @if (i < maxIconsLength) {
-      <span class="badged-icon" matBadgeSize="small" [matBadge]="tabs.length" [matBadgeHidden]="tabs.length <= 1">
-        <app-chip [source]="tabs[0].favIconUrl | favicon: tabs[0].url" size="small"> </app-chip>
+      <span
+        class="badged-icon"
+        matBadgeSize="small"
+        [matBadge]="tabs.length"
+        [matBadgeHidden]="tabs.length <= 1">
+        <nc-chip
+          [source]="tabs[0].favIconUrl | favicon: tabs[0].url"
+          size="small">
+        </nc-chip>
       </span>
     }
   }

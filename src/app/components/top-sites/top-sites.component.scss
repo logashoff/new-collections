@@ -2,10 +2,13 @@
 @import 'theme';
 
 @include component-theme using($theme) {
-  app-top-sites {
+  nc-top-sites {
     .site-container {
       .site {
-        background: get-palette-color(get-background-palette($theme), disabled-list-option);
+        background: get-palette-color(
+          get-background-palette($theme),
+          disabled-list-option
+        );
       }
 
       .site-title {
@@ -22,13 +25,13 @@
 
 $typography-config: mat.m2-get-typography-config($dark-theme);
 
-app-top-sites {
+nc-top-sites {
   display: block;
   position: relative;
 
   .container {
     margin: 1rem 0;
-    
+
     .site-container {
       display: grid;
       grid-template-columns: repeat(6, 1fr);

@@ -12,7 +12,7 @@ import { IconsContainerComponent } from '../icons-container/icons-container.comp
  * Expansion panel header layout container.
  */
 @Component({
-  selector: 'app-panel-header',
+  selector: 'nc-panel-header',
   templateUrl: './panel-header.component.html',
   styleUrl: './panel-header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

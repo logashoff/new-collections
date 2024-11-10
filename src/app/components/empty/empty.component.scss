@@ -2,7 +2,7 @@
 @import 'theme';
 
 @include component-theme using($theme) {
-  app-empty {
+  nc-empty {
     .icon {
       color: get-palette-color(get-foreground-palette($theme), disabled-text);
     }
@@ -15,7 +15,7 @@
 
 $icon-size: 5rem;
 
-app-empty {
+nc-empty {
   @include vertical-flex;
   align-items: center;
   justify-content: center;

@@ -22,7 +22,7 @@ interface RenameForm {
  * Popup modal dialog for renaming tab title.
  */
 @Component({
-  selector: 'app-rename-dialog',
+  selector: 'nc-rename-dialog',
   templateUrl: './rename-dialog.component.html',
   styleUrl: './rename-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

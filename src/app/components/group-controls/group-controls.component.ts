@@ -14,7 +14,7 @@ import { queryCurrentWindow, restoreTabs, TabGroup, Tabs } from '../../utils';
  * Panel header controls container.
  */
 @Component({
-  selector: 'app-group-controls',
+  selector: 'nc-group-controls',
   templateUrl: './group-controls.component.html',
   styleUrl: './group-controls.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -6,7 +6,7 @@ $typography-config: mat.m2-get-typography-config($dark-theme);
 @include component-theme using($theme) {
   $primary-palette: get-primary-palette($theme);
 
-  app-list-item {
+  nc-list-item {
     .container,
     a:link,
     a:visited,
@@ -36,10 +36,14 @@ $typography-config: mat.m2-get-typography-config($dark-theme);
     .controls {
       color: get-palette-color(get-foreground-palette($theme), secondary-text);
     }
+
+    .title-container .mat-icon {
+      color: get-palette-color(get-foreground-palette($theme), disabled-text);
+    }
   }
 }
 
-app-list-item {
+nc-list-item {
   display: block;
   position: relative;
   overflow: hidden;
@@ -81,6 +85,12 @@ app-list-item {
 
       .title {
         flex: 0 1 auto;
+      }
+
+      .mat-icon {
+        font-size: 1rem;
+        width: auto;
+        height: auto;
       }
     }
 

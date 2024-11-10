@@ -2,7 +2,7 @@
   <div class="timestamp">
     {{ abs(group().timestamp) | date }}
   </div>
-  <div class="controls" appStopPropagation>
+  <div class="controls" stopPropagation>
     @let isReadOnly = readOnly();
 
     @if (!isReadOnly) {

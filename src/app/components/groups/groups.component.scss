@@ -1,6 +1,6 @@
 @import 'common';
 
-app-groups {
+nc-groups {
   display: block;
 
   .mat-expansion-panel-header {
@@ -23,10 +23,10 @@ app-groups {
     }
   }
 
-  app-tab-list.cdk-drop-list.cdk-drop-list-dragging {
+  nc-tab-list.cdk-drop-list.cdk-drop-list-dragging {
     pointer-events: none;
 
-    app-list-item.cdk-drag:not(.cdk-drag-placeholder) {
+    nc-list-item.cdk-drag:not(.cdk-drag-placeholder) {
       transition: transform $cubic-ease;
     }
   }

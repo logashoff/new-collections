@@ -14,7 +14,7 @@ import { TimelineComponent } from '../timeline/timeline.component';
  * Content component for extension popup that renders stored tab groups data.
  */
 @Component({
-  selector: 'app-popup-content',
+  selector: 'nc-popup-content',
   templateUrl: './popup-content.component.html',
   styleUrl: './popup-content.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

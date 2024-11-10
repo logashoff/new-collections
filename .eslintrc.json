@@ -17,7 +17,7 @@
         "@angular-eslint/component-selector": [
           "error",
           {
-            "prefix": "app",
+            "prefix": "nc",
             "style": "kebab-case",
             "type": "element"
           }
@@ -25,7 +25,6 @@
         "@angular-eslint/directive-selector": [
           "error",
           {
-            "prefix": "app",
             "style": "camelCase",
             "type": "attribute"
           }

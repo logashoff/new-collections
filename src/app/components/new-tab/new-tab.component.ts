@@ -16,7 +16,7 @@ import { TopSitesComponent } from '../top-sites/top-sites.component';
  * New Tab root component.
  */
 @Component({
-  selector: 'app-new-tab',
+  selector: 'nc-new-tab',
   templateUrl: './new-tab.component.html',
   styleUrls: ['./new-tab.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

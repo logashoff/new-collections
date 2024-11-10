@@ -6,7 +6,10 @@
         @let tabsLen = tabs.length;
 
         <span class="heading">
-          {{ 'tabsCount' | translate: [selectionLength?.toString(), tabsLen.toString()] }}
+          {{
+            'tabsCount'
+              | translate: [selectionLength?.toString(), tabsLen.toString()]
+          }}
         </span>
         <div class="controls">
           <button
@@ -14,8 +17,7 @@
             mat-icon-button
             color="primary"
             [disabled]="!formGroup.valid"
-            [matTooltip]="'addSelected' | translate"
-          >
+            [matTooltip]="'addSelected' | translate">
             <mat-icon>add</mat-icon>
           </button>
           <div class="checkbox-container">
@@ -23,8 +25,7 @@
               color="primary"
               [checked]="allSelected$ | async"
               [indeterminate]="someSelected$ | async"
-              (change)="selectAll($event.checked)"
-            >
+              (change)="selectAll($event.checked)">
             </mat-checkbox>
           </div>
         </div>
@@ -36,18 +37,19 @@
         @for (tab of tabs; track tab) {
           <mat-list-option [value]="tab" color="primary">
             <div class="list-item">
-              <app-chip [source]="tab.favIconUrl | favicon: tab.url" size="small"></app-chip>
+              <nc-chip
+                [source]="tab.favIconUrl | favicon: tab.url"
+                size="small"></nc-chip>
               <div class="item-text">
                 <div class="item-title">{{ tab.title }}</div>
                 <span class="item-subtitle">
                   @if (tab.active) {
-                    <app-label>{{ 'active' | translate }}</app-label>
+                    <nc-label>{{ 'active' | translate }}</nc-label>
                   }
 
                   @if (tab.pinned) {
-                    <app-label>{{ 'pinned' | translate }}</app-label>
+                    <nc-label>{{ 'pinned' | translate }}</nc-label>
                   }
-
                   <span class="subtitle">{{ tab.url | hostname }}</span>
                 </span>
               </div>

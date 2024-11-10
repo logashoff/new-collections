@@ -14,7 +14,7 @@ import { ImageComponent } from '../image/image.component';
  * Top Sites expansion panel
  */
 @Component({
-  selector: 'app-top-sites',
+  selector: 'nc-top-sites',
   templateUrl: './top-sites.component.html',
   styleUrl: './top-sites.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

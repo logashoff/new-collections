@@ -7,7 +7,7 @@ import { MatListModule } from '@angular/material/list';
  * Tabs list component
  */
 @Component({
-  selector: 'app-tab-list',
+  selector: 'nc-tab-list',
   templateUrl: './tab-list.component.html',
   styleUrl: './tab-list.component.scss',
   encapsulation: ViewEncapsulation.None,

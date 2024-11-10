@@ -2,7 +2,7 @@
 @import 'theme';
 
 @include component-theme using($theme) {
-  app-options {
+  nc-options {
     h4,
     h3,
     h2,
@@ -23,7 +23,7 @@ body {
   overflow: hidden;
 }
 
-app-options {
+nc-options {
   display: block;
   position: absolute;
   top: 0;

@@ -2,7 +2,7 @@
 @import 'theme';
 
 @include component-theme using($theme) {
-  app-panel-header {
+  nc-panel-header {
     .title {
       color: get-palette-color(get-foreground-palette($theme), secondary-text);
 
@@ -15,7 +15,10 @@
       color: get-palette-color(get-foreground-palette($theme), secondary-text);
 
       .total {
-        background-color: get-palette-color(get-background-palette($theme), disabled-list-option);
+        background-color: get-palette-color(
+          get-background-palette($theme),
+          disabled-list-option
+        );
       }
     }
 
@@ -27,7 +30,7 @@
 
 $typography-config: mat.m2-get-typography-config($dark-theme);
 
-app-panel-header {
+nc-panel-header {
   display: block;
   height: inherit;
 

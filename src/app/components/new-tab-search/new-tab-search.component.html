@@ -1,3 +1,4 @@
-<app-search [source]="searchSource$ | async" 
-  [devices]="devices$ | async" 
+<nc-search
+  [source]="searchSource$ | async"
+  [devices]="devices$ | async"
   (findItem)="findItem($event)" />

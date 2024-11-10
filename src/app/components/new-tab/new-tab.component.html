@@ -1,9 +1,9 @@
 @let hideTopSites = hideTopSites$ | async;
 
 @if (hideTopSites === false) {
-  <app-top-sites class="top-sites" [topSites]="topSites$ | async" />
+  <nc-top-sites class="top-sites" [topSites]="topSites$ | async" />
 }
-<app-search-form
+<nc-search-form
   class="search-form"
   (activated)="navigate('search')"
   (canceled)="navigate('main')"

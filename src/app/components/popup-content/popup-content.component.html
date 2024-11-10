@@ -1,7 +1,7 @@
 @if (groupsTimeline$ | async) {
-  <app-timeline class="main-content" />
+  <nc-timeline class="main-content" />
 } @else {
-  <app-empty
+  <nc-empty
     [actions]="defaultActions"
     [message]="'popupEmptyMessage' | translate" />
 }

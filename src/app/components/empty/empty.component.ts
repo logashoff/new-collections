@@ -12,7 +12,7 @@ import { Action, CollectionActions } from '../../utils';
  * Component is rendered when there is tab groups data.
  */
 @Component({
-  selector: 'app-empty',
+  selector: 'nc-empty',
   templateUrl: './empty.component.html',
   styleUrl: './empty.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

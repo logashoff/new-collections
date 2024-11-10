@@ -12,7 +12,7 @@ import { TimelineElementComponent } from '../timeline-element/timeline-element.c
  * Displays tab groups separated by time.
  */
 @Component({
-  selector: 'app-timeline',
+  selector: 'nc-timeline',
   templateUrl: './timeline.component.html',
   styleUrl: './timeline.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

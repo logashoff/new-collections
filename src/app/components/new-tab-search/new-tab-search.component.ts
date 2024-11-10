@@ -7,7 +7,7 @@ import { BrowserTab, BrowserTabs } from '../../utils';
 import { SearchComponent } from '../search/search.component';
 
 @Component({
-  selector: 'app-new-tab-search',
+  selector: 'nc-new-tab-search',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, SearchComponent],

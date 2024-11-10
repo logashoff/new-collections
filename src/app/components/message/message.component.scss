@@ -3,7 +3,7 @@
 @import 'theme';
 
 @include component-theme using ($theme) {
-  app-message {
+  nc-message {
     $accent-palette: get-accent-palette($theme);
     $foreground-palette: get-foreground-palette($theme);
 
@@ -30,7 +30,7 @@
 
 $typography-config: mat.m2-get-typography-config($dark-theme);
 
-app-message {
+nc-message {
   @include mat.elevation(8);
 
   $border-radius: 5px;

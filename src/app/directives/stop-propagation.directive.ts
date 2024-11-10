@@ -6,7 +6,7 @@ import { Directive, HostListener } from '@angular/core';
  * Prevents event propagation on clicked element.
  */
 @Directive({
-  selector: '[appStopPropagation]',
+  selector: '[stopPropagation]',
   standalone: true,
 })
 export class StopPropagationDirective {

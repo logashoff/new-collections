@@ -13,7 +13,7 @@ import { ActionIcon } from '../../utils';
  * Custom MatSnackBar component
  */
 @Component({
-  selector: 'app-message',
+  selector: 'nc-message',
   templateUrl: './message.component.html',
   styleUrl: './message.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, HostBinding, input, ViewEncapsulati
 import { ThemePalette } from '@angular/material/core';
 
 @Component({
-  selector: 'app-label',
+  selector: 'nc-label',
   standalone: true,
   imports: [],
   templateUrl: './label.component.html',

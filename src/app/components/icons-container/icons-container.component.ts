@@ -6,7 +6,7 @@ import { FaviconPipe } from '../../pipes';
 import { ChipComponent } from '../chip/chip.component';
 
 @Component({
-  selector: 'app-icons-container',
+  selector: 'nc-icons-container',
   templateUrl: './icons-container.component.html',
   styleUrl: './icons-container.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

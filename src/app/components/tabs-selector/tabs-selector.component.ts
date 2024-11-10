@@ -28,7 +28,7 @@ interface TabSelectorForm {
  * Bottom sheet for selecting specified tabs.
  */
 @Component({
-  selector: 'app-tabs-selector',
+  selector: 'nc-tabs-selector',
   templateUrl: './tabs-selector.component.html',
   styleUrl: './tabs-selector.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

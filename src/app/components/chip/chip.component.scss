@@ -4,13 +4,16 @@
 @import 'theme';
 
 @include component-theme using($theme) {
-  app-chip {
+  nc-chip {
     .icons-container .overflow {
       color: get-palette-color(get-foreground-palette($theme), disabled-text);
     }
 
     .icon-container {
-      background-color: get-palette-color(get-background-palette($theme), disabled-list-option);
+      background-color: get-palette-color(
+        get-background-palette($theme),
+        disabled-list-option
+      );
 
       .icon-label {
         color: get-palette-color(get-foreground-palette($theme), text);
@@ -20,12 +23,12 @@
 }
 
 @media (max-width: 50rem) {
-  app-chip .icon-container .icon-label {
+  nc-chip .icon-container .icon-label {
     display: none;
   }
 }
 
-app-chip {
+nc-chip {
   .icon-container {
     display: flex;
     align-items: center;
