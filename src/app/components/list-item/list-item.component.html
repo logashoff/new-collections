@@ -1,13 +1,18 @@
+@let tabValue = tab();
+
 <a
   class="container"
-  appRankUrl
+  [rankTab]="tabValue.id"
   matRipple
-  [href]="tab().url"
+  [href]="tabValue.url"
   [target]="target()">
-  <app-chip [source]="tab().favIconUrl | favicon: tab().url" />
+  <nc-chip [source]="tabValue.favIconUrl | favicon: tabValue.url" />
   <div class="text-container">
     <div class="title-container">
-      <span class="title">{{ tab().title }}</span>
+      <span class="title">{{ tabValue.title }}</span>
+      @if (isRecent()) {
+        <mat-icon>search_activity</mat-icon>
+      }
     </div>
     <div class="subtitle-container">
       @if (hasLabels$ | async) {
@@ -16,31 +21,31 @@
           @let dupTabs = dupTabs$ | async;
 
           @if (openTabsCount) {
-            <app-label color="primary">
+            <nc-label color="primary">
               {{ 'openTabs' | translate: openTabsCount.toString() }}
-            </app-label>
+            </nc-label>
           }
 
           @if (dupTabs > 1) {
-            <app-label color="accent">
+            <nc-label color="accent">
               {{ 'savedCount' | translate: dupTabs?.toString() }}
-            </app-label>
+            </nc-label>
           }
 
           @if (activeTab$ | async) {
-            <app-label>
+            <nc-label>
               {{ 'active' | translate }}
-            </app-label>
+            </nc-label>
           }
 
           @if (pinnedTab$ | async) {
-            <app-label>
+            <nc-label>
               {{ 'pinned' | translate }}
-            </app-label>
+            </nc-label>
           }
         </span>
       }
-      <span class="subtitle">{{ tab().url }}</span>
+      <span class="subtitle">{{ tabValue.url }}</span>
     </div>
   </div>
 
@@ -51,17 +56,17 @@
     <div class="controls">
       @if (inTimeline) {
         <button
-          appStopPropagation
+          stopPropagation
           mat-icon-button
           [matTooltip]="'find' | translate"
-          (click)="find.emit(tab())">
+          (click)="find.emit(tabValue)">
           <mat-icon>manage_search</mat-icon>
         </button>
       }
 
       @if (notReadOnly) {
         <button
-          appStopPropagation
+          stopPropagation
           mat-icon-button
           (click)="editClick()"
           [matTooltip]="'edit' | translate">
@@ -71,7 +76,7 @@
 
       @if (notReadOnly) {
         <button
-          appStopPropagation
+          stopPropagation
           mat-icon-button
           (click)="deleteClick()"
           [matTooltip]="'delete' | translate">
@@ -83,5 +88,5 @@
 </a>
 
 @if (focused()) {
-  <app-ripple [focused]="focused()" />
+  <nc-ripple [focused]="focused()" />
 }

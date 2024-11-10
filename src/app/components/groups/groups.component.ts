@@ -28,7 +28,7 @@ import { RippleComponent } from '../ripple/ripple.component';
  * Displays list of tab groups.
  */
 @Component({
-  selector: 'app-groups',
+  selector: 'nc-groups',
   templateUrl: './groups.component.html',
   styleUrl: './groups.component.scss',
   encapsulation: ViewEncapsulation.None,

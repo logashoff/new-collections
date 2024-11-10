@@ -13,7 +13,7 @@ html {
   height: 100vh;
 }
 
-app-new-tab {
+nc-new-tab {
   @include vertical-flex;
 
   margin-bottom: 1rem;
@@ -36,7 +36,7 @@ app-new-tab {
 }
 
 @media (max-width: 60rem) {
-  app-new-tab {
+  nc-new-tab {
     .content,
     .top-sites,
     .search-form .controls-wrapper {

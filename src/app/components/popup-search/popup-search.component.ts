@@ -6,7 +6,7 @@ import { BrowserTab, BrowserTabs } from '../../utils';
 import { SearchComponent } from '../search/search.component';
 
 @Component({
-  selector: 'app-popup-search',
+  selector: 'nc-popup-search',
   standalone: true,
   imports: [CommonModule, SearchComponent],
   templateUrl: './popup-search.component.html',

@@ -4,8 +4,11 @@
 $typography-config: mat.m2-get-typography-config($dark-theme);
 
 @include component-theme using($theme) {
-  app-label {
-    background-color: get-palette-color(get-background-palette($theme), disabled-list-option);
+  nc-label {
+    background-color: get-palette-color(
+      get-background-palette($theme),
+      disabled-list-option
+    );
     color: get-palette-color(get-foreground-palette($theme), text);
 
     $primary-palette: get-primary-palette($theme);
@@ -29,7 +32,7 @@ $typography-config: mat.m2-get-typography-config($dark-theme);
   }
 }
 
-app-label {
+nc-label {
   flex: 0 0 0;
   border-radius: 1rem;
   padding: 0 0.5rem;

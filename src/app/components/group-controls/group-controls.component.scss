@@ -1,14 +1,14 @@
 @import 'theme';
 
 @include component-theme using($theme) {
-  app-group-controls {
+  nc-group-controls {
     .container {
       color: get-palette-color(get-foreground-palette($theme), secondary-text);
     }
   }
 }
 
-app-group-controls {
+nc-group-controls {
   .container {
     display: flex;
     position: relative;

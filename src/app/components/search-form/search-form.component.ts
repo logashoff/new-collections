@@ -32,7 +32,7 @@ interface SearchForm {
 }
 
 @Component({
-  selector: 'app-search-form',
+  selector: 'nc-search-form',
   templateUrl: './search-form.component.html',
   styleUrl: './search-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,9 +1,12 @@
 <div class="timeline-header">
-  <app-timeline-label>
+  <nc-timeline-label>
     {{ timelineLabel() }}
-  </app-timeline-label>
+  </nc-timeline-label>
   @if (controls()) {
-    <button mat-icon-button [matTooltip]="'deleteAll' | translate" (click)="remove()">
+    <button
+      mat-icon-button
+      [matTooltip]="'deleteAll' | translate"
+      (click)="remove()">
       <mat-icon>done_all</mat-icon>
     </button>
   }

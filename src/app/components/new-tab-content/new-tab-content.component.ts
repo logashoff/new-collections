@@ -15,7 +15,7 @@ import { TimelineElementComponent } from '../timeline-element/timeline-element.c
  * New Tab content component.
  */
 @Component({
-  selector: 'app-new-tab-content',
+  selector: 'nc-new-tab-content',
   templateUrl: './new-tab-content.component.html',
   styleUrls: ['./new-tab-content.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -3,7 +3,7 @@
 @import 'theme';
 
 @include component-theme using($theme) {
-  app-search-form {
+  nc-search-form {
     $is-dark: is-dark-theme($theme);
     $border-color: get-palette-color(
       get-background-palette($theme),
@@ -46,7 +46,7 @@
   }
 }
 
-app-search-form {
+nc-search-form {
   $height: 42px;
 
   display: block;

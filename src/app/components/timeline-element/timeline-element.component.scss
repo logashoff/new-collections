@@ -2,14 +2,14 @@
 @import 'theme';
 
 @include component-theme using($theme) {
-  app-timeline-element {
+  nc-timeline-element {
     .timeline-header {
       color: get-palette-color(get-foreground-palette($theme), hint-text);
     }
   }
 }
 
-app-timeline-element {
+nc-timeline-element {
   display: block;
 
   .timeline-header {

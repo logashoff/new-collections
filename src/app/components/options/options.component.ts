@@ -47,7 +47,7 @@ interface OptionsForm {
  * Extension Options page.
  */
 @Component({
-  selector: 'app-options',
+  selector: 'nc-options',
   templateUrl: './options.component.html',
   styleUrl: './options.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -11,6 +11,9 @@ import {
   StorageArea,
   SyncData,
   SyncTabs,
+  TabId,
+  TabRank,
+  tabRankKey,
   urlRankKey,
 } from './models';
 import { getSettings, getUrlHost } from './utils';
@@ -83,6 +86,27 @@ export async function rankUrl(url: string) {
 
   storage.set({
     [urlRankKey]: rankStore,
+  });
+}
+export async function getTabRankStore(): Promise<TabRank> {
+  const storage = await getStorage();
+  const urlRank = await storage.get(tabRankKey);
+  return urlRank[tabRankKey] ?? {};
+}
+
+export async function rankTab(tabId: TabId) {
+  const rankStore = (await getTabRankStore()) ?? {};
+
+  if (!rankStore[tabId]) {
+    rankStore[tabId] = 1;
+  } else {
+    rankStore[tabId]++;
+  }
+
+  const storage = await getStorage();
+
+  storage.set({
+    [tabRankKey]: rankStore,
   });
 }
 

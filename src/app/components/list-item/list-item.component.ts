@@ -16,7 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { combineLatest, filter, map, Observable, shareReplay, switchMap, withLatestFrom } from 'rxjs';
 
-import { RankUrlDirective, StopPropagationDirective } from '../../directives';
+import { RankTabDirective, StopPropagationDirective } from '../../directives';
 import { FaviconPipe, TranslatePipe } from '../../pipes';
 import { Activatable } from '../../services';
 import { BrowserTab, BrowserTabs, rankUrl, scrollIntoView, Tabs } from '../../utils';
@@ -30,7 +30,7 @@ import { RippleComponent } from '../ripple/ripple.component';
  * List item with tab information
  */
 @Component({
-  selector: 'app-list-item',
+  selector: 'nc-list-item',
   templateUrl: './list-item.component.html',
   styleUrl: './list-item.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -48,7 +48,7 @@ import { RippleComponent } from '../ripple/ripple.component';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    RankUrlDirective,
+    RankTabDirective,
     RippleComponent,
     StopPropagationDirective,
     TranslatePipe,
@@ -63,6 +63,8 @@ export class ListItemComponent implements OnInit, Activatable {
 
   readonly tabs = input<BrowserTabs>();
   readonly #tabs$: Observable<BrowserTabs>;
+
+  readonly isRecent = input<boolean>(false);
 
   /**
    * Plays ripple animation when set to true

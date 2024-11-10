@@ -22,6 +22,11 @@ export const faviconStorageKey = 'favicon';
 export const urlRankKey = 'urlRank';
 
 /**
+ * Storage key to store tab ID maps to number of clicks
+ */
+export const tabRankKey = 'tabRank';
+
+/**
  * URLs to ignore when saving tabs.
  */
 export const ignoreUrlsRegExp = new RegExp('^(about:|chrome:|file:|wss:|ws:|chrome-extension:)');
@@ -51,9 +56,13 @@ export type GroupExpanded = { [groupId: string]: boolean };
  */
 export type ExpandedGroupsByUrl = { [url: string]: GroupExpanded };
 
+export type TabId = number;
+
+export type TabRank = { [tabId: TabId]: number };
+
 export interface RouterParams extends Params {
   groupId?: string;
-  tabId?: number;
+  tabId?: TabId;
   query?: string;
 }
 

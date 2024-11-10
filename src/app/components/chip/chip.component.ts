@@ -8,7 +8,7 @@ import { ImageComponent } from '../image/image.component';
  * Icon with background and label.
  */
 @Component({
-  selector: 'app-chip',
+  selector: 'nc-chip',
   templateUrl: './chip.component.html',
   styleUrl: './chip.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

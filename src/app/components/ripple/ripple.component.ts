@@ -23,7 +23,7 @@ import { scrollIntoView } from '../../utils';
  * Stretches to fit parent element and plays ripple animation when triggered
  */
 @Component({
-  selector: 'app-ripple',
+  selector: 'nc-ripple',
   template: '',
   styleUrl: './ripple.component.scss',
   encapsulation: ViewEncapsulation.None,

@@ -1,14 +1,14 @@
 @import 'theme';
 
 @include component-theme using($theme) {
-  app-icons-container {
+  nc-icons-container {
     .icons-container .overflow {
       color: get-palette-color(get-foreground-palette($theme), disabled-text);
     }
   }
 }
 
-app-icons-container {
+nc-icons-container {
   display: block;
   position: relative;
 

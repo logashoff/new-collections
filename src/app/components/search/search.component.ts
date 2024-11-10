@@ -52,7 +52,7 @@ const fuseOptions: IFuseOptions<BrowserTab> = {
  * Search form component
  */
 @Component({
-  selector: 'app-search',
+  selector: 'nc-search',
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -105,6 +105,8 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
   private listItems: QueryList<ListItemComponent>;
 
   private readonly searchValue$ = this.navService.paramsSearch$.pipe(shareReplay(1));
+
+  readonly recentTabs$ = this.tabService.recentTabs$;
 
   constructor(
     private readonly navService: NavService,

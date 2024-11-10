@@ -12,7 +12,7 @@ import { TimelineLabelComponent } from '../timeline-label/timeline-label.compone
  * Component for rendering timeline elements
  */
 @Component({
-  selector: 'app-timeline-element',
+  selector: 'nc-timeline-element',
   templateUrl: './timeline-element.component.html',
   styleUrl: './timeline-element.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

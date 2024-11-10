@@ -1,12 +1,12 @@
 @import 'theme';
 
 @include component-theme using($theme) {
-  app-search {
+  nc-search {
     color: get-palette-color(get-foreground-palette($theme), secondary-text);
   }
 }
 
-app-search {
+nc-search {
   @include vertical-flex;
 
   .search-container,

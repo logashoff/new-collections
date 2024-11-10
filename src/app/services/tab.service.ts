@@ -25,8 +25,8 @@ import {
   getCollections,
   getFaviconStore,
   getHostnameGroup,
+  getTabRankStore,
   getUrlHost,
-  getUrlRankStore,
   ignoreUrlsRegExp,
   queryCurrentWindow,
   saveCollections,
@@ -70,13 +70,15 @@ export class TabService {
     shareReplay(1)
   );
 
+  readonly recentTabs$ = this.tabs$.pipe(switchMap(() => from(getTabRankStore())));
+
   readonly rankedTabs$: Observable<BrowserTabs> = this.tabs$.pipe(
     switchMap((tabs) =>
-      from(getUrlRankStore()).pipe(
+      this.recentTabs$.pipe(
         map((ranks) => {
           return tabs.sort((a, b) => {
-            const rankA = ranks[a.url] ?? 0;
-            const rankB = ranks[b.url] ?? 0;
+            const rankA = ranks[a.id] ?? 0;
+            const rankB = ranks[b.id] ?? 0;
 
             return rankB - rankA;
           });
