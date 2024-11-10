@@ -25,7 +25,7 @@ export class NewTabSearchComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.searchSource$ = this.tabService.tabs$;
+    this.searchSource$ = this.tabService.rankedTabs$;
     this.devices$ = this.homeService.devices$.pipe(
       map((devices) => flatMap(devices?.map((device) => this.homeService.getTabsFromSessions(device.sessions)))),
       shareReplay(1)

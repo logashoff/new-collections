@@ -3,7 +3,7 @@ import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-shee
 import { MatDialog } from '@angular/material/dialog';
 import { format, isSameDay, isSameWeek, isSameYear, subDays } from 'date-fns';
 import { debounce, flatMap, keyBy, remove, uniqBy } from 'lodash-es';
-import { BehaviorSubject, Observable, firstValueFrom, lastValueFrom } from 'rxjs';
+import { BehaviorSubject, Observable, firstValueFrom, from, lastValueFrom } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { validate as uuidValidate, v4 as uuidv4 } from 'uuid';
 
@@ -26,6 +26,7 @@ import {
   getFaviconStore,
   getHostnameGroup,
   getUrlHost,
+  getUrlRankStore,
   ignoreUrlsRegExp,
   queryCurrentWindow,
   saveCollections,
@@ -66,6 +67,22 @@ export class TabService {
    */
   readonly tabs$: Observable<BrowserTabs> = this.#updated$.pipe(
     switchMap(() => this.tabGroups$.pipe(map((tabGroups) => flatMap(tabGroups, (tabGroup) => tabGroup.tabs)))),
+    shareReplay(1)
+  );
+
+  readonly rankedTabs$: Observable<BrowserTabs> = this.tabs$.pipe(
+    switchMap((tabs) =>
+      from(getUrlRankStore()).pipe(
+        map((ranks) => {
+          return tabs.sort((a, b) => {
+            const rankA = ranks[a.url] ?? 0;
+            const rankB = ranks[b.url] ?? 0;
+
+            return rankB - rankA;
+          });
+        })
+      )
+    ),
     shareReplay(1)
   );
 

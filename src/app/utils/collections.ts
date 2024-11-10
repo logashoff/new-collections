@@ -11,6 +11,7 @@ import {
   StorageArea,
   SyncData,
   SyncTabs,
+  urlRankKey,
 } from './models';
 import { getSettings, getUrlHost } from './utils';
 
@@ -61,6 +62,28 @@ export async function getFaviconStore(): Promise<{ [hostname: string]: string }>
   const storage = await getStorage();
   const favicon = await storage.get(faviconStorageKey);
   return favicon[faviconStorageKey] ?? {};
+}
+
+export async function getUrlRankStore(): Promise<{ [url: string]: number }> {
+  const storage = await getStorage();
+  const urlRank = await storage.get(urlRankKey);
+  return urlRank[urlRankKey] ?? {};
+}
+
+export async function rankUrl(url: string) {
+  const rankStore = (await getUrlRankStore()) ?? {};
+
+  if (!rankStore[url]) {
+    rankStore[url] = 1;
+  } else {
+    rankStore[url]++;
+  }
+
+  const storage = await getStorage();
+
+  storage.set({
+    [urlRankKey]: rankStore,
+  });
 }
 
 /**

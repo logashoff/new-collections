@@ -2,12 +2,17 @@
   <div class="container">
     <div class="site-container">
       @for (site of topSites(); track site) {
-        <a class="site" href="{{ site.url }}">
-          <app-image [source]="undefined | favicon: site.url" size="medium"></app-image>
+        <a class="site" [href]="site.url">
+          <app-image
+            [source]="undefined | favicon: site.url"
+            size="medium"></app-image>
           <span class="site-title">
             {{ site.title }}
           </span>
-          <button appStopPropagation class="remove-btn" (click)="removeSite(site)">
+          <button
+            appStopPropagation
+            class="remove-btn"
+            (click)="removeSite(site)">
             <mat-icon>close</mat-icon>
           </button>
         </a>

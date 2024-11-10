@@ -17,6 +17,10 @@
     color: get-palette-color(get-foreground-palette($theme), secondary-text);
     background-color: $app-background;
 
+    &.is-active.scrolled {
+      @include mat.elevation(2, $app-background);
+    }
+
     .controls-wrapper {
       $background-color: get-palette-color(
         get-background-palette($theme),
@@ -52,11 +56,8 @@ app-search-form {
   top: 0;
 
   &.is-active {
+    @include mat.elevation-transition();
     position: sticky;
-
-    &.scrolled {
-      @include mat.elevation(1);
-    }
   }
 
   .controls-wrapper {
