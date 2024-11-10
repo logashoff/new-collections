@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { NavService, TabService } from '../../services';
 import { BrowserTab, BrowserTabs } from '../../utils';
 import { SearchComponent } from '../search/search.component';
@@ -21,7 +21,7 @@ export class PopupSearchComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.searchSource$ = this.tabService.tabs$.pipe(map((tabs) => tabs ?? []));
+    this.searchSource$ = this.tabService.rankedTabs$;
   }
 
   /**

@@ -16,10 +16,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { combineLatest, filter, map, Observable, shareReplay, switchMap, withLatestFrom } from 'rxjs';
 
-import { StopPropagationDirective } from '../../directives';
+import { RankUrlDirective, StopPropagationDirective } from '../../directives';
 import { FaviconPipe, TranslatePipe } from '../../pipes';
 import { Activatable } from '../../services';
-import { BrowserTab, BrowserTabs, scrollIntoView, Tabs } from '../../utils';
+import { BrowserTab, BrowserTabs, rankUrl, scrollIntoView, Tabs } from '../../utils';
 import { ChipComponent } from '../chip/chip.component';
 import { LabelComponent } from '../label/label.component';
 import { RippleComponent } from '../ripple/ripple.component';
@@ -48,6 +48,7 @@ import { RippleComponent } from '../ripple/ripple.component';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
+    RankUrlDirective,
     RippleComponent,
     StopPropagationDirective,
     TranslatePipe,
@@ -203,8 +204,10 @@ export class ListItemComponent implements OnInit, Activatable {
     this.deleted.emit(this.tab());
   }
 
-  activate() {
-    open(this.tab().url, this.target());
+  async activate() {
+    const { url } = this.tab();
+    await rankUrl(url);
+    open(url, this.target());
   }
 
   async setActiveStyles() {

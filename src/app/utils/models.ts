@@ -17,6 +17,11 @@ export const settingsStorageKey = 'settings';
 export const faviconStorageKey = 'favicon';
 
 /**
+ * Storage key to store link clicks
+ */
+export const urlRankKey = 'urlRank';
+
+/**
  * URLs to ignore when saving tabs.
  */
 export const ignoreUrlsRegExp = new RegExp('^(about:|chrome:|file:|wss:|ws:|chrome-extension:)');
@@ -90,6 +95,15 @@ export interface SettingsSync {
 }
 
 /**
+ * URL rank data in sync storage
+ */
+export interface UrlRankSync {
+  [urlRankKey]?: {
+    [url: string]: number;
+  };
+}
+
+/**
  * Map group ID to array containing group timestamp and tabs
  */
 export type GroupSync = {
@@ -99,7 +113,7 @@ export type GroupSync = {
 /**
  * Data used to store collections in sync storage
  */
-export type SyncData = SettingsSync & FaviconSync & GroupSync;
+export type SyncData = SettingsSync & FaviconSync & GroupSync & UrlRankSync;
 
 /**
  * Storage change event

@@ -11,7 +11,7 @@ import {
   MessageServiceMock,
   NavServiceMock,
 } from 'src/mocks';
-import { getFaviconStore, syncToTabs, tabsToSync } from '../utils/collections';
+import { getFaviconStore, getUrlRankStore, syncToTabs, tabsToSync } from '../utils/collections';
 import { ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
 import { getHost, getHostname, getHostnameGroup, getUrlHost, getUrlHostname } from '../utils/utils';
 import { MessageService } from './message.service';
@@ -33,6 +33,7 @@ jest.mock('src/app/utils', () => ({
   getHostnameGroup,
   getUrlHost,
   getUrlHostname,
+  getUrlRankStore,
   ignoreUrlsRegExp,
   syncToTabs,
   TabGroup,
