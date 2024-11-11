@@ -139,6 +139,9 @@
   "popupEmptyMessage": {
     "message": "No collection found. Use button below to create new collection by saving open tabs"
   },
+  "recent": {
+    "message": "Recent"
+  },
   "restore": {
     "message": "Restore"
   },
@@ -168,7 +171,7 @@
     "message": "Settings"
   },
   "siteMovedToIgnoreList": {
-    "message": "Site moved to ignore list"
+    "message": "Site ignored"
   },
   "syncCollections": {
     "message": "Sync Collections"
