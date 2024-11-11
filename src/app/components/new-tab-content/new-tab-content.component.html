@@ -1,15 +1,19 @@
 @if (hasAnyData$ | async) {
   @for (item of devicesTimeline$ | async; track item.label) {
-    <nc-timeline-element [timelineLabel]="item.label" [controls]="false">
-      <nc-groups [groups]="item.elements" />
+    <nc-timeline-element
+      [timelineLabel]="item.label"
+      [controls]="false"
+      [expanded]="deviceGroups.expanded">
+      <nc-groups #deviceGroups [groups]="item.elements" />
     </nc-timeline-element>
   }
 
   @for (item of timeline$ | async; track item.label) {
     <nc-timeline-element
       [timelineLabel]="item.label"
-      (removed)="removeGroups(item.elements)">
-      <nc-groups [groups]="item.elements" [dragDisabled]="false" />
+      (removed)="removeGroups(item.elements)"
+      [expanded]="tabGroups.expanded">
+      <nc-groups #tabGroups [groups]="item.elements" [dragDisabled]="false" />
     </nc-timeline-element>
   }
 } @else {

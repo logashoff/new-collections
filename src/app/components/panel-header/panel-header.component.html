@@ -15,9 +15,9 @@
         [matTooltip]="(pinned() ? 'unpin' : 'pin') | translate"
         (click)="favClicked()">
         @if (pinned()) {
-          <mat-icon>star</mat-icon>
+          <mat-icon>keep_off</mat-icon>
         } @else {
-          <mat-icon>grade</mat-icon>
+          <mat-icon>keep</mat-icon>
         }
       </div>
       <div class="total">{{ total() }}</div>

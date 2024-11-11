@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject, viewChild, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, viewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule, MatSelectionList } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { isNil } from 'lodash-es';
-import { Observable, filter, map, shareReplay, startWith, withLatestFrom } from 'rxjs';
+import { filter, map, Observable, shareReplay, startWith, withLatestFrom } from 'rxjs';
 
 import { FaviconPipe, HostnamePipe, TranslatePipe } from '../../pipes';
 import { Tabs } from '../../utils';
