@@ -19,6 +19,7 @@ import {
   combineLatest,
   distinctUntilChanged,
   filter,
+  from,
   lastValueFrom,
   map,
   Observable,
@@ -32,7 +33,7 @@ import {
 import { SubSinkDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
 import { KeyService, NavService, TabService } from '../../services';
-import { Action, BrowserTab, BrowserTabs, listItemAnimation } from '../../utils';
+import { Action, BrowserTab, BrowserTabs, getTabRankStore, listItemAnimation } from '../../utils';
 import { EmptyComponent } from '../empty/empty.component';
 import { ListItemComponent } from '../list-item/list-item.component';
 import { SearchFormComponent } from '../search-form/search-form.component';
@@ -136,9 +137,10 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
             take(1),
             map((fuse) => fuse.search(searchValue).map(({ item }) => item))
           )
-        )
+        ),
+        withLatestFrom(from(getTabRankStore()))
       )
-      .subscribe((results) => this.#searchResults$.next(results));
+      .subscribe(([results, tabRank]) => this.#searchResults$.next(this.tabService.sortByRank(results, tabRank)));
 
     this.subscribe(resultChanges);
 
