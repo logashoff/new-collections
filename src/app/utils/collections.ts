@@ -97,11 +97,7 @@ export async function getTabRankStore(): Promise<TabRank> {
 export async function rankTab(tabId: TabId) {
   const rankStore = (await getTabRankStore()) ?? {};
 
-  if (!rankStore[tabId]) {
-    rankStore[tabId] = 1;
-  } else {
-    rankStore[tabId]++;
-  }
+  rankStore[tabId] = new Date().getTime();
 
   const storage = await getStorage();
 

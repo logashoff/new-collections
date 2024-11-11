@@ -18,6 +18,7 @@ import {
   StorageChanges,
   TabGroup,
   TabGroups,
+  TabRank,
   Tabs,
   TabsByHostname,
   Timeline,
@@ -73,18 +74,7 @@ export class TabService {
   readonly recentTabs$ = this.tabs$.pipe(switchMap(() => from(getTabRankStore())));
 
   readonly rankedTabs$: Observable<BrowserTabs> = this.tabs$.pipe(
-    switchMap((tabs) =>
-      this.recentTabs$.pipe(
-        map((ranks) => {
-          return tabs.sort((a, b) => {
-            const rankA = ranks[a.id] ?? 0;
-            const rankB = ranks[b.id] ?? 0;
-
-            return rankB - rankA;
-          });
-        })
-      )
-    ),
+    switchMap((tabs) => this.recentTabs$.pipe(map((ranks) => this.sortByRank(tabs, ranks)))),
     shareReplay(1)
   );
 
@@ -107,6 +97,15 @@ export class TabService {
     private navService: NavService
   ) {
     this.initService();
+  }
+
+  sortByRank(tabs: BrowserTabs, ranks: TabRank) {
+    return tabs.sort((a, b) => {
+      const rankA = ranks[a.id] ?? 0;
+      const rankB = ranks[b.id] ?? 0;
+
+      return rankB - rankA;
+    });
   }
 
   /**
