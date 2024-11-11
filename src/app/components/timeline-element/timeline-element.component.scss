@@ -2,15 +2,46 @@
 @import 'theme';
 
 @include component-theme using($theme) {
+  $background-pallette: get-background-palette($theme);
+  $foreground-pallette: get-foreground-palette($theme);
+  $is-dark: is-dark-theme($theme);
+
   nc-timeline-element {
     .timeline-header {
-      color: get-palette-color(get-foreground-palette($theme), hint-text);
+      color: get-palette-color($foreground-pallette, hint-text);
+    }
+
+    &.expanded {
+      $background-color: get-palette-color(
+        $background-pallette,
+        disabled-button-toggle
+      );
+
+      @if $is-dark {
+        background-color: rgba($background-color, 0.15);
+      } @else {
+        background-color: $background-color;
+      }
     }
   }
 }
 
 nc-timeline-element {
   display: block;
+  border-radius: 1rem;
+
+  transition-property: padding, background-color, margin;
+  transition-timing-function: $cubic-ease;
+  transition-duration: 250ms;
+
+  &.expanded {
+    padding: 0 1rem 1rem;
+    margin: 0 -1rem;
+
+    &:not(:first-of-type) {
+      margin-top: 1rem;
+    }
+  }
 
   .timeline-header {
     display: flex;
