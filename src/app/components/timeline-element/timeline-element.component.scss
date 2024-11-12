@@ -14,13 +14,14 @@
     &.expanded {
       $background-color: get-palette-color(
         $background-pallette,
-        disabled-button-toggle
+        disabled-button
       );
 
-      @if $is-dark {
-        background-color: rgba($background-color, 0.15);
-      } @else {
-        background-color: $background-color;
+      background-color: $background-color;
+
+      .timeline-header,
+      .timeline-header nc-timeline-label {
+        color: get-palette-color($foreground-pallette, secondary-text);
       }
     }
   }
@@ -44,6 +45,10 @@ nc-timeline-element {
   }
 
   .timeline-header {
+    transition-property: color;
+    transition-timing-function: $cubic-ease;
+    transition-duration: 250ms;
+
     display: flex;
     align-items: center;
     justify-content: space-between;

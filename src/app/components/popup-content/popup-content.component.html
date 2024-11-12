@@ -1,5 +1,5 @@
 @let groupsTimeline = groupsTimeline$ | async;
-@if (groupsTimeline$) {
+@if (groupsTimeline) {
   @for (item of groupsTimeline; track item.label) {
     <nc-timeline-element
       [timelineLabel]="item.label"

@@ -49,14 +49,16 @@ export class TabService {
   /**
    * Behavior subject will be used to populate tabs data when managing tabs.
    */
-  private readonly tabGroupsSource$ = new BehaviorSubject<TabGroups>(null);
+  readonly #tabGroupsSource$ = new BehaviorSubject<TabGroups>(null);
 
   /**
    * Observable used by components to listen for tabs data changes.
    */
-  private readonly tabGroups$ = this.tabGroupsSource$.pipe(
-    map((res) =>
-      res?.length > 0 ? res.sort(({ timestamp: a }, { timestamp: b }) => (a < 0 || b < 0 ? a - b : b - a)) : null
+  private readonly tabGroups$ = this.#tabGroupsSource$.pipe(
+    map((tabGroups) =>
+      tabGroups?.length > 0
+        ? tabGroups.sort(({ timestamp: a }, { timestamp: b }) => (a < 0 || b < 0 ? a - b : b - a))
+        : null
     ),
     shareReplay(1)
   );
@@ -93,23 +95,27 @@ export class TabService {
   }
 
   sortByRecent(tabs: BrowserTabs, recentTabs: RecentTabs) {
-    return tabs.sort((a, b) => {
-      const rankA = recentTabs[a.id] ?? 0;
-      const rankB = recentTabs[b.id] ?? 0;
+    if (recentTabs && Object.keys(recentTabs)?.length > 0) {
+      return tabs?.sort((a, b) => {
+        const rankA = recentTabs[a.id] ?? 0;
+        const rankB = recentTabs[b.id] ?? 0;
 
-      return rankB - rankA;
-    });
+        return rankB - rankA;
+      });
+    }
+
+    return tabs;
   }
 
   /**
    * Initialize service and load stored tab groups.
    */
   private async initService() {
-    const collections = await getCollections();
-    this.tabGroupsSource$.next(collections?.map((collection) => new TabGroup(collection)));
-
     const recent = await getRecentTabs();
     this.#recentTabs$.next(recent ?? {});
+
+    const collections = await getCollections();
+    this.#tabGroupsSource$.next(collections?.map((collection) => new TabGroup(collection)));
 
     chrome.storage.onChanged.addListener(async (changes: StorageChanges) => {
       if (changes[recentKey]) {
@@ -158,7 +164,7 @@ export class TabService {
         }
       });
 
-      this.tabGroupsSource$.next(tabGroups);
+      this.#tabGroupsSource$.next(tabGroups);
     }
   }
 
@@ -269,7 +275,7 @@ export class TabService {
         }
       });
 
-      this.tabGroupsSource$.next(newTabGroups);
+      this.#tabGroupsSource$.next(newTabGroups);
 
       this.save();
     }
@@ -291,7 +297,7 @@ export class TabService {
       tabGroups.push(tabGroup);
     }
 
-    this.tabGroupsSource$.next(tabGroups);
+    this.#tabGroupsSource$.next(tabGroups);
 
     this.save();
   }
@@ -417,7 +423,7 @@ export class TabService {
       const messageRef = this.message.open(translate('itemRemoved'), ActionIcon.Undo);
       const removedGroups = remove(tabGroups, (tg) => tg === tabGroup);
 
-      this.tabGroupsSource$.next(tabGroups);
+      this.#tabGroupsSource$.next(tabGroups);
 
       this.navService.reset('groupId');
       resolve(messageRef);
@@ -450,7 +456,7 @@ export class TabService {
         );
 
         this.navService.reset('groupId');
-        this.tabGroupsSource$.next(currentTabGroups);
+        this.#tabGroupsSource$.next(currentTabGroups);
 
         resolve(messageRef);
 
@@ -495,6 +501,6 @@ export class TabService {
   }
 
   hasTabGroup(tabGroup: TabGroup): boolean {
-    return this.tabGroupsSource$.value?.includes(tabGroup);
+    return this.#tabGroupsSource$.value?.includes(tabGroup);
   }
 }
