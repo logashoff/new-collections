@@ -96,9 +96,6 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
   deviceTabs$: Observable<BrowserTabs>;
 
   readonly #searchResults$ = new BehaviorSubject<BrowserTabs>([]);
-
-  readonly openTabs$ = this.tabService.openTabs$.pipe(shareReplay(1));
-  readonly timelineTabs$ = this.tabService.tabs$.pipe(shareReplay(1));
   readonly isPopup = this.navService.isPopup;
 
   @ViewChildren(ListItemComponent)

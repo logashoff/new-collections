@@ -10,36 +10,11 @@
   <div class="text-container">
     <div class="title-container">
       <span class="title">{{ tabValue.title }}</span>
-      @if (isRecent()) {
+      @if (recent()) {
         <mat-icon>search_activity</mat-icon>
       }
     </div>
     <div class="subtitle-container">
-      @let active = hasActive();
-      @let pinned = hasPinned();
-      @let dup = hasDuplicate();
-
-      @if (active || pinned || dup) {
-        <span class="label-container">
-          @if (active) {
-            <nc-label>
-              {{ 'open' | translate }}
-            </nc-label>
-          }
-
-          @if (dup) {
-            <nc-label>
-              {{ 'duplicate' | translate }}
-            </nc-label>
-          }
-
-          @if (pinned) {
-            <nc-label>
-              {{ 'pinned' | translate }}
-            </nc-label>
-          }
-        </span>
-      }
       <span class="subtitle">{{ tabValue.url }}</span>
     </div>
   </div>

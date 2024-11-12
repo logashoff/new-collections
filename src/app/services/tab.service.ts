@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { format, isSameDay, isSameWeek, isSameYear, subDays } from 'date-fns';
-import { debounce, flatMap, groupBy, keyBy, remove, uniqBy } from 'lodash-es';
+import { flatMap, keyBy, remove, uniqBy } from 'lodash-es';
 import { BehaviorSubject, Observable, firstValueFrom, lastValueFrom } from 'rxjs';
-import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
+import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { validate as uuidValidate, v4 as uuidv4 } from 'uuid';
 
 import { RenameDialogComponent, TabsSelectorComponent } from '../components';
@@ -19,7 +19,6 @@ import {
   StorageChanges,
   TabGroup,
   TabGroups,
-  TabId,
   Tabs,
   TabsByHostname,
   Timeline,
@@ -30,7 +29,6 @@ import {
   getRecentTabs,
   getUrlHost,
   ignoreUrlsRegExp,
-  queryCurrentWindow,
   recentKey,
   saveCollections,
   syncToTabs,
@@ -85,33 +83,6 @@ export class TabService {
     shareReplay(1)
   );
 
-  readonly #openTabs$ = new BehaviorSubject<Tabs>(null);
-
-  readonly openTabs$ = this.#openTabs$.asObservable().pipe(
-    filter((tabs) => tabs?.length > 0),
-    shareReplay(1)
-  );
-
-  readonly activeTabs$: Observable<Set<string>> = this.openTabs$.pipe(
-    map((tabs) => new Set(tabs.map((t) => t.url))),
-    shareReplay(1)
-  );
-
-  readonly dupTabs$: Observable<Set<TabId>> = this.tabs$.pipe(
-    map(
-      (tabs) =>
-        new Set<TabId>(
-          flatMap(Object.values(groupBy(tabs, 'url')).filter((group) => group.length > 1)).map((t) => t.id)
-        )
-    ),
-    shareReplay(1)
-  );
-
-  readonly pinnedTabs$: Observable<Set<string>> = this.openTabs$.pipe(
-    map((tabs) => new Set(tabs.filter((t) => t.pinned).map((t) => t.url))),
-    shareReplay(1)
-  );
-
   constructor(
     private bottomSheet: MatBottomSheet,
     private dialog: MatDialog,
@@ -147,18 +118,7 @@ export class TabService {
 
       this.syncCollections(changes);
     });
-
-    chrome.tabs.onCreated.addListener(this.#updateTabs);
-    chrome.tabs.onRemoved.addListener(this.#updateTabs);
-    chrome.tabs.onUpdated.addListener(this.#updateTabs);
-
-    this.#updateTabs();
   }
-
-  readonly #updateTabs = debounce(async () => {
-    const tabs = await queryCurrentWindow();
-    this.#openTabs$.next(tabs);
-  }, 150);
 
   /**
    * Sync local storage collection with loaded UI tab groups.

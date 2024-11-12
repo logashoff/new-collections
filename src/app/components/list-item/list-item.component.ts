@@ -54,11 +54,12 @@ import { RippleComponent } from '../ripple/ripple.component';
 export class ListItemComponent implements Activatable {
   readonly tab = input.required<BrowserTab>();
   readonly actions = input<TabActions>();
-  readonly isRecent = input<boolean>(false);
 
-  readonly hasActive = input<boolean>(false);
-  readonly hasDuplicate = input<boolean>(false);
-  readonly hasPinned = input<boolean>(false);
+  /**
+   * Show recent activity indicator
+   */
+  readonly recent = input<boolean>(false);
+
   /**
    * Plays ripple animation when set to true
    */

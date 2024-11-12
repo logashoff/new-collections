@@ -89,10 +89,6 @@ export class GroupsComponent {
   readonly panelStates$: Observable<GroupExpanded>;
 
   readonly isNaN = isNaN;
-
-  readonly dupTabs$ = this.tabService.dupTabs$.pipe(shareReplay(1));
-  readonly activeTabs$ = this.tabService.activeTabs$.pipe(shareReplay(1));
-  readonly pinnedTabs$ = this.tabService.pinnedTabs$.pipe(shareReplay(1));
   readonly isPopup = this.navService.isPopup;
 
   private readonly panels = viewChildren(MatExpansionPanel);

@@ -33,7 +33,7 @@
             [@listItemAnimation]
             [tab]="tab"
             [actions]="recentTabs?.[tab.id] ? recentActions : tabActions"
-            [isRecent]="recentTabs?.[tab.id]"
+            [recent]="recentTabs?.[tab.id]"
             [target]="isPopup ? '_blank' : '_self'"
             (deleted)="itemDeleted($event)"
             (modified)="itemModified($event)"
