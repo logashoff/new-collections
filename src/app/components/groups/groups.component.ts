@@ -12,6 +12,7 @@ import {
   BrowserTab,
   BrowserTabs,
   GroupExpanded,
+  TabActions,
   TabGroup,
   TabGroups,
   TabsByHostname,
@@ -49,11 +50,14 @@ import { RippleComponent } from '../ripple/ripple.component';
   ],
 })
 export class GroupsComponent {
+  readonly tabActions = input<TabActions>();
+
   /**
    * List of tab groups to render.
    */
   readonly groups = input<TabGroups>();
   readonly groups$: Observable<TabGroups>;
+
   /**
    * Disable list items drag and drop
    */
@@ -86,8 +90,9 @@ export class GroupsComponent {
 
   readonly isNaN = isNaN;
 
-  readonly openTabs$ = this.tabService.openTabChanges$.pipe(shareReplay(1));
-  readonly timelineTabs$ = this.tabService.tabs$.pipe(shareReplay(1));
+  readonly dupTabs$ = this.tabService.dupTabs$.pipe(shareReplay(1));
+  readonly activeTabs$ = this.tabService.activeTabs$.pipe(shareReplay(1));
+  readonly pinnedTabs$ = this.tabService.pinnedTabs$.pipe(shareReplay(1));
   readonly isPopup = this.navService.isPopup;
 
   private readonly panels = viewChildren(MatExpansionPanel);

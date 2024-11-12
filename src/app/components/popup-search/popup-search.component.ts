@@ -21,7 +21,7 @@ export class PopupSearchComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.searchSource$ = this.tabService.rankedTabs$;
+    this.searchSource$ = this.tabService.tabs$;
   }
 
   /**

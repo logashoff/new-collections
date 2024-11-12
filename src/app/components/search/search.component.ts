@@ -19,7 +19,6 @@ import {
   combineLatest,
   distinctUntilChanged,
   filter,
-  from,
   lastValueFrom,
   map,
   Observable,
@@ -33,7 +32,7 @@ import {
 import { SubSinkDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
 import { KeyService, NavService, TabService } from '../../services';
-import { Action, BrowserTab, BrowserTabs, getTabRankStore, listItemAnimation } from '../../utils';
+import { Action, ActionIcon, BrowserTab, BrowserTabs, listItemAnimation, TabActions } from '../../utils';
 import { EmptyComponent } from '../empty/empty.component';
 import { ListItemComponent } from '../list-item/list-item.component';
 import { SearchFormComponent } from '../search-form/search-form.component';
@@ -98,7 +97,7 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
 
   readonly #searchResults$ = new BehaviorSubject<BrowserTabs>([]);
 
-  readonly openTabs$ = this.tabService.openTabChanges$.pipe(shareReplay(1));
+  readonly openTabs$ = this.tabService.openTabs$.pipe(shareReplay(1));
   readonly timelineTabs$ = this.tabService.tabs$.pipe(shareReplay(1));
   readonly isPopup = this.navService.isPopup;
 
@@ -108,6 +107,33 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
   private readonly searchValue$ = this.navService.paramsSearch$.pipe(shareReplay(1));
 
   readonly recentTabs$ = this.tabService.recentTabs$;
+
+  readonly tabActions: TabActions = [
+    {
+      action: Action.Find,
+      icon: ActionIcon.Find,
+      label: 'find',
+    },
+    {
+      action: Action.Edit,
+      icon: ActionIcon.Edit,
+      label: 'edit',
+    },
+    {
+      action: Action.Delete,
+      icon: ActionIcon.Delete,
+      label: 'delete',
+    },
+  ];
+
+  readonly recentActions: TabActions = [
+    {
+      action: Action.Forget,
+      icon: ActionIcon.Forget,
+      label: 'removeRecent',
+    },
+    ...this.tabActions,
+  ];
 
   constructor(
     private readonly navService: NavService,
@@ -138,9 +164,9 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
             map((fuse) => fuse.search(searchValue).map(({ item }) => item))
           )
         ),
-        withLatestFrom(from(getTabRankStore()))
+        withLatestFrom(this.recentTabs$)
       )
-      .subscribe(([results, tabRank]) => this.#searchResults$.next(this.tabService.sortByRank(results, tabRank)));
+      .subscribe(([tabs, recent]) => this.#searchResults$.next(this.tabService.sortByRecent(tabs, recent)));
 
     this.subscribe(resultChanges);
 
@@ -152,6 +178,8 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
 
         return source;
       }),
+      withLatestFrom(this.recentTabs$),
+      map(([tabs, recent]) => this.tabService.sortByRecent(tabs, recent)),
       shareReplay(1)
     );
 

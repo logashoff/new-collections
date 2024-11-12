@@ -7,14 +7,13 @@ import {
   Collections,
   faviconStorageKey,
   FaviconSync,
+  recentKey,
   Settings,
   StorageArea,
   SyncData,
   SyncTabs,
   TabId,
-  TabRank,
-  tabRankKey,
-  urlRankKey,
+  RecentTabs,
 } from './models';
 import { getSettings, getUrlHost } from './utils';
 
@@ -67,42 +66,33 @@ export async function getFaviconStore(): Promise<{ [hostname: string]: string }>
   return favicon[faviconStorageKey] ?? {};
 }
 
-export async function getUrlRankStore(): Promise<{ [url: string]: number }> {
+export async function getRecentTabs(): Promise<RecentTabs> {
   const storage = await getStorage();
-  const urlRank = await storage.get(urlRankKey);
-  return urlRank[urlRankKey] ?? {};
+  const recentStore = await storage.get(recentKey);
+  return recentStore[recentKey] ?? {};
 }
 
-export async function rankUrl(url: string) {
-  const rankStore = (await getUrlRankStore()) ?? {};
-
-  if (!rankStore[url]) {
-    rankStore[url] = 1;
-  } else {
-    rankStore[url]++;
-  }
-
+export async function addRecent(tabId: TabId) {
+  const recentTabs = (await getRecentTabs()) ?? {};
   const storage = await getStorage();
 
+  recentTabs[tabId] = new Date().getTime();
+
   storage.set({
-    [urlRankKey]: rankStore,
+    [recentKey]: recentTabs,
   });
 }
-export async function getTabRankStore(): Promise<TabRank> {
+
+export async function removeRecent(tabId: TabId) {
+  const recentTabs = (await getRecentTabs()) ?? {};
   const storage = await getStorage();
-  const urlRank = await storage.get(tabRankKey);
-  return urlRank[tabRankKey] ?? {};
-}
 
-export async function rankTab(tabId: TabId) {
-  const rankStore = (await getTabRankStore()) ?? {};
-
-  rankStore[tabId] = new Date().getTime();
-
-  const storage = await getStorage();
+  if (tabId in recentTabs) {
+    delete recentTabs[tabId];
+  }
 
   storage.set({
-    [tabRankKey]: rankStore,
+    [recentKey]: recentTabs,
   });
 }
 

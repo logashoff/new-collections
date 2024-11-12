@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { format, isSameDay, isSameWeek, isSameYear, subDays } from 'date-fns';
-import { debounce, flatMap, keyBy, remove, uniqBy } from 'lodash-es';
-import { BehaviorSubject, Observable, firstValueFrom, from, lastValueFrom } from 'rxjs';
-import { map, shareReplay, switchMap } from 'rxjs/operators';
+import { debounce, flatMap, groupBy, keyBy, remove, uniqBy } from 'lodash-es';
+import { BehaviorSubject, Observable, firstValueFrom, lastValueFrom } from 'rxjs';
+import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
 import { validate as uuidValidate, v4 as uuidv4 } from 'uuid';
 
 import { RenameDialogComponent, TabsSelectorComponent } from '../components';
@@ -15,10 +15,11 @@ import {
   Collection,
   Collections,
   MessageRef,
+  RecentTabs,
   StorageChanges,
   TabGroup,
   TabGroups,
-  TabRank,
+  TabId,
   Tabs,
   TabsByHostname,
   Timeline,
@@ -26,10 +27,11 @@ import {
   getCollections,
   getFaviconStore,
   getHostnameGroup,
-  getTabRankStore,
+  getRecentTabs,
   getUrlHost,
   ignoreUrlsRegExp,
   queryCurrentWindow,
+  recentKey,
   saveCollections,
   syncToTabs,
   translate,
@@ -71,12 +73,9 @@ export class TabService {
     shareReplay(1)
   );
 
-  readonly recentTabs$ = this.tabs$.pipe(switchMap(() => from(getTabRankStore())));
+  readonly #recentTabs$ = new BehaviorSubject<RecentTabs>({});
 
-  readonly rankedTabs$: Observable<BrowserTabs> = this.tabs$.pipe(
-    switchMap((tabs) => this.recentTabs$.pipe(map((ranks) => this.sortByRank(tabs, ranks)))),
-    shareReplay(1)
-  );
+  readonly recentTabs$: Observable<RecentTabs> = this.#recentTabs$.asObservable();
 
   /**
    * Groups timeline.
@@ -86,9 +85,32 @@ export class TabService {
     shareReplay(1)
   );
 
-  readonly #openTabChanges$ = new BehaviorSubject<Tabs>(null);
+  readonly #openTabs$ = new BehaviorSubject<Tabs>(null);
 
-  readonly openTabChanges$ = this.#openTabChanges$.asObservable();
+  readonly openTabs$ = this.#openTabs$.asObservable().pipe(
+    filter((tabs) => tabs?.length > 0),
+    shareReplay(1)
+  );
+
+  readonly activeTabs$: Observable<Set<string>> = this.openTabs$.pipe(
+    map((tabs) => new Set(tabs.map((t) => t.url))),
+    shareReplay(1)
+  );
+
+  readonly dupTabs$: Observable<Set<TabId>> = this.tabs$.pipe(
+    map(
+      (tabs) =>
+        new Set<TabId>(
+          flatMap(Object.values(groupBy(tabs, 'url')).filter((group) => group.length > 1)).map((t) => t.id)
+        )
+    ),
+    shareReplay(1)
+  );
+
+  readonly pinnedTabs$: Observable<Set<string>> = this.openTabs$.pipe(
+    map((tabs) => new Set(tabs.filter((t) => t.pinned).map((t) => t.url))),
+    shareReplay(1)
+  );
 
   constructor(
     private bottomSheet: MatBottomSheet,
@@ -99,10 +121,10 @@ export class TabService {
     this.initService();
   }
 
-  sortByRank(tabs: BrowserTabs, ranks: TabRank) {
+  sortByRecent(tabs: BrowserTabs, recentTabs: RecentTabs) {
     return tabs.sort((a, b) => {
-      const rankA = ranks[a.id] ?? 0;
-      const rankB = ranks[b.id] ?? 0;
+      const rankA = recentTabs[a.id] ?? 0;
+      const rankB = recentTabs[b.id] ?? 0;
 
       return rankB - rankA;
     });
@@ -115,7 +137,16 @@ export class TabService {
     const collections = await getCollections();
     this.tabGroupsSource$.next(collections?.map((collection) => new TabGroup(collection)));
 
-    chrome.storage.onChanged.addListener((changes: StorageChanges) => this.syncCollections(changes));
+    const recent = await getRecentTabs();
+    this.#recentTabs$.next(recent ?? {});
+
+    chrome.storage.onChanged.addListener(async (changes: StorageChanges) => {
+      if (changes[recentKey]) {
+        this.#recentTabs$.next(await getRecentTabs());
+      }
+
+      this.syncCollections(changes);
+    });
 
     chrome.tabs.onCreated.addListener(this.#updateTabs);
     chrome.tabs.onRemoved.addListener(this.#updateTabs);
@@ -126,7 +157,7 @@ export class TabService {
 
   readonly #updateTabs = debounce(async () => {
     const tabs = await queryCurrentWindow();
-    this.#openTabChanges$.next(tabs);
+    this.#openTabs$.next(tabs);
   }, 150);
 
   /**

@@ -13,7 +13,11 @@
       [timelineLabel]="item.label"
       (removed)="removeGroups(item.elements)"
       [expanded]="tabGroups.expanded">
-      <nc-groups #tabGroups [groups]="item.elements" [dragDisabled]="false" />
+      <nc-groups
+        #tabGroups
+        [groups]="item.elements"
+        [dragDisabled]="false"
+        [tabActions]="tabActions" />
     </nc-timeline-element>
   }
 } @else {

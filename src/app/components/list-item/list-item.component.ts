@@ -6,20 +6,17 @@ import {
   ElementRef,
   HostBinding,
   input,
-  OnInit,
   output,
   ViewEncapsulation,
 } from '@angular/core';
-import { toObservable } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { combineLatest, filter, map, Observable, shareReplay, switchMap, withLatestFrom } from 'rxjs';
 
-import { RankTabDirective, StopPropagationDirective } from '../../directives';
+import { RecentDirective, StopPropagationDirective } from '../../directives';
 import { FaviconPipe, TranslatePipe } from '../../pipes';
 import { Activatable } from '../../services';
-import { BrowserTab, BrowserTabs, rankTab, scrollIntoView, Tabs } from '../../utils';
+import { Action, addRecent, BrowserTab, removeRecent, scrollIntoView, TabAction, TabActions } from '../../utils';
 import { ChipComponent } from '../chip/chip.component';
 import { LabelComponent } from '../label/label.component';
 import { RippleComponent } from '../ripple/ripple.component';
@@ -48,38 +45,24 @@ import { RippleComponent } from '../ripple/ripple.component';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    RankTabDirective,
+    RecentDirective,
     RippleComponent,
     StopPropagationDirective,
     TranslatePipe,
   ],
 })
-export class ListItemComponent implements OnInit, Activatable {
-  readonly openTabs = input<Tabs>();
-  readonly #openTabs$: Observable<Tabs>;
-
-  readonly tab = input<BrowserTab>();
-  readonly #tab$: Observable<BrowserTab>;
-
-  readonly tabs = input<BrowserTabs>();
-  readonly #tabs$: Observable<BrowserTabs>;
-
+export class ListItemComponent implements Activatable {
+  readonly tab = input.required<BrowserTab>();
+  readonly actions = input<TabActions>();
   readonly isRecent = input<boolean>(false);
 
+  readonly hasActive = input<boolean>(false);
+  readonly hasDuplicate = input<boolean>(false);
+  readonly hasPinned = input<boolean>(false);
   /**
    * Plays ripple animation when set to true
    */
   readonly focused = input<boolean>(false);
-
-  /**
-   * Disables item menu
-   */
-  readonly notReadOnly$: Observable<boolean>;
-
-  /**
-   * Indicates if list item is part of timeline.
-   */
-  readonly inTimeline$: Observable<boolean>;
 
   /**
    * Dispatches event when Delete menu item is clicked
@@ -101,22 +84,6 @@ export class ListItemComponent implements OnInit, Activatable {
    */
   readonly target = input<'_blank' | '_self'>('_self');
 
-  /**
-   * Display button to trigger `find` event emitter
-   */
-  readonly useFind = input<boolean>(false);
-
-  /**
-   * Indicates how many tabs are currently open that match this tab's URL
-   */
-  openTabsCount$: Observable<number>;
-
-  readonly dupTabs$: Observable<number>;
-
-  activeTab$: Observable<boolean>;
-  pinnedTab$: Observable<boolean>;
-  hasLabels$: Observable<boolean>;
-
   private _isActive = false;
 
   @HostBinding('class.active')
@@ -127,89 +94,31 @@ export class ListItemComponent implements OnInit, Activatable {
   constructor(
     private cdr: ChangeDetectorRef,
     private el: ElementRef
-  ) {
-    this.#openTabs$ = toObservable(this.openTabs);
-    this.#tab$ = toObservable(this.tab);
-    this.#tabs$ = toObservable(this.tabs);
-
-    this.notReadOnly$ = this.#tab$.pipe(
-      switchMap((tab) =>
-        this.#tabs$.pipe(
-          filter((tabs) => tabs?.length > 0),
-          map((tabs) => tabs.some((t) => t.id === tab.id))
-        )
-      ),
-      shareReplay(1)
-    );
-
-    this.dupTabs$ = this.#tab$.pipe(
-      switchMap((tab) =>
-        this.#tabs$.pipe(
-          filter((tabs) => tabs?.length > 0),
-          map((tabs) => tabs.filter((t) => t.url === tab.url)?.length)
-        )
-      ),
-      shareReplay(1)
-    );
-
-    this.inTimeline$ = toObservable(this.useFind).pipe(
-      filter((useFind) => useFind),
-      withLatestFrom(this.#tab$),
-      switchMap(([, tab]) =>
-        this.#tabs$.pipe(
-          filter((tabs) => tabs?.length > 0),
-          map((tabs) => tabs.some((t) => t.id === tab.id))
-        )
-      ),
-      shareReplay(1)
-    );
-  }
-
-  ngOnInit() {
-    const openTabs$: Observable<Tabs> = combineLatest([this.#tab$, this.#openTabs$]).pipe(
-      map(([tab, tabs]) => tabs?.filter((t) => t.url === tab.url)),
-      shareReplay(1)
-    );
-
-    this.activeTab$ = openTabs$.pipe(
-      map((tabs) => tabs?.some((t) => t.active)),
-      shareReplay(1)
-    );
-
-    this.pinnedTab$ = openTabs$.pipe(
-      map((tabs) => tabs?.some((t) => t.pinned)),
-      shareReplay(1)
-    );
-
-    this.openTabsCount$ = openTabs$.pipe(
-      map((tabs) => tabs?.length),
-      shareReplay(1)
-    );
-
-    this.hasLabels$ = combineLatest([this.activeTab$, this.pinnedTab$, this.openTabsCount$, this.dupTabs$]).pipe(
-      map(([active, pinned, openTabs, dupTabs]) => active || pinned || openTabs > 0 || dupTabs > 1),
-      shareReplay(1)
-    );
-  }
-
-  /**
-   * Opens dialog to edit specified tab.
-   */
-  async editClick() {
-    this.modified.emit(this.tab());
-  }
-
-  /**
-   * Handles delete menu item click
-   */
-  async deleteClick() {
-    this.deleted.emit(this.tab());
-  }
+  ) {}
 
   async activate() {
     const { id, url } = this.tab();
-    await rankTab(id);
+    await addRecent(id);
     open(url, this.target());
+  }
+
+  async handleAction(action: TabAction) {
+    const tab = this.tab();
+
+    switch (action.action) {
+      case Action.Edit:
+        this.modified.emit(tab);
+        break;
+      case Action.Find:
+        this.find.emit(tab);
+        break;
+      case Action.Forget:
+        await removeRecent(tab.id);
+        break;
+      case Action.Delete:
+        this.deleted.emit(tab);
+        break;
+    }
   }
 
   async setActiveStyles() {

@@ -1,5 +1,12 @@
-@if (groupsTimeline$ | async) {
-  <nc-timeline class="main-content" />
+@let groupsTimeline = groupsTimeline$ | async;
+@if (groupsTimeline$) {
+  @for (item of groupsTimeline; track item.label) {
+    <nc-timeline-element
+      [timelineLabel]="item.label"
+      (removed)="removeGroups(item.elements)">
+      <nc-groups [groups]="item.elements" [tabActions]="tabActions"></nc-groups>
+    </nc-timeline-element>
+  }
 } @else {
   <nc-empty
     [actions]="defaultActions"

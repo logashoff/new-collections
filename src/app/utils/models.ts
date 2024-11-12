@@ -17,14 +17,9 @@ export const settingsStorageKey = 'settings';
 export const faviconStorageKey = 'favicon';
 
 /**
- * Storage key to store link clicks
- */
-export const urlRankKey = 'urlRank';
-
-/**
  * Storage key to store tab ID maps to number of clicks
  */
-export const tabRankKey = 'tabRank';
+export const recentKey = 'recent';
 
 /**
  * URLs to ignore when saving tabs.
@@ -58,7 +53,7 @@ export type ExpandedGroupsByUrl = { [url: string]: GroupExpanded };
 
 export type TabId = number;
 
-export type TabRank = { [tabId: TabId]: number };
+export type RecentTabs = { [tabId: TabId]: number };
 
 export interface RouterParams extends Params {
   groupId?: string;
@@ -104,11 +99,11 @@ export interface SettingsSync {
 }
 
 /**
- * URL rank data in sync storage
+ * Save recently used tabs in sync storage
  */
-export interface UrlRankSync {
-  [urlRankKey]?: {
-    [url: string]: number;
+export interface RecentSync {
+  [recentKey]?: {
+    [tabId: TabId]: number;
   };
 }
 
@@ -122,7 +117,7 @@ export type GroupSync = {
 /**
  * Data used to store collections in sync storage
  */
-export type SyncData = SettingsSync & FaviconSync & GroupSync & UrlRankSync;
+export type SyncData = SettingsSync & FaviconSync & GroupSync & RecentSync;
 
 /**
  * Storage change event
@@ -267,7 +262,11 @@ export interface TabsByHostname {
  * Action icons.
  */
 export enum ActionIcon {
+  Delete = 'delete',
+  Edit = 'edit_note',
   Export = 'save_alt',
+  Find = 'manage_search',
+  Forget = 'history_off',
   Import = 'file_upload',
   Save = 'bookmark_add',
   Settings = 'settings',
@@ -278,11 +277,23 @@ export enum ActionIcon {
  * Available actions within application.
  */
 export enum Action {
-  Export = 1,
-  Import = 2,
-  Settings = 3,
-  Save = 4,
+  Delete,
+  Edit,
+  Export,
+  Find,
+  Forget,
+  Import,
+  Save,
+  Settings,
 }
+
+export interface TabAction {
+  action: Action;
+  icon: ActionIcon;
+  label: string;
+}
+
+export type TabActions = TabAction[];
 
 /**
  * Collection Action

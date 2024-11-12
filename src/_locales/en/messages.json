@@ -32,6 +32,9 @@
   "dismiss": {
     "message": "Dismiss"
   },
+  "duplicate": {
+    "message": "Duplicate"
+  },
   "edit": {
     "message": "Edit"
   },
@@ -122,6 +125,9 @@
   "oneResult": {
     "message": "One result"
   },
+  "open": {
+    "message": "Open"
+  },
   "openTabs": {
     "message": "$count$ Open",
     "placeholders": {
@@ -141,6 +147,9 @@
   },
   "recent": {
     "message": "Recent"
+  },
+  "removeRecent": {
+    "message": "Remove from recent"
   },
   "restore": {
     "message": "Restore"

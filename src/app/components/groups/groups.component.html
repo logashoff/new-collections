@@ -41,6 +41,10 @@
         <mat-divider />
 
         @if (group.tabs$ | async; as tabs) {
+          @let active = activeTabs$ | async;
+          @let dups = dupTabs$ | async;
+          @let pinned = pinnedTabs$ | async;
+
           <nc-tab-list cdkDropList (cdkDropListDropped)="drop($event, tabs)">
             @for (tab of tabs; track tab.id) {
               <nc-list-item
@@ -48,8 +52,10 @@
                 [@listItemAnimation]
                 [cdkDragDisabled]="dragDisabled()"
                 [tab]="tab"
-                [tabs]="timelineTabs$ | async"
-                [openTabs]="openTabs$ | async"
+                [actions]="tabActions()"
+                [hasActive]="active?.has(tab.url)"
+                [hasDuplicate]="dups?.has(tab.id)"
+                [hasPinned]="pinned?.has(tab.url)"
                 [target]="isPopup ? '_blank' : '_self'"
                 (modified)="editTab(tab)"
                 (deleted)="deleteTab(tab)"

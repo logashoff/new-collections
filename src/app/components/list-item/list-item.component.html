@@ -2,7 +2,7 @@
 
 <a
   class="container"
-  [rankTab]="tabValue.id"
+  [recent]="tabValue.id"
   matRipple
   [href]="tabValue.url"
   [target]="target()">
@@ -15,30 +15,25 @@
       }
     </div>
     <div class="subtitle-container">
-      @if (hasLabels$ | async) {
+      @let active = hasActive();
+      @let pinned = hasPinned();
+      @let dup = hasDuplicate();
+
+      @if (active || pinned || dup) {
         <span class="label-container">
-          @let openTabsCount = openTabsCount$ | async;
-          @let dupTabs = dupTabs$ | async;
-
-          @if (openTabsCount) {
-            <nc-label color="primary">
-              {{ 'openTabs' | translate: openTabsCount.toString() }}
-            </nc-label>
-          }
-
-          @if (dupTabs > 1) {
-            <nc-label color="accent">
-              {{ 'savedCount' | translate: dupTabs?.toString() }}
-            </nc-label>
-          }
-
-          @if (activeTab$ | async) {
+          @if (active) {
             <nc-label>
-              {{ 'active' | translate }}
+              {{ 'open' | translate }}
             </nc-label>
           }
 
-          @if (pinnedTab$ | async) {
+          @if (dup) {
+            <nc-label>
+              {{ 'duplicate' | translate }}
+            </nc-label>
+          }
+
+          @if (pinned) {
             <nc-label>
               {{ 'pinned' | translate }}
             </nc-label>
@@ -49,38 +44,17 @@
     </div>
   </div>
 
-  @let inTimeline = inTimeline$ | async;
-  @let notReadOnly = notReadOnly$ | async;
+  @let tabActions = actions();
 
-  @if (inTimeline || notReadOnly) {
+  @if (tabActions?.length) {
     <div class="controls">
-      @if (inTimeline) {
+      @for (action of tabActions; track action) {
         <button
           stopPropagation
           mat-icon-button
-          [matTooltip]="'find' | translate"
-          (click)="find.emit(tabValue)">
-          <mat-icon>manage_search</mat-icon>
-        </button>
-      }
-
-      @if (notReadOnly) {
-        <button
-          stopPropagation
-          mat-icon-button
-          (click)="editClick()"
-          [matTooltip]="'edit' | translate">
-          <mat-icon>edit_note</mat-icon>
-        </button>
-      }
-
-      @if (notReadOnly) {
-        <button
-          stopPropagation
-          mat-icon-button
-          (click)="deleteClick()"
-          [matTooltip]="'delete' | translate">
-          <mat-icon>delete</mat-icon>
+          [matTooltip]="action.label | translate"
+          (click)="handleAction(action)">
+          <mat-icon>{{ action.icon }}</mat-icon>
         </button>
       }
     </div>

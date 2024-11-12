@@ -32,11 +32,9 @@
           <nc-list-item
             [@listItemAnimation]
             [tab]="tab"
+            [actions]="recentTabs?.[tab.id] ? recentActions : tabActions"
             [isRecent]="recentTabs?.[tab.id]"
-            [tabs]="timelineTabs$ | async"
-            [openTabs]="openTabs$ | async"
             [target]="isPopup ? '_blank' : '_self'"
-            [useFind]="true"
             (deleted)="itemDeleted($event)"
             (modified)="itemModified($event)"
             (find)="findItem.emit($event)" />
