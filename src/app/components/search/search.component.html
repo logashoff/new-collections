@@ -1,5 +1,7 @@
 @let sourceTabs = sourceTabs$ | async;
 @let deviceTabs = deviceTabs$ | async;
+@let searchValue = searchValue$ | async;
+@let recentTabs = recentTabs$ | async;
 
 @if (sourceTabs?.length > 0 || deviceTabs?.length > 0) {
   @if (deviceTabs?.length > 0) {
@@ -13,27 +15,48 @@
         }
       </nc-tab-list>
     </mat-card>
-  }
-
-  @if (sourceTabs?.length > 0) {
-    <nc-timeline-label [ngPlural]="sourceTabs.length">
-      <ng-template ngPluralCase="one">
-        {{ 'oneResult' | translate }}
-      </ng-template>
-      <ng-template ngPluralCase="other">
-        {{ 'resultCount' | translate: sourceTabs?.length.toString() }}
-      </ng-template>
+  } @else if (!searchValue && recentTabs?.length > 0) {
+    <nc-timeline-label>
+      {{ 'recent' | translate }}
     </nc-timeline-label>
     <mat-card class="search-container">
       <nc-tab-list>
-        @let recentTabs = recentTabs$ | async;
+        @for (tab of recentTabs; track tab) {
+          <nc-list-item
+            [@listItemAnimation]
+            [tab]="tab"
+            [actions]="recentActions"
+            [target]="isPopup ? '_blank' : '_self'"
+            (deleted)="itemDeleted($event)"
+            (modified)="itemModified($event)"
+            (find)="findItem.emit($event)" />
+        }
+      </nc-tab-list>
+    </mat-card>
+  }
 
+  @if (sourceTabs?.length > 0) {
+    <nc-timeline-label>
+      @if (searchValue?.length > 0) {
+        <ng-container [ngPlural]="sourceTabs.length">
+          <ng-template ngPluralCase="one">
+            {{ 'oneResult' | translate }}
+          </ng-template>
+          <ng-template ngPluralCase="other">
+            {{ 'resultCount' | translate: sourceTabs?.length.toString() }}
+          </ng-template>
+        </ng-container>
+      } @else {
+        {{ 'latest' | translate }}
+      }
+    </nc-timeline-label>
+    <mat-card class="search-container">
+      <nc-tab-list>
         @for (tab of sourceTabs; track tab.id) {
           <nc-list-item
             [@listItemAnimation]
             [tab]="tab"
-            [actions]="recentTabs?.[tab.id] ? recentActions : tabActions"
-            [recent]="recentTabs?.[tab.id]"
+            [actions]="defaultActions"
             [target]="isPopup ? '_blank' : '_self'"
             (deleted)="itemDeleted($event)"
             (modified)="itemModified($event)"

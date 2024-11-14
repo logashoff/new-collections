@@ -1,5 +1,5 @@
 {
-  "action_settings": {
+  "action_manufacturing": {
     "message": "Settings"
   },
   "action_undo": {
@@ -110,6 +110,17 @@
   },
   "itemsRemovedCount": {
     "message": "Removed $count$ items",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "latest": {
+    "message": "Latest"
+  },
+  "latestCount": {
+    "message": "Latest $count$",
     "placeholders": {
       "count": {
         "content": "$1"

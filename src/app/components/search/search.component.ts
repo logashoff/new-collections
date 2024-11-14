@@ -46,6 +46,9 @@ const fuseOptions: IFuseOptions<BrowserTab> = {
   useExtendedSearch: true,
 };
 
+const LATEST_LIMIT = 16;
+const RECENT_LIMIT = 8;
+
 /**
  * @description
  *
@@ -96,16 +99,19 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
   deviceTabs$: Observable<BrowserTabs>;
 
   readonly #searchResults$ = new BehaviorSubject<BrowserTabs>([]);
-  readonly isPopup = this.navService.isPopup;
+  readonly isPopup: boolean = this.navService.isPopup;
 
   @ViewChildren(ListItemComponent)
   private listItems: QueryList<ListItemComponent>;
 
-  private readonly searchValue$ = this.navService.paramsSearch$.pipe(shareReplay(1));
+  readonly searchValue$: Observable<string> = this.navService.paramsSearch$.pipe(shareReplay(1));
 
-  readonly recentTabs$ = this.tabService.recentTabs$;
+  /**
+   * Recently used tabs
+   */
+  recentTabs$: Observable<BrowserTabs>;
 
-  readonly tabActions: TabActions = [
+  readonly defaultActions: TabActions = [
     {
       action: Action.Find,
       icon: ActionIcon.Find,
@@ -129,7 +135,7 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
       icon: ActionIcon.Forget,
       label: 'removeRecent',
     },
-    ...this.tabActions,
+    ...this.defaultActions,
   ];
 
   constructor(
@@ -160,10 +166,9 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
             take(1),
             map((fuse) => fuse.search(searchValue).map(({ item }) => item))
           )
-        ),
-        withLatestFrom(this.recentTabs$)
+        )
       )
-      .subscribe(([tabs, recent]) => this.#searchResults$.next(this.tabService.sortByRecent(tabs, recent)));
+      .subscribe((tabs) => this.#searchResults$.next(tabs));
 
     this.subscribe(resultChanges);
 
@@ -173,10 +178,20 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
           return searchResults;
         }
 
-        return source;
+        return source.sort((a, b) => b.id - a.id).slice(0, LATEST_LIMIT);
       }),
-      withLatestFrom(this.recentTabs$),
-      map(([tabs, recent]) => this.tabService.sortByRecent(tabs, recent)),
+      shareReplay(1)
+    );
+
+    this.recentTabs$ = combineLatest([this.tabService.recentTabs$, this.#source$]).pipe(
+      map(([recentTabs, tabs]) =>
+        this.tabService
+          .sortByRecent(
+            tabs?.filter((tab) => recentTabs?.[tab.id]),
+            recentTabs
+          )
+          ?.slice(0, RECENT_LIMIT)
+      ),
       shareReplay(1)
     );
 

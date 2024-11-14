@@ -262,14 +262,14 @@ export interface TabsByHostname {
  * Action icons.
  */
 export enum ActionIcon {
-  Delete = 'delete',
+  Delete = 'delete_forever',
   Edit = 'edit_note',
   Export = 'save_alt',
   Find = 'manage_search',
   Forget = 'history_off',
   Import = 'file_upload',
   Save = 'bookmark_add',
-  Settings = 'settings',
+  Settings = 'manufacturing',
   Undo = 'undo',
 }
 

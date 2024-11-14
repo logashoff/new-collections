@@ -36,10 +36,6 @@ $typography-config: mat.m2-get-typography-config($dark-theme);
     .controls {
       color: get-palette-color(get-foreground-palette($theme), secondary-text);
     }
-
-    .title-container .mat-icon {
-      color: get-palette-color(get-foreground-palette($theme), disabled-text);
-    }
   }
 }
 
@@ -85,12 +81,6 @@ nc-list-item {
 
       .title {
         flex: 0 1 auto;
-      }
-
-      .mat-icon {
-        font-size: 1rem;
-        width: auto;
-        height: auto;
       }
     }
 

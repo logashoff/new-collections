@@ -56,11 +56,6 @@ export class ListItemComponent implements Activatable {
   readonly actions = input<TabActions>();
 
   /**
-   * Show recent activity indicator
-   */
-  readonly recent = input<boolean>(false);
-
-  /**
    * Plays ripple animation when set to true
    */
   readonly focused = input<boolean>(false);

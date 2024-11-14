@@ -238,12 +238,13 @@ export class TabService {
    */
   createTabGroup(tabs: Tabs): TabGroup {
     const timestamp = new Date().getTime();
+    const len = tabs.length;
     const filteredTabs: BrowserTabs = tabs
       .filter((tab) => !ignoreUrlsRegExp.test(tab.url))
       .map(
         ({ url, title, favIconUrl }, index): BrowserTab => ({
           favIconUrl,
-          id: (timestamp + index) * Math.random(),
+          id: timestamp + (len - index),
           title,
           url,
         })
@@ -322,7 +323,15 @@ export class TabService {
         const tabs: BrowserTabs = await lastValueFrom(bottomSheetRef.afterDismissed());
 
         if (tabs?.length > 0) {
-          group.prepend(tabs);
+          const timestamp = new Date().getTime();
+          const len = tabs.length;
+          group.prepend(
+            tabs.map((tab, index) => {
+              tab.id = timestamp + (len - index);
+              return tab;
+            })
+          );
+
           await this.save();
 
           const tabsLen = tabs.length;
