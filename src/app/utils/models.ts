@@ -42,6 +42,16 @@ export type MessageRef = MatSnackBarRef<MessageComponent>;
 export type ImageSource = string | SafeUrl;
 
 /**
+ * Group tab groups by time label in hashmap.
+ */
+export type Timeline = TimelineElement[];
+
+/**
+ * setTimeout function return value type
+ */
+export type Timeout = ReturnType<typeof setTimeout>;
+
+/**
  * Checks if group should be expanded by group ID
  */
 export type GroupExpanded = { [groupId: string]: boolean };
@@ -321,15 +331,10 @@ export interface TimelineElement {
   elements: TabGroups;
 }
 
-/**
- * Group tab groups by time label in hashmap.
- */
-export type Timeline = TimelineElement[];
-
 export const ESC_KEY_CODE = 'Escape';
 
 export const KEY_UP = 'keyup';
 
 export const KEY_DOWN = 'keydown';
 
-export type Timeout = ReturnType<typeof setTimeout>;
+export const RECENT_LIMIT = 5;

@@ -47,7 +47,6 @@ const fuseOptions: IFuseOptions<BrowserTab> = {
 };
 
 const LATEST_LIMIT = 16;
-const RECENT_LIMIT = 8;
 
 /**
  * @description
@@ -185,12 +184,10 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
 
     this.recentTabs$ = combineLatest([this.tabService.recentTabs$, this.#source$]).pipe(
       map(([recentTabs, tabs]) =>
-        this.tabService
-          .sortByRecent(
-            tabs?.filter((tab) => recentTabs?.[tab.id]),
-            recentTabs
-          )
-          ?.slice(0, RECENT_LIMIT)
+        this.tabService.sortByRecent(
+          tabs?.filter((tab) => recentTabs?.[tab.id]),
+          recentTabs
+        )
       ),
       shareReplay(1)
     );

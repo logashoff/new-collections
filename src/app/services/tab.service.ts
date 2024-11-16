@@ -19,6 +19,7 @@ import {
   StorageChanges,
   TabGroup,
   TabGroups,
+  TabId,
   Tabs,
   TabsByHostname,
   Timeline,
@@ -30,6 +31,7 @@ import {
   getUrlHost,
   ignoreUrlsRegExp,
   recentKey,
+  removeRecent,
   saveCollections,
   syncToTabs,
   translate,
@@ -370,6 +372,8 @@ export class TabService {
           this.navService.reset('groupId', 'tabId');
           tabGroup.removeTabAt(removeIndex);
 
+          await removeRecent(removedTab.id);
+
           if (tabGroup.tabs.length === 0) {
             messageRef = await this.removeTabGroup(tabGroup);
           } else {
@@ -439,6 +443,8 @@ export class TabService {
 
       this.save();
 
+      await removeRecent(tabGroup.tabs.map((tab) => tab.id));
+
       if (removedGroups?.length > 0) {
         const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
 
@@ -470,6 +476,9 @@ export class TabService {
         resolve(messageRef);
 
         this.save();
+
+        const tabIds: TabId[] = flatMap(removedGroups.map((group) => group.tabs.map((tab) => tab.id)));
+        await removeRecent(tabIds);
 
         if (removedGroups?.length > 0) {
           const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());

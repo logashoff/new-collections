@@ -7,13 +7,14 @@ import {
   Collections,
   faviconStorageKey,
   FaviconSync,
+  RECENT_LIMIT,
   recentKey,
+  RecentTabs,
   Settings,
   StorageArea,
   SyncData,
   SyncTabs,
   TabId,
-  RecentTabs,
 } from './models';
 import { getSettings, getUrlHost } from './utils';
 
@@ -41,7 +42,7 @@ export async function saveCollections(collections: Collections): Promise<void> {
     }
   }
 
-  await storage.remove(removeKeys);
+  await storage.remove([...removeKeys, faviconStorageKey]);
 
   delete syncData[faviconStorageKey];
 
@@ -73,25 +74,34 @@ export async function getRecentTabs(): Promise<RecentTabs> {
 }
 
 export async function addRecent(tabId: TabId) {
-  const recentTabs = (await getRecentTabs()) ?? {};
+  const recentTabs: RecentTabs = (await getRecentTabs()) ?? {};
   const storage = await getStorage();
 
-  recentTabs[tabId] = new Date().getTime();
+  const timestamp = new Date().getTime();
+  recentTabs[tabId] = timestamp;
+  const tabIds = Object.keys(recentTabs).sort((a, b) => recentTabs[b] - recentTabs[a]);
 
-  storage.set({
+  if (tabIds?.length > RECENT_LIMIT) {
+    tabIds.slice(RECENT_LIMIT).forEach((id) => delete recentTabs[id]);
+  }
+
+  await storage.set({
     [recentKey]: recentTabs,
   });
 }
 
-export async function removeRecent(tabId: TabId) {
+export async function removeRecent(tabId: TabId | TabId[]) {
   const recentTabs = (await getRecentTabs()) ?? {};
   const storage = await getStorage();
 
-  if (tabId in recentTabs) {
+  if (Array.isArray(tabId)) {
+    tabId.forEach((id) => delete recentTabs[id]);
+  } else if (tabId in recentTabs) {
     delete recentTabs[tabId];
   }
 
-  storage.set({
+  await storage.remove(recentKey);
+  await storage.set({
     [recentKey]: recentTabs,
   });
 }

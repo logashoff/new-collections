@@ -1,8 +1,22 @@
 import { getTabGroupMock, getTabGroupsMock } from 'src/mocks';
-import { SyncStorageArea } from '.';
-import { getCollections, saveCollections, syncToTabs, tabsToSync } from './collections';
+import { addRecent, getCollections, removeRecent, saveCollections, syncToTabs, tabsToSync } from './collections';
+import { SyncStorageArea } from './models';
 
 describe('collections.ts', () => {
+  const setSyncSpy = jest.spyOn(chrome.storage.sync, 'set');
+  const remSyncSpy = jest.spyOn(chrome.storage.sync, 'remove');
+  const getSyncSpy = jest.spyOn<SyncStorageArea, 'get'>(chrome.storage.sync, 'get');
+
+  beforeAll(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2024-11-15'));
+  });
+
+  beforeEach(() => {
+    setSyncSpy.mockReset();
+    remSyncSpy.mockReset();
+    getSyncSpy.mockReset();
+  });
+
   const syncedData = {
     favicon: {
       'duckduckgo.com': 'https://duckduckgo.com/favicon.ico',
@@ -70,9 +84,6 @@ describe('collections.ts', () => {
   });
 
   it('should save tab groups to storage', async () => {
-    const setSyncSpy = jest.spyOn(chrome.storage.sync, 'set');
-    const remSyncSpy = jest.spyOn(chrome.storage.sync, 'remove');
-
     await saveCollections(getTabGroupsMock());
 
     expect(remSyncSpy).toHaveBeenCalled();
@@ -80,7 +91,6 @@ describe('collections.ts', () => {
   });
 
   it('should return tab groups from storage', async () => {
-    const getSyncSpy = jest.spyOn<SyncStorageArea, 'get'>(chrome.storage.sync, 'get');
     getSyncSpy.mockImplementation(() => syncedData);
 
     const collections = await getCollections();
@@ -171,5 +181,72 @@ describe('collections.ts', () => {
         timestamp: 1650858875455,
       },
     ]);
+  });
+
+  it('should delete recent when over limit', async () => {
+    setSyncSpy.mockReset();
+    remSyncSpy.mockReset();
+    getSyncSpy.mockReset();
+
+    getSyncSpy.mockImplementation(() => ({
+      recent: {
+        1: 1,
+        2: 2,
+        3: 3,
+        4: 4,
+        5: 5,
+        6: 6,
+        7: 7,
+        8: 8,
+        9: 9,
+      },
+    }));
+
+    await addRecent(5);
+
+    expect(setSyncSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        recent: {
+          6: 6,
+          7: 7,
+          8: 8,
+          5: 1731628800000,
+          9: 9,
+        },
+      })
+    );
+  });
+
+  it('should remove recent', async () => {
+    getSyncSpy.mockReset();
+    setSyncSpy.mockReset();
+
+    getSyncSpy.mockImplementation(() => ({
+      recent: {
+        1: 1,
+        2: 2,
+        3: 3,
+        4: 4,
+        5: 5,
+        6: 6,
+        7: 7,
+        8: 8,
+        9: 9,
+      },
+    }));
+
+    await removeRecent([5, 1, 6, 7]);
+
+    expect(setSyncSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        recent: {
+          2: 2,
+          3: 3,
+          4: 4,
+          8: 8,
+          9: 9,
+        },
+      })
+    );
   });
 });
