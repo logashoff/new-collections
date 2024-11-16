@@ -278,6 +278,7 @@ export enum ActionIcon {
   Find = 'manage_search',
   Forget = 'history_off',
   Import = 'file_upload',
+  Remove = 'playlist_remove',
   Save = 'bookmark_add',
   Settings = 'manufacturing',
   Undo = 'undo',
@@ -293,9 +294,12 @@ export enum Action {
   Find,
   Forget,
   Import,
+  Remove,
   Save,
   Settings,
 }
+
+export type Actions = Action[];
 
 export interface TabAction {
   action: Action;
@@ -304,6 +308,41 @@ export interface TabAction {
 }
 
 export type TabActions = TabAction[];
+
+export const tabActions = new Map<Action, TabAction>([
+  [
+    Action.Edit,
+    {
+      action: Action.Edit,
+      icon: ActionIcon.Edit,
+      label: 'edit',
+    },
+  ],
+  [
+    Action.Delete,
+    {
+      action: Action.Delete,
+      icon: ActionIcon.Remove,
+      label: 'remove',
+    },
+  ],
+  [
+    Action.Find,
+    {
+      action: Action.Find,
+      icon: ActionIcon.Find,
+      label: 'find',
+    },
+  ],
+  [
+    Action.Forget,
+    {
+      action: Action.Forget,
+      icon: ActionIcon.Forget,
+      label: 'removeRecent',
+    },
+  ],
+]);
 
 /**
  * Collection Action

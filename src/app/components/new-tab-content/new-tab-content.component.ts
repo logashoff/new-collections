@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { TranslatePipe } from '../../pipes';
 import { HomeService, TabService } from '../../services';
-import { Action, ActionIcon, CollectionActions, TabActions, TabGroups, Timeline, translate } from '../../utils';
+import { Action, ActionIcon, Actions, CollectionActions, TabGroups, Timeline, translate } from '../../utils';
 import { EmptyComponent } from '../empty/empty.component';
 import { GroupsComponent } from '../groups/groups.component';
 import { TimelineElementComponent } from '../timeline-element/timeline-element.component';
@@ -36,18 +36,7 @@ export class NewTabContentComponent {
   readonly hasAnyData$: Observable<boolean>;
   readonly timeline$: Observable<Timeline>;
 
-  readonly tabActions: TabActions = [
-    {
-      action: Action.Edit,
-      icon: ActionIcon.Edit,
-      label: 'edit',
-    },
-    {
-      action: Action.Delete,
-      icon: ActionIcon.Delete,
-      label: 'delete',
-    },
-  ];
+  readonly tabActions: Actions = [Action.Edit, Action.Delete];
 
   constructor(
     homeService: HomeService,

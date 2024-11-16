@@ -16,7 +16,17 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { RecentDirective, StopPropagationDirective } from '../../directives';
 import { FaviconPipe, TranslatePipe } from '../../pipes';
 import { Activatable } from '../../services';
-import { Action, addRecent, BrowserTab, removeRecent, scrollIntoView, TabAction, TabActions } from '../../utils';
+import {
+  Action,
+  Actions,
+  addRecent,
+  BrowserTab,
+  removeRecent,
+  scrollIntoView,
+  TabAction,
+  tabActions,
+  TabActions,
+} from '../../utils';
 import { ChipComponent } from '../chip/chip.component';
 import { LabelComponent } from '../label/label.component';
 import { RippleComponent } from '../ripple/ripple.component';
@@ -53,7 +63,7 @@ import { RippleComponent } from '../ripple/ripple.component';
 })
 export class ListItemComponent implements Activatable {
   readonly tab = input.required<BrowserTab>();
-  readonly actions = input<TabActions>();
+  readonly actions = input<Actions>();
 
   /**
    * Plays ripple animation when set to true
@@ -81,6 +91,10 @@ export class ListItemComponent implements Activatable {
   readonly target = input<'_blank' | '_self'>('_self');
 
   private _isActive = false;
+
+  get tabActions(): TabActions {
+    return this.actions()?.map((action) => tabActions.get(action));
+  }
 
   @HostBinding('class.active')
   private get isActive() {

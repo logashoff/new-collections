@@ -5,7 +5,8 @@
 
 @if (sourceTabs?.length > 0 || deviceTabs?.length > 0) {
   @if (deviceTabs?.length > 0) {
-    <nc-timeline-label>
+    <nc-timeline-label class="icon-label">
+      <mat-icon>devices</mat-icon>
       {{ 'fromDevices' | translate }}
     </nc-timeline-label>
     <mat-card class="search-container">
@@ -16,7 +17,8 @@
       </nc-tab-list>
     </mat-card>
   } @else if (!searchValue && recentTabs?.length > 0) {
-    <nc-timeline-label>
+    <nc-timeline-label class="icon-label">
+      <mat-icon>search_activity</mat-icon>
       {{ 'recent' | translate }}
     </nc-timeline-label>
     <mat-card class="search-container">
@@ -36,7 +38,7 @@
   }
 
   @if (sourceTabs?.length > 0) {
-    <nc-timeline-label>
+    <nc-timeline-label class="icon-label">
       @if (searchValue?.length > 0) {
         <ng-container [ngPlural]="sourceTabs.length">
           <ng-template ngPluralCase="one">
@@ -47,6 +49,7 @@
           </ng-template>
         </ng-container>
       } @else {
+        <mat-icon>tab_recent</mat-icon>
         {{ 'latest' | translate }}
       }
     </nc-timeline-label>

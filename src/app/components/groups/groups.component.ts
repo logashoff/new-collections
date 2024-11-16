@@ -9,10 +9,10 @@ import { Observable, map, shareReplay } from 'rxjs';
 import { IsReadOnlyGroupPipe } from '../../pipes';
 import { NavService, SettingsService, TabService } from '../../services';
 import {
+  Actions,
   BrowserTab,
   BrowserTabs,
   GroupExpanded,
-  TabActions,
   TabGroup,
   TabGroups,
   TabsByHostname,
@@ -50,7 +50,7 @@ import { RippleComponent } from '../ripple/ripple.component';
   ],
 })
 export class GroupsComponent {
-  readonly tabActions = input<TabActions>();
+  readonly tabActions = input<Actions>();
 
   /**
    * List of tab groups to render.

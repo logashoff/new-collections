@@ -159,6 +159,9 @@
   "recent": {
     "message": "Recent"
   },
+  "remove": {
+    "message": "Remove"
+  },
   "removeRecent": {
     "message": "Remove from recent"
   },

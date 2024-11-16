@@ -32,7 +32,7 @@ import {
 import { SubSinkDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
 import { KeyService, NavService, TabService } from '../../services';
-import { Action, ActionIcon, BrowserTab, BrowserTabs, listItemAnimation, TabActions } from '../../utils';
+import { Action, Actions, BrowserTab, BrowserTabs, listItemAnimation } from '../../utils';
 import { EmptyComponent } from '../empty/empty.component';
 import { ListItemComponent } from '../list-item/list-item.component';
 import { SearchFormComponent } from '../search-form/search-form.component';
@@ -110,32 +110,8 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
    */
   recentTabs$: Observable<BrowserTabs>;
 
-  readonly defaultActions: TabActions = [
-    {
-      action: Action.Find,
-      icon: ActionIcon.Find,
-      label: 'find',
-    },
-    {
-      action: Action.Edit,
-      icon: ActionIcon.Edit,
-      label: 'edit',
-    },
-    {
-      action: Action.Delete,
-      icon: ActionIcon.Delete,
-      label: 'delete',
-    },
-  ];
-
-  readonly recentActions: TabActions = [
-    {
-      action: Action.Forget,
-      icon: ActionIcon.Forget,
-      label: 'removeRecent',
-    },
-    ...this.defaultActions,
-  ];
+  readonly defaultActions: Actions = [Action.Find, Action.Edit, Action.Delete];
+  readonly recentActions: Actions = [Action.Forget, ...this.defaultActions];
 
   constructor(
     private readonly navService: NavService,

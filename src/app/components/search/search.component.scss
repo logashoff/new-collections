@@ -13,4 +13,10 @@ nc-search {
   .main-content {
     padding: 0;
   }
+
+  .icon-label {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
 }
