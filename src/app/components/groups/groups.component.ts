@@ -81,7 +81,7 @@ export class GroupsComponent {
   /**
    * Maps group ID to list of group's tab titles
    */
-  readonly titlesMap$: Observable<{ [groupId: string]: string }>;
+  readonly titlesMap$: Observable<Map<string, string[]>>;
 
   /**
    * Hashmap of expanded panel states by group ID
@@ -113,12 +113,18 @@ export class GroupsComponent {
     );
 
     this.titlesMap$ = this.groups$.pipe(
-      map((tabGroups) =>
-        tabGroups.reduce((ret, group) => {
-          ret[group.id] = group.tabs.map((tab) => tab.title);
-          return ret;
-        }, {})
-      ),
+      map((tabGroups) => {
+        const map = new Map<string, string[]>();
+
+        tabGroups.forEach((group) =>
+          map.set(
+            group.id,
+            group.tabs.map((tab) => tab.title)
+          )
+        );
+
+        return map;
+      }),
       shareReplay(1)
     );
 

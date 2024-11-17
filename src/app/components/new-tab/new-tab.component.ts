@@ -27,7 +27,9 @@ import { TopSitesComponent } from '../top-sites/top-sites.component';
   providers: [KeyService],
 })
 export class NewTabComponent extends KeyListenerDirective implements OnInit {
-  topSites$: Observable<TopSites>;
+  readonly urlChanges$: Observable<string> = this.navService.pathChanges$;
+  readonly topSites$: Observable<TopSites> = this.homeService.topSites$;
+  readonly hasData$: Observable<boolean> = this.homeService.hasAnyData$;
 
   /**
    * Check if search is active
@@ -42,8 +44,6 @@ export class NewTabComponent extends KeyListenerDirective implements OnInit {
    */
   hideTopSites$: Observable<boolean>;
 
-  urlChanges$: Observable<string>;
-
   constructor(
     private readonly homeService: HomeService,
     private readonly navService: NavService
@@ -52,9 +52,6 @@ export class NewTabComponent extends KeyListenerDirective implements OnInit {
   }
 
   ngOnInit() {
-    this.topSites$ = this.homeService.topSites$.pipe(shareReplay(1));
-    this.urlChanges$ = this.navService.pathChanges$.pipe(shareReplay(1));
-
     this.hideTopSites$ = combineLatest([this.topSites$, this.isSearchActive$]).pipe(
       map(([topSites, isSearchActive]) => isNil(topSites) || topSites?.length === 0 || isSearchActive),
       shareReplay(1)

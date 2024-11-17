@@ -93,12 +93,15 @@ export type SyncTab = [id: number, url: string, title: string];
 export type SyncTabs = SyncTab[];
 
 /**
+ * Map hostname to icon's URL
+ */
+export type FaviconHost = { [hostname: string]: string };
+
+/**
  * Favicon data in sync storage
  */
 export interface FaviconSync {
-  [faviconStorageKey]?: {
-    [hostname: string]: string;
-  };
+  [faviconStorageKey]?: FaviconHost;
 }
 
 /**

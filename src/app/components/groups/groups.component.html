@@ -20,11 +20,15 @@
         }
 
         <div class="collapsed">
-          @if (tabsByHostname$ | async; as tabsByHostname) {
+          @let tabsByHostname = tabsByHostname$ | async;
+
+          @if (tabsByHostname) {
+            @let titlesMap = titlesMap$ | async;
+
             <nc-panel-header
               [icons]="tabsByHostname[group.id]"
               [total]="group.tabs.length"
-              [titleText]="(titlesMap$ | async)[group.id]"
+              [titleText]="titlesMap.get(group.id)"
               [pinned]="group.timestamp < 0"
               [readOnly]="group | isReadOnlyGroup"
               (starred)="favGroup(group)" />

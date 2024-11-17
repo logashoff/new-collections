@@ -3,8 +3,12 @@
 @if (hideTopSites === false) {
   <nc-top-sites class="top-sites" [topSites]="topSites$ | async" />
 }
+
+@let hasData = hasData$ | async;
+
 <nc-search-form
   class="search-form"
+  [disabled]="!hasData"
   (activated)="navigate('search')"
   (canceled)="navigate('main')"
   (blur)="onBlur()" />

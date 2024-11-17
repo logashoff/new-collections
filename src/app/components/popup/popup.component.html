@@ -1,5 +1,8 @@
+@let hasData = hasData$ | async;
+
 <nc-search-form
   class="search-form"
+  [disabled]="!hasData"
   (activated)="navigate('search')"
   (canceled)="navigate('main')"
   (blur)="onBlur()" />

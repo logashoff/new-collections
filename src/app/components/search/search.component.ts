@@ -46,7 +46,7 @@ const fuseOptions: IFuseOptions<BrowserTab> = {
   useExtendedSearch: true,
 };
 
-const LATEST_LIMIT = 16;
+const LATEST_LIMIT = 10;
 
 /**
  * @description
@@ -103,7 +103,7 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
   @ViewChildren(ListItemComponent)
   private listItems: QueryList<ListItemComponent>;
 
-  readonly searchValue$: Observable<string> = this.navService.paramsSearch$.pipe(shareReplay(1));
+  readonly searchQuery$: Observable<string> = this.navService.paramsSearch$.pipe(shareReplay(1));
 
   /**
    * Recently used tabs
@@ -132,7 +132,7 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
       })
     );
 
-    const resultChanges = this.searchValue$
+    const resultChanges = this.searchQuery$
       .pipe(
         filter((searchValue) => searchValue?.length > 0),
         distinctUntilChanged(),
@@ -147,7 +147,7 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
 
     this.subscribe(resultChanges);
 
-    this.sourceTabs$ = combineLatest([this.searchValue$, this.#searchResults$, this.#source$]).pipe(
+    this.sourceTabs$ = combineLatest([this.searchQuery$, this.#searchResults$, this.#source$]).pipe(
       map(([searchValue, searchResults, source]) => {
         if (searchValue?.length) {
           return searchResults;
@@ -174,7 +174,7 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
       take(1)
     );
 
-    this.deviceTabs$ = this.searchValue$.pipe(
+    this.deviceTabs$ = this.searchQuery$.pipe(
       switchMap((search) => {
         if (search) {
           return fuseDevices$.pipe(map((fuse) => fuse.search(search)?.map(({ item }) => item)));
@@ -187,7 +187,7 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
   }
 
   ngAfterViewInit() {
-    const itemChanges = this.listItems.changes.pipe(withLatestFrom(this.searchValue$)).subscribe(([, searchValue]) => {
+    const itemChanges = this.listItems.changes.pipe(withLatestFrom(this.searchQuery$)).subscribe(([, searchValue]) => {
       this.keyService.clear();
       this.keyService.setItems(this.listItems);
 

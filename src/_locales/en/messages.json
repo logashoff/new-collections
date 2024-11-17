@@ -38,6 +38,9 @@
   "edit": {
     "message": "Edit"
   },
+  "emptyCollections": {
+    "message": "Collections are empty"
+  },
   "emptyListError": {
     "message": "No collections to export"
   },
@@ -188,7 +191,12 @@
     }
   },
   "searchEmptyMessage": {
-    "message": "No search results"
+    "message": "Nothing found for <strong>$query$</strong>",
+    "placeholders": {
+      "query": {
+        "content": "$1"
+      }
+    }
   },
   "settings": {
     "message": "Settings"
@@ -214,7 +222,7 @@
     }
   },
   "tabsExistError": {
-    "message": "All tabs are already in the list"
+    "message": "No new tabs"
   },
   "title": {
     "message": "Title"

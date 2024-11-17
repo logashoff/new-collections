@@ -6,6 +6,7 @@ import {
   ElementRef,
   HostBinding,
   HostListener,
+  Input,
   OnInit,
   output,
   viewChild,
@@ -55,6 +56,24 @@ export class SearchFormComponent extends SubSinkDirective implements OnInit {
   readonly canceled = output();
   readonly blur = output();
 
+  #disabled = false;
+
+  @Input()
+  @HostBinding('class.disabled')
+  set disabled(disabled: boolean) {
+    if (disabled) {
+      this.#searchControl.disable();
+    } else {
+      this.#searchControl.enable();
+    }
+
+    this.#disabled = disabled;
+  }
+
+  get disabled(): boolean {
+    return this.#disabled;
+  }
+
   private readonly searchInput = viewChild.required<ElementRef>('searchInput');
 
   readonly Action = Action;
@@ -74,10 +93,6 @@ export class SearchFormComponent extends SubSinkDirective implements OnInit {
 
   @HostBinding('class.is-focused') get isFocused() {
     return this.focused$.value;
-  }
-
-  get search(): string {
-    return this.#searchControl.value;
   }
 
   readonly isActive$ = this.navService.pathChanges$.pipe(

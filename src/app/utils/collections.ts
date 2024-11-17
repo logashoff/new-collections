@@ -5,6 +5,7 @@ import {
   BrowserTabs,
   Collection,
   Collections,
+  FaviconHost,
   faviconStorageKey,
   FaviconSync,
   RECENT_LIMIT,
@@ -49,7 +50,7 @@ export async function saveCollections(collections: Collections): Promise<void> {
   if (collections?.length > 0) {
     collections.forEach(({ tabs, timestamp, id }) => (syncData[id] = [timestamp, tabsToSync(tabs)]));
 
-    const favicon: { [host: string]: string } = {};
+    const favicon: FaviconHost = {};
     collections.forEach(({ tabs }) =>
       tabs.filter(({ favIconUrl }) => favIconUrl).forEach((tab) => (favicon[getUrlHost(tab.url)] = tab.favIconUrl))
     );
@@ -61,7 +62,7 @@ export async function saveCollections(collections: Collections): Promise<void> {
   }
 }
 
-export async function getFaviconStore(): Promise<{ [hostname: string]: string }> {
+export async function getFaviconStore(): Promise<FaviconHost> {
   const storage = await getStorage();
   const favicon = await storage.get(faviconStorageKey);
   return favicon[faviconStorageKey] ?? {};
