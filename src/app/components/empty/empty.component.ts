@@ -17,7 +17,6 @@ import { Action, CollectionActions } from '../../utils';
   styleUrl: './empty.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [HtmlPipe, MatButtonModule, MatIconModule],
 })
 export class EmptyComponent {

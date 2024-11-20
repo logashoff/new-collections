@@ -17,7 +17,6 @@ import { TimelineLabelComponent } from '../timeline-label/timeline-label.compone
   styleUrl: './timeline-element.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [MatButtonModule, MatIconModule, MatTooltipModule, TimelineLabelComponent, TranslatePipe],
 })
 export class TimelineElementComponent {

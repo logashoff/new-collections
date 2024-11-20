@@ -8,7 +8,6 @@ import { SearchComponent } from '../search/search.component';
 
 @Component({
   selector: 'nc-new-tab-search',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, SearchComponent],
   templateUrl: './new-tab-search.component.html',

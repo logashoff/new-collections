@@ -33,7 +33,6 @@ interface TabSelectorForm {
   styleUrl: './tabs-selector.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [
     ChipComponent,
     CommonModule,

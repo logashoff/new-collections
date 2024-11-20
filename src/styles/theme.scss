@@ -426,7 +426,8 @@ $light-theme: modify-theme($light-theme, $light-theme-background-palette, $light
   }
 }
 
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 @include mat.all-component-themes($dark-theme);
 @include app-theme($dark-theme);

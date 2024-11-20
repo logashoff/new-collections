@@ -17,7 +17,6 @@ import { IconsContainerComponent } from '../icons-container/icons-container.comp
   styleUrl: './panel-header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [
     CommonModule,
     IconsContainerComponent,

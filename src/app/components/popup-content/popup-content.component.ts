@@ -19,7 +19,6 @@ import { TimelineElementComponent } from '../timeline-element/timeline-element.c
   templateUrl: './popup-content.component.html',
   styleUrl: './popup-content.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [CommonModule, EmptyComponent, GroupsComponent, TranslatePipe, TimelineElementComponent],
 })
 export class PopupContentComponent {

@@ -19,7 +19,6 @@ import { SearchFormComponent } from '../search-form/search-form.component';
   styleUrl: './popup.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   animations: [routeAnimations],
   imports: [CommonModule, RouterOutlet, SearchFormComponent],
   providers: [KeyService],

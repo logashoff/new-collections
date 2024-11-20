@@ -38,7 +38,6 @@ interface SearchForm {
   styleUrl: './search-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [
     CommonModule,
     MatButtonModule,

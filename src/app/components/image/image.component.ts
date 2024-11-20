@@ -13,7 +13,6 @@ import { getFaviconUrl, IconSize, ImageSource } from '../../utils';
   templateUrl: './image.component.html',
   styleUrl: './image.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [CommonModule],
 })
 export class ImageComponent {

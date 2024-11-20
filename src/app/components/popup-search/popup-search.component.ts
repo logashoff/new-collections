@@ -7,7 +7,6 @@ import { SearchComponent } from '../search/search.component';
 
 @Component({
   selector: 'nc-popup-search',
-  standalone: true,
   imports: [CommonModule, SearchComponent],
   templateUrl: './popup-search.component.html',
   styleUrl: './popup-search.component.scss',

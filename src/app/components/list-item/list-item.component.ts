@@ -42,7 +42,6 @@ import { RippleComponent } from '../ripple/ripple.component';
   styleUrl: './list-item.component.scss',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   host: {
     tabindex: '-1',
     role: 'list-item',

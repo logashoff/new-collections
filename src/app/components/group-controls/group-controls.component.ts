@@ -19,7 +19,6 @@ import { queryCurrentWindow, restoreTabs, TabGroup, Tabs } from '../../utils';
   styleUrl: './group-controls.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [DatePipe, MatButtonModule, MatIconModule, MatTooltipModule, StopPropagationDirective, TranslatePipe],
 })
 export class GroupControlsComponent {
