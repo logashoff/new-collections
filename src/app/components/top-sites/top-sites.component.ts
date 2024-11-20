@@ -19,7 +19,6 @@ import { ImageComponent } from '../image/image.component';
   styleUrl: './top-sites.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [FaviconPipe, ImageComponent, MatButtonModule, MatIconModule, StopPropagationDirective],
 })
 export class TopSitesComponent {

@@ -11,7 +11,6 @@ import { MatListModule } from '@angular/material/list';
   templateUrl: './tab-list.component.html',
   styleUrl: './tab-list.component.scss',
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [MatListModule],
 })
 export class TabListComponent {}

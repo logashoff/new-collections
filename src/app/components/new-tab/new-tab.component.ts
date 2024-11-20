@@ -21,7 +21,6 @@ import { TopSitesComponent } from '../top-sites/top-sites.component';
   styleUrls: ['./new-tab.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   animations: [routeAnimations],
   imports: [RouterOutlet, CommonModule, SearchFormComponent, TopSitesComponent],
   providers: [KeyService],

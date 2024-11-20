@@ -59,7 +59,6 @@ const LATEST_LIMIT = 10;
   styleUrl: './search.component.scss',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   animations: [listItemAnimation],
   imports: [
     CommonModule,

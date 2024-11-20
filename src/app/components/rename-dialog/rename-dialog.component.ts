@@ -26,7 +26,6 @@ interface RenameForm {
   templateUrl: './rename-dialog.component.html',
   styleUrl: './rename-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, TranslatePipe],
 })
 export class RenameDialogComponent implements OnInit {

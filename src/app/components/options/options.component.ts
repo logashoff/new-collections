@@ -52,7 +52,6 @@ interface OptionsForm {
   styleUrl: './options.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [
     CommonModule,
     MatButtonModule,

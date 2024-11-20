@@ -34,7 +34,6 @@ import { RippleComponent } from '../ripple/ripple.component';
   styleUrl: './groups.component.scss',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   animations: [listItemAnimation],
   imports: [
     CommonModule,

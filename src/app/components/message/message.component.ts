@@ -18,7 +18,6 @@ import { ActionIcon } from '../../utils';
   styleUrl: './message.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [MatButtonModule, MatIconModule, MatTooltipModule, TranslatePipe],
 })
 export class MessageComponent {

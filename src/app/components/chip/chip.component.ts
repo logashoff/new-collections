@@ -13,7 +13,6 @@ import { ImageComponent } from '../image/image.component';
   styleUrl: './chip.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [ImageComponent],
 })
 export class ChipComponent {

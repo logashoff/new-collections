@@ -19,7 +19,6 @@ import { TimelineElementComponent } from '../timeline-element/timeline-element.c
   templateUrl: './new-tab-content.component.html',
   styleUrls: ['./new-tab-content.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [CommonModule, EmptyComponent, GroupsComponent, TimelineElementComponent, TranslatePipe],
 })
 export class NewTabContentComponent {

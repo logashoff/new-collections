@@ -11,7 +11,6 @@ import { ChipComponent } from '../chip/chip.component';
   styleUrl: './icons-container.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [ChipComponent, FaviconPipe, MatBadgeModule],
 })
 export class IconsContainerComponent {

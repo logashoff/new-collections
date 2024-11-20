@@ -3,7 +3,6 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
 
 @Component({
   selector: 'nc-timeline-label',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './timeline-label.component.html',
   styleUrl: './timeline-label.component.scss',
