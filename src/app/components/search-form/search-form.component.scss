@@ -1,54 +1,11 @@
 @use '@angular/material' as mat;
-@import 'common';
-@import 'theme';
-
-@include component-theme using($theme) {
-  nc-search-form {
-    $is-dark: is-dark-theme($theme);
-    $border-color: get-palette-color(
-      get-background-palette($theme),
-      disabled-button-toggle
-    );
-    $app-background: get-palette-color(
-      get-background-palette($theme),
-      background
-    );
-
-    color: get-palette-color(get-foreground-palette($theme), secondary-text);
-    background-color: $app-background;
-
-    &.is-active.scrolled {
-      @include mat.elevation(2, $app-background);
-    }
-
-    $control-background-color: get-palette-color(
-      get-background-palette($theme),
-      card
-    );
-
-    .controls-wrapper {
-      background-color: $control-background-color;
-
-      @if not $is-dark {
-        border: 1px solid $border-color;
-      }
-
-      .controls {
-        border-left: 1px solid
-          get-palette-color(get-foreground-palette($theme), divider);
-      }
-    }
-
-    &.is-focused {
-      .controls-wrapper {
-        background-color: if($is-dark, $border-color, $app-background);
-      }
-    }
-  }
-}
 
 nc-search-form {
-  $height: 42px;
+  $_app-background: var(--mat-sys-surface-container);
+  $_border-color: var(--mat-sys-disabled-button-toggle);
+  $_control-background-color: var(--mat-sys-surface-container-high);
+  $_controls-border: var(--mat-sys-surface-bright);
+  $_height: 42px;
 
   display: block;
   position: relative;
@@ -56,8 +13,34 @@ nc-search-form {
   z-index: 1;
   top: 0;
 
+  color: var(--mat-sys-secondary-text);
+  background-color: $_app-background;
+
+  &.is-active.scrolled {
+    box-shadow: var(--mat-sys-level2);
+  }
+
+  .controls-wrapper {
+    background-color: $_control-background-color;
+    border: 1px solid $_control-background-color;
+
+    .controls {
+      border-left: 1px solid $_controls-border;
+    }
+  }
+
+  &.is-focused .controls-wrapper {
+    $_dark-focus: var(--mat-sys-surface-variant);
+
+    border-color: $_dark-focus;
+    background-color: $_dark-focus;
+
+    .controls {
+      border-left: 1px solid $_controls-border;
+    }
+  }
+
   &.is-active {
-    @include mat.elevation-transition();
     position: sticky;
   }
 
@@ -78,7 +61,7 @@ nc-search-form {
 
         .mat-mdc-form-field-infix {
           display: flex;
-          min-height: $height;
+          min-height: $_height;
           padding: 0;
         }
 
@@ -123,6 +106,29 @@ nc-search-form {
       height: auto;
       padding: 0;
       line-height: 0;
+    }
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  nc-search-form {
+    $_app-background: var(--mat-sys-surface);
+    $_control-background-color: var(--mat-sys-surface-container);
+    $_border-color: var(--mat-sys-surface-container-highest);
+
+    background-color: $_app-background;
+
+    .controls-wrapper {
+      background-color: $_control-background-color;
+      border: 1px solid $_border-color;
+
+      .controls {
+        border-left: 1px solid $_border-color;
+      }
+    }
+
+    &.is-focused .controls-wrapper {
+      background-color: $_app-background;
     }
   }
 }

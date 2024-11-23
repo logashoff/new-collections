@@ -1,8 +1,8 @@
 @use '@angular/material' as mat;
-@import 'common';
+@use 'common' as common;
 
 body {
-  @include vertical-flex;
+  @include common.vertical-flex;
 
   font-family: Roboto, 'Helvetica Neue', sans-serif;
   overflow: auto;
@@ -15,7 +15,7 @@ html.cdk-global-scrollblock {
 }
 
 ::-webkit-scrollbar {
-  width: $scrollbar-width;
+  width: common.$scrollbar-width;
 }
 
 a {

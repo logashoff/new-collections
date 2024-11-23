@@ -1,39 +1,23 @@
-@use '@angular/material' as mat;
-@import 'theme';
-
-$typography-config: mat.m2-get-typography-config($dark-theme);
-
-@include component-theme using($theme) {
-  nc-label {
-    background-color: get-palette-color(
-      get-background-palette($theme),
-      disabled-list-option
-    );
-    color: get-palette-color(get-foreground-palette($theme), text);
-
-    $primary-palette: get-primary-palette($theme);
-    $accent-palette: get-accent-palette($theme);
-    $warn-palette: get-warn-palette($theme);
-
-    &.theme-primary {
-      background-color: get-palette-color($primary-palette);
-      color: get-contrast-color($primary-palette, 500);
-    }
-
-    &.theme-warn {
-      background-color: get-palette-color($warn-palette);
-      color: get-contrast-color($warn-palette, 500);
-    }
-
-    &.theme-accent {
-      background-color: get-palette-color($accent-palette);
-      color: get-contrast-color($accent-palette, 500);
-    }
-  }
-}
-
 nc-label {
   flex: 0 0 0;
   border-radius: 1rem;
   padding: 0 0.5rem;
+
+  background-color: var(--mat-sys-disabled-list-option);
+  color: var(--mat-sys-text);
+
+  &.theme-primary {
+    background-color: var(--mat-sys-primary);
+    color: var(--mat-sys-on-primary);
+  }
+
+  &.theme-warn {
+    background-color: var(--mat-sys-warn);
+    color: var(--mat-sys-on-warn);
+  }
+
+  &.theme-accent {
+    background-color: var(--mat-sys-secondary);
+    color: var(--mat-sys-on-secondary);
+  }
 }

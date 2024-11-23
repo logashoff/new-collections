@@ -1,15 +1,6 @@
-@import 'theme';
-
-@include component-theme using($theme) {
-  nc-group-controls {
-    .container {
-      color: get-palette-color(get-foreground-palette($theme), secondary-text);
-    }
-  }
-}
-
 nc-group-controls {
   .container {
+    color: var(--mat-sys-secondary-text);
     display: flex;
     position: relative;
     justify-content: space-between;

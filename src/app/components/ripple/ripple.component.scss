@@ -1,33 +1,18 @@
-@import 'theme';
+@keyframes ripple {
+  from {
+    background-size: 0%;
+    opacity: 0.35;
+  }
 
-@include component-theme using($theme) {
-  nc-ripple.focused {
-    $color: get-palette-color(get-background-palette($theme), ripple);
-    $alpha: rgba(0, 0, 0, 0);
-    background: radial-gradient(
-      circle,
-      $color 0%,
-      $color 49%,
-      $alpha 50%,
-      $alpha 100%
-    );
-    background-position: 50%;
-    background-repeat: no-repeat;
+  to {
+    background-size: 300%;
+    opacity: 0;
   }
 }
 
 nc-ripple {
-  @keyframes ripple {
-    from {
-      background-size: 0%;
-      opacity: 1;
-    }
-
-    to {
-      background-size: 300%;
-      opacity: 0;
-    }
-  }
+  $_color: var(--mat-sys-inverse-surface);
+  $_alpha: rgba(0, 0, 0, 0);
 
   display: block;
   position: absolute;
@@ -41,5 +26,14 @@ nc-ripple {
   &.focused {
     pointer-events: auto;
     animation: ripple 1s ease;
+    background: radial-gradient(
+      circle,
+      $_color 0%,
+      $_color 49%,
+      $_alpha 50%,
+      $_alpha 100%
+    );
+    background-position: 50%;
+    background-repeat: no-repeat;
   }
 }

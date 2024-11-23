@@ -1,37 +1,11 @@
-@use '@angular/material' as mat;
-
-@import 'theme';
-
-@include component-theme using ($theme) {
-  nc-message {
-    $accent-palette: get-accent-palette($theme);
-    $foreground-palette: get-foreground-palette($theme);
-
-    $background-color: get-palette-color(get-background-palette($theme), card);
-    $accent-color: get-palette-color($accent-palette);
-    $icon-color: get-contrast-color($accent-palette, 500);
-    $text-color: get-palette-color($foreground-palette, text);
-    $buttons-color: get-palette-color($foreground-palette, secondary-text);
-    $border-color: get-palette-color($foreground-palette, divider);
-
-    color: $text-color;
-    background-color: $background-color;
-
-    .icon-container {
-      background-color: $accent-color;
-      color: $icon-color;
-    }
-
-    .controls {
-      color: $buttons-color;
-    }
-  }
-}
-
-$typography-config: mat.m2-get-typography-config($dark-theme);
-
 nc-message {
-  @include mat.elevation(8);
+  box-shadow: var(--mat-sys-level2);
+  color: var(--nc-text);
+  background-color: var(--mat-sys-surface-container);
+
+  .controls {
+    color: var(--mat-sys-on-surface-variant);
+  }
 
   $border-radius: 5px;
 
@@ -41,13 +15,14 @@ nc-message {
   overflow: hidden;
 
   .container {
+    padding: 1rem 0 1rem 1rem;
     display: flex;
     align-items: stretch;
     gap: 1rem;
   }
 
   .message {
-    @include mat.m2-typography-level($typography-config, subtitle-1);
+    font: var(--mat-sys-body-large);
 
     display: flex;
     align-items: center;
@@ -56,16 +31,6 @@ nc-message {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .icon-container {
-    display: flex;
-    align-items: center;
-    padding: 1rem 0.75rem;
-
-    .icon {
-      line-height: 0;
-    }
   }
 
   .controls {

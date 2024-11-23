@@ -1,16 +1,6 @@
-@use '@angular/material' as mat;
-@import 'theme';
-
-$typography-config: mat.m2-get-typography-config($dark-theme);
-
-@include component-theme using($theme) {
-  nc-timeline-label {
-    color: get-palette-color(get-foreground-palette($theme), hint-text);
-  }
-}
-
 nc-timeline-label {
-  @include mat.m2-typography-level($typography-config, subtitle-2);
+  font: var(--mat-sys-title-medium);
+  color: var(--nc-disabled-text);
 
   display: block;
   margin: 0;

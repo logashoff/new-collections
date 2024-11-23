@@ -1,4 +1,4 @@
-@import 'common';
+@use 'common' as common;
 
 html,
 body {
@@ -7,19 +7,19 @@ body {
 }
 
 html {
-  @include vertical-flex;
+  @include common.vertical-flex;
 
   overflow: hidden;
   height: 100vh;
 }
 
 nc-new-tab {
-  @include vertical-flex;
+  @include common.vertical-flex;
 
   margin-bottom: 1rem;
 
   .content {
-    @include vertical-flex;
+    @include common.vertical-flex;
   }
 
   .top-sites {

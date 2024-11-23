@@ -1,58 +1,54 @@
-@use '@angular/material' as mat;
-@import 'theme';
-
-@include component-theme using($theme) {
-  $background-pallette: get-background-palette($theme);
-  $foreground-pallette: get-foreground-palette($theme);
-  $is-dark: is-dark-theme($theme);
-
-  nc-timeline-element {
-    .timeline-header {
-      color: get-palette-color($foreground-pallette, hint-text);
-    }
-
-    &.expanded {
-      $background-color: get-palette-color(
-        $background-pallette,
-        disabled-button
-      );
-
-      background-color: $background-color;
-
-      .timeline-header,
-      .timeline-header nc-timeline-label {
-        color: get-palette-color($foreground-pallette, secondary-text);
-      }
-    }
-  }
-}
+@use 'common' as common;
 
 nc-timeline-element {
   display: block;
   border-radius: 1rem;
 
   transition-property: padding, background-color, margin;
-  transition-timing-function: $cubic-ease;
+  transition-timing-function: common.$cubic-ease;
   transition-duration: 250ms;
 
   &.expanded {
     padding: 0 1rem 1rem;
     margin: 0 -1rem;
 
+    background-color: var(--mat-sys-surface-bright);
+
     &:not(:first-of-type) {
       margin-top: 1rem;
+    }
+
+    .timeline-header,
+    .timeline-header nc-timeline-label {
+      color: var(--mat-sys-on-surface);
+    }
+
+    .timeline-header .mat-mdc-icon-button {
+      color: inherit;
     }
   }
 
   .timeline-header {
     transition-property: color;
-    transition-timing-function: $cubic-ease;
+    transition-timing-function: common.$cubic-ease;
     transition-duration: 250ms;
+
+    color: var(--nc-disabled-text);
 
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin: 0;
     overflow: hidden;
+
+    .mat-mdc-icon-button {
+      color: var(--nc-disabled-text);
+    }
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  nc-timeline-element.expanded {
+    background-color: var(--mat-sys-surface-container-high);
   }
 }
