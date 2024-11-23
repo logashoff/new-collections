@@ -28,7 +28,6 @@ import {
   TabActions,
 } from '../../utils';
 import { ChipComponent } from '../chip/chip.component';
-import { LabelComponent } from '../label/label.component';
 import { RippleComponent } from '../ripple/ripple.component';
 
 /**
@@ -50,7 +49,6 @@ import { RippleComponent } from '../ripple/ripple.component';
     ChipComponent,
     CommonModule,
     FaviconPipe,
-    LabelComponent,
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,

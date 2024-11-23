@@ -42,7 +42,7 @@
       </mat-expansion-panel-header>
 
       <ng-template matExpansionPanelContent>
-        <mat-divider />
+        <mat-divider *ngIf="panel.expanded" />
 
         @if (group.tabs$ | async; as tabs) {
           <nc-tab-list cdkDropList (cdkDropListDropped)="drop($event, tabs)">

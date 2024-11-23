@@ -20,7 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BehaviorSubject, filter, map, shareReplay } from 'rxjs';
 
-import { StopPropagationDirective, SubSinkDirective } from '../../directives';
+import { SubSinkDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
 import { CollectionsService, NavService } from '../../services';
 import { Action, ESC_KEY_CODE, KEY_UP, scrollTop } from '../../utils';
@@ -46,7 +46,6 @@ interface SearchForm {
     MatInputModule,
     MatTooltipModule,
     ReactiveFormsModule,
-    StopPropagationDirective,
     TranslatePipe,
   ],
 })

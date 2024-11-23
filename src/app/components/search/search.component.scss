@@ -1,16 +1,12 @@
-@import 'theme';
-
-@include component-theme using($theme) {
-  nc-search {
-    color: get-palette-color(get-foreground-palette($theme), secondary-text);
-  }
-}
+@use 'common' as common;
 
 nc-search {
-  @include vertical-flex;
+  @include common.vertical-flex;
 
-  .search-container,
-  .main-content {
+  color: var(--mat-sys-secondary-text);
+
+  .search-container {
+    overflow: hidden;
     padding: 0;
   }
 

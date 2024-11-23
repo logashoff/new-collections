@@ -35,7 +35,6 @@ import { KeyService, NavService, TabService } from '../../services';
 import { Action, Actions, BrowserTab, BrowserTabs, listItemAnimation } from '../../utils';
 import { EmptyComponent } from '../empty/empty.component';
 import { ListItemComponent } from '../list-item/list-item.component';
-import { SearchFormComponent } from '../search-form/search-form.component';
 import { TabListComponent } from '../tab-list/tab-list.component';
 import { TimelineLabelComponent } from '../timeline-label/timeline-label.component';
 
@@ -66,7 +65,6 @@ const LATEST_LIMIT = 10;
     ListItemComponent,
     MatCardModule,
     MatIconModule,
-    SearchFormComponent,
     TabListComponent,
     TimelineLabelComponent,
     TranslatePipe,

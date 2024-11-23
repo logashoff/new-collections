@@ -1,4 +1,4 @@
-@import 'common';
+@use 'common' as common;
 
 $padding: 0.5rem;
 
@@ -7,26 +7,26 @@ body {
   margin: 0;
   padding: 0;
 
-  width: $popup-width;
-  height: $popup-height;
+  width: common.$popup-width;
+  height: common.$popup-height;
 
-  min-width: $popup-width;
-  min-height: $popup-height;
+  min-width: common.$popup-width;
+  min-height: common.$popup-height;
 
-  max-width: $popup-width;
-  max-height: $popup-height;
+  max-width: common.$popup-width;
+  max-height: common.$popup-height;
 }
 
 html {
-  @include vertical-flex;
+  @include common.vertical-flex;
   overflow: hidden;
 }
 
 nc-popup {
-  @include vertical-flex;
+  @include common.vertical-flex;
 
   .content {
-    @include vertical-flex;
+    @include common.vertical-flex;
     margin: 0 $padding $padding;
   }
 

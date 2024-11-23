@@ -1,26 +1,14 @@
-@use '@angular/material' as mat;
-@import 'theme';
-
-@include component-theme using($theme) {
-  nc-empty {
-    .icon {
-      color: get-palette-color(get-foreground-palette($theme), disabled-text);
-    }
-
-    .message {
-      color: get-palette-color(get-foreground-palette($theme), secondary-text);
-    }
-  }
-}
+@use 'common' as common;
 
 $icon-size: 10rem;
 
 nc-empty {
-  @include vertical-flex;
+  @include common.vertical-flex;
   align-items: center;
   justify-content: center;
 
   .icon {
+    color: var(--mat-sys-inverse-primary);
     width: $icon-size;
     height: $icon-size;
     font-size: $icon-size;
@@ -29,7 +17,8 @@ nc-empty {
   }
 
   .message {
-    @include mat.m2-typography-level($typography-config, body-1);
+    font: var(--mat-sys-body-medium);
+    color: var(--mat-sys-on-surface-variant);
 
     margin-bottom: 2rem;
     text-align: center;

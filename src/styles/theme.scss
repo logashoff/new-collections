@@ -1,460 +1,224 @@
 @use '@angular/material' as mat;
 @use 'sass:color' as color;
+@use 'dark-colors' as dark-colors;
+@use 'light-colors' as light-colors;
 
-@import 'common';
-
-$typography-config: mat.m2-define-typography-config(
-  $body-1: mat.m2-define-typography-level(14px, 20px, 400, 'Roboto', 0.0179em),
-  $body-2: mat.m2-define-typography-level(14px, 24px, 500, 'Roboto', 0.0179em),
-  $button: mat.m2-define-typography-level(14px, 14px, 500, 'Roboto', 0.0893em),
-  $caption: mat.m2-define-typography-level(12px, 20px, 400, 'Roboto', 0.0333em),
-  $headline-1: mat.m2-define-typography-level(24px, 32px, 400, 'Roboto', 0em),
-  $headline-2: mat.m2-define-typography-level(34px, 40px, 400, 'Roboto', 0.0074em),
-  $headline-3: mat.m2-define-typography-level(45px, 48px, 400, 'Roboto', 0em),
-  $headline-4: mat.m2-define-typography-level(56px, 56px, 400, 'Roboto', -0.0089em),
-  $headline-5: mat.m2-define-typography-level(112px, 112px, 300, 'Roboto', -0.0134em),
-  $subtitle-1: mat.m2-define-typography-level(15px, 24px, 500, 'Roboto', 0.0067em),
-  $subtitle-2: mat.m2-define-typography-level(16px, 28px, 400, 'Roboto', 0.0094em),
+$_typography-config: (
+  plain-family: Roboto,
+  bold-weight: 500,
+  medium-weight: 400,
+  regular-weight: 300,
 );
 
-$dark-text: #000000;
-$dark-primary-text: rgba($dark-text, 0.87);
-$dark-secondary-text: rgba($dark-primary-text, 0.54);
-$dark-disabled-text: rgba($dark-primary-text, 0.38);
-$dark-dividers: rgba($dark-primary-text, 0.12);
-$dark-focused: rgba($dark-primary-text, 0.12);
+$_dark-text: #000000;
+$_dark-primary-text: rgba($_dark-text, 0.87);
+$_dark-secondary-text: rgba($_dark-primary-text, 0.54);
+$_dark-disabled-text: rgba($_dark-primary-text, 0.38);
+$_dark-dividers: rgba($_dark-primary-text, 0.12);
+$_dark-focused: rgba($_dark-primary-text, 0.12);
 
-$light-text: #ffffff;
-$light-primary-text: #9aa0a6;
-$light-secondary-text: rgba($light-text, 0.7);
-$light-disabled-text: rgba($light-primary-text, 0.5);
-$light-dividers: rgba($light-primary-text, 0.12);
-$light-focused: rgba($light-primary-text, 0.12);
+$_light-text: #ffffff;
+$_light-primary-text: #9aa0a6;
+$_light-secondary-text: rgba($_light-text, 0.7);
+$_light-disabled-text: rgba($_light-primary-text, 0.5);
+$_light-dividers: rgba($_light-primary-text, 0.12);
+$_light-focused: rgba($_light-primary-text, 0.12);
 
-$light-background-color: #ffffff;
-$dark-background-color: #242528;
+$_light-background-color: #ffffff;
+$_dark-background-color: #242528;
 
-$light-background: $light-background-color;
-$light-card-background: #f8f9fa;
-$light-bg-darker-5: color.adjust($light-card-background, $blackness: 5%);
-$light-bg-darker-10: color.adjust($light-card-background, $blackness: 10%);
-$light-bg-darker-20: color.adjust($light-card-background, $blackness: 20%);
-$light-bg-darker-30: color.adjust($light-card-background, $blackness: 30%);
-$light-bg-lighter-5: $light-card-background;
-$dark-bg-tooltip: color.adjust($dark-background-color, $lightness: 20%);
-$dark-bg-alpha-4: rgba($dark-background-color, 0.04);
-$dark-bg-alpha-12: rgba($dark-background-color, 0.12);
-$dark-bg-alpha-24: rgba($dark-background-color, 0.24);
+$light-background: $_light-background-color;
+$_light-card-background: #f8f9fa;
+$_light-bg-darker-5: color.adjust($_light-card-background, $blackness: 5%);
+$_light-bg-darker-10: color.adjust($_light-card-background, $blackness: 10%);
+$_light-bg-darker-20: color.adjust($_light-card-background, $blackness: 20%);
+$_light-bg-darker-30: color.adjust($_light-card-background, $blackness: 30%);
+$_light-bg-lighter-5: $_light-card-background;
+$_dark-bg-tooltip: color.adjust($_dark-background-color, $lightness: 20%);
+$_dark-bg-alpha-4: rgba($_dark-background-color, 0.04);
+$_dark-bg-alpha-12: rgba($_dark-background-color, 0.12);
+$_dark-bg-alpha-24: rgba($_dark-background-color, 0.24);
 
-$dark-background: $dark-background-color;
-$dark-card-background: #303134;
-$dark-bg-lighter-5: $dark-card-background;
-$dark-bg-lighter-10: color.adjust($dark-card-background, $lightness: 10%);
-$dark-bg-lighter-20: color.adjust($dark-card-background, $lightness: 20%);
-$dark-bg-lighter-30: color.adjust($dark-card-background, $lightness: 30%);
-$light-bg-alpha-4: rgba($light-background-color, 0.04);
-$light-bg-alpha-12: rgba($light-background-color, 0.12);
-$light-bg-alpha-24: rgba($light-background-color, 0.24);
+$_dark-background: $_dark-background-color;
+$_dark-card-background: #303134;
+$_dark-bg-lighter-5: $_dark-card-background;
+$_dark-bg-lighter-10: color.adjust($_dark-card-background, $lightness: 10%);
+$_dark-bg-lighter-20: color.adjust($_dark-card-background, $lightness: 20%);
+$_dark-bg-lighter-30: color.adjust($_dark-card-background, $lightness: 30%);
+$_light-bg-alpha-4: rgba($_light-background-color, 0.04);
+$_light-bg-alpha-12: rgba($_light-background-color, 0.12);
+$_light-bg-alpha-24: rgba($_light-background-color, 0.24);
 
-$light-theme-foreground-palette: (
-  base: black,
-  disabled-button: rgba($dark-text, 0.26),
-  disabled-text: $dark-disabled-text,
-  disabled: $dark-disabled-text,
-  divider: $dark-dividers,
-  dividers: $dark-dividers,
-  elevation: black,
-  hint-text: $dark-disabled-text,
-  icon: $dark-secondary-text,
-  icons: $dark-secondary-text,
-  secondary-text: $dark-secondary-text,
-  slider-min: $dark-primary-text,
-  slider-off-active: $dark-disabled-text,
-  slider-off: rgba($dark-text, 0.26),
-  text: $dark-primary-text,
-);
+:root {
+  --nc-text: light-dark(#{$_dark-text}, #{$_light-text});
+  --nc-primary-text: light-dark(
+    #{$_dark-primary-text},
+    #{$_light-primary-text}
+  );
+  --nc-disabled-text: light-dark(
+    #{$_dark-disabled-text},
+    #{$_light-disabled-text}
+  );
+  --nc-secondary-text: light-dark(
+    #{$_dark-secondary-text},
+    #{$_light-secondary-text}
+  );
 
-$dark-theme-foreground-palette: (
-  base: white,
-  disabled-button: rgba($light-text, 0.3),
-  disabled-text: $light-disabled-text,
-  disabled: $light-disabled-text,
-  divider: $light-dividers,
-  dividers: $light-dividers,
-  elevation: black,
-  hint-text: $light-disabled-text,
-  icon: $light-text,
-  icons: $light-text,
-  secondary-text: $light-secondary-text,
-  slider-min: $light-text,
-  slider-off-active: rgba($light-text, 0.3),
-  slider-off: rgba($light-text, 0.3),
-  text: $light-text,
-);
+  --nc-dividers: light-dark(#{$_dark-dividers}, #{$_light-dividers});
 
-$light-theme-background-palette: (
-  app-bar: $light-bg-darker-5,
-  background: $light-background,
-  card: $light-bg-lighter-5,
-  dialog: $light-bg-lighter-5,
-  disabled-button-toggle: $light-bg-darker-10,
-  disabled-button: $dark-bg-alpha-12,
-  disabled-list-option: $light-bg-darker-10,
-  focused-button: $dark-focused,
-  hover: $dark-bg-alpha-4,
-  raised-button: $light-bg-lighter-5,
-  selected-button: $light-bg-darker-20,
-  selected-disabled-button: $light-bg-darker-30,
-  status-bar: $light-bg-darker-20,
-  tooltip: $dark-bg-tooltip,
-  unselected-chip: $light-bg-darker-10,
-  ripple: $dark-bg-alpha-24,
-);
+  --mat-bottom-sheet-container-shape: 1rem;
 
-$dark-theme-background-palette: (
-  app-bar: $dark-bg-lighter-5,
-  background: $dark-background,
-  card: $dark-bg-lighter-5,
-  dialog: $dark-bg-lighter-5,
-  disabled-button-toggle: $dark-bg-lighter-10,
-  disabled-button: $light-bg-alpha-12,
-  disabled-list-option: $dark-bg-lighter-10,
-  focused-button: $light-focused,
-  hover: $light-bg-alpha-4,
-  raised-button: $dark-bg-lighter-5,
-  selected-button: $dark-bg-lighter-20,
-  selected-disabled-button: $dark-bg-lighter-30,
-  status-bar: $dark-bg-lighter-20,
-  tooltip: $dark-bg-lighter-20,
-  unselected-chip: $dark-bg-lighter-20,
-  ripple: $light-bg-alpha-24,
-);
+  color-scheme: light dark;
 
-$dark-primary-palette: (
-  50: #f1f6fe,
-  100: #dce9fd,
-  200: #c5dafc,
-  300: #adcbfa,
-  400: #9cbff9,
-  500: #8ab4f8,
-  600: #82adf7,
-  700: #77a4f6,
-  800: #6d9cf5,
-  900: #5a8cf3,
-  A100: #ffffff,
-  A200: #ffffff,
-  A400: #f2f6ff,
-  A700: #d9e5ff,
-  contrast: (
-    50: $dark-primary-text,
-    100: $dark-primary-text,
-    200: $dark-primary-text,
-    300: $dark-primary-text,
-    400: $dark-primary-text,
-    500: $dark-primary-text,
-    600: $dark-primary-text,
-    700: $dark-primary-text,
-    800: $dark-primary-text,
-    900: $dark-primary-text,
-    A100: $dark-primary-text,
-    A200: $dark-primary-text,
-    A400: $dark-primary-text,
-    A700: $dark-primary-text,
-  ),
-);
+  @include mat.theme(
+    (
+      typography: $_typography-config,
+      density: 0,
+      color: (
+        primary: dark-colors.$primary-palette,
+        tertiary: dark-colors.$tertiary-palette,
+        theme-type: dark,
+      ),
+    )
+  );
 
-$dark-theme-primary: mat.m2-define-palette($dark-primary-palette, 500, 400, 700);
+  @include mat.theme-overrides(
+    (
+      on-primary: $_dark-text,
+      on-surface-variant: $_light-secondary-text,
+    )
+  );
 
-$light-primary-palette: (
-  50: #e4eefc,
-  100: #bad5f8,
-  200: #8db9f4,
-  300: #5f9def,
-  400: #3c88eb,
-  500: #1a73e8,
-  600: #176be5,
-  700: #1360e2,
-  800: #0f56de,
-  900: #0843d8,
-  A100: #ffffff,
-  A200: #cfdaff,
-  A400: #9cb3ff,
-  A700: #829fff,
-  contrast: (
-    50: $dark-primary-text,
-    100: $dark-primary-text,
-    200: $dark-primary-text,
-    300: $dark-primary-text,
-    400: $light-text,
-    500: $light-text,
-    600: $light-text,
-    700: $light-text,
-    800: $light-text,
-    900: $light-text,
-    A100: $dark-primary-text,
-    A200: $dark-primary-text,
-    A400: $dark-primary-text,
-    A700: $dark-primary-text,
-  ),
-);
-
-$light-theme-primary: mat.m2-define-palette($light-primary-palette, 500, 400, 700);
-
-$dark-accent-palette: (
-  50: #e5eefa,
-  100: #bed4f4,
-  200: #93b8ec,
-  300: #679ce4,
-  400: #4786df,
-  500: #2671d9,
-  600: #2269d5,
-  700: #1c5ecf,
-  800: #1754ca,
-  900: #0d42c0,
-  A100: #edf2ff,
-  A200: #bacbff,
-  A400: #87a5ff,
-  A700: #6e92ff,
-  contrast: (
-    50: $dark-primary-text,
-    100: $dark-primary-text,
-    200: $dark-primary-text,
-    300: $dark-primary-text,
-    400: $light-text,
-    500: $light-text,
-    600: $light-text,
-    700: $light-text,
-    800: $light-text,
-    900: $light-text,
-    A100: $dark-primary-text,
-    A200: $dark-primary-text,
-    A400: $dark-primary-text,
-    A700: $dark-primary-text,
-  ),
-);
-
-$dark-theme-accent: mat.m2-define-palette($dark-accent-palette, 500, 400, 700);
-
-$light-accent-palette: (
-  50: #e7e8ff,
-  100: #c2c5ff,
-  200: #9a9eff,
-  300: #7177ff,
-  400: #525aff,
-  500: #343dff,
-  600: #2f37ff,
-  700: #272fff,
-  800: #2127ff,
-  900: #151aff,
-  A100: #ffffff,
-  A200: #fbfbff,
-  A400: #c8c9ff,
-  A700: #aeb0ff,
-  contrast: (
-    50: $dark-text,
-    100: $dark-text,
-    200: $dark-text,
-    300: $dark-text,
-    400: $light-text,
-    500: $light-text,
-    600: $light-text,
-    700: $light-text,
-    800: $light-text,
-    900: $light-text,
-    A100: $dark-text,
-    A200: $dark-text,
-    A400: $dark-text,
-    A700: $dark-text,
-  ),
-);
-
-$light-theme-accent: mat.m2-define-palette($light-accent-palette, 500, 400, 700);
-
-$dark-warn-palette: (
-  50: #ffeded,
-  100: #ffd1d1,
-  200: #ffb3b3,
-  300: #ff9494,
-  400: #ff7d7d,
-  500: #ff6666,
-  600: #ff5e5e,
-  700: #ff5353,
-  800: #ff4949,
-  900: #ff3838,
-  A100: #ffffff,
-  A200: #ffffff,
-  A400: #ffe1e1,
-  A700: #ffc8c8,
-  contrast: (
-    50: $dark-text,
-    100: $dark-text,
-    200: $dark-text,
-    300: $dark-text,
-    400: $dark-text,
-    500: $dark-text,
-    600: $dark-text,
-    700: $dark-text,
-    800: $light-text,
-    900: $light-text,
-    A100: $dark-text,
-    A200: $dark-text,
-    A400: $dark-text,
-    A700: $dark-text,
-  ),
-);
-
-$dark-theme-warn: mat.m2-define-palette($dark-warn-palette, 500, 400, 700);
-
-$light-warn-palette: (
-  50: #ffe0e0,
-  100: #ffb3b3,
-  200: #ff8080,
-  300: #ff4d4d,
-  400: #ff2626,
-  500: #ff0000,
-  600: #ff0000,
-  700: #ff0000,
-  800: #ff0000,
-  900: #ff0000,
-  A100: #ffffff,
-  A200: #fff2f2,
-  A400: #ffbfbf,
-  A700: #ffa6a6,
-  contrast: (
-    50: $dark-text,
-    100: $dark-text,
-    200: $dark-text,
-    300: $dark-text,
-    400: $light-text,
-    500: $light-text,
-    600: $light-text,
-    700: $light-text,
-    800: $light-text,
-    900: $light-text,
-    A100: $dark-text,
-    A200: $dark-text,
-    A400: $dark-text,
-    A700: $dark-text,
-  ),
-);
-
-$light-theme-warn: mat.m2-define-palette($light-warn-palette, 500, 400, 700);
-
-$dark-theme: mat.m2-define-dark-theme(
-  (
-    color: (
-      primary: $dark-theme-primary,
-      accent: $dark-theme-accent,
-      warn: $dark-theme-warn,
-      is-dark: true,
-    ),
-    typography: $typography-config,
-    density: 0,
-  )
-);
-
-$dark-theme: modify-theme($dark-theme, $dark-theme-background-palette, $dark-theme-foreground-palette);
-
-$light-theme: mat.m2-define-light-theme(
-  (
-    color: (
-      primary: $light-theme-primary,
-      accent: $light-theme-accent,
-      warn: $light-theme-warn,
-      is-dark: false,
-    ),
-  )
-);
-
-$light-theme: modify-theme($light-theme, $light-theme-background-palette, $light-theme-foreground-palette);
-
-.mat-raised-button.mat-warn,
-.mat-fab.mat-warn,
-.mat-mini-fab.mat-warn,
-.mat-flat-button,
-.mat-raised-button,
-.mat-fab,
-.mat-mini-fab {
-  background-color: $dark-background;
-}
-
-.mat-mdc-form-field-hint {
-  color: $light-secondary-text;
-}
-
-@mixin app-color($theme) {
   ::-webkit-scrollbar-track {
-    background: get-palette-color(get-background-palette($theme), background);
+    background: var(--mat-sys-surface-container);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: get-palette-color(get-foreground-palette($theme), divider);
+    background: var(--mat-sys-surface-container-high);
+  }
+}
+
+body {
+  background: var(--mat-sys-surface-container);
+}
+
+a {
+  &:link,
+  &:visited,
+  &:hover,
+  &:active {
+    color: var(--mat-sys-primary);
+  }
+}
+
+.message-container.mat-snack-bar-container {
+  color: var(--mat-sys-secondary-text);
+  background: var(--mat-sys-background);
+}
+
+.cdk-dialog-container.mat-bottom-sheet-container {
+  background: var(--mat-sys-background);
+  overflow: hidden;
+}
+
+.cdk-drag-preview {
+  background-color: var(--mat-sys-card);
+}
+
+.mdc-icon-button.mat-mdc-icon-button:not(.mat-mdc-button-disabled) {
+  &.mat-primary {
+    color: var(--mat-sys-primary);
+  }
+}
+
+.mat-bottom-sheet-container {
+  border-top-left-radius: var(--mat-bottom-sheet-container-shape);
+  border-top-right-radius: var(--mat-bottom-sheet-container-shape);
+}
+
+@include mat.expansion-overrides(
+  (
+    container-background-color: var(--mat-sys-surface-container-high),
+    container-text-color: var(--mat-sys-on-surface),
+  )
+);
+
+@include mat.divider-overrides(
+  (
+    color: var(--nc-dividers),
+  )
+);
+
+@include mat.dialog-overrides(
+  (
+    container-color: var(--mat-sys-surface-container-high),
+    container-elevation-shadow: var(--mat-sys-level5),
+  )
+);
+
+@include mat.card-overrides(
+  (
+    elevated-container-color: var(--mat-sys-surface-container-high),
+  )
+);
+
+@include mat.bottom-sheet-overrides(
+  (
+    container-background-color: var(--mat-sys-surface-container-high),
+  )
+);
+
+@include mat.badge-overrides(
+  (
+    background-color: var(--mat-sys-primary),
+    text-color: var(--mat-sys-on-primary),
+  )
+);
+
+@media (prefers-color-scheme: light) {
+  :root {
+    @include mat.theme(
+      (
+        typography: $_typography-config,
+        density: 0,
+        color: (
+          primary: light-colors.$primary-palette,
+          tertiary: light-colors.$tertiary-palette,
+          theme-type: light,
+        ),
+      )
+    );
+
+    @include mat.theme-overrides(
+      (
+        on-primary: $_light-text,
+        on-surface-variant: $_dark-secondary-text,
+      )
+    );
   }
 
   body {
-    background: get-palette-color(get-background-palette($theme), background);
+    background: var(--mat-sys-surface);
   }
 
-  a {
-    &:link,
-    &:visited,
-    &:hover,
-    &:active {
-      color: get-palette-color(get-primary-palette($theme));
-    }
+  ::-webkit-scrollbar-track {
+    background: var(--mat-sys-surface);
   }
 
-  .message-container.mat-snack-bar-container {
-    color: get-palette-color(get-foreground-palette($theme), secondary-text);
-    background: get-palette-color(get-background-palette($theme), background);
+  ::-webkit-scrollbar-thumb {
+    background: var(--mat-sys-surface-container-high);
   }
 
-  .cdk-dialog-container.mat-bottom-sheet-container {
-    background: get-palette-color(get-background-palette($theme), background);
-    overflow: hidden;
-  }
+  @include mat.expansion-overrides(
+    (
+      container-background-color: var(--mat-sys-surface-container),
+      container-text-color: var(--mat-sys-on-surface),
+    )
+  );
 
-  .cdk-drag-preview {
-    background-color: get-palette-color(get-background-palette($theme), card);
-  }
-}
-
-@mixin app-theme($theme) {
-  $color-config: mat.m2-get-color-config($theme);
-  @if $color-config != null {
-    @include app-color($theme);
-  }
-}
-
-@include mat.elevation-classes();
-@include mat.app-background();
-
-@include mat.all-component-themes($dark-theme);
-@include app-theme($dark-theme);
-
-@media (prefers-color-scheme: light) {
-  .mat-raised-button.mat-warn,
-  .mat-fab.mat-warn,
-  .mat-mini-fab.mat-warn,
-  .mat-flat-button,
-  .mat-raised-button,
-  .mat-fab,
-  .mat-mini-fab {
-    background-color: $light-background;
-  }
-
-  .mat-mdc-form-field-hint {
-    color: $dark-secondary-text;
-  }
-
-  @include mat.all-component-colors($light-theme);
-  @include app-theme($light-theme);
-}
-
-@mixin component-theme() {
-  @content ($dark-theme);
-
-  @media (prefers-color-scheme: light) {
-    @content ($light-theme);
-  }
+  @include mat.card-overrides(
+    (
+      elevated-container-color: var(--mat-sys-surface-container),
+    )
+  );
 }

@@ -1,4 +1,4 @@
-@import 'common';
+@use 'common' as common;
 
 nc-groups {
   display: block;
@@ -27,7 +27,7 @@ nc-groups {
     pointer-events: none;
 
     nc-list-item.cdk-drag:not(.cdk-drag-placeholder) {
-      transition: transform $cubic-ease;
+      transition: transform common.$cubic-ease;
     }
   }
 }
@@ -50,5 +50,5 @@ nc-groups {
 }
 
 .cdk-drag-animating {
-  transition: transform $cubic-ease;
+  transition: transform common.$cubic-ease;
 }

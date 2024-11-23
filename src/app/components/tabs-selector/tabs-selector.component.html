@@ -2,23 +2,13 @@
   <div class="container">
     <div class="header-container">
       <div class="header">
-        @let selectionLength = selectionLength$ | async;
-        @let tabsLen = tabs.length;
-
-        <span class="heading">
-          {{
-            'tabsCount'
-              | translate: [selectionLength?.toString(), tabsLen.toString()]
-          }}
-        </span>
         <div class="controls">
           <button
             type="submit"
-            mat-icon-button
+            mat-flat-button
             color="primary"
-            [disabled]="!formGroup.valid"
-            [matTooltip]="'addSelected' | translate">
-            <mat-icon>add</mat-icon>
+            [disabled]="!formGroup.valid">
+            {{ 'addTabs' | translate }}
           </button>
           <div class="checkbox-container">
             <mat-checkbox

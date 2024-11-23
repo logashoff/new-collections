@@ -13,130 +13,20 @@ $cubic-ease: 225ms cubic-bezier(0.4, 0, 0.2, 1);
   flex: 1;
 }
 
-@function get-foreground-palette($config-or-theme) {
-  $colors: mat.m2-get-color-config($config-or-theme);
-  $foreground: map.get($colors, foreground);
-
-  @return $foreground;
+@mixin body-small() {
+  font: var(--mat-sys-body-small);
 }
 
-@function get-background-palette($config-or-theme) {
-  $colors: mat.m2-get-color-config($config-or-theme);
-  $background: map.get($colors, background);
-
-  @return $background;
+@mixin vertical-flex() {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1;
 }
 
-@function get-accent-palette($config-or-theme) {
-  $colors: mat.m2-get-color-config($config-or-theme);
-  $accent: map.get($colors, accent);
-
-  @return $accent;
-}
-
-@function get-warn-palette($config-or-theme) {
-  $colors: mat.m2-get-color-config($config-or-theme);
-  $warn: map.get($colors, warn);
-
-  @return $warn;
-}
-
-@function get-primary-palette($config-or-theme) {
-  $colors: mat.m2-get-color-config($config-or-theme);
-  $primary: map.get($colors, primary);
-
-  @return $primary;
-}
-
-@function get-palette-color($palette, $hue: default) {
-  @return mat.m2-get-color-from-palette($palette, $hue);
-}
-
-@function get-contrast-color($palette, $hue: default) {
-  @return mat.m2-get-contrast-color-from-palette($palette, $hue);
-}
-
-@function is-dark-theme($theme) {
-  @return mat.get-theme-type($theme) == dark;
-}
-
-@function modify-theme($theme, $background-palette, $foreground-palette) {
-  // Replace the background in the color object's background palette.
-  $theme-color: map.get($theme, color);
-  $color-background-palette: map.get($theme-color, background);
-  $color-foreground-palette: map.get($theme-color, foreground);
-
-  @each $key, $color in $background-palette {
-    $color-background-palette: map.merge(
-      $color-background-palette,
-      (
-        $key: $color,
-      )
-    );
-  }
-
-  @each $key, $color in $foreground-palette {
-    $color-foreground-palette: map.merge(
-      $color-foreground-palette,
-      (
-        $key: $color,
-      )
-    );
-  }
-
-  // Replace the background in the background palette.
-  $legacy-background-palette: map.get($theme, background);
-  $legacy-foreground-palette: map.get($theme, foreground);
-
-  @each $key, $color in $background-palette {
-    $legacy-background-palette: map.merge(
-      $legacy-background-palette,
-      (
-        $key: $color,
-      )
-    );
-  }
-
-  @each $key, $color in $foreground-palette {
-    $legacy-foreground-palette: map.merge(
-      $legacy-foreground-palette,
-      (
-        $key: $color,
-      )
-    );
-  }
-
-  // Merge the changes into a new theme.
-  $modified-theme-color: map.merge(
-    $theme-color,
-    (
-      background: $color-background-palette,
-    )
-  );
-  $modified-theme-color: map.merge(
-    $modified-theme-color,
-    (
-      foreground: $color-foreground-palette,
-    )
-  );
-  $modified-theme: map.merge(
-    $theme,
-    (
-      color: $modified-theme-color,
-    )
-  );
-  $modified-theme: map.merge(
-    $modified-theme,
-    (
-      background: $legacy-background-palette,
-    )
-  );
-  $modified-theme: map.merge(
-    $modified-theme,
-    (
-      foreground: $legacy-foreground-palette,
-    )
-  );
-
-  @return $modified-theme;
+@mixin vertical-flex() {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1;
 }

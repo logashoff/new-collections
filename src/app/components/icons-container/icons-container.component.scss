@@ -1,16 +1,10 @@
-@import 'theme';
-
-@include component-theme using($theme) {
-  nc-icons-container {
-    .icons-container .overflow {
-      color: get-palette-color(get-foreground-palette($theme), disabled-text);
-    }
-  }
-}
-
 nc-icons-container {
   display: block;
   position: relative;
+
+  .icons-container .overflow {
+    color: var(--mat-sys-disabled-text);
+  }
 
   .icons-container {
     display: flex;

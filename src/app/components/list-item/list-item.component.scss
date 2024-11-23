@@ -1,49 +1,35 @@
-@use '@angular/material' as mat;
-@import 'theme';
-
-$typography-config: mat.m2-get-typography-config($dark-theme);
-
-@include component-theme using($theme) {
-  $primary-palette: get-primary-palette($theme);
-
-  nc-list-item {
-    .container,
-    a:link,
-    a:visited,
-    a:hover,
-    a:active {
-      color: get-palette-color(get-foreground-palette($theme), text);
-    }
-
-    &:hover,
-    &.active {
-      background-color: get-palette-color(
-        get-background-palette($theme),
-        hover
-      );
-    }
-
-    &.active::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      border-left: 3px solid get-palette-color($primary-palette);
-    }
-
-    .subtitle,
-    .controls {
-      color: get-palette-color(get-foreground-palette($theme), secondary-text);
-    }
-  }
-}
-
 nc-list-item {
   display: block;
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
+
+  .container,
+  a:link,
+  a:visited,
+  a:hover,
+  a:active {
+    color: var(--nc-text);
+  }
+
+  &:hover,
+  &.active {
+    background-color: var(--mat-sys-surface-container-highest);
+  }
+
+  &.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    border-left: 3px solid var(--mat-sys-primary);
+  }
+
+  .subtitle,
+  .controls {
+    color: var(--mat-sys-on-surface-variant);
+  }
 
   .container {
     display: flex;
@@ -72,7 +58,7 @@ nc-list-item {
     flex-grow: 1;
 
     .title-container {
-      @include mat.m2-typography-level($typography-config, subtitle-1);
+      font: var(--mat-sys-title-small);
 
       display: flex;
       align-items: center;
@@ -84,18 +70,8 @@ nc-list-item {
       }
     }
 
-    .label-container {
-      @include mat.m2-typography-level($typography-config, caption);
-
-      display: flex;
-      overflow: hidden;
-      align-items: center;
-      gap: 0.25rem;
-      flex: 0 0 auto;
-    }
-
     .subtitle-container {
-      @include mat.m2-typography-level($typography-config, caption);
+      font: var(--mat-sys-label-medium);
 
       display: flex;
       overflow: hidden;

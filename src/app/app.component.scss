@@ -1,5 +1,5 @@
-@import 'common';
+@use 'common' as common;
 
 :host {
-  @include vertical-flex;
+  @include common.vertical-flex;
 }

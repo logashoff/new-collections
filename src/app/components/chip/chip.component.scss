@@ -1,27 +1,3 @@
-@use 'sass:map';
-@use '@angular/material' as mat;
-
-@import 'theme';
-
-@include component-theme using($theme) {
-  nc-chip {
-    .icons-container .overflow {
-      color: get-palette-color(get-foreground-palette($theme), disabled-text);
-    }
-
-    .icon-container {
-      background-color: get-palette-color(
-        get-background-palette($theme),
-        disabled-list-option
-      );
-
-      .icon-label {
-        color: get-palette-color(get-foreground-palette($theme), text);
-      }
-    }
-  }
-}
-
 @media (max-width: 50rem) {
   nc-chip .icon-container .icon-label {
     display: none;
@@ -39,6 +15,7 @@ nc-chip {
     gap: 0.5rem;
     max-width: 12rem;
     min-width: 2rem;
+    background-color: var(--mat-sys-surface-variant);
 
     &.medium {
       max-width: 14rem;
@@ -50,11 +27,16 @@ nc-chip {
     }
 
     .icon-label {
+      color: var(--mat-sys-text);
       line-height: 1rem;
       margin-right: 0.5rem;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
+    }
+
+    .overflow {
+      color: var(--mat-sys-disabled-text);
     }
   }
 }
