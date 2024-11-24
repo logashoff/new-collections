@@ -1,61 +1,56 @@
 nc-tabs-selector {
-  $max-width: 25rem;
+  $_max-width: 25rem;
 
-  .container,
-  .header-container {
-    background-color: var(--mat-sys-surface-container);
+  .mat-mdc-dialog-title::before {
+    content: none;
   }
 
-  .container {
+  .mat-mdc-dialog-title {
+    padding: 0;
+  }
+
+  .header-container {
+    display: flex;
+    padding: 1rem;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+
+    .heading {
+      font: var(--mat-sys-body-large);
+      margin: 0;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      margin-right: 0.25rem;
+
+      .checkbox-container {
+        align-items: center;
+        display: flex;
+        height: 2.5rem;
+        justify-content: center;
+        width: 2rem;
+      }
+    }
+  }
+
+  .mat-mdc-dialog-content.container {
     color: var(--nc-secondary-text);
-    max-width: $max-width;
-    min-width: $max-width;
+    max-width: $_max-width;
+    min-width: $_max-width;
     position: relative;
-    max-height: 80vh;
+    max-height: 50vh;
     overflow: auto;
+    overflow-y: scroll;
+    padding: 0;
 
     .mat-mdc-list-base .mat-mdc-list-option .mat-mdc-list-text {
       display: block;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-    }
-
-    .header-container {
-      overflow: hidden;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
-
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      min-height: 3rem;
-      padding: 0.5rem;
-
-      .heading {
-        font: var(--mat-sys-label-large);
-
-        margin-left: 0.5rem;
-      }
-
-      .controls {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-right: 0.25rem;
-        flex: 1;
-
-        .checkbox-container {
-          align-items: center;
-          display: flex;
-          height: 2.5rem;
-          justify-content: center;
-          width: 2rem;
-        }
-      }
     }
 
     .list-container {

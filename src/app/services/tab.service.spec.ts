@@ -1,5 +1,4 @@
-import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { firstValueFrom } from 'rxjs';
@@ -45,7 +44,7 @@ describe('TabService', () => {
   let spectator: SpectatorService<TabService>;
   const createService = createServiceFactory({
     service: TabService,
-    imports: [MatSnackBarModule, MatBottomSheetModule],
+    imports: [MatSnackBarModule, MatDialogModule],
     providers: [
       {
         provide: NavService,

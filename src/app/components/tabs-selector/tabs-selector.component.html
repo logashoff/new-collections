@@ -1,27 +1,28 @@
 <form [formGroup]="formGroup" (ngSubmit)="save()">
-  <div class="container">
+  <mat-card-header>
     <div class="header-container">
-      <div class="header">
-        <div class="controls">
-          <button
-            type="submit"
-            mat-flat-button
+      @let selectionLength = selectionLength$ | async;
+      @let tabsLen = tabs.length;
+
+      <h2 class="heading">
+        {{
+          'tabsCount'
+            | translate: [selectionLength?.toString(), tabsLen.toString()]
+        }}
+      </h2>
+      <div class="controls">
+        <div class="checkbox-container">
+          <mat-checkbox
             color="primary"
-            [disabled]="!formGroup.valid">
-            {{ 'addTabs' | translate }}
-          </button>
-          <div class="checkbox-container">
-            <mat-checkbox
-              color="primary"
-              [checked]="allSelected$ | async"
-              [indeterminate]="someSelected$ | async"
-              (change)="selectAll($event.checked)">
-            </mat-checkbox>
-          </div>
+            [checked]="allSelected$ | async"
+            [indeterminate]="someSelected$ | async"
+            (change)="selectAll($event.checked)">
+          </mat-checkbox>
         </div>
       </div>
-      <mat-divider></mat-divider>
     </div>
+  </mat-card-header>
+  <mat-dialog-content class="container">
     <div class="list-container">
       <mat-selection-list formControlName="list">
         @for (tab of tabs; track tab) {
@@ -48,5 +49,17 @@
         }
       </mat-selection-list>
     </div>
-  </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button type="button" mat-stroked-button [mat-dialog-close]>
+      {{ 'close' | translate }}
+    </button>
+    <button
+      type="submit"
+      mat-flat-button
+      color="primary"
+      [disabled]="!formGroup.valid">
+      {{ 'save' | translate }}
+    </button>
+  </mat-dialog-actions>
 </form>

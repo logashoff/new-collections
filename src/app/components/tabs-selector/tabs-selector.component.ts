@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject, viewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,6 +9,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { isNil } from 'lodash-es';
 import { filter, map, Observable, shareReplay, startWith, withLatestFrom } from 'rxjs';
 
+import { MatCardHeader } from '@angular/material/card';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { FaviconPipe, HostnamePipe, TranslatePipe } from '../../pipes';
 import { Tabs } from '../../utils';
 import { ChipComponent } from '../chip/chip.component';
@@ -25,7 +28,7 @@ interface TabSelectorForm {
 /**
  * @description
  *
- * Bottom sheet for selecting specified tabs.
+ * Dialog for selecting specified tabs.
  */
 @Component({
   selector: 'nc-tabs-selector',
@@ -40,8 +43,12 @@ interface TabSelectorForm {
     HostnamePipe,
     LabelComponent,
     MatButtonModule,
+    MatCardHeader,
     MatCheckboxModule,
+    MatDialogModule,
+    MatFormFieldModule,
     MatIconModule,
+    MatInputModule,
     MatListModule,
     MatTooltipModule,
     ReactiveFormsModule,
@@ -96,8 +103,8 @@ export class TabsSelectorComponent {
   private listComponent = viewChild(MatSelectionList);
 
   constructor(
-    @Inject(MAT_BOTTOM_SHEET_DATA) readonly tabs: Tabs,
-    private bottomSheetRef: MatBottomSheetRef<TabsSelectorComponent>
+    @Inject(MAT_DIALOG_DATA) readonly tabs: Tabs,
+    private readonly dialogRef: MatDialogRef<TabsSelectorComponent>
   ) {}
 
   /**
@@ -111,6 +118,6 @@ export class TabsSelectorComponent {
    * Handles form submit.
    */
   save() {
-    this.bottomSheetRef.dismiss(this.formGroup.get('list').value);
+    this.dialogRef.close(this.formGroup.get('list').value);
   }
 }

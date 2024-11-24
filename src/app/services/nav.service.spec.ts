@@ -1,4 +1,3 @@
-import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
@@ -10,7 +9,7 @@ describe('NavService', () => {
   let spectator: SpectatorService<NavService>;
   const createService = createServiceFactory({
     service: NavService,
-    imports: [MatSnackBarModule, MatBottomSheetModule],
+    imports: [MatSnackBarModule],
     providers: [
       {
         provide: ActivatedRoute,
