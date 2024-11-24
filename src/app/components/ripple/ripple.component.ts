@@ -5,17 +5,11 @@ import {
   effect,
   ElementRef,
   HostBinding,
-  HostListener,
   input,
-  OnInit,
-  signal,
   ViewEncapsulation,
 } from '@angular/core';
-import { toObservable } from '@angular/core/rxjs-interop';
-import { concat, from, map, of, switchMap, timer } from 'rxjs';
 
-import { SubSinkDirective } from '../../directives';
-import { scrollIntoView } from '../../utils';
+import { scrollIntoView, sleep } from '../../utils';
 
 /**
  * @description
@@ -28,46 +22,30 @@ import { scrollIntoView } from '../../utils';
   styleUrl: './ripple.component.scss',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
 })
-export class RippleComponent extends SubSinkDirective implements OnInit {
-  readonly focused = input<boolean>();
-
-  readonly isFocused = signal<boolean>(false);
-  readonly isFocused$ = toObservable(this.isFocused);
+export class RippleComponent {
+  readonly focused = input<boolean>(false);
 
   @HostBinding('class.focused')
   private _focused = false;
 
-  @HostListener('mousedown')
-  mousedown() {
-    this.isFocused.set(false);
-  }
+  constructor(el: ElementRef, cdr: ChangeDetectorRef) {
+    effect(async () => {
+      if (this.focused()) {
+        await sleep(225);
+        await scrollIntoView(el.nativeElement);
 
-  constructor(
-    private el: ElementRef,
-    private cdr: ChangeDetectorRef
-  ) {
-    super();
-    effect(() => this.isFocused.set(this.focused()), { allowSignalWrites: true });
-  }
+        this._focused = true;
+        cdr.markForCheck();
 
-  ngOnInit() {
-    const scrollIntoView$ = from(scrollIntoView(this.el.nativeElement)).pipe(map(() => true));
+        await sleep(1000);
 
-    const focusSub = this.isFocused$
-      .pipe(
-        switchMap((focused) =>
-          focused
-            ? concat(timer(225).pipe(switchMap(() => scrollIntoView$)), timer(1000).pipe(map(() => false)))
-            : of(false)
-        )
-      )
-      .subscribe((focused) => {
-        this._focused = focused;
-        this.cdr.markForCheck();
-      });
+        this._focused = false;
+      } else {
+        this._focused = false;
+      }
 
-    this.subscribe(focusSub);
+      cdr.markForCheck();
+    });
   }
 }

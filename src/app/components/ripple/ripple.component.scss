@@ -24,7 +24,6 @@ nc-ripple {
   opacity: 0;
 
   &.focused {
-    pointer-events: auto;
     animation: ripple 1s ease;
     background: radial-gradient(
       circle,
