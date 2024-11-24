@@ -66,8 +66,6 @@ $_light-bg-alpha-24: rgba($_light-background-color, 0.24);
 
   --nc-dividers: light-dark(#{$_dark-dividers}, #{$_light-dividers});
 
-  --mat-bottom-sheet-container-shape: 1rem;
-
   color-scheme: light dark;
 
   @include mat.theme(
@@ -89,6 +87,7 @@ $_light-bg-alpha-24: rgba($_light-background-color, 0.24);
     )
   );
 
+  body,
   ::-webkit-scrollbar-track {
     background: var(--mat-sys-surface-container);
   }
@@ -96,10 +95,16 @@ $_light-bg-alpha-24: rgba($_light-background-color, 0.24);
   ::-webkit-scrollbar-thumb {
     background: var(--mat-sys-surface-container-high);
   }
-}
 
-body {
-  background: var(--mat-sys-surface-container);
+  .mat-mdc-dialog-container.mdc-dialog {
+    ::-webkit-scrollbar-track {
+      background: var(--mat-sys-surface-container-high);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--mat-sys-surface-container-highest);
+    }
+  }
 }
 
 a {
@@ -116,11 +121,6 @@ a {
   background: var(--mat-sys-background);
 }
 
-.cdk-dialog-container.mat-bottom-sheet-container {
-  background: var(--mat-sys-background);
-  overflow: hidden;
-}
-
 .cdk-drag-preview {
   background-color: var(--mat-sys-card);
 }
@@ -129,11 +129,6 @@ a {
   &.mat-primary {
     color: var(--mat-sys-primary);
   }
-}
-
-.mat-bottom-sheet-container {
-  border-top-left-radius: var(--mat-bottom-sheet-container-shape);
-  border-top-right-radius: var(--mat-bottom-sheet-container-shape);
 }
 
 @include mat.expansion-overrides(
@@ -159,12 +154,6 @@ a {
 @include mat.card-overrides(
   (
     elevated-container-color: var(--mat-sys-surface-container-high),
-  )
-);
-
-@include mat.bottom-sheet-overrides(
-  (
-    container-background-color: var(--mat-sys-surface-container-high),
   )
 );
 
@@ -195,18 +184,21 @@ a {
         on-surface-variant: $_dark-secondary-text,
       )
     );
-  }
 
-  body {
-    background: var(--mat-sys-surface);
-  }
+    body,
+    ::-webkit-scrollbar-track {
+      background: var(--mat-sys-surface);
+    }
 
-  ::-webkit-scrollbar-track {
-    background: var(--mat-sys-surface);
-  }
+    ::-webkit-scrollbar-thumb {
+      background: var(--mat-sys-surface-container-high);
+    }
 
-  ::-webkit-scrollbar-thumb {
-    background: var(--mat-sys-surface-container-high);
+    .mat-mdc-dialog-container.mdc-dialog {
+      ::-webkit-scrollbar-thumb {
+        background: var(--mat-sys-surface-dim);
+      }
+    }
   }
 
   @include mat.expansion-overrides(

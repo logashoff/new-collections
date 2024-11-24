@@ -6,7 +6,7 @@ export class TabServiceMock {
   readonly addTabGroup = () => new Promise((resolve) => resolve(0));
   readonly createTabGroup = () => new Promise((resolve) => resolve(getTabGroupMock()));
   readonly openTabsSelector = () => ({
-    afterDismissed: () => of(getBrowserTabsMock()),
+    afterClosed: () => of(getBrowserTabsMock()),
   });
 
   addTabGroups() {}

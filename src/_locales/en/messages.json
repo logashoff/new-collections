@@ -211,7 +211,7 @@
     "message": "Sync Storage Usage"
   },
   "tabsCount": {
-    "message": "Tabs $selected$ / $total$",
+    "message": "Selected Tabs $selected$/$total$",
     "placeholders": {
       "selected": {
         "content": "$1"

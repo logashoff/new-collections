@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { format, isSameDay, isSameWeek, isSameYear, subDays } from 'date-fns';
 import { flatMap, keyBy, remove, uniqBy } from 'lodash-es';
 import { BehaviorSubject, Observable, firstValueFrom, lastValueFrom } from 'rxjs';
@@ -88,7 +87,6 @@ export class TabService {
   );
 
   constructor(
-    private bottomSheet: MatBottomSheet,
     private dialog: MatDialog,
     private message: MessageService,
     private navService: NavService
@@ -321,8 +319,8 @@ export class TabService {
       filteredTabs = filteredTabs.filter(({ url }) => !tabsByUrl[url]);
 
       if (filteredTabs?.length > 0) {
-        const bottomSheetRef = this.openTabsSelector(filteredTabs);
-        const tabs: BrowserTabs = await lastValueFrom(bottomSheetRef.afterDismissed());
+        const dialogRef = this.openTabsSelector(filteredTabs);
+        const tabs: BrowserTabs = await lastValueFrom(dialogRef.afterClosed());
 
         if (tabs?.length > 0) {
           const timestamp = new Date().getTime();
@@ -511,10 +509,9 @@ export class TabService {
   /**
    * Opens tabs selector bottom sheet.
    */
-  openTabsSelector(tabs: BrowserTabs): MatBottomSheetRef<TabsSelectorComponent> {
-    return this.bottomSheet.open(TabsSelectorComponent, {
+  openTabsSelector(tabs: BrowserTabs): MatDialogRef<TabsSelectorComponent> {
+    return this.dialog.open(TabsSelectorComponent, {
       data: tabs,
-      panelClass: 'bottom-sheet',
     });
   }
 
