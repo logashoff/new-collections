@@ -1,7 +1,8 @@
-import { groupBy } from 'lodash-es';
-import { BrowserTabs, HostnameGroup, Settings, settingsStorageKey, Tab } from './models';
 import { inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { groupBy } from 'lodash-es';
+
+import { BrowserTabs, HostnameGroup, Settings, settingsStorageKey, Tab } from './models';
 
 /**
  * Returns BrowserTab array grouped by hostnames
@@ -122,3 +123,8 @@ export const sanitizeHtml = () => {
  */
 export const translate = (messageName: string, substitutions?: string | string[]): string =>
   chrome.i18n.getMessage(messageName, substitutions);
+
+/**
+ * Resolves promise when timeout is completed.
+ */
+export const sleep = (timeout: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, timeout));
