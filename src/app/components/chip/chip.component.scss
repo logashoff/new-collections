@@ -1,4 +1,6 @@
-@media (max-width: 50rem) {
+@use 'common' as common;
+
+@media (max-width: common.$desktop-width) {
   nc-chip .icon-container .icon-label {
     display: none;
   }

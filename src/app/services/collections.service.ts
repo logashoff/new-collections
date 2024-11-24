@@ -40,10 +40,10 @@ export class CollectionsService {
    * Import tab groups JSON file from file system.
    */
   private async importCollections(): Promise<Collections> {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const files = await selectFile();
+    const files = await selectFile();
 
+    return new Promise((resolve, reject) => {
+      try {
         const reader = new FileReader();
         reader.readAsText(files[0], 'utf-8');
 

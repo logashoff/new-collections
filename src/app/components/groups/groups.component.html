@@ -3,19 +3,19 @@
     @let activeGroupId = activeGroupId$ | async;
     @let activeTabId = activeTabId$ | async;
     @let hasTabId = !isNaN(activeTabId);
+    @let panelStates = panelStates$ | async;
+    @let groupId = group.id;
+    @let expandPanel =
+      panelStates?.[groupId] || (activeGroupId === groupId && hasTabId);
 
     <mat-expansion-panel
       #panel
-      [expanded]="
-        (panelStates$ | async)?.[group.id] ||
-        (activeGroupId === group.id && hasTabId) ||
-        panel.expanded
-      "
-      (opened)="opened(group.id)"
-      (closed)="closed(group.id)"
+      [expanded]="panel.expanded || expandPanel"
+      (opened)="opened(groupId)"
+      (closed)="closed(groupId)"
       hideToggle>
       <mat-expansion-panel-header>
-        @if (activeGroupId === group.id && !hasTabId) {
+        @if (activeGroupId === groupId && !hasTabId) {
           <nc-ripple [focused]="true" />
         }
 
@@ -26,9 +26,9 @@
             @let titlesMap = titlesMap$ | async;
 
             <nc-panel-header
-              [icons]="tabsByHostname[group.id]"
+              [icons]="tabsByHostname[groupId]"
               [total]="group.tabs.length"
-              [titleText]="titlesMap.get(group.id)"
+              [titleText]="titlesMap.get(groupId)"
               [pinned]="group.timestamp < 0"
               [readOnly]="group | isReadOnlyGroup"
               (starred)="favGroup(group)" />
@@ -57,7 +57,7 @@
                 (modified)="editTab(tab)"
                 (deleted)="deleteTab(tab)"
                 [focused]="
-                  activeGroupId === group.id && activeTabId === tab.id
+                  activeGroupId === groupId && activeTabId === tab.id
                 " />
             }
           </nc-tab-list>

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostBinding, input, output, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -34,16 +34,6 @@ export class TimelineElementComponent {
    * Emits event when remove button clicked
    */
   readonly removed = output();
-
-  /**
-   * True when any child panels are expanded
-   */
-  readonly expanded = input<boolean>(false);
-
-  @HostBinding('class.expanded')
-  get isExpanded() {
-    return this.expanded();
-  }
 
   /**
    * Handles remove button

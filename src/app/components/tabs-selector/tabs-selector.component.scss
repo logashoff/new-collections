@@ -17,7 +17,7 @@ nc-tabs-selector {
     overflow: hidden;
 
     .heading {
-      font: var(--mat-sys-body-large);
+      font: var(--mat-sys-headline-small);
       margin: 0;
     }
 
@@ -87,7 +87,7 @@ nc-tabs-selector {
 
           .item-subtitle {
             font: var(--mat-sys-label-medium);
-            color: var(--mat-sys-disabled-text);
+            color: var(--nc-disabled-text);
 
             display: flex;
             align-items: center;

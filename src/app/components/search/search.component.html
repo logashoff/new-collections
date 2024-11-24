@@ -19,7 +19,7 @@
     </mat-card>
   } @else if (!searchQuery && recentTabs?.length > 0) {
     <nc-timeline-label class="icon-label">
-      <mat-icon>search_activity</mat-icon>
+      <mat-icon>history_2</mat-icon>
       {{ 'recent' | translate }}
     </nc-timeline-label>
     <mat-card class="search-container">
@@ -71,7 +71,7 @@
   }
 } @else if (baseSource?.length > 0) {
   <nc-empty [message]="'searchEmptyMessage' | translate: searchQuery">
-    search_off
+    block
   </nc-empty>
 } @else {
   <nc-empty [message]="'emptyCollections' | translate">data_alert</nc-empty>

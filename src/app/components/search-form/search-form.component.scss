@@ -16,10 +16,6 @@ nc-search-form {
   color: var(--mat-sys-secondary-text);
   background-color: $_app-background;
 
-  &.is-active.scrolled {
-    box-shadow: var(--mat-sys-level2);
-  }
-
   .controls-wrapper {
     background-color: $_control-background-color;
     border: 1px solid $_control-background-color;

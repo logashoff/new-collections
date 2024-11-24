@@ -1,5 +1,5 @@
 {
-  "action_manufacturing": {
+  "action_settings": {
     "message": "Settings"
   },
   "action_undo": {
@@ -198,6 +198,9 @@
       }
     }
   },
+  "selectTabs": {
+    "message": "Select Tabs"
+  },
   "settings": {
     "message": "Settings"
   },
@@ -211,7 +214,7 @@
     "message": "Sync Storage Usage"
   },
   "tabsCount": {
-    "message": "Selected Tabs $selected$/$total$",
+    "message": "$selected$ tabs of $total$",
     "placeholders": {
       "selected": {
         "content": "$1"

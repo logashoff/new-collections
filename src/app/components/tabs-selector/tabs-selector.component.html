@@ -5,10 +5,7 @@
       @let tabsLen = tabs.length;
 
       <h2 class="heading">
-        {{
-          'tabsCount'
-            | translate: [selectionLength?.toString(), tabsLen.toString()]
-        }}
+        {{ 'selectTabs' | translate }}
       </h2>
       <div class="controls">
         <div class="checkbox-container">
@@ -34,13 +31,6 @@
               <div class="item-text">
                 <div class="item-title">{{ tab.title }}</div>
                 <span class="item-subtitle">
-                  @if (tab.active) {
-                    <nc-label>{{ 'active' | translate }}</nc-label>
-                  }
-
-                  @if (tab.pinned) {
-                    <nc-label>{{ 'pinned' | translate }}</nc-label>
-                  }
                   <span class="subtitle">{{ tab.url | hostname }}</span>
                 </span>
               </div>

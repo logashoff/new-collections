@@ -5,6 +5,7 @@ $scrollbar-width: 0.5rem;
 $popup-width: 32rem;
 $popup-height: 35rem;
 $cubic-ease: 225ms cubic-bezier(0.4, 0, 0.2, 1);
+$desktop-width: 60rem;
 
 @mixin vertical-flex() {
   display: flex;

@@ -121,7 +121,7 @@ export class NavService {
     });
   }
 
-  navigate(commands: any[], extras: RouterExtras = {}): Promise<boolean> {
+  navigate(commands: string[], extras: RouterExtras = {}): Promise<boolean> {
     return this.router.navigate(commands, {
       replaceUrl: true,
       ...extras,

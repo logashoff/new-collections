@@ -8,7 +8,7 @@ nc-empty {
   justify-content: center;
 
   .icon {
-    color: var(--mat-sys-inverse-primary);
+    color: var(--mat-sys-surface-container-highest);
     width: $icon-size;
     height: $icon-size;
     font-size: $icon-size;
@@ -17,7 +17,7 @@ nc-empty {
   }
 
   .message {
-    font: var(--mat-sys-body-medium);
+    font: var(--mat-sys-body-large);
     color: var(--mat-sys-on-surface-variant);
 
     margin-bottom: 2rem;
