@@ -35,7 +35,7 @@ nc-new-tab {
   }
 }
 
-@media (max-width: 60rem) {
+@media (max-width: common.$desktop-width) {
   nc-new-tab {
     .content,
     .top-sites,

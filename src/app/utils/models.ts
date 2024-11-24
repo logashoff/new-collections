@@ -279,11 +279,11 @@ export enum ActionIcon {
   Edit = 'edit_note',
   Export = 'save_alt',
   Find = 'manage_search',
-  Forget = 'history_off',
+  Forget = 'delete_history',
   Import = 'file_upload',
   Remove = 'playlist_remove',
   Save = 'bookmark_add',
-  Settings = 'manufacturing',
+  Settings = 'settings',
   Undo = 'undo',
 }
 

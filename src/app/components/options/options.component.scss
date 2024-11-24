@@ -17,17 +17,20 @@ nc-options {
   overflow: hidden;
   overflow-y: auto;
 
+  .toggle-label,
   h4,
   h3,
   h2,
   h1 {
-    color: var(--mat-sys-text);
+    font: var(--mat-sys-body-large);
+    color: var(--mat-sys-on-surface);
     font-weight: 500;
     margin: 0;
   }
 
   .mat-mdc-form-field-hint {
-    font: var(--mat-sys-caption);
+    font: var(--mat-sys-label-medium);
+    color: var(--mat-sys-on-surface-variant);
     margin-bottom: 1rem;
     position: relative;
     display: block;

@@ -164,6 +164,14 @@ a {
   )
 );
 
+@include mat.fab-overrides(
+  (
+    container-color: var(--mat-sys-primary),
+    foreground-color: var(--mat-sys-on-primary),
+    small-foreground-color: var(--mat-sys-on-primary),
+  )
+);
+
 @media (prefers-color-scheme: light) {
   :root {
     @include mat.theme(

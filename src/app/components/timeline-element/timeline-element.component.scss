@@ -8,26 +8,6 @@ nc-timeline-element {
   transition-timing-function: common.$cubic-ease;
   transition-duration: 250ms;
 
-  &.expanded {
-    padding: 0 1rem 1rem;
-    margin: 0 -1rem;
-
-    background-color: var(--mat-sys-surface-bright);
-
-    &:not(:first-of-type) {
-      margin-top: 1rem;
-    }
-
-    .timeline-header,
-    .timeline-header nc-timeline-label {
-      color: var(--mat-sys-on-surface);
-    }
-
-    .timeline-header .mat-mdc-icon-button {
-      color: inherit;
-    }
-  }
-
   .timeline-header {
     transition-property: color;
     transition-timing-function: common.$cubic-ease;
@@ -47,8 +27,34 @@ nc-timeline-element {
   }
 }
 
-@media (prefers-color-scheme: light) {
-  nc-timeline-element.expanded {
-    background-color: var(--mat-sys-surface-container-high);
+@media (min-width: common.$desktop-width) {
+  nc-timeline-element {
+    &:has(.mat-expansion-panel.mat-expanded) {
+      padding: 0 1rem 1rem;
+      margin: 0 -1rem;
+
+      background-color: var(--mat-sys-surface-bright);
+
+      &:not(:first-of-type) {
+        margin-top: 1rem;
+      }
+
+      .timeline-header,
+      .timeline-header nc-timeline-label {
+        color: var(--mat-sys-on-surface);
+      }
+
+      .timeline-header .mat-mdc-icon-button {
+        color: inherit;
+      }
+    }
+  }
+
+  @media (prefers-color-scheme: light) {
+    nc-timeline-element {
+      &:has(.mat-expansion-panel.mat-expanded) {
+        background-color: var(--mat-sys-surface-container-highest);
+      }
+    }
   }
 }

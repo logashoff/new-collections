@@ -22,10 +22,8 @@ import { queryCurrentWindow, restoreTabs, TabGroup, Tabs } from '../../utils';
   imports: [DatePipe, MatButtonModule, MatIconModule, MatTooltipModule, StopPropagationDirective, TranslatePipe],
 })
 export class GroupControlsComponent {
-  readonly group = input<TabGroup>();
+  readonly group = input.required<TabGroup>();
   readonly readOnly = input<boolean>(false);
-
-  readonly abs = Math.abs;
 
   constructor(
     private tabService: TabService,

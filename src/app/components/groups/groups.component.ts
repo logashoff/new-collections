@@ -1,11 +1,12 @@
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, input, viewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, input } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { Observable, map, shareReplay } from 'rxjs';
+
 import { IsReadOnlyGroupPipe } from '../../pipes';
 import { NavService, SettingsService, TabService } from '../../services';
 import {
@@ -89,15 +90,6 @@ export class GroupsComponent {
 
   readonly isNaN = isNaN;
   readonly isPopup = this.navService.isPopup;
-
-  private readonly panels = viewChildren(MatExpansionPanel);
-
-  /**
-   * True if any panels are expanded
-   */
-  get expanded(): boolean {
-    return this.panels().some((p) => p.expanded);
-  }
 
   constructor(
     private readonly navService: NavService,
