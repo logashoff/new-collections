@@ -1,6 +1,6 @@
 import { ActiveDescendantKeyManager, Highlightable } from '@angular/cdk/a11y';
 import { DOWN_ARROW, ENTER, UP_ARROW } from '@angular/cdk/keycodes';
-import { Injectable, QueryList } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 export interface Activatable extends Highlightable {
   activate?(): void;
@@ -18,14 +18,15 @@ export class KeyService<T extends Activatable> {
   keyDown(event: KeyboardEvent) {
     event.stopImmediatePropagation();
 
-    if (event.keyCode === DOWN_ARROW || event.keyCode === UP_ARROW) {
+    const { keyCode } = event;
+    if (keyCode === DOWN_ARROW || keyCode === UP_ARROW) {
       this.keyManager?.onKeydown(event);
     } else if (event.keyCode === ENTER) {
       this.keyManager?.activeItem?.activate();
     }
   }
 
-  setItems(items: QueryList<T>) {
+  setItems(items: Readonly<T[]>) {
     this.keyManager = new ActiveDescendantKeyManager(items).withWrap();
   }
 

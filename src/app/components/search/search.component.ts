@@ -1,13 +1,12 @@
 import { CommonModule } from '@angular/common';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  effect,
   input,
   OnInit,
   output,
-  QueryList,
-  ViewChildren,
+  viewChildren,
   ViewEncapsulation,
 } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
@@ -19,6 +18,7 @@ import {
   combineLatest,
   distinctUntilChanged,
   filter,
+  firstValueFrom,
   lastValueFrom,
   map,
   Observable,
@@ -26,13 +26,12 @@ import {
   shareReplay,
   switchMap,
   take,
-  withLatestFrom,
 } from 'rxjs';
 
 import { SubSinkDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
 import { KeyService, NavService, TabService } from '../../services';
-import { Action, Actions, BrowserTab, BrowserTabs, listItemAnimation } from '../../utils';
+import { Action, Actions, BrowserTab, BrowserTabs, listItemAnimation, Target } from '../../utils';
 import { EmptyComponent } from '../empty/empty.component';
 import { ListItemComponent } from '../list-item/list-item.component';
 import { TabListComponent } from '../tab-list/tab-list.component';
@@ -70,7 +69,7 @@ const LATEST_LIMIT = 10;
     TranslatePipe,
   ],
 })
-export class SearchComponent extends SubSinkDirective implements OnInit, AfterViewInit {
+export class SearchComponent extends SubSinkDirective implements OnInit {
   readonly Action = Action;
 
   readonly source = input.required<BrowserTabs>();
@@ -94,12 +93,13 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
    */
   deviceTabs$: Observable<BrowserTabs>;
 
+  get target(): Target {
+    return this.navService.isPopup ? '_blank' : '_self';
+  }
+
+  private listItems = viewChildren(ListItemComponent);
+
   readonly #searchResults$ = new BehaviorSubject<BrowserTabs>([]);
-  readonly isPopup: boolean = this.navService.isPopup;
-
-  @ViewChildren(ListItemComponent)
-  private listItems: QueryList<ListItemComponent>;
-
   readonly searchQuery$: Observable<string> = this.navService.paramsSearch$.pipe(shareReplay(1));
 
   /**
@@ -116,6 +116,18 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
     private readonly keyService: KeyService<ListItemComponent>
   ) {
     super();
+
+    effect(async () => {
+      const listItems = this.listItems();
+      this.keyService.clear();
+      this.keyService.setItems(listItems);
+
+      const searchQuery = await firstValueFrom(this.searchQuery$);
+
+      if (searchQuery?.length > 0) {
+        this.keyService.setActive(0);
+      }
+    });
   }
 
   ngOnInit() {
@@ -131,7 +143,7 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
 
     const resultChanges = this.searchQuery$
       .pipe(
-        filter((searchValue) => searchValue?.length > 0),
+        filter((searchQuery) => searchQuery?.length > 0),
         distinctUntilChanged(),
         switchMap((searchValue) =>
           fuse$.pipe(
@@ -145,8 +157,8 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
     this.subscribe(resultChanges);
 
     this.sourceTabs$ = combineLatest([this.searchQuery$, this.#searchResults$, this.#source$]).pipe(
-      map(([searchValue, searchResults, source]) => {
-        if (searchValue?.length) {
+      map(([searchQuery, searchResults, source]) => {
+        if (searchQuery?.length) {
           return searchResults;
         }
 
@@ -181,19 +193,6 @@ export class SearchComponent extends SubSinkDirective implements OnInit, AfterVi
       }),
       shareReplay(1)
     );
-  }
-
-  ngAfterViewInit() {
-    const itemChanges = this.listItems.changes.pipe(withLatestFrom(this.searchQuery$)).subscribe(([, searchValue]) => {
-      this.keyService.clear();
-      this.keyService.setItems(this.listItems);
-
-      if (searchValue?.length) {
-        this.keyService.setActive(0);
-      }
-    });
-
-    this.subscribe(itemChanges);
   }
 
   /**

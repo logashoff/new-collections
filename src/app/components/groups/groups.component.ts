@@ -17,6 +17,7 @@ import {
   TabGroup,
   TabGroups,
   TabsByHostname,
+  Target,
   listItemAnimation,
 } from '../../utils';
 import { GroupControlsComponent } from '../group-controls/group-controls.component';
@@ -89,7 +90,10 @@ export class GroupsComponent {
   readonly panelStates$: Observable<GroupExpanded>;
 
   readonly isNaN = isNaN;
-  readonly isPopup = this.navService.isPopup;
+
+  get target(): Target {
+    return this.navService.isPopup ? '_blank' : '_self';
+  }
 
   constructor(
     private readonly navService: NavService,

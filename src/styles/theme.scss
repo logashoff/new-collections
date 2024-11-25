@@ -51,9 +51,14 @@ $_light-bg-alpha-24: rgba($_light-background-color, 0.24);
 
 :root {
   --nc-text: light-dark(#{$_dark-text}, #{$_light-text});
+  --nc-text-inverse: light-dark(#{$_light-text}, #{$_dark-text});
   --nc-primary-text: light-dark(
     #{$_dark-primary-text},
     #{$_light-primary-text}
+  );
+  --nc-primary-text-inverse: light-dark(
+    #{$_light-primary-text},
+    #{$_dark-primary-text}
   );
   --nc-disabled-text: light-dark(
     #{$_dark-disabled-text},
@@ -62,6 +67,10 @@ $_light-bg-alpha-24: rgba($_light-background-color, 0.24);
   --nc-secondary-text: light-dark(
     #{$_dark-secondary-text},
     #{$_light-secondary-text}
+  );
+  --nc-secondary-text-inverse: light-dark(
+    #{$_light-secondary-text},
+    #{$_dark-secondary-text}
   );
 
   --nc-dividers: light-dark(#{$_dark-dividers}, #{$_light-dividers});
@@ -116,13 +125,8 @@ a {
   }
 }
 
-.message-container.mat-snack-bar-container {
-  color: var(--mat-sys-secondary-text);
-  background: var(--mat-sys-background);
-}
-
 .cdk-drag-preview {
-  background-color: var(--mat-sys-card);
+  background-color: var(--mat-sys-surface-container-high);
 }
 
 .mdc-icon-button.mat-mdc-icon-button:not(.mat-mdc-button-disabled) {

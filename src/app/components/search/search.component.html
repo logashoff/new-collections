@@ -29,7 +29,7 @@
             [@listItemAnimation]
             [tab]="tab"
             [actions]="recentActions"
-            [target]="isPopup ? '_blank' : '_self'"
+            [target]="target"
             (deleted)="itemDeleted($event)"
             (modified)="itemModified($event)"
             (find)="findItem.emit($event)" />
@@ -61,7 +61,7 @@
             [@listItemAnimation]
             [tab]="tab"
             [actions]="defaultActions"
-            [target]="isPopup ? '_blank' : '_self'"
+            [target]="target"
             (deleted)="itemDeleted($event)"
             (modified)="itemModified($event)"
             (find)="findItem.emit($event)" />
