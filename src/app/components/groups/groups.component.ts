@@ -55,7 +55,7 @@ export class GroupsComponent {
   /**
    * List of tab groups to render.
    */
-  readonly groups = input<TabGroups>();
+  readonly groups = input.required<TabGroups>();
   readonly groups$: Observable<TabGroups>;
 
   /**

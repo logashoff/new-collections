@@ -8,7 +8,6 @@ import { translate } from '../utils';
  */
 @Pipe({
   name: 'translate',
-  standalone: true,
 })
 export class TranslatePipe implements PipeTransform {
   transform(messageName: string, substitutions?: string | string[]): string {

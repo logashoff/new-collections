@@ -10,14 +10,20 @@ nc-tabs-selector {
   }
 
   .header-container {
+    background: var(--mat-sys-surface-container);
     display: flex;
-    padding: 1rem;
+    padding: 1rem 0.5rem 1rem 1rem;
     justify-content: space-between;
     align-items: center;
     overflow: hidden;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    border-bottom: 1px solid var(--nc-dividers);
 
     .heading {
-      font: var(--mat-sys-headline-small);
+      font: var(--mat-sys-title-large);
+      color: var(--mat-sys-on-surface);
       margin: 0;
     }
 
@@ -43,7 +49,6 @@ nc-tabs-selector {
     position: relative;
     max-height: 50vh;
     overflow: auto;
-    overflow-y: scroll;
     padding: 0;
 
     .mat-mdc-list-base .mat-mdc-list-option .mat-mdc-list-text {
@@ -77,6 +82,7 @@ nc-tabs-selector {
 
           .item-title {
             font: var(--mat-sys-body-medium);
+            font-weight: 500;
           }
 
           .item-title,
