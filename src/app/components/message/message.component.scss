@@ -1,7 +1,9 @@
 nc-message {
+  $_text-color: var(--nc-text-inverse);
+
   box-shadow: var(--mat-sys-level2);
-  color: var(--nc-text);
-  background-color: var(--mat-sys-surface-container);
+  color: $_text-color;
+  background-color: var(--mat-sys-inverse-surface);
 
   .controls {
     color: var(--mat-sys-on-surface-variant);
@@ -11,13 +13,12 @@ nc-message {
   border-radius: 2rem;
   box-sizing: border-box;
   overflow: hidden;
-  padding: 0 1rem;
+  padding: 1rem;
 
   .container {
-    padding: 1rem 0 1rem 1rem;
     display: flex;
     align-items: stretch;
-    gap: 1rem;
+    gap: 2rem;
   }
 
   .message {
@@ -30,6 +31,7 @@ nc-message {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding: 0 1rem;
   }
 
   .controls {
@@ -37,9 +39,9 @@ nc-message {
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    margin-right: 0.5rem;
 
     .mdc-icon-button {
+      color: $_text-color;
       padding: 0;
       width: 24px;
       height: 24px;

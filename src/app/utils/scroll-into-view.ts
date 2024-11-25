@@ -18,26 +18,18 @@ export function scrollIntoView(
   options: ScrollIntoViewOptions = { behavior: 'smooth', block: 'center', inline: 'center' }
 ): Promise<HTMLElement> {
   return new Promise((resolve) => {
-    const viewHeight = window.innerHeight;
-    const viewCenterY = viewHeight / 2;
-    const elBounds = element.getBoundingClientRect();
-    const elCenterY = elBounds.y + elBounds.height / 2;
+    const { body } = document;
+    const handleScroll = () => {
+      clearInterval(scrollTimeoutId);
 
-    if (elBounds.y > 0 && elCenterY < viewCenterY) {
-      resolve(element);
-    } else {
-      const { body } = document;
-      const handleScroll = () => {
-        clearInterval(scrollTimeoutId);
+      scrollTimeoutId = setTimeout(() => {
+        body.removeEventListener('scroll', handleScroll);
+        resolve(element);
+      }, callbackTimeout);
+    };
 
-        scrollTimeoutId = setTimeout(() => {
-          body.removeEventListener('scroll', handleScroll);
-          resolve(element);
-        }, callbackTimeout);
-      };
-
-      body.addEventListener('scroll', handleScroll);
-      element.scrollIntoView(options);
-    }
+    body.addEventListener('scroll', handleScroll);
+    element.scrollIntoView(options);
+    handleScroll();
   });
 }

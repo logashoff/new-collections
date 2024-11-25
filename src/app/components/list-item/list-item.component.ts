@@ -26,6 +26,7 @@ import {
   TabAction,
   tabActions,
   TabActions,
+  Target,
 } from '../../utils';
 import { ChipComponent } from '../chip/chip.component';
 import { RippleComponent } from '../ripple/ripple.component';
@@ -85,7 +86,7 @@ export class ListItemComponent implements Activatable {
   /**
    * Target window to open URL
    */
-  readonly target = input<'_blank' | '_self'>('_self');
+  readonly target = input<Target>('_self');
 
   private _isActive = false;
 
@@ -130,10 +131,9 @@ export class ListItemComponent implements Activatable {
 
   async setActiveStyles() {
     this._isActive = true;
+    this.cdr.markForCheck();
 
     await scrollIntoView(this.el.nativeElement, { block: 'center' });
-
-    this.cdr.markForCheck();
   }
 
   setInactiveStyles() {

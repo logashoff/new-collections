@@ -3,8 +3,8 @@ nc-label {
   border-radius: 1rem;
   padding: 0 0.5rem;
 
-  background-color: var(--mat-sys-disabled-list-option);
-  color: var(--mat-sys-text);
+  background-color: var(--mat-sys-surface-variant);
+  color: var(--nc-text);
 
   &.theme-primary {
     background-color: var(--mat-sys-primary);
@@ -12,12 +12,12 @@ nc-label {
   }
 
   &.theme-warn {
-    background-color: var(--mat-sys-warn);
-    color: var(--mat-sys-on-warn);
+    background-color: var(--mat-sys-error);
+    color: var(--mat-sys-on-error);
   }
 
   &.theme-accent {
-    background-color: var(--mat-sys-secondary);
-    color: var(--mat-sys-on-secondary);
+    background-color: var(--mat-sys-tertiary);
+    color: var(--mat-sys-on-tertiary);
   }
 }

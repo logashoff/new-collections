@@ -53,7 +53,7 @@
                 [cdkDragDisabled]="dragDisabled()"
                 [tab]="tab"
                 [actions]="tabActions()"
-                [target]="isPopup ? '_blank' : '_self'"
+                [target]="target"
                 (modified)="editTab(tab)"
                 (deleted)="deleteTab(tab)"
                 [focused]="

@@ -14,12 +14,12 @@ export class NavService {
   readonly paramsGroupId$: Observable<string>;
 
   /**
-   * Group ID set by URL query params
+   * Tab ID set by URL query params
    */
   readonly paramsTabId$: Observable<number>;
 
   /**
-   * Group ID set by URL query params
+   * Search query set by URL query params
    */
   readonly paramsSearch$: Observable<string>;
 
