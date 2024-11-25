@@ -8,7 +8,6 @@ import { addRecent, TabId } from '../utils';
  */
 @Directive({
   selector: '[recent]',
-  standalone: true,
 })
 export class RecentDirective {
   readonly recent = input.required<TabId>();

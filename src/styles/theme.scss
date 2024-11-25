@@ -98,7 +98,7 @@ $_light-bg-alpha-24: rgba($_light-background-color, 0.24);
 
   .mat-mdc-dialog-container.mdc-dialog {
     ::-webkit-scrollbar-track {
-      background: var(--mat-sys-surface-container-high);
+      background: var(--mat-sys-surface-container);
     }
 
     ::-webkit-scrollbar-thumb {
@@ -146,8 +146,9 @@ a {
 
 @include mat.dialog-overrides(
   (
-    container-color: var(--mat-sys-surface-container-high),
+    container-color: var(--mat-sys-surface-container),
     container-elevation-shadow: var(--mat-sys-level5),
+    subhead-size: var(--mat-sys-title-large-size),
   )
 );
 

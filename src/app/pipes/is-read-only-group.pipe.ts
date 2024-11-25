@@ -9,7 +9,6 @@ import { TabGroup } from '../utils';
  */
 @Pipe({
   name: 'isReadOnlyGroup',
-  standalone: true,
 })
 export class IsReadOnlyGroupPipe implements PipeTransform {
   constructor(private readonly tabService: TabService) {}

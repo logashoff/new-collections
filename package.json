@@ -48,7 +48,7 @@
     "@angular/compiler-cli": "^19.0.0",
     "@angular/language-service": "^19.0.0",
     "@ngneat/spectator": "^19.0.0",
-    "@types/chrome": "^0.0.283",
+    "@types/chrome": "^0.0.284",
     "@types/filesystem": "^0.0.36",
     "@types/jest": "^29.5.14",
     "@types/lodash-es": "^4.17.12",

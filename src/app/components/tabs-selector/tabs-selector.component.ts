@@ -9,7 +9,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { isNil } from 'lodash-es';
 import { filter, map, Observable, shareReplay, startWith, withLatestFrom } from 'rxjs';
 
-import { MatCardHeader } from '@angular/material/card';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -41,7 +40,6 @@ interface TabSelectorForm {
     FaviconPipe,
     HostnamePipe,
     MatButtonModule,
-    MatCardHeader,
     MatCheckboxModule,
     MatDialogModule,
     MatFormFieldModule,

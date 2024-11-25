@@ -9,7 +9,6 @@ import { ImageSource, getFaviconUrl } from '../utils';
  */
 @Pipe({
   name: 'favicon',
-  standalone: true,
 })
 export class FaviconPipe implements PipeTransform {
   constructor(private sanitizer: DomSanitizer) {}

@@ -10,7 +10,6 @@ import { sanitizeHtml } from '../utils';
  */
 @Pipe({
   name: 'html',
-  standalone: true,
 })
 export class HtmlPipe implements PipeTransform {
   private readonly sanitizeHtml = sanitizeHtml();

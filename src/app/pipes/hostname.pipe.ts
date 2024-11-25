@@ -8,7 +8,6 @@ import { getUrlHostname } from '../utils';
  */
 @Pipe({
   name: 'hostname',
-  standalone: true,
 })
 export class HostnamePipe implements PipeTransform {
   transform(url: string): string {

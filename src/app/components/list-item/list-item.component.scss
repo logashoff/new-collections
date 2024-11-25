@@ -58,7 +58,8 @@ nc-list-item {
     flex-grow: 1;
 
     .title-container {
-      font: var(--mat-sys-title-small);
+      font: var(--mat-sys-title-medium);
+      font-weight: 500;
 
       display: flex;
       align-items: center;

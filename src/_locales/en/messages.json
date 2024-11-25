@@ -168,6 +168,9 @@
   "removeRecent": {
     "message": "Remove from recent"
   },
+  "required": {
+    "message": "Required"
+  },
   "restore": {
     "message": "Restore"
   },

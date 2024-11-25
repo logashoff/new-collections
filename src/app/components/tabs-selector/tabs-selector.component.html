@@ -1,5 +1,5 @@
 <form [formGroup]="formGroup" (ngSubmit)="save()">
-  <mat-card-header>
+  <mat-dialog-content class="container">
     <div class="header-container">
       @let selectionLength = selectionLength$ | async;
       @let tabsLen = tabs.length;
@@ -18,8 +18,6 @@
         </div>
       </div>
     </div>
-  </mat-card-header>
-  <mat-dialog-content class="container">
     <div class="list-container">
       <mat-selection-list formControlName="list">
         @for (tab of tabs; track tab) {

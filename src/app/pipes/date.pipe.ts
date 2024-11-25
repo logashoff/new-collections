@@ -9,7 +9,6 @@ import { isNumber } from 'lodash-es';
  */
 @Pipe({
   name: 'date',
-  standalone: true,
 })
 export class DatePipe implements PipeTransform {
   transform(value: DateArg<Date>, formatStr = 'PP'): string {
