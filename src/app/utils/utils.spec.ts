@@ -1,5 +1,5 @@
 import { getBrowserTabMock, getTabGroupMock } from 'src/mocks';
-import { getHostname, getHostnameGroup } from './utils';
+import { getHostname, getHostnameGroup, isUuid, uuid } from './utils';
 
 describe('utils.ts', () => {
   it('should create hostname groups', () => {
@@ -26,5 +26,14 @@ describe('utils.ts', () => {
 
   it('should return hostname', () => {
     expect(getHostname(getBrowserTabMock())).toBe('getfedora.org');
+  });
+
+  it('should validate uuid', () => {
+    expect(isUuid(uuid())).toBeTruthy();
+    expect(isUuid(uuid())).toBeTruthy();
+    expect(isUuid(uuid())).toBeTruthy();
+    expect(isUuid(uuid())).toBeTruthy();
+    expect(isUuid(uuid())).toBeTruthy();
+    expect(isUuid(uuid())).toBeTruthy();
   });
 });

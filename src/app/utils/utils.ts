@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { groupBy } from 'lodash-es';
 
-import { BrowserTabs, HostnameGroup, Settings, settingsStorageKey, Tab } from './models';
+import { BrowserTabs, HostnameGroup, Settings, settingsStorageKey, Tab, uuidRegExp } from './models';
 
 /**
  * Returns BrowserTab array grouped by hostnames
@@ -58,14 +58,14 @@ export const openOptions = () => chrome.runtime.openOptionsPage();
  * Saves specified data to a file
  */
 export const saveFile = (blob: Blob, fileName: string) => {
-  const url = window.URL.createObjectURL(blob);
+  const url = self.URL.createObjectURL(blob);
   const link = document.createElement('a');
 
   link.href = url;
   link.download = fileName;
   link.click();
 
-  window.URL.revokeObjectURL(url);
+  self.URL.revokeObjectURL(url);
 };
 
 /**
@@ -128,3 +128,7 @@ export const translate = (messageName: string, substitutions?: string | string[]
  * Resolves promise when timeout is completed.
  */
 export const sleep = (timeout: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, timeout));
+
+export const uuid = () => self.crypto.randomUUID();
+
+export const isUuid = (uuid: string) => uuidRegExp.test(uuid);
