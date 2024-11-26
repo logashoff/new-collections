@@ -1,5 +1,4 @@
 import { isUndefined, keyBy } from 'lodash-es';
-import { validate as uuidValidate } from 'uuid';
 
 import {
   BrowserTabs,
@@ -17,7 +16,7 @@ import {
   SyncTabs,
   TabId,
 } from './models';
-import { getSettings, getUrlHost } from './utils';
+import { getSettings, getUrlHost, isUuid } from './utils';
 
 /**
  * Returns storage in use.
@@ -37,7 +36,7 @@ export async function saveCollections(collections: Collections): Promise<void> {
 
   const removeKeys = [faviconStorageKey];
   for (const groupId in syncData) {
-    if (uuidValidate(groupId) && !(groupId in collectionsById)) {
+    if (isUuid(groupId) && !(groupId in collectionsById)) {
       delete syncData[groupId];
       removeKeys.push(groupId);
     }
@@ -118,7 +117,7 @@ export const getCollections = async (): Promise<Collections> => {
     const favicon = await getFaviconStore();
 
     const collections: Collections = Object.keys(syncData)
-      .filter((groupId) => uuidValidate(groupId))
+      .filter((groupId) => isUuid(groupId))
       .map((groupId) => ({
         id: groupId,
         timestamp: syncData[groupId][0],
@@ -160,7 +159,7 @@ export async function copyStorage(source: StorageArea, target: StorageArea) {
   };
   const newData = { ...faviconData };
 
-  const sourceKeys = Object.keys(sourceData).filter((groupId) => uuidValidate(groupId));
+  const sourceKeys = Object.keys(sourceData).filter((groupId) => isUuid(groupId));
   sourceKeys.forEach((key) => (newData[key] = sourceData[key]));
   await source.remove([faviconStorageKey, ...sourceKeys.map((key) => key)]);
   await target.set(newData);

@@ -37,24 +37,24 @@
     "zone.js": "^0.15.0"
   },
   "devDependencies": {
-    "@angular-devkit/architect": "^0.1900.1",
+    "@angular-devkit/architect": "^0.1900.2",
     "@angular-eslint/builder": "^18.4.2",
     "@angular-eslint/eslint-plugin": "^18.4.2",
     "@angular-eslint/eslint-plugin-template": "^18.4.2",
     "@angular-eslint/schematics": "^18.4.2",
     "@angular-eslint/template-parser": "^18.4.2",
-    "@angular/build": "^19.0.1",
-    "@angular/cli": "^19.0.1",
+    "@angular/build": "^19.0.2",
+    "@angular/cli": "^19.0.2",
     "@angular/compiler-cli": "^19.0.0",
     "@angular/language-service": "^19.0.0",
     "@ngneat/spectator": "^19.0.0",
-    "@types/chrome": "^0.0.284",
+    "@types/chrome": "^0.0.286",
     "@types/filesystem": "^0.0.36",
     "@types/jest": "^29.5.14",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^22.9.3",
-    "@typescript-eslint/eslint-plugin": "^8.15.0",
-    "@typescript-eslint/parser": "^8.15.0",
+    "@types/node": "^22.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.16.0",
+    "@typescript-eslint/parser": "^8.16.0",
     "codelyzer": "^6.0.2",
     "esbuild": "^0.24.0",
     "eslint": "^9.15.0",
@@ -67,7 +67,6 @@
     "stylelint-config-sass-guidelines": "^12.1.0",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
-    "typescript": "5.6.3",
-    "uuid": "^11.0.3"
+    "typescript": "5.6.3"
   }
 }

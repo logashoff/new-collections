@@ -4,7 +4,6 @@ import { format, isSameDay, isSameWeek, isSameYear, subDays } from 'date-fns';
 import { flatMap, keyBy, remove, uniqBy } from 'lodash-es';
 import { BehaviorSubject, Observable, firstValueFrom, lastValueFrom } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
-import { validate as uuidValidate, v4 as uuidv4 } from 'uuid';
 
 import { RenameDialogComponent, TabsSelectorComponent } from '../components';
 import {
@@ -29,11 +28,13 @@ import {
   getRecentTabs,
   getUrlHost,
   ignoreUrlsRegExp,
+  isUuid,
   recentKey,
   removeRecent,
   saveCollections,
   syncToTabs,
   translate,
+  uuid,
 } from '../utils';
 import { MessageService } from './message.service';
 import { NavService } from './nav.service';
@@ -130,7 +131,7 @@ export class TabService {
    * Sync local storage collection with loaded UI tab groups.
    */
   private async syncCollections(changes: StorageChanges) {
-    const changedGroupIds = Object.keys(changes).filter((groupId) => uuidValidate(groupId));
+    const changedGroupIds = Object.keys(changes).filter((groupId) => isUuid(groupId));
 
     if (changedGroupIds?.length > 0) {
       const tabGroups = (await firstValueFrom(this.tabGroups$)) ?? [];
@@ -251,7 +252,7 @@ export class TabService {
       );
 
     return new TabGroup({
-      id: uuidv4(),
+      id: uuid(),
       timestamp,
       tabs: filteredTabs,
     });
@@ -271,7 +272,7 @@ export class TabService {
         const currentGroup = currentGroupsMap[newGroup.id];
         if (currentGroup) {
           currentGroup.mergeTabs(newGroup.tabs);
-        } else if (uuidValidate(newGroup.id) && newGroup.timestamp && newGroup.tabs?.length > 0) {
+        } else if (isUuid(newGroup.id) && newGroup.timestamp && newGroup.tabs?.length > 0) {
           newTabGroups.push(newGroup);
         }
       });

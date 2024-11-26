@@ -12,7 +12,7 @@ import {
 } from 'src/mocks';
 import { getFaviconStore, getRecentTabs, removeRecent, syncToTabs, tabsToSync } from '../utils/collections';
 import { ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
-import { getHost, getHostname, getHostnameGroup, getUrlHost, getUrlHostname } from '../utils/utils';
+import { getHost, getHostname, getHostnameGroup, getUrlHost, getUrlHostname, uuid, isUuid } from '../utils/utils';
 import { MessageService } from './message.service';
 import { NavService } from './nav.service';
 import { TabService } from './tab.service';
@@ -34,10 +34,12 @@ jest.mock('src/app/utils', () => ({
   getUrlHost,
   getUrlHostname,
   ignoreUrlsRegExp,
+  isUuid,
   removeRecent,
   syncToTabs,
   TabGroup,
   tabsToSync,
+  uuid,
 }));
 
 describe('TabService', () => {
