@@ -83,6 +83,7 @@ nc-tabs-selector {
           .item-title {
             font: var(--mat-sys-body-medium);
             font-weight: 500;
+            color: var(--nc-primary-text);
           }
 
           .item-title,
@@ -93,7 +94,7 @@ nc-tabs-selector {
 
           .item-subtitle {
             font: var(--mat-sys-body-small);
-            color: var(--nc-disabled-text);
+            color: var(--nc-secondary-text);
 
             display: flex;
             align-items: center;

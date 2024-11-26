@@ -1,4 +1,6 @@
 nc-list-item {
+  font: var(--mat-sys-title-medium);
+  letter-spacing: var(--mat-sys-title-medium-tracking);
   display: block;
   position: relative;
   overflow: hidden;
@@ -58,7 +60,6 @@ nc-list-item {
     flex-grow: 1;
 
     .title-container {
-      font: var(--mat-sys-title-medium);
       font-weight: 500;
 
       display: flex;

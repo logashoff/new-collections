@@ -1,4 +1,4 @@
-import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation, input } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
@@ -39,7 +39,8 @@ import { RippleComponent } from '../ripple/ripple.component';
   animations: [listItemAnimation],
   imports: [
     CommonModule,
-    DragDropModule,
+    CdkDrag,
+    CdkDropList,
     GroupControlsComponent,
     IsReadOnlyGroupPipe,
     ListItemComponent,

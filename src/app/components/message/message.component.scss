@@ -5,10 +5,6 @@ nc-message {
   color: $_text-color;
   background-color: var(--mat-sys-inverse-surface);
 
-  .controls {
-    color: var(--mat-sys-on-surface-variant);
-  }
-
   display: block;
   border-radius: 2rem;
   box-sizing: border-box;
