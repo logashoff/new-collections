@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject, viewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, Inject, viewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -51,7 +51,7 @@ interface TabSelectorForm {
     TranslatePipe,
   ],
 })
-export class TabsSelectorComponent {
+export class TabsSelectorComponent implements AfterViewInit {
   /**
    * Root group form.
    */
@@ -98,22 +98,31 @@ export class TabsSelectorComponent {
    */
   private listComponent = viewChild(MatSelectionList);
 
+  private get list(): FormControl {
+    return this.formGroup.get('list') as FormControl;
+  }
+
   constructor(
     @Inject(MAT_DIALOG_DATA) readonly tabs: Tabs,
     private readonly dialogRef: MatDialogRef<TabsSelectorComponent>
   ) {}
 
+  ngAfterViewInit() {
+    this.list.setValue(this.tabs.filter((tab) => tab.active));
+  }
+
   /**
    * Selects all items in the list.
    */
   selectAll(checked: boolean) {
-    return checked ? this.listComponent().selectAll() : this.listComponent().deselectAll();
+    const listComponent = this.listComponent();
+    return checked ? listComponent.selectAll() : listComponent.deselectAll();
   }
 
   /**
    * Handles form submit.
    */
   save() {
-    this.dialogRef.close(this.formGroup.get('list').value);
+    this.dialogRef.close(this.list.value);
   }
 }

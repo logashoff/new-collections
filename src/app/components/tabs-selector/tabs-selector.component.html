@@ -11,6 +11,7 @@
         <div class="checkbox-container">
           <mat-checkbox
             color="primary"
+            tabIndex="-1"
             [checked]="allSelected$ | async"
             [indeterminate]="someSelected$ | async"
             (change)="selectAll($event.checked)">
