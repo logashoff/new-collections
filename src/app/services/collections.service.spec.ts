@@ -12,7 +12,6 @@ jest.mock('src/app/utils', () => ({
   importTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   queryCurrentWindow: jest.fn().mockImplementation(() => new Promise((resolve) => resolve([getBrowserTabMock()]))),
   translate: jest.fn().mockImplementation(() => (str) => str),
-  usesDarkMode: jest.fn().mockImplementation(() => {}),
   openOptions: jest.fn().mockImplementation(() => {}),
   Action,
   ActionIcon,

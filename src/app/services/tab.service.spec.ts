@@ -9,10 +9,11 @@ import {
   MatDialogMock,
   MessageServiceMock,
   NavServiceMock,
+  randomUuid,
 } from 'src/mocks';
 import { getFaviconStore, getRecentTabs, removeRecent, syncToTabs, tabsToSync } from '../utils/collections';
 import { ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
-import { getHost, getHostname, getHostnameGroup, getUrlHost, getUrlHostname, uuid, isUuid } from '../utils/utils';
+import { getHost, getHostname, getHostnameGroup, getUrlHost, getUrlHostname, isUuid } from '../utils/utils';
 import { MessageService } from './message.service';
 import { NavService } from './nav.service';
 import { TabService } from './tab.service';
@@ -24,7 +25,7 @@ jest.mock('src/app/utils', () => ({
   removeTab: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   saveCollections: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
   translate: jest.fn().mockImplementation(() => (str) => str),
-  usesDarkMode: jest.fn().mockImplementation(() => {}),
+  uuid: jest.fn().mockImplementation(randomUuid),
   ActionIcon,
   getFaviconStore,
   getHost,
@@ -39,7 +40,6 @@ jest.mock('src/app/utils', () => ({
   syncToTabs,
   TabGroup,
   tabsToSync,
-  uuid,
 }));
 
 describe('TabService', () => {
