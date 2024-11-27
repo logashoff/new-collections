@@ -11,16 +11,16 @@ $_typography-config: (
 );
 
 $_dark-text: #000000;
-$_dark-primary-text: rgba($_dark-text, 0.87);
-$_dark-secondary-text: rgba($_dark-primary-text, 0.54);
-$_dark-disabled-text: rgba($_dark-primary-text, 0.38);
+$_dark-primary-text: color.adjust($_dark-text, $lightness: 20%);
+$_dark-secondary-text: color.adjust($_dark-text, $lightness: 40%);
+$_dark-disabled-text: color.adjust($_dark-text, $lightness: 60%);
 $_dark-dividers: rgba($_dark-primary-text, 0.12);
 $_dark-focused: rgba($_dark-primary-text, 0.12);
 
-$_light-text: #ffffff;
+$_light-text: hsl(210, 20%, 90%);
 $_light-primary-text: #9aa0a6;
-$_light-secondary-text: rgba($_light-primary-text, 0.7);
-$_light-disabled-text: rgba($_light-primary-text, 0.5);
+$_light-secondary-text: color.adjust($_light-primary-text, $blackness: 20%);
+$_light-disabled-text: color.adjust($_light-primary-text, $blackness: 40%);
 $_light-dividers: rgba($_light-primary-text, 0.12);
 $_light-focused: rgba($_light-primary-text, 0.12);
 
@@ -75,6 +75,11 @@ $_light-bg-alpha-24: rgba($_light-background-color, 0.24);
 
   --nc-dividers: light-dark(#{$_dark-dividers}, #{$_light-dividers});
 
+  --mat-expansion-header-hover-state-layer-color: light-dark(
+    #{$_dark-bg-alpha-4},
+    #{$_light-bg-alpha-4}
+  );
+
   color-scheme: light dark;
 
   @include mat.theme(
@@ -93,6 +98,7 @@ $_light-bg-alpha-24: rgba($_light-background-color, 0.24);
     (
       on-primary: $_dark-text,
       on-surface-variant: $_light-primary-text,
+      surface-variant: $_dark-bg-lighter-10,
     )
   );
 
@@ -139,6 +145,7 @@ a {
   (
     container-background-color: var(--mat-sys-surface-container-high),
     container-text-color: var(--mat-sys-on-surface),
+    container-shape: 12px,
   )
 );
 
@@ -193,8 +200,9 @@ a {
 
     @include mat.theme-overrides(
       (
-        on-primary: $_light-text,
+        on-primary: #ffffff,
         on-surface-variant: $_dark-primary-text,
+        surface-variant: $_light-bg-darker-10,
       )
     );
 
@@ -216,14 +224,14 @@ a {
 
   @include mat.expansion-overrides(
     (
-      container-background-color: var(--mat-sys-surface-container),
+      container-background-color: $_light-card-background,
       container-text-color: var(--mat-sys-on-surface),
     )
   );
 
   @include mat.card-overrides(
     (
-      elevated-container-color: var(--mat-sys-surface-container),
+      elevated-container-color: $_light-card-background,
     )
   );
 }
