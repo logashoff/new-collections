@@ -64,3 +64,18 @@ nc-top-sites {
     }
   }
 }
+
+@media (prefers-color-scheme: light) {
+  nc-top-sites {
+    .container {
+      .site-container {
+        .site {
+          .remove-btn {
+            color: var(--mat-sys-on-surface);
+            background-color: var(--mat-sys-surface);
+          }
+        }
+      }
+    }
+  }
+}

@@ -29,10 +29,6 @@ nc-search-form {
 
     border-color: $_dark-focus;
     background-color: $_dark-focus;
-
-    .controls {
-      border-left: 1px solid $_controls-border;
-    }
   }
 
   &.is-active {
@@ -40,7 +36,9 @@ nc-search-form {
   }
 
   .controls-wrapper {
-    transition: background-color 250ms ease;
+    transition-property: background-color, border-color;
+    transition-timing-function: ease;
+    transition-duration: 250ms;
 
     display: flex;
     border-radius: 5rem;
@@ -109,7 +107,7 @@ nc-search-form {
 @media (prefers-color-scheme: light) {
   nc-search-form {
     $_app-background: var(--mat-sys-surface);
-    $_control-background-color: var(--mat-sys-surface-container);
+    $_control-background-color: var(--mat-sys-surface-container-low);
     $_border-color: var(--mat-sys-surface-container-highest);
 
     background-color: $_app-background;
