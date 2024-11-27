@@ -16,7 +16,7 @@ nc-list-item {
 
   &:hover,
   &.active {
-    background-color: var(--mat-sys-surface-container-highest);
+    background-color: var(--mat-expansion-header-hover-state-layer-color);
   }
 
   &.active::before {

@@ -2,14 +2,14 @@
 
 nc-timeline-element {
   display: block;
-  border-radius: 1rem;
+  border-radius: var(--mat-expansion-container-shape);
 
   transition-property: padding, background-color, margin;
   transition-timing-function: common.$cubic-ease;
   transition-duration: 250ms;
 
   .timeline-header {
-    transition-property: color;
+    transition-property: color margin;
     transition-timing-function: common.$cubic-ease;
     transition-duration: 250ms;
 
@@ -30,8 +30,9 @@ nc-timeline-element {
 @media (min-width: common.$desktop-width) {
   nc-timeline-element {
     &:has(.mat-expansion-panel.mat-expanded) {
-      padding: 0 1rem 1rem;
-      margin: 0 -1rem;
+      $_padding: 1rem;
+      padding: 0 $_padding $_padding;
+      margin: 0 -#{$_padding};
 
       background-color: var(--mat-sys-surface-container-low);
 

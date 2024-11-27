@@ -2,7 +2,6 @@
 
 nc-search-form {
   $_app-background: var(--mat-sys-surface-container);
-  $_border-color: var(--mat-sys-disabled-button-toggle);
   $_control-background-color: var(--mat-sys-surface-container-high);
   $_controls-border: var(--mat-sys-surface-bright);
   $_height: 42px;
@@ -13,7 +12,7 @@ nc-search-form {
   z-index: 1;
   top: 0;
 
-  color: var(--nc-secondary-text);
+  color: var(--nc-primary-text);
   background-color: $_app-background;
 
   .controls-wrapper {
@@ -84,6 +83,7 @@ nc-search-form {
 
     .mat-mdc-form-field-icon-prefix {
       padding: 0 0.25rem;
+      color: inherit;
     }
 
     .mat-mdc-form-field-icon-prefix,
