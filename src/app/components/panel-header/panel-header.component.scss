@@ -34,10 +34,10 @@ nc-panel-header {
     overflow: hidden;
     text-overflow: ellipsis;
     flex: 1 1 0;
-    color: var(--nc-primary-text);
+    color: var(--nc-primary-text-color);
 
     .text:first-of-type {
-      color: var(--nc-text);
+      color: var(--nc-text-color);
     }
 
     .text:not(:last-of-type) {
@@ -80,6 +80,6 @@ nc-panel-header {
   }
 
   .icons-container .overflow {
-    color: var(--nc-disabled-text);
+    color: var(--nc-disabled-text-color);
   }
 }

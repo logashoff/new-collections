@@ -10,22 +10,25 @@ $_typography-config: (
 );
 
 :root {
-  --nc-text: light-dark(#{dark.$text}, #{light.$text});
-  --nc-text-inverse: light-dark(#{light.$text}, #{dark.$text});
-  --nc-primary-text: light-dark(#{dark.$primary-text}, #{light.$primary-text});
-  --nc-primary-text-inverse: light-dark(
+  --nc-text-color: light-dark(#{dark.$text}, #{light.$text});
+  --nc-text-color-inverse: light-dark(#{light.$text}, #{dark.$text});
+  --nc-primary-text-color: light-dark(
+    #{dark.$primary-text},
+    #{light.$primary-text}
+  );
+  --nc-primary-text-color-inverse: light-dark(
     #{light.$primary-text},
     #{dark.$primary-text}
   );
-  --nc-disabled-text: light-dark(
+  --nc-disabled-text-color: light-dark(
     #{dark.$disabled-text},
     #{light.$disabled-text}
   );
-  --nc-secondary-text: light-dark(
+  --nc-secondary-text-color: light-dark(
     #{dark.$secondary-text},
     #{light.$secondary-text}
   );
-  --nc-secondary-text-inverse: light-dark(
+  --nc-secondary-text-color-inverse: light-dark(
     #{light.$secondary-text},
     #{dark.$secondary-text}
   );

@@ -13,7 +13,7 @@ nc-timeline-element {
     transition-timing-function: common.$cubic-ease;
     transition-duration: 250ms;
 
-    color: var(--nc-disabled-text);
+    color: var(--nc-disabled-text-color);
 
     display: flex;
     align-items: center;
@@ -22,7 +22,7 @@ nc-timeline-element {
     overflow: hidden;
 
     .mat-mdc-icon-button {
-      color: var(--nc-disabled-text);
+      color: var(--nc-disabled-text-color);
     }
   }
 }
@@ -42,7 +42,7 @@ nc-timeline-element {
 
       .timeline-header,
       .timeline-header nc-timeline-label {
-        color: var(--nc-secondary-text);
+        color: var(--nc-secondary-text-color);
       }
 
       .timeline-header .mat-mdc-icon-button {

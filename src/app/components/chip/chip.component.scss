@@ -29,7 +29,7 @@ nc-chip {
     }
 
     .icon-label {
-      color: var(--nc-text);
+      color: var(--nc-text-color);
       line-height: 1rem;
       margin-right: 0.5rem;
       white-space: nowrap;
@@ -38,7 +38,7 @@ nc-chip {
     }
 
     .overflow {
-      color: var(--nc-disabled-text);
+      color: var(--nc-disabled-text-color);
     }
   }
 }

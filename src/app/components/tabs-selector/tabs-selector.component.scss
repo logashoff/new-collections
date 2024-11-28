@@ -43,7 +43,7 @@ nc-tabs-selector {
   }
 
   .mat-mdc-dialog-content.container {
-    color: var(--nc-secondary-text);
+    color: var(--nc-secondary-text-color);
     max-width: $_max-width;
     min-width: $_max-width;
     position: relative;
@@ -74,7 +74,7 @@ nc-tabs-selector {
         display: flex;
         align-items: center;
         gap: 1rem;
-        color: var(--nc-secondary-text);
+        color: var(--nc-secondary-text-color);
 
         .item-text {
           overflow: hidden;
@@ -83,7 +83,7 @@ nc-tabs-selector {
           .item-title {
             font: var(--mat-sys-body-medium);
             font-weight: 500;
-            color: var(--nc-primary-text);
+            color: var(--nc-primary-text-color);
           }
 
           .item-title,
@@ -94,7 +94,7 @@ nc-tabs-selector {
 
           .item-subtitle {
             font: var(--mat-sys-body-small);
-            color: var(--nc-secondary-text);
+            color: var(--nc-secondary-text-color);
 
             display: flex;
             align-items: center;
