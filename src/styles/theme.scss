@@ -1,7 +1,6 @@
 @use '@angular/material' as mat;
-@use 'sass:color' as color;
-@use 'dark-colors' as dark-colors;
-@use 'light-colors' as light-colors;
+@use 'dark-colors' as dark;
+@use 'light-colors' as light;
 
 $_typography-config: (
   plain-family: Roboto,
@@ -10,74 +9,32 @@ $_typography-config: (
   regular-weight: 300,
 );
 
-$_dark-text: #000000;
-$_dark-primary-text: color.adjust($_dark-text, $lightness: 20%);
-$_dark-secondary-text: color.adjust($_dark-text, $lightness: 40%);
-$_dark-disabled-text: color.adjust($_dark-text, $lightness: 60%);
-$_dark-dividers: rgba($_dark-primary-text, 0.12);
-$_dark-focused: rgba($_dark-primary-text, 0.12);
-
-$_light-text: hsl(210, 20%, 90%);
-$_light-primary-text: #9aa0a6;
-$_light-secondary-text: color.adjust($_light-primary-text, $blackness: 20%);
-$_light-disabled-text: color.adjust($_light-primary-text, $blackness: 40%);
-$_light-dividers: rgba($_light-primary-text, 0.12);
-$_light-focused: rgba($_light-primary-text, 0.12);
-
-$_light-background-color: #ffffff;
-$_dark-background-color: #242528;
-
-$light-background: $_light-background-color;
-$_light-card-background: #f8f9fa;
-$_light-bg-darker-5: color.adjust($_light-card-background, $blackness: 5%);
-$_light-bg-darker-10: color.adjust($_light-card-background, $blackness: 10%);
-$_light-bg-darker-20: color.adjust($_light-card-background, $blackness: 20%);
-$_light-bg-darker-30: color.adjust($_light-card-background, $blackness: 30%);
-$_light-bg-lighter-5: $_light-card-background;
-$_dark-bg-tooltip: color.adjust($_dark-background-color, $lightness: 20%);
-$_dark-bg-alpha-4: rgba($_dark-background-color, 0.04);
-$_dark-bg-alpha-12: rgba($_dark-background-color, 0.12);
-$_dark-bg-alpha-24: rgba($_dark-background-color, 0.24);
-
-$_dark-background: $_dark-background-color;
-$_dark-card-background: #303134;
-$_dark-bg-lighter-5: $_dark-card-background;
-$_dark-bg-lighter-10: color.adjust($_dark-card-background, $lightness: 10%);
-$_dark-bg-lighter-20: color.adjust($_dark-card-background, $lightness: 20%);
-$_dark-bg-lighter-30: color.adjust($_dark-card-background, $lightness: 30%);
-$_light-bg-alpha-4: rgba($_light-background-color, 0.04);
-$_light-bg-alpha-12: rgba($_light-background-color, 0.12);
-$_light-bg-alpha-24: rgba($_light-background-color, 0.24);
-
 :root {
-  --nc-text: light-dark(#{$_dark-text}, #{$_light-text});
-  --nc-text-inverse: light-dark(#{$_light-text}, #{$_dark-text});
-  --nc-primary-text: light-dark(
-    #{$_dark-primary-text},
-    #{$_light-primary-text}
-  );
+  --nc-text: light-dark(#{dark.$text}, #{light.$text});
+  --nc-text-inverse: light-dark(#{light.$text}, #{dark.$text});
+  --nc-primary-text: light-dark(#{dark.$primary-text}, #{light.$primary-text});
   --nc-primary-text-inverse: light-dark(
-    #{$_light-primary-text},
-    #{$_dark-primary-text}
+    #{light.$primary-text},
+    #{dark.$primary-text}
   );
   --nc-disabled-text: light-dark(
-    #{$_dark-disabled-text},
-    #{$_light-disabled-text}
+    #{dark.$disabled-text},
+    #{light.$disabled-text}
   );
   --nc-secondary-text: light-dark(
-    #{$_dark-secondary-text},
-    #{$_light-secondary-text}
+    #{dark.$secondary-text},
+    #{light.$secondary-text}
   );
   --nc-secondary-text-inverse: light-dark(
-    #{$_light-secondary-text},
-    #{$_dark-secondary-text}
+    #{light.$secondary-text},
+    #{dark.$secondary-text}
   );
 
-  --nc-dividers: light-dark(#{$_dark-dividers}, #{$_light-dividers});
+  --nc-dividers: light-dark(#{dark.$dividers}, #{light.$dividers});
 
   --mat-expansion-header-hover-state-layer-color: light-dark(
-    #{$_dark-bg-alpha-4},
-    #{$_light-bg-alpha-4}
+    #{dark.$bg-alpha-4},
+    #{light.$bg-alpha-4}
   );
 
   color-scheme: light dark;
@@ -87,8 +44,8 @@ $_light-bg-alpha-24: rgba($_light-background-color, 0.24);
       typography: $_typography-config,
       density: 0,
       color: (
-        primary: dark-colors.$primary-palette,
-        tertiary: dark-colors.$tertiary-palette,
+        primary: dark.$primary-palette,
+        tertiary: dark.$tertiary-palette,
         theme-type: dark,
       ),
     )
@@ -96,9 +53,9 @@ $_light-bg-alpha-24: rgba($_light-background-color, 0.24);
 
   @include mat.theme-overrides(
     (
-      on-primary: $_dark-text,
-      on-surface-variant: $_light-primary-text,
-      surface-variant: $_dark-bg-lighter-10,
+      on-primary: dark.$text,
+      on-surface-variant: light.$primary-text,
+      surface-variant: dark.$bg-lighter-10,
     )
   );
 
@@ -191,8 +148,8 @@ a {
         typography: $_typography-config,
         density: 0,
         color: (
-          primary: light-colors.$primary-palette,
-          tertiary: light-colors.$tertiary-palette,
+          primary: light.$primary-palette,
+          tertiary: light.$tertiary-palette,
           theme-type: light,
         ),
       )
@@ -201,9 +158,9 @@ a {
     @include mat.theme-overrides(
       (
         on-primary: #ffffff,
-        on-surface-variant: $_dark-primary-text,
-        surface-variant: $_light-bg-darker-10,
-        surface: $_light-background-color,
+        on-surface-variant: dark.$primary-text,
+        surface-variant: light.$bg-darker-10,
+        surface: light.$background-color,
       )
     );
 
@@ -225,14 +182,14 @@ a {
 
   @include mat.expansion-overrides(
     (
-      container-background-color: $_light-card-background,
+      container-background-color: light.$card-background,
       container-text-color: var(--mat-sys-on-surface),
     )
   );
 
   @include mat.card-overrides(
     (
-      elevated-container-color: $_light-card-background,
+      elevated-container-color: light.$card-background,
     )
   );
 }

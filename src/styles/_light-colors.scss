@@ -1,5 +1,24 @@
-@use 'sass:map';
 @use '@angular/material' as mat;
+@use 'sass:color' as color;
+@use 'sass:map';
+
+$text: hsl(210, 20%, 90%);
+$primary-text: #9aa0a6;
+$secondary-text: color.adjust($primary-text, $blackness: 20%);
+$disabled-text: color.adjust($primary-text, $blackness: 40%);
+$dividers: rgba($primary-text, 0.12);
+$focused: rgba($primary-text, 0.12);
+
+$card-background: #f8f9fa;
+$bg-darker-5: color.adjust($card-background, $blackness: 5%);
+$bg-darker-10: color.adjust($card-background, $blackness: 10%);
+$bg-darker-20: color.adjust($card-background, $blackness: 20%);
+$bg-darker-30: color.adjust($card-background, $blackness: 30%);
+
+$background-color: #ffffff;
+$bg-alpha-4: rgba($background-color, 0.04);
+$bg-alpha-12: rgba($background-color, 0.12);
+$bg-alpha-24: rgba($background-color, 0.24);
 
 $_palettes: (
   primary: (

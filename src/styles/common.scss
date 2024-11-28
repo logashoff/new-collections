@@ -13,21 +13,3 @@ $desktop-width: 60rem;
   position: relative;
   flex: 1;
 }
-
-@mixin body-small() {
-  font: var(--mat-sys-body-small);
-}
-
-@mixin vertical-flex() {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  flex: 1;
-}
-
-@mixin vertical-flex() {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  flex: 1;
-}
