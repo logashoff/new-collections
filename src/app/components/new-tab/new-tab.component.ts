@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { isNil } from 'lodash-es';
@@ -22,7 +22,7 @@ import { TopSitesComponent } from '../top-sites/top-sites.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   animations: [routeAnimations],
-  imports: [RouterOutlet, CommonModule, SearchFormComponent, TopSitesComponent],
+  imports: [AsyncPipe, RouterOutlet, SearchFormComponent, TopSitesComponent],
   providers: [KeyService],
 })
 export class NewTabComponent extends KeyListenerDirective implements OnInit {

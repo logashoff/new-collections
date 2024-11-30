@@ -1,7 +1,8 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { flatMap } from 'lodash-es';
 import { Observable, map, shareReplay } from 'rxjs';
+
 import { HomeService, NavService, TabService } from '../../services';
 import { BrowserTab, BrowserTabs } from '../../utils';
 import { SearchComponent } from '../search/search.component';
@@ -9,7 +10,7 @@ import { SearchComponent } from '../search/search.component';
 @Component({
   selector: 'nc-new-tab-search',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, SearchComponent],
+  imports: [AsyncPipe, SearchComponent],
   templateUrl: './new-tab-search.component.html',
   styleUrl: './new-tab-search.component.scss',
 })

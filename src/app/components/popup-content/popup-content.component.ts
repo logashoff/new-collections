@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -19,7 +19,7 @@ import { TimelineElementComponent } from '../timeline-element/timeline-element.c
   templateUrl: './popup-content.component.html',
   styleUrl: './popup-content.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, EmptyComponent, GroupsComponent, TranslatePipe, TimelineElementComponent],
+  imports: [AsyncPipe, EmptyComponent, GroupsComponent, TranslatePipe, TimelineElementComponent],
 })
 export class PopupContentComponent {
   readonly defaultActions: CollectionActions = [

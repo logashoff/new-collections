@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { map, Observable, shareReplay } from 'rxjs';
@@ -20,7 +20,7 @@ import { SearchFormComponent } from '../search-form/search-form.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   animations: [routeAnimations],
-  imports: [CommonModule, RouterOutlet, SearchFormComponent],
+  imports: [AsyncPipe, RouterOutlet, SearchFormComponent],
   providers: [KeyService],
 })
 export class PopupComponent extends KeyListenerDirective {

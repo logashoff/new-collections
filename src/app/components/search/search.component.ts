@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, NgPlural, NgPluralCase } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -59,11 +59,13 @@ const LATEST_LIMIT = 10;
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [listItemAnimation],
   imports: [
-    CommonModule,
+    AsyncPipe,
     EmptyComponent,
     ListItemComponent,
     MatCardModule,
     MatIconModule,
+    NgPlural,
+    NgPluralCase,
     TabListComponent,
     TimelineLabelComponent,
     TranslatePipe,

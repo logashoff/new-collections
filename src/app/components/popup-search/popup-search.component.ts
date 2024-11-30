@@ -1,13 +1,14 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+
 import { NavService, TabService } from '../../services';
 import { BrowserTab, BrowserTabs } from '../../utils';
 import { SearchComponent } from '../search/search.component';
 
 @Component({
   selector: 'nc-popup-search',
-  imports: [CommonModule, SearchComponent],
+  imports: [AsyncPipe, SearchComponent],
   templateUrl: './popup-search.component.html',
   styleUrl: './popup-search.component.scss',
 })
