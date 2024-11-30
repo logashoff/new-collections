@@ -391,3 +391,5 @@ export const KEY_DOWN = 'keydown';
 export const RECENT_LIMIT = 5;
 
 export type Target = '_blank' | '_self';
+
+export type ListItemLayout = 'normal' | 'compact';

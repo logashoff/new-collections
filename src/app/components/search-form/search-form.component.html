@@ -1,28 +1,24 @@
-<section class="controls-wrapper">
-  <form class="search-form" [formGroup]="formGroup">
-    <mat-form-field class="search-field" appearance="fill">
-      <mat-icon matPrefix>search</mat-icon>
-      <input
-        #searchInput
-        type="text"
-        matInput
-        formControlName="search"
-        (focus)="focused$.next(true)"
-        (blur)="onBlur()"
-        autocomplete="off" />
-    </mat-form-field>
-  </form>
+@let sourceTabs = sourceTabs$ | async;
+@let deviceTabs = deviceTabs$ | async;
+@let searchQuery = searchQuery$ | async;
+@let recentTabs = recentTabs$ | async;
+@let baseSource = source();
 
-  <div class="controls">
-    @if (isActive$ | async) {
-      <button
-        mat-icon-button
-        color="primary"
-        [matTooltip]="'cancelSearch' | translate"
-        (click)="clearSearch()">
-        <mat-icon>close</mat-icon>
-      </button>
-    } @else {
+<section #controlsContainer class="controls-wrapper">
+  <div class="inputs">
+    <form class="search-form" [formGroup]="formGroup">
+      <mat-form-field class="search-field" appearance="fill">
+        <mat-icon matPrefix>search</mat-icon>
+        <input
+          #searchInput
+          type="text"
+          matInput
+          formControlName="search"
+          autocomplete="off"
+          (focus)="onFocus()" />
+      </mat-form-field>
+    </form>
+    <div class="controls">
       <button
         mat-icon-button
         color="primary"
@@ -30,6 +26,28 @@
         (click)="handleAction(Action.Save)">
         <mat-icon>add</mat-icon>
       </button>
-    }
+    </div>
   </div>
+  @if (active()) {
+    <section class="search-results">
+      <mat-divider></mat-divider>
+      @if (sourceTabs?.length > 0 || deviceTabs?.length > 0) {
+        @if (deviceTabs?.length > 0) {
+          @for (tab of deviceTabs; track tab) {
+            <nc-list-item [tab]="tab" layout="compact" />
+          }
+        } @else if (!searchQuery && recentTabs?.length > 0) {
+          @for (tab of recentTabs; track tab) {
+            <nc-list-item [tab]="tab" layout="compact" icon="history" />
+          }
+        }
+
+        @if (sourceTabs?.length > 0) {
+          @for (tab of sourceTabs; track tab.id) {
+            <nc-list-item [tab]="tab" layout="compact" />
+          }
+        }
+      }
+    </section>
+  }
 </section>

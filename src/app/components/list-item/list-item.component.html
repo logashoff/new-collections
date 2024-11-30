@@ -2,11 +2,18 @@
 
 <a
   class="container"
+  [ngClass]="layout()"
   [recent]="tabValue.id"
   matRipple
   [href]="tabValue.url"
   [target]="target()">
-  <nc-chip [source]="tabValue.favIconUrl | favicon: tabValue.url" />
+  @if (icon()) {
+    <mat-icon>{{ icon() }}</mat-icon>
+  } @else {
+    <nc-chip
+      [size]="layout() === 'compact' ? 'small' : 'medium'"
+      [source]="tabValue.favIconUrl | favicon: tabValue.url" />
+  }
   <div class="text-container">
     <div class="title-container">
       <span class="title">{{ tabValue.title }}</span>

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -21,6 +21,7 @@ import {
   Actions,
   addRecent,
   BrowserTab,
+  ListItemLayout,
   removeRecent,
   scrollIntoView,
   TabAction,
@@ -48,11 +49,11 @@ import { RippleComponent } from '../ripple/ripple.component';
   },
   imports: [
     ChipComponent,
-    CommonModule,
     FaviconPipe,
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
+    NgClass,
     RecentDirective,
     RippleComponent,
     StopPropagationDirective,
@@ -60,6 +61,9 @@ import { RippleComponent } from '../ripple/ripple.component';
   ],
 })
 export class ListItemComponent implements Activatable {
+  readonly layout = input<ListItemLayout>('normal');
+  readonly icon = input<string>('');
+
   readonly tab = input.required<BrowserTab>();
   readonly actions = input<Actions>();
 

@@ -1,13 +1,15 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { isNil } from 'lodash-es';
+import { flatMap, isNil } from 'lodash-es';
 import { Observable, combineLatest, map, shareReplay } from 'rxjs';
 
-import { KeyListenerDirective } from '../../directives';
-import { HomeService, KeyService, NavService } from '../../services';
-import { TopSites, routeAnimations, scrollTop } from '../../utils';
+import { TranslatePipe } from '../../pipes';
+import { HomeService, NavService, TabService } from '../../services';
+import { Action, ActionIcon, Actions, CollectionActions, TabGroups, Timeline, translate } from '../../utils';
+import { EmptyComponent } from '../empty/empty.component';
+import { GroupsComponent } from '../groups/groups.component';
 import { SearchFormComponent } from '../search-form/search-form.component';
+import { TimelineElementComponent } from '../timeline-element/timeline-element.component';
 import { TopSitesComponent } from '../top-sites/top-sites.component';
 
 /**
@@ -21,14 +23,39 @@ import { TopSitesComponent } from '../top-sites/top-sites.component';
   styleUrls: ['./new-tab.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  animations: [routeAnimations],
-  imports: [RouterOutlet, CommonModule, SearchFormComponent, TopSitesComponent],
-  providers: [KeyService],
+  imports: [
+    AsyncPipe,
+    EmptyComponent,
+    GroupsComponent,
+    SearchFormComponent,
+    TimelineElementComponent,
+    TopSitesComponent,
+    TranslatePipe,
+  ],
 })
-export class NewTabComponent extends KeyListenerDirective implements OnInit {
-  readonly urlChanges$: Observable<string> = this.navService.pathChanges$;
-  readonly topSites$: Observable<TopSites> = this.homeService.topSites$;
-  readonly hasData$: Observable<boolean> = this.homeService.hasAnyData$;
+export class NewTabComponent implements OnInit {
+  readonly tabActions: Actions = [Action.Edit, Action.Delete];
+
+  readonly noDataActions: CollectionActions = [
+    {
+      action: Action.Import,
+      icon: ActionIcon.Import,
+      label: translate('importCollections'),
+      color: 'primary',
+    },
+  ];
+
+  readonly urlChanges$ = this.navService.pathChanges$;
+  readonly topSites$ = this.homeService.topSites$;
+  readonly hasData$ = this.homeService.hasAnyData$;
+  readonly searchSource$ = this.tabService.tabs$;
+  readonly devices$ = this.homeService.devices$.pipe(
+    map((devices) => flatMap(devices?.map((device) => this.homeService.getTabsFromSessions(device.sessions)))),
+    shareReplay(1)
+  );
+  readonly devicesTimeline$: Observable<Timeline> = this.homeService.devicesTimeline$;
+  readonly hasAnyData$: Observable<boolean> = this.homeService.hasAnyData$;
+  readonly timeline$: Observable<Timeline> = this.homeService.timeline$;
 
   /**
    * Check if search is active
@@ -45,10 +72,9 @@ export class NewTabComponent extends KeyListenerDirective implements OnInit {
 
   constructor(
     private readonly homeService: HomeService,
-    private readonly navService: NavService
-  ) {
-    super();
-  }
+    private readonly navService: NavService,
+    private readonly tabService: TabService
+  ) {}
 
   ngOnInit() {
     this.hideTopSites$ = combineLatest([this.topSites$, this.isSearchActive$]).pipe(
@@ -57,12 +83,10 @@ export class NewTabComponent extends KeyListenerDirective implements OnInit {
     );
   }
 
-  async navigate(...command: string[]) {
-    await this.navService.navigate(['/new-tab', ...command]);
-    scrollTop();
-  }
-
-  onBlur() {
-    this.clearActive();
+  /**`
+   * Removes all items in timeline section
+   */
+  async removeGroups(groups: TabGroups) {
+    await this.tabService.removeTabGroups(groups);
   }
 }

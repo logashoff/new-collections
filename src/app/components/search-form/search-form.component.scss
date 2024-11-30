@@ -1,4 +1,5 @@
 @use '@angular/material' as mat;
+@use 'sass:math';
 
 nc-search-form {
   $_app-background: var(--mat-sys-surface-container);
@@ -8,9 +9,9 @@ nc-search-form {
 
   display: block;
   position: relative;
-  padding: 1rem 0;
   z-index: 1;
   top: 0;
+  height: 4rem;
 
   color: var(--nc-primary-text-color);
   background-color: $_app-background;
@@ -18,6 +19,7 @@ nc-search-form {
   .controls-wrapper {
     background-color: $_control-background-color;
     border: 1px solid $_control-background-color;
+    overflow: hidden;
 
     .controls {
       border-left: 1px solid $_controls-border;
@@ -32,7 +34,9 @@ nc-search-form {
   }
 
   &.is-active {
-    position: sticky;
+    .controls-wrapper {
+      box-shadow: var(--mat-sys-level5);
+    }
   }
 
   .controls-wrapper {
@@ -41,9 +45,20 @@ nc-search-form {
     transition-duration: 250ms;
 
     display: flex;
-    border-radius: 5rem;
+    flex-direction: column;
+    border-radius: math.div($_height, 2);
     box-sizing: border-box;
     z-index: 1;
+    position: absolute;
+    top: 1rem;
+    left: 0;
+    right: 0;
+    min-height: $_height;
+
+    .inputs {
+      display: flex;
+      align-items: center;
+    }
 
     .search-form {
       flex: 1 1 auto;
@@ -73,7 +88,6 @@ nc-search-form {
     .controls {
       flex: 0 0 0;
       padding: 0 0.5rem;
-      margin: 0.5rem 0;
       align-items: center;
       justify-content: center;
       display: flex;

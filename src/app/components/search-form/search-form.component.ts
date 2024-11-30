@@ -1,29 +1,48 @@
-import { CommonModule } from '@angular/common';
+import { CdkListbox, CdkOption } from '@angular/cdk/listbox';
+import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  effect,
   ElementRef,
   HostBinding,
-  HostListener,
-  Input,
+  input,
   OnInit,
   output,
+  signal,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { BehaviorSubject, filter, map, shareReplay } from 'rxjs';
+import Fuse, { IFuseOptions } from 'fuse.js';
+import {
+  BehaviorSubject,
+  combineLatest,
+  distinctUntilChanged,
+  filter,
+  map,
+  Observable,
+  of,
+  shareReplay,
+  switchMap,
+  take,
+} from 'rxjs';
 
+import { MatListModule } from '@angular/material/list';
 import { SubSinkDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
-import { CollectionsService, NavService } from '../../services';
-import { Action, ESC_KEY_CODE, KEY_UP, scrollTop } from '../../utils';
+import { CollectionsService, NavService, TabService } from '../../services';
+import { Action, BrowserTab, BrowserTabs } from '../../utils';
+import { ListItemComponent } from '../list-item/list-item.component';
+import { TabListComponent } from '../tab-list/tab-list.component';
 
 /**
  * Search input form.
@@ -32,6 +51,15 @@ interface SearchForm {
   search: FormControl<string>;
 }
 
+const fuseOptions: IFuseOptions<BrowserTab> = {
+  keys: ['title', 'url'],
+  threshold: 0.33,
+  ignoreLocation: true,
+  useExtendedSearch: true,
+};
+
+const LATEST_LIMIT = 10;
+
 @Component({
   selector: 'nc-search-form',
   templateUrl: './search-form.component.html',
@@ -39,64 +67,65 @@ interface SearchForm {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   imports: [
-    CommonModule,
+    AsyncPipe,
+    CdkListbox,
+    CdkOption,
+    ListItemComponent,
+    MatAutocompleteModule,
     MatButtonModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatListModule,
     MatTooltipModule,
     ReactiveFormsModule,
+    TabListComponent,
     TranslatePipe,
   ],
 })
 export class SearchFormComponent extends SubSinkDirective implements OnInit {
+  readonly Action = Action;
+
   readonly activated = output();
   readonly canceled = output();
   readonly blur = output();
 
-  #disabled = false;
+  readonly source = input.required<BrowserTabs>();
+  readonly #source$ = toObservable(this.source);
 
-  @Input()
+  readonly devices = input<BrowserTabs>();
+  readonly #devices$ = toObservable(this.devices);
+
+  readonly active = signal<boolean>(false);
+
+  private readonly controlsContainer = viewChild.required<ElementRef>('controlsContainer');
+
+  @HostBinding('class.is-active')
+  get isActive(): boolean {
+    return this.active();
+  }
+
+  /**
+   * Tabs data from search results
+   */
+  sourceTabs$: Observable<BrowserTabs>;
+
+  /**
+   * Tabs from synced devices
+   */
+  deviceTabs$: Observable<BrowserTabs>;
+
   @HostBinding('class.disabled')
-  set disabled(disabled: boolean) {
-    if (disabled) {
-      this.#searchControl.disable();
-    } else {
-      this.#searchControl.enable();
-    }
+  private _disabled = false;
 
-    this.#disabled = disabled;
-  }
-
-  get disabled(): boolean {
-    return this.#disabled;
-  }
+  readonly disabled = input<boolean>(false);
 
   private readonly searchInput = viewChild.required<ElementRef>('searchInput');
 
-  readonly Action = Action;
   readonly #searchControl = new FormControl<string>('');
   readonly formGroup = new FormGroup<SearchForm>({
     search: this.#searchControl,
   });
-
-  /**
-   * Indicates search input is focused
-   */
-  readonly focused$ = new BehaviorSubject<boolean>(false);
-
-  @HostBinding('class.is-active') get isActive() {
-    return this.navService.isActive('search');
-  }
-
-  @HostBinding('class.is-focused') get isFocused() {
-    return this.focused$.value;
-  }
-
-  readonly isActive$ = this.navService.pathChanges$.pipe(
-    map(() => this.isActive),
-    shareReplay(1)
-  );
 
   private scrollTop: number;
 
@@ -104,12 +133,33 @@ export class SearchFormComponent extends SubSinkDirective implements OnInit {
     return this.scrollTop > 0;
   }
 
+  readonly #searchResults$ = new BehaviorSubject<BrowserTabs>([]);
+  readonly searchQuery$: Observable<string> = this.navService.paramsSearch$.pipe(shareReplay(1));
+
+  /**
+   * Recently used tabs
+   */
+  recentTabs$: Observable<BrowserTabs>;
+
   constructor(
     private cdr: ChangeDetectorRef,
     private collectionsService: CollectionsService,
-    private navService: NavService
+    private navService: NavService,
+    private readonly tabService: TabService
   ) {
     super();
+
+    effect(() => {
+      const disabled = this.disabled();
+
+      if (disabled) {
+        this.#searchControl.disable();
+      } else {
+        this.#searchControl.enable();
+      }
+
+      this._disabled = disabled;
+    });
   }
 
   ngOnInit() {
@@ -119,49 +169,98 @@ export class SearchFormComponent extends SubSinkDirective implements OnInit {
       })
     );
 
-    const focusChanges = this.focused$
-      .pipe(filter((focused) => focused && !this.isActive))
-      .subscribe(() => this.activated.emit());
+    const formChanges = this.formGroup.valueChanges.subscribe(({ search }) => this.searchChange(search));
 
-    this.formGroup.valueChanges.subscribe(({ search }) => this.searchChange(search));
+    const fuse = new Fuse<BrowserTab>([], fuseOptions);
 
-    this.subscribe(paramChanges, focusChanges);
+    const fuse$: Observable<Fuse<BrowserTab>> = this.#source$.pipe(
+      filter((source) => source?.length > 0),
+      map((source) => {
+        fuse.setCollection(source);
+        return fuse;
+      })
+    );
+
+    const resultChanges = this.searchQuery$
+      .pipe(
+        filter((searchQuery) => searchQuery?.length > 0),
+        distinctUntilChanged(),
+        switchMap((searchValue) =>
+          fuse$.pipe(
+            take(1),
+            map((fuse) => fuse.search(searchValue).map(({ item }) => item))
+          )
+        )
+      )
+      .subscribe((tabs) => this.#searchResults$.next(tabs));
+
+    this.sourceTabs$ = combineLatest([this.searchQuery$, this.#searchResults$, this.#source$]).pipe(
+      map(([searchQuery, searchResults, source]) => {
+        if (searchQuery?.length) {
+          return searchResults;
+        }
+
+        return source.sort((a, b) => b.id - a.id).slice(0, LATEST_LIMIT);
+      }),
+      shareReplay(1)
+    );
+
+    this.recentTabs$ = combineLatest([this.tabService.recentTabs$, this.#source$]).pipe(
+      map(([recentTabs, tabs]) =>
+        this.tabService.sortByRecent(
+          tabs?.filter((tab) => recentTabs?.[tab.id]),
+          recentTabs
+        )
+      ),
+      shareReplay(1)
+    );
+
+    this.recentTabs$.subscribe(console.log);
+
+    const fuseDevices$: Observable<Fuse<BrowserTab>> = this.#devices$.pipe(
+      filter((devices) => devices?.length > 0),
+      map((devices) => new Fuse(devices, fuseOptions)),
+      take(1)
+    );
+
+    this.deviceTabs$ = this.searchQuery$.pipe(
+      switchMap((search) => {
+        if (search) {
+          return fuseDevices$.pipe(map((fuse) => fuse.search(search)?.map(({ item }) => item)));
+        }
+
+        return of([]);
+      }),
+      shareReplay(1)
+    );
+
+    this.subscribe(paramChanges, resultChanges, formChanges);
   }
 
-  @HostListener(`document:${KEY_UP}`, ['$event'])
-  private onKeyUp(e: KeyboardEvent) {
-    if (e.code === ESC_KEY_CODE && this.isActive) {
-      this.clearSearch();
-    }
-  }
-
-  @HostListener('body:scroll', ['$event'])
-  private onScroll(e: Event) {
-    this.scrollTop = (e.target as HTMLElement).scrollTop;
-    this.cdr.markForCheck();
-  }
-
-  /**
-   * Clears search input
-   */
-  clearSearch() {
-    if (this.isActive) {
-      this.canceled.emit();
-      this.searchInput().nativeElement.blur();
-    }
-  }
+  clearSearch() {}
 
   handleAction(action: Action) {
     this.collectionsService.handleAction(action);
   }
 
-  onBlur() {
-    this.focused$.next(false);
-    this.blur.emit();
-  }
-
   async searchChange(value: string) {
     await this.navService.search(value);
-    scrollTop({ top: 0 });
+  }
+
+  private handleDocClick = (e: MouseEvent) => {
+    const { clientX, clientY } = e;
+    const el: HTMLElement = this.controlsContainer().nativeElement as HTMLElement;
+    const rect: DOMRect = el.getBoundingClientRect();
+
+    if (clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom) {
+      this.active.set(false);
+      document.removeEventListener('click', this.handleDocClick);
+    }
+  };
+
+  onFocus() {
+    this.active.set(true);
+
+    document.addEventListener('click', this.handleDocClick);
   }
 }

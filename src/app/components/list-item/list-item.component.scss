@@ -49,6 +49,14 @@ nc-list-item {
         display: flex;
       }
     }
+
+    &.compact {
+      height: 2.5rem;
+
+      .subtitle-container {
+        display: none;
+      }
+    }
   }
 
   .controls {

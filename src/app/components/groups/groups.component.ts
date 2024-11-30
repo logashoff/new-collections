@@ -1,5 +1,5 @@
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation, input } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { MatDividerModule } from '@angular/material/divider';
@@ -38,7 +38,7 @@ import { RippleComponent } from '../ripple/ripple.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [listItemAnimation],
   imports: [
-    CommonModule,
+    AsyncPipe,
     CdkDrag,
     CdkDropList,
     GroupControlsComponent,
@@ -52,13 +52,15 @@ import { RippleComponent } from '../ripple/ripple.component';
   ],
 })
 export class GroupsComponent {
+  readonly isNaN = isNaN;
+
   readonly tabActions = input<Actions>();
 
   /**
    * List of tab groups to render.
    */
   readonly groups = input.required<TabGroups>();
-  readonly groups$: Observable<TabGroups>;
+  readonly groups$: Observable<TabGroups> = toObservable(this.groups);
 
   /**
    * Disable list items drag and drop
@@ -68,12 +70,12 @@ export class GroupsComponent {
   /**
    * Expand and collapse panels based on query params groupId
    */
-  readonly activeGroupId$: Observable<string>;
+  readonly activeGroupId$: Observable<string> = this.navService.paramsGroupId$;
 
   /**
    * Active tab ID from query params
    */
-  readonly activeTabId$: Observable<number>;
+  readonly activeTabId$: Observable<number> = this.navService.paramsTabId$;
 
   /**
    * Groups tabs by their hostname to create header icons
@@ -88,9 +90,7 @@ export class GroupsComponent {
   /**
    * Hashmap of expanded panel states by group ID
    */
-  readonly panelStates$: Observable<GroupExpanded>;
-
-  readonly isNaN = isNaN;
+  readonly panelStates$: Observable<GroupExpanded> = this.settings.panelStates$.pipe(map((states) => states ?? {}));
 
   get target(): Target {
     return this.navService.isPopup ? '_blank' : '_self';
@@ -101,8 +101,6 @@ export class GroupsComponent {
     private readonly tabService: TabService,
     private readonly settings: SettingsService
   ) {
-    this.groups$ = toObservable(this.groups);
-
     this.tabsByHostname$ = this.groups$.pipe(
       map((tabGroups) => (tabGroups?.length > 0 ? this.tabService.createHostnameGroups(tabGroups) : null)),
       shareReplay(1)
@@ -123,10 +121,6 @@ export class GroupsComponent {
       }),
       shareReplay(1)
     );
-
-    this.panelStates$ = this.settings.panelStates$.pipe(map((states) => states ?? {}));
-    this.activeGroupId$ = this.navService.paramsGroupId$;
-    this.activeTabId$ = this.navService.paramsTabId$;
   }
 
   favGroup(group: TabGroup) {
