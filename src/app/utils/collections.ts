@@ -7,7 +7,7 @@ import {
   FaviconHost,
   faviconStorageKey,
   FaviconSync,
-  RECENT_LIMIT,
+  RECENT_STORE,
   recentKey,
   RecentTabs,
   Settings,
@@ -81,8 +81,8 @@ export async function addRecent(tabId: TabId) {
   recentTabs[tabId] = timestamp;
   const tabIds = Object.keys(recentTabs).sort((a, b) => recentTabs[b] - recentTabs[a]);
 
-  if (tabIds?.length > RECENT_LIMIT) {
-    tabIds.slice(RECENT_LIMIT).forEach((id) => delete recentTabs[id]);
+  if (tabIds?.length > RECENT_STORE) {
+    tabIds.slice(RECENT_STORE).forEach((id) => delete recentTabs[id]);
   }
 
   await storage.set({

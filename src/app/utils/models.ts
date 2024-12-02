@@ -388,6 +388,7 @@ export const KEY_UP = 'keyup';
 
 export const KEY_DOWN = 'keydown';
 
-export const RECENT_LIMIT = 5;
+export const RECENT_DISPLAY = 5;
+export const RECENT_STORE = 25;
 
 export type Target = '_blank' | '_self';

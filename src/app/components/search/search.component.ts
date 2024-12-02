@@ -31,7 +31,7 @@ import {
 import { SubSinkDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
 import { KeyService, NavService, TabService } from '../../services';
-import { Action, Actions, BrowserTab, BrowserTabs, listItemAnimation, Target } from '../../utils';
+import { Action, Actions, BrowserTab, BrowserTabs, listItemAnimation, RECENT_DISPLAY, Target } from '../../utils';
 import { EmptyComponent } from '../empty/empty.component';
 import { ListItemComponent } from '../list-item/list-item.component';
 import { TabListComponent } from '../tab-list/tab-list.component';
@@ -170,12 +170,11 @@ export class SearchComponent extends SubSinkDirective implements OnInit {
     );
 
     this.recentTabs$ = combineLatest([this.tabService.recentTabs$, this.#source$]).pipe(
-      map(([recentTabs, tabs]) =>
-        this.tabService.sortByRecent(
-          tabs?.filter((tab) => recentTabs?.[tab.id]),
-          recentTabs
-        )
-      ),
+      map(([recentTabs, tabs]) => {
+        const filterTabs = tabs?.filter((tab) => recentTabs?.[tab.id]);
+        const sortTabs = this.tabService.sortByRecent(filterTabs, recentTabs);
+        return sortTabs.slice(0, RECENT_DISPLAY);
+      }),
       shareReplay(1)
     );
 
