@@ -4,7 +4,6 @@ export * from './group-controls/group-controls.component';
 export * from './groups/groups.component';
 export * from './icons-container/icons-container.component';
 export * from './image/image.component';
-export * from './label/label.component';
 export * from './list-item/list-item.component';
 export * from './message/message.component';
 export * from './panel-header/panel-header.component';

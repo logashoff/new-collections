@@ -28,7 +28,7 @@
             <nc-panel-header
               [icons]="tabsByHostname[groupId]"
               [total]="group.tabs.length"
-              [titleText]="titlesMap.get(groupId)"
+              [title]="titlesMap.get(groupId)"
               [pinned]="group.timestamp < 0"
               [readOnly]="group | isReadOnlyGroup"
               (starred)="favGroup(group)" />

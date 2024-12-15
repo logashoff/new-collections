@@ -2,10 +2,10 @@
 @use 'sass:color' as color;
 @use 'sass:map';
 
-$text: #000000;
+$text: hsl(210, 5%, 10%);
 $primary-text: color.adjust($text, $lightness: 20%);
-$secondary-text: color.adjust($text, $lightness: 40%);
-$disabled-text: color.adjust($text, $lightness: 60%);
+$secondary-text: color.adjust($text, $lightness: 30%);
+$disabled-text: color.adjust($text, $lightness: 50%);
 $dividers: rgba($primary-text, 0.12);
 $focused: rgba($primary-text, 0.12);
 

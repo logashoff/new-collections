@@ -20,7 +20,7 @@ export class ImageComponent {
   /**
    * Image source path.
    */
-  readonly source = input<ImageSource>();
+  readonly source = input.required<ImageSource>();
 
   /**
    * Icon size.

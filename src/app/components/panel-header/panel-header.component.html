@@ -1,13 +1,16 @@
+@let titleText = title();
+@let totalVal = total();
+
 <div class="header-container" [ngClass]="{ disabled: readOnly() }">
   <nc-icons-container [icons]="icons()"></nc-icons-container>
-  @if (titleText()?.length > 0) {
+  @if (titleText?.length > 0) {
     <div class="title">
-      @for (text of titleText(); track text) {
+      @for (text of titleText; track text) {
         <span class="text">{{ text }}</span>
       }
     </div>
   }
-  @if (total() > 0) {
+  @if (totalVal > 0) {
     <div class="description">
       <div
         stopPropagation
@@ -20,7 +23,7 @@
           <mat-icon>keep</mat-icon>
         }
       </div>
-      <div class="total">{{ total() }}</div>
+      <div class="total">{{ totalVal }}</div>
     </div>
   }
 </div>

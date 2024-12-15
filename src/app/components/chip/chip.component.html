@@ -1,7 +1,10 @@
-<div class="icon-container {{ size() }}">
-  <nc-image [source]="source()" [size]="size()" />
+@let labelVal = label();
+@let sizeVal = size();
 
-  @if (label() && !labelHidden()) {
-    <span class="icon-label">{{ label() }}</span>
+<div class="icon-container {{ sizeVal }}">
+  <nc-image [source]="source()" [size]="sizeVal" />
+
+  @if (labelVal && !labelHidden()) {
+    <span class="icon-label">{{ labelVal }}</span>
   }
 </div>

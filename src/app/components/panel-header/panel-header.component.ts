@@ -48,7 +48,7 @@ export class PanelHeaderComponent {
   /**
    * Optional text to display
    */
-  readonly titleText = input<string[]>();
+  readonly title = input<string[]>();
 
   favClicked() {
     this.starred.emit();
