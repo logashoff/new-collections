@@ -20,7 +20,6 @@ import {
   Actions,
   addRecent,
   BrowserTab,
-  removeRecent,
   scrollIntoView,
   TabAction,
   tabActions,
@@ -82,6 +81,11 @@ export class ListItemComponent implements Activatable {
   readonly find = output<BrowserTab>();
 
   /**
+   * Scroll this list item into view
+   */
+  readonly recent = output<BrowserTab>();
+
+  /**
    * Target window to open URL
    */
   readonly target = input<Target>('_self');
@@ -119,7 +123,7 @@ export class ListItemComponent implements Activatable {
         this.find.emit(tab);
         break;
       case Action.Forget:
-        await removeRecent(tab.id);
+        this.recent.emit(tab);
         break;
       case Action.Delete:
         this.deleted.emit(tab);

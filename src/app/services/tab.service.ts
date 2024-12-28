@@ -75,7 +75,7 @@ export class TabService {
     shareReplay(1)
   );
 
-  readonly #recentTabs$ = new BehaviorSubject<RecentTabs>({});
+  readonly #recentTabs$ = new BehaviorSubject<RecentTabs>(null);
 
   readonly recentTabs$: Observable<RecentTabs> = this.#recentTabs$.asObservable();
 
@@ -113,7 +113,7 @@ export class TabService {
    */
   private async initService() {
     const recent = await getRecentTabs();
-    this.#recentTabs$.next(recent ?? {});
+    this.#recentTabs$.next(recent);
 
     const collections = await getCollections();
     this.#tabGroupsSource$.next(collections?.map((collection) => new TabGroup(collection)));

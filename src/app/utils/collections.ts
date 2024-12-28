@@ -70,7 +70,7 @@ export async function getFaviconStore(): Promise<FaviconHost> {
 export async function getRecentTabs(): Promise<RecentTabs> {
   const storage = await getStorage();
   const recentStore = await storage.get(recentKey);
-  return recentStore[recentKey] ?? {};
+  return recentStore[recentKey];
 }
 
 export async function addRecent(tabId: TabId) {

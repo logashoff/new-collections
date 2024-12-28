@@ -30,6 +30,7 @@
             [tab]="tab"
             [actions]="recentActions"
             [target]="target"
+            (recent)="recentRemoved($event)"
             (deleted)="itemDeleted($event)"
             (modified)="itemModified($event)"
             (find)="findItem.emit($event)" />
@@ -62,6 +63,7 @@
             [tab]="tab"
             [actions]="defaultActions"
             [target]="target"
+            (recent)="recentRemoved($event)"
             (deleted)="itemDeleted($event)"
             (modified)="itemModified($event)"
             (find)="findItem.emit($event)" />

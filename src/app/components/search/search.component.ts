@@ -26,12 +26,23 @@ import {
   shareReplay,
   switchMap,
   take,
+  takeWhile,
 } from 'rxjs';
 
+import { isNil } from 'lodash';
 import { SubSinkDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
 import { KeyService, NavService, TabService } from '../../services';
-import { Action, Actions, BrowserTab, BrowserTabs, listItemAnimation, RECENT_DISPLAY, Target } from '../../utils';
+import {
+  Action,
+  Actions,
+  BrowserTab,
+  BrowserTabs,
+  listItemAnimation,
+  RECENT_DISPLAY,
+  removeRecent,
+  Target,
+} from '../../utils';
 import { EmptyComponent } from '../empty/empty.component';
 import { ListItemComponent } from '../list-item/list-item.component';
 import { TabListComponent } from '../tab-list/tab-list.component';
@@ -107,7 +118,7 @@ export class SearchComponent extends SubSinkDirective implements OnInit {
   /**
    * Recently used tabs
    */
-  recentTabs$: Observable<BrowserTabs>;
+  readonly recentTabs$ = new BehaviorSubject<BrowserTabs>(null);
 
   readonly defaultActions: Actions = [Action.Find, Action.Edit, Action.Delete];
   readonly recentActions: Actions = [Action.Forget, ...this.defaultActions];
@@ -169,14 +180,19 @@ export class SearchComponent extends SubSinkDirective implements OnInit {
       shareReplay(1)
     );
 
-    this.recentTabs$ = combineLatest([this.tabService.recentTabs$, this.#source$]).pipe(
-      map(([recentTabs, tabs]) => {
-        const filterTabs = tabs?.filter((tab) => recentTabs?.[tab.id]);
-        const sortTabs = this.tabService.sortByRecent(filterTabs, recentTabs);
-        return sortTabs.slice(0, RECENT_DISPLAY);
-      }),
-      shareReplay(1)
-    );
+    const recentTabs = combineLatest([this.tabService.recentTabs$, this.#source$])
+      .pipe(
+        takeWhile(([recentTabs, tabs]) => isNil(recentTabs) || !tabs?.length, true),
+        filter(([recentTabs, tabs]) => !isNil(recentTabs) && tabs.length > 0),
+        map(([recentTabs, tabs]) => {
+          const filterTabs = tabs?.filter((tab) => recentTabs?.[tab.id]);
+          const sortTabs = this.tabService.sortByRecent(filterTabs, recentTabs);
+          return sortTabs.slice(0, RECENT_DISPLAY);
+        })
+      )
+      .subscribe((tabs) => this.recentTabs$.next(tabs));
+
+    this.subscribe(recentTabs);
 
     const fuseDevices$: Observable<Fuse<BrowserTab>> = this.#devices$.pipe(
       filter((devices) => devices?.length > 0),
@@ -219,6 +235,8 @@ export class SearchComponent extends SubSinkDirective implements OnInit {
   async itemDeleted(tab: BrowserTab) {
     const messageRef = await this.tabService.removeTab(tab);
 
+    await this.recentRemoved(tab);
+
     const index = this.getSearchIndex(tab);
 
     if (index > -1) {
@@ -237,5 +255,21 @@ export class SearchComponent extends SubSinkDirective implements OnInit {
 
   private getSearchIndex(tab: BrowserTab): number {
     return this.#searchResults$.value?.findIndex((t) => t === tab);
+  }
+
+  async recentRemoved(tab: BrowserTab) {
+    if (tab) {
+      await removeRecent(tab?.id);
+
+      const index = this.recentTabs$.value?.findIndex((t) => t === tab);
+
+      if (index > -1) {
+        const recentTabs = this.recentTabs$.value;
+        recentTabs.splice(index, 1);
+        this.recentTabs$.next(recentTabs);
+
+        return index;
+      }
+    }
   }
 }
