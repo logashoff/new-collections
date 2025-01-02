@@ -30,9 +30,9 @@ nc-timeline-element {
 @media (min-width: common.$desktop-width) {
   nc-timeline-element {
     &:has(.mat-expansion-panel.mat-expanded) {
-      $_padding: 1rem;
+      $_padding: var(--mat-expansion-container-shape);
       padding: 0 $_padding $_padding;
-      margin: 0 -#{$_padding};
+      margin: 0 calc($_padding * -1);
 
       background-color: var(--mat-sys-surface-container-low);
 
