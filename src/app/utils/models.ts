@@ -73,6 +73,7 @@ export type ExpandedGroupsByUrl = { [url: string]: GroupExpanded };
 export type TabId = number;
 
 export type RecentTabs = { [tabId: TabId]: number };
+export type RecentMap = Map<TabId, number>;
 
 export interface RouterParams extends Params {
   groupId?: string;
@@ -388,7 +389,7 @@ export const KEY_UP = 'keyup';
 
 export const KEY_DOWN = 'keydown';
 
-export const RECENT_DISPLAY = 5;
+export const RECENT_DISPLAY = 15;
 export const RECENT_STORE = 25;
 
 export type Target = '_blank' | '_self';
