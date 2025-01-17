@@ -24,12 +24,12 @@ import {
   Observable,
   of,
   shareReplay,
+  startWith,
   switchMap,
   take,
-  takeWhile,
+  withLatestFrom,
 } from 'rxjs';
 
-import { isNil } from 'lodash';
 import { SubSinkDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
 import { KeyService, NavService, TabService } from '../../services';
@@ -40,6 +40,7 @@ import {
   BrowserTabs,
   listItemAnimation,
   RECENT_DISPLAY,
+  RecentMap,
   removeRecent,
   Target,
 } from '../../utils';
@@ -49,13 +50,12 @@ import { TabListComponent } from '../tab-list/tab-list.component';
 import { TimelineLabelComponent } from '../timeline-label/timeline-label.component';
 
 const fuseOptions: IFuseOptions<BrowserTab> = {
-  keys: ['title', 'url'],
-  threshold: 0.33,
   ignoreLocation: true,
+  keys: ['title', 'url'],
+  minMatchCharLength: 1,
+  threshold: 0.33,
   useExtendedSearch: true,
 };
-
-const LATEST_LIMIT = 10;
 
 /**
  * @description
@@ -99,7 +99,7 @@ export class SearchComponent extends SubSinkDirective implements OnInit {
   /**
    * Tabs data from search results
    */
-  sourceTabs$: Observable<BrowserTabs>;
+  readonly sourceTabs$ = new BehaviorSubject<BrowserTabs>(null);
 
   /**
    * Tabs from synced devices
@@ -112,13 +112,8 @@ export class SearchComponent extends SubSinkDirective implements OnInit {
 
   private listItems = viewChildren(ListItemComponent);
 
-  readonly #searchResults$ = new BehaviorSubject<BrowserTabs>([]);
-  readonly searchQuery$: Observable<string> = this.navService.paramsSearch$.pipe(shareReplay(1));
-
-  /**
-   * Recently used tabs
-   */
-  readonly recentTabs$ = new BehaviorSubject<BrowserTabs>(null);
+  readonly searchQuery$: Observable<string> = this.navService.paramsSearch$;
+  readonly recentMap$: Observable<RecentMap> = this.tabService.recentTabs$;
 
   readonly defaultActions: Actions = [Action.Find, Action.Edit, Action.Delete];
   readonly recentActions: Actions = [Action.Forget, ...this.defaultActions];
@@ -154,45 +149,45 @@ export class SearchComponent extends SubSinkDirective implements OnInit {
       })
     );
 
-    const resultChanges = this.searchQuery$
-      .pipe(
-        filter((searchQuery) => searchQuery?.length > 0),
-        distinctUntilChanged(),
-        switchMap((searchValue) =>
-          fuse$.pipe(
-            take(1),
-            map((fuse) => fuse.search(searchValue).map(({ item }) => item))
-          )
+    const searchResults$ = this.searchQuery$.pipe(
+      filter((searchQuery) => searchQuery?.length > 0),
+      distinctUntilChanged(),
+      switchMap((searchValue) =>
+        fuse$.pipe(
+          take(1),
+          map((fuse) => fuse.search(searchValue).map(({ item }) => item))
         )
       )
-      .subscribe((tabs) => this.#searchResults$.next(tabs));
-
-    this.subscribe(resultChanges);
-
-    this.sourceTabs$ = combineLatest([this.searchQuery$, this.#searchResults$, this.#source$]).pipe(
-      map(([searchQuery, searchResults, source]) => {
-        if (searchQuery?.length) {
-          return searchResults;
-        }
-
-        return source.sort((a, b) => b.id - a.id).slice(0, LATEST_LIMIT);
-      }),
-      shareReplay(1)
     );
 
-    const recentTabs = combineLatest([this.tabService.recentTabs$, this.#source$])
+    const sourceTabs = combineLatest([
+      this.searchQuery$.pipe(startWith('')),
+      searchResults$.pipe(startWith(null)),
+      this.#source$,
+    ])
       .pipe(
-        takeWhile(([recentTabs, tabs]) => isNil(recentTabs) || !tabs?.length, true),
-        filter(([recentTabs, tabs]) => !isNil(recentTabs) && tabs.length > 0),
-        map(([recentTabs, tabs]) => {
-          const filterTabs = tabs?.filter((tab) => recentTabs?.[tab.id]);
-          const sortTabs = this.tabService.sortByRecent(filterTabs, recentTabs);
-          return sortTabs.slice(0, RECENT_DISPLAY);
-        })
-      )
-      .subscribe((tabs) => this.recentTabs$.next(tabs));
+        filter(([, , tabs]) => tabs?.length > 0),
+        distinctUntilChanged(
+          ([query1, results1], [query2, results2]) => query1 === query2 && results1?.length === results2?.length
+        ),
+        withLatestFrom(this.recentMap$),
+        map(([[searchQuery, searchResults, source], recentTabs]) => {
+          if (searchQuery?.length) {
+            return searchResults;
+          }
 
-    this.subscribe(recentTabs);
+          const tabsById = source.sort((a, b) => b.id - a.id);
+          const filterTabs = tabsById?.filter((tab) => recentTabs?.has(tab.id));
+          const dedupTabs = tabsById.filter((tab) => !recentTabs?.has(tab.id));
+          const sortTabs = this.tabService.sortByRecent(filterTabs, recentTabs).concat(dedupTabs);
+
+          return sortTabs.slice(0, RECENT_DISPLAY);
+        }),
+        shareReplay(1)
+      )
+      .subscribe((tabs) => this.sourceTabs$.next(tabs));
+
+    this.subscribe(sourceTabs);
 
     const fuseDevices$: Observable<Fuse<BrowserTab>> = this.#devices$.pipe(
       filter((devices) => devices?.length > 0),
@@ -219,12 +214,12 @@ export class SearchComponent extends SubSinkDirective implements OnInit {
     const updatedTab = await this.tabService.updateTab(tab);
 
     if (updatedTab) {
-      const index = this.getSearchIndex(tab);
+      const results = this.sourceTabs$.value;
+      const index = this.getSearchIndex(tab, results);
 
       if (index > -1) {
-        const results = this.#searchResults$.value;
         results.splice(index, 1, updatedTab);
-        this.#searchResults$.next(results);
+        this.sourceTabs$.next(results);
       }
     }
   }
@@ -234,39 +229,38 @@ export class SearchComponent extends SubSinkDirective implements OnInit {
    */
   async itemDeleted(tab: BrowserTab) {
     const messageRef = await this.tabService.removeTab(tab);
-
-    await this.recentRemoved(tab);
-
-    const index = this.getSearchIndex(tab);
+    const sourceTabs = this.sourceTabs$.value;
+    const index = this.getSearchIndex(tab, sourceTabs);
 
     if (index > -1) {
-      const results = this.#searchResults$.value;
-      results.splice(index, 1);
-      this.#searchResults$.next(results);
+      sourceTabs.splice(index, 1);
+      this.sourceTabs$.next(sourceTabs);
+
+      await removeRecent(tab?.id);
 
       const { dismissedByAction } = await lastValueFrom(messageRef.afterDismissed());
 
       if (dismissedByAction) {
-        results.splice(index, 0, tab);
-        this.#searchResults$.next(results);
+        sourceTabs.splice(index, 0, tab);
+        this.sourceTabs$.next(sourceTabs);
       }
     }
   }
 
-  private getSearchIndex(tab: BrowserTab): number {
-    return this.#searchResults$.value?.findIndex((t) => t === tab);
+  private getSearchIndex(tab: BrowserTab, source: BrowserTabs): number {
+    return source.findIndex((t) => t === tab);
   }
 
   async recentRemoved(tab: BrowserTab) {
     if (tab) {
       await removeRecent(tab?.id);
 
-      const index = this.recentTabs$.value?.findIndex((t) => t === tab);
+      const sourceTabs = this.sourceTabs$.value;
+      const index = this.getSearchIndex(tab, sourceTabs);
 
       if (index > -1) {
-        const recentTabs = this.recentTabs$.value;
-        recentTabs.splice(index, 1);
-        this.recentTabs$.next(recentTabs);
+        sourceTabs.splice(index, 1);
+        this.sourceTabs$.next(sourceTabs);
 
         return index;
       }

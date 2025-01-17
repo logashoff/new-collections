@@ -13,7 +13,7 @@ import {
   Collection,
   Collections,
   MessageRef,
-  RecentTabs,
+  RecentMap,
   StorageChanges,
   TabGroup,
   TabGroups,
@@ -75,9 +75,9 @@ export class TabService {
     shareReplay(1)
   );
 
-  readonly #recentTabs$ = new BehaviorSubject<RecentTabs>(null);
+  readonly #recentTabs$ = new BehaviorSubject<RecentMap>(null);
 
-  readonly recentTabs$: Observable<RecentTabs> = this.#recentTabs$.asObservable();
+  readonly recentTabs$: Observable<RecentMap> = this.#recentTabs$.asObservable();
 
   /**
    * Groups timeline.
@@ -95,11 +95,11 @@ export class TabService {
     this.initService();
   }
 
-  sortByRecent(tabs: BrowserTabs, recentTabs: RecentTabs) {
+  sortByRecent(tabs: BrowserTabs, recentTabs: RecentMap) {
     if (recentTabs && Object.keys(recentTabs)?.length > 0) {
       return tabs?.sort((a, b) => {
-        const rankA = recentTabs[a.id] ?? 0;
-        const rankB = recentTabs[b.id] ?? 0;
+        const rankA = recentTabs.get(a.id) ?? 0;
+        const rankB = recentTabs.get(b.id) ?? 0;
 
         return rankB - rankA;
       });
@@ -112,19 +112,32 @@ export class TabService {
    * Initialize service and load stored tab groups.
    */
   private async initService() {
-    const recent = await getRecentTabs();
-    this.#recentTabs$.next(recent);
+    this.updateRecent();
 
     const collections = await getCollections();
     this.#tabGroupsSource$.next(collections?.map((collection) => new TabGroup(collection)));
 
     chrome.storage.onChanged.addListener(async (changes: StorageChanges) => {
       if (changes[recentKey]) {
-        this.#recentTabs$.next(await getRecentTabs());
+        this.updateRecent();
       }
 
       this.syncCollections(changes);
     });
+  }
+
+  private async updateRecent() {
+    const recent = await getRecentTabs();
+    if (recent) {
+      const entries = Object.entries(recent);
+      if (entries.length > 0) {
+        this.#recentTabs$.next(new Map(entries.map(([key, value]) => [parseFloat(key), value])));
+      } else {
+        this.#recentTabs$.next(null);
+      }
+    } else {
+      this.#recentTabs$.next(null);
+    }
   }
 
   /**
