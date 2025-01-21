@@ -96,7 +96,7 @@ export class TabService {
   }
 
   sortByRecent(tabs: BrowserTabs, recentTabs: RecentMap) {
-    if (recentTabs && Object.keys(recentTabs)?.length > 0) {
+    if (recentTabs) {
       return tabs?.sort((a, b) => {
         const rankA = recentTabs.get(a.id) ?? 0;
         const rankB = recentTabs.get(b.id) ?? 0;

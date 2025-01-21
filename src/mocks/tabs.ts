@@ -23,6 +23,7 @@ const browserTabMock: Tab = {
   url: 'https://getfedora.org/',
   width: 1188,
   windowId: 1,
+  frozen: false,
 };
 
 export const getBrowserTabMock = () => cloneDeep(browserTabMock);
@@ -50,6 +51,7 @@ const browserTabsMock: Tabs = [
     url: 'chrome://extensions/',
     width: 1188,
     windowId: 1,
+    frozen: false,
   },
   {
     active: false,
@@ -73,6 +75,7 @@ const browserTabsMock: Tabs = [
     url: 'https://about.gitlab.com/',
     width: 1188,
     windowId: 1,
+    frozen: false,
   },
   {
     active: false,
@@ -96,6 +99,7 @@ const browserTabsMock: Tabs = [
     url: 'https://github.com/',
     width: 1188,
     windowId: 1,
+    frozen: false,
   },
   {
     active: false,
@@ -119,6 +123,7 @@ const browserTabsMock: Tabs = [
     url: 'https://getfedora.org/',
     width: 1188,
     windowId: 1,
+    frozen: false,
   },
 ];
 

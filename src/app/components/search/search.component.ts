@@ -176,10 +176,7 @@ export class SearchComponent extends SubSinkDirective implements OnInit {
             return searchResults;
           }
 
-          const tabsById = source.sort((a, b) => b.id - a.id);
-          const filterTabs = tabsById?.filter((tab) => recentTabs?.has(tab.id));
-          const dedupTabs = tabsById.filter((tab) => !recentTabs?.has(tab.id));
-          const sortTabs = this.tabService.sortByRecent(filterTabs, recentTabs).concat(dedupTabs);
+          const sortTabs = this.tabService.sortByRecent(source, recentTabs);
 
           return sortTabs.slice(0, RECENT_DISPLAY);
         }),

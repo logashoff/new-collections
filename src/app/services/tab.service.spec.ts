@@ -267,4 +267,50 @@ describe('TabService', () => {
 
     expect(groups.length).toBe(2);
   });
+
+  it('should sort recent tabs', () => {
+    const tabs = [
+      {
+        id: 787499525277.7153,
+        title: 'Accessibility | Angular Material',
+        url: 'https://material.angular.io/cdk/a11y/overview',
+        favIconUrl: 'https://material.angular.io/assets/img/favicons/favicon.ico?v=8.2.3',
+      },
+      {
+        id: 1598195848292.6968,
+        title: 'API reference',
+        url: 'https://developer.chrome.com/docs/extensions/reference/api',
+        favIconUrl:
+          'https://www.gstatic.com/devrel-devsite/prod/v26b300f563a53ffacd00cce6a8a17d6c34b57fcb0529359ecdc637e6db343c18/chrome/images/favicon.png',
+      },
+      {
+        id: 386983855156.07916,
+        title: 'Options · Prettier',
+        url: 'https://prettier.io/docs/en/options',
+        favIconUrl: 'https://prettier.io/icon.png',
+      },
+    ];
+
+    let sortedTabs = spectator.service.sortByRecent(tabs, null);
+
+    expect(sortedTabs.length).toBe(3);
+    expect(sortedTabs[0].id).toBe(787499525277.7153);
+    expect(sortedTabs[1].id).toBe(1598195848292.6968);
+    expect(sortedTabs[2].id).toBe(386983855156.07916);
+
+    const recentMap = new Map([
+      [386983855156.07916, 2],
+      [1598195848292.6968, 1],
+      [787499525277.7153, 0],
+      [-1, -1],
+      [0, 0],
+    ]);
+
+    sortedTabs = spectator.service.sortByRecent(tabs, recentMap);
+
+    expect(sortedTabs.length).toBe(3);
+    expect(sortedTabs[0].id).toBe(386983855156.07916);
+    expect(sortedTabs[1].id).toBe(1598195848292.6968);
+    expect(sortedTabs[2].id).toBe(787499525277.7153);
+  });
 });
