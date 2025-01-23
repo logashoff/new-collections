@@ -34,13 +34,11 @@ export class PopupContentComponent {
   /**
    * Tab groups grouped by time
    */
-  readonly groupsTimeline$: Observable<Timeline>;
+  readonly groupsTimeline$: Observable<Timeline> = this.tabService.groupsTimeline$;
 
   readonly tabActions: Actions = [Action.Edit, Action.Delete];
 
-  constructor(private tabService: TabService) {
-    this.groupsTimeline$ = this.tabService.groupsTimeline$;
-  }
+  constructor(private readonly tabService: TabService) {}
 
   /**`
    * Removes all items in timeline section

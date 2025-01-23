@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { NavService, TabService } from '../../services';
@@ -8,21 +8,18 @@ import { SearchComponent } from '../search/search.component';
 
 @Component({
   selector: 'nc-popup-search',
-  imports: [AsyncPipe, SearchComponent],
   templateUrl: './popup-search.component.html',
   styleUrl: './popup-search.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [AsyncPipe, SearchComponent],
 })
-export class PopupSearchComponent implements OnInit {
-  searchSource$: Observable<BrowserTabs>;
+export class PopupSearchComponent {
+  readonly searchSource$: Observable<BrowserTabs> = this.tabService.tabs$;
 
   constructor(
-    private navService: NavService,
-    private tabService: TabService
+    private readonly navService: NavService,
+    private readonly tabService: TabService
   ) {}
-
-  ngOnInit() {
-    this.searchSource$ = this.tabService.tabs$;
-  }
 
   /**
    * Scroll specified tab into view

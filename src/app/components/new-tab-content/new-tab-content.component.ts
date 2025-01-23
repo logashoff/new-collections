@@ -31,20 +31,16 @@ export class NewTabContentComponent {
     },
   ];
 
-  readonly devicesTimeline$: Observable<Timeline>;
-  readonly hasAnyData$: Observable<boolean>;
-  readonly timeline$: Observable<Timeline>;
+  readonly devicesTimeline$: Observable<Timeline> = this.homeService.devicesTimeline$;
+  readonly hasAnyData$: Observable<boolean> = this.homeService.hasAnyData$;
+  readonly timeline$: Observable<Timeline> = this.homeService.timeline$;
 
   readonly tabActions: Actions = [Action.Edit, Action.Delete];
 
   constructor(
-    homeService: HomeService,
-    private tabService: TabService
-  ) {
-    this.devicesTimeline$ = homeService.devicesTimeline$;
-    this.hasAnyData$ = homeService.hasAnyData$;
-    this.timeline$ = homeService.timeline$;
-  }
+    private readonly homeService: HomeService,
+    private readonly tabService: TabService
+  ) {}
 
   /**`
    * Removes all items in timeline section

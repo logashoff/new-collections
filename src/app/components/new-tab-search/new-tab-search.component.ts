@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { flatMap } from 'lodash-es';
 import { Observable, map, shareReplay } from 'rxjs';
 
@@ -9,28 +9,24 @@ import { SearchComponent } from '../search/search.component';
 
 @Component({
   selector: 'nc-new-tab-search',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [AsyncPipe, SearchComponent],
   templateUrl: './new-tab-search.component.html',
   styleUrl: './new-tab-search.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [AsyncPipe, SearchComponent],
 })
-export class NewTabSearchComponent implements OnInit {
-  searchSource$: Observable<BrowserTabs>;
-  devices$: Observable<BrowserTabs>;
+export class NewTabSearchComponent {
+  readonly searchSource$: Observable<BrowserTabs> = this.tabService.tabs$;
+
+  readonly devices$: Observable<BrowserTabs> = this.homeService.devices$.pipe(
+    map((devices) => flatMap(devices?.map((device) => this.homeService.getTabsFromSessions(device.sessions)))),
+    shareReplay(1)
+  );
 
   constructor(
-    private homeService: HomeService,
-    private navService: NavService,
-    private tabService: TabService
+    private readonly homeService: HomeService,
+    private readonly navService: NavService,
+    private readonly tabService: TabService
   ) {}
-
-  ngOnInit() {
-    this.searchSource$ = this.tabService.tabs$;
-    this.devices$ = this.homeService.devices$.pipe(
-      map((devices) => flatMap(devices?.map((device) => this.homeService.getTabsFromSessions(device.sessions)))),
-      shareReplay(1)
-    );
-  }
 
   /**
    * Scroll specified tab into view
