@@ -73,16 +73,17 @@ export async function getRecentTabs(): Promise<RecentTabs> {
   return recentStore[recentKey];
 }
 
-export async function addRecent(tabId: TabId) {
+export async function addRecent(...tabIds: TabId[]) {
   const recentTabs: RecentTabs = (await getRecentTabs()) ?? {};
   const storage = await getStorage();
 
   const timestamp = new Date().getTime();
-  recentTabs[tabId] = timestamp;
-  const tabIds = Object.keys(recentTabs).sort((a, b) => recentTabs[b] - recentTabs[a]);
+  tabIds.forEach((id) => (recentTabs[id] = timestamp));
 
-  if (tabIds?.length > RECENT_STORE) {
-    tabIds.slice(RECENT_STORE).forEach((id) => delete recentTabs[id]);
+  const tabIdsByDate = Object.keys(recentTabs).sort((a, b) => recentTabs[b] - recentTabs[a]);
+
+  if (tabIdsByDate?.length > RECENT_STORE) {
+    tabIdsByDate.slice(RECENT_STORE).forEach((id) => delete recentTabs[id]);
   }
 
   await storage.set({

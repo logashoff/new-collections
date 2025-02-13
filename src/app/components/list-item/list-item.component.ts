@@ -12,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { RecentDirective, StopPropagationDirective } from '../../directives';
+import { StopPropagationDirective } from '../../directives';
 import { FaviconPipe, TranslatePipe } from '../../pipes';
 import { Activatable } from '../../services';
 import {
@@ -50,7 +50,6 @@ import { RippleComponent } from '../ripple/ripple.component';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    RecentDirective,
     RippleComponent,
     StopPropagationDirective,
     TranslatePipe,
