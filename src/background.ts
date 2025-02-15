@@ -1,3 +1,4 @@
+import normalizeUrl from 'normalize-url';
 import { addRecent, getCollections } from './app/utils/collections';
 
 const tabIdsByUrl = new Map<string, number[]>();
@@ -8,13 +9,13 @@ const updateBadgeText = async () => {
   tabIdsByUrl.clear();
   collections.forEach((collection) =>
     collection.tabs.forEach(({ url, id }) => {
-      const { href } = new URL(url);
+      const normalizedUrl = normalizeUrl(url);
 
-      if (!tabIdsByUrl.has(href)) {
-        tabIdsByUrl.set(href, []);
+      if (!tabIdsByUrl.has(normalizedUrl)) {
+        tabIdsByUrl.set(normalizedUrl, []);
       }
 
-      tabIdsByUrl.get(href).push(id);
+      tabIdsByUrl.get(normalizedUrl).push(id);
     })
   );
 
@@ -22,8 +23,8 @@ const updateBadgeText = async () => {
 };
 
 const updateRecent = async (tab: chrome.tabs.Tab) => {
-  const { href } = new URL(tab.url);
-  const tabIds = tabIdsByUrl.get(href);
+  const normalizedUrl = normalizeUrl(tab.url);
+  const tabIds = tabIdsByUrl.get(normalizedUrl);
 
   if (tabIds?.length > 0) {
     await addRecent(...tabIds);
