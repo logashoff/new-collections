@@ -163,7 +163,7 @@
     "message": "Recent"
   },
   "recentNotFound": {
-    "message": "Recent items not found. Try searching."
+    "message": "Recent items are unavailable"
   },
   "remove": {
     "message": "Remove"

@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { groupBy } from 'lodash-es';
 
-import { BrowserTabs, HostnameGroup, Settings, settingsStorageKey, Tab, uuidRegExp } from './models';
+import { BackgroundMessage, BrowserTabs, HostnameGroup, Settings, settingsStorageKey, Tab, uuidRegExp } from './models';
 
 /**
  * Returns BrowserTab array grouped by hostnames
@@ -132,3 +132,5 @@ export const sleep = (timeout: number): Promise<void> => new Promise((resolve) =
 export const uuid = () => self.crypto.randomUUID();
 
 export const isUuid = (uuid: string) => uuidRegExp.test(uuid);
+
+export const sendMessage = (message: BackgroundMessage) => chrome.runtime.sendMessage(message);

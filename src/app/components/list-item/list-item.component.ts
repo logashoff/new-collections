@@ -4,6 +4,7 @@ import {
   Component,
   ElementRef,
   HostBinding,
+  HostListener,
   input,
   output,
   ViewEncapsulation,
@@ -21,6 +22,7 @@ import {
   addRecent,
   BrowserTab,
   scrollIntoView,
+  sendMessage,
   TabAction,
   tabActions,
   TabActions,
@@ -98,6 +100,17 @@ export class ListItemComponent implements Activatable {
   @HostBinding('class.active')
   private get isActive() {
     return this._isActive;
+  }
+
+  @HostListener('auxclick', ['$event'])
+  @HostListener('click', ['$event'])
+  private handleClick() {
+    const { url, id: tabId } = this.tab();
+
+    sendMessage({
+      url,
+      tabId,
+    });
   }
 
   constructor(

@@ -27,6 +27,7 @@
     "@angular/forms": "^19.1.6",
     "@angular/material": "^19.1.4",
     "@angular/platform-browser": "^19.1.6",
+    "@angular/platform-browser-dynamic": "^19.1.6",
     "@angular/router": "^19.1.6",
     "date-fns": "^4.1.0",
     "fuse.js": "^7.1.0",

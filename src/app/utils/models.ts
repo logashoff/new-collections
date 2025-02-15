@@ -320,6 +320,14 @@ export interface TabAction {
   label: string;
 }
 
+/**
+ * Background service message
+ */
+export interface BackgroundMessage {
+  tabId?: TabId;
+  url?: string;
+}
+
 export type TabActions = TabAction[];
 
 export const tabActions = new Map<Action, TabAction>([
