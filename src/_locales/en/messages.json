@@ -162,6 +162,9 @@
   "recent": {
     "message": "Recent"
   },
+  "recentNotFound": {
+    "message": "Recent items not found. Try searching."
+  },
   "remove": {
     "message": "Remove"
   },
@@ -194,7 +197,7 @@
     }
   },
   "searchEmptyMessage": {
-    "message": "Nothing found for <strong>$query$</strong>",
+    "message": "Nothing found for ‘<strong>$query$</strong>’",
     "placeholders": {
       "query": {
         "content": "$1"

@@ -61,9 +61,15 @@
     </mat-card>
   }
 } @else if (baseSource?.length > 0) {
-  <nc-empty [message]="'searchEmptyMessage' | translate: searchQuery">
-    block
-  </nc-empty>
+  @if (searchQuery) {
+    <nc-empty [message]="'searchEmptyMessage' | translate: searchQuery">
+      block
+    </nc-empty>
+  } @else {
+    <nc-empty [message]="'recentNotFound' | translate">
+      playlist_remove
+    </nc-empty>
+  }
 } @else {
   <nc-empty [message]="'emptyCollections' | translate">data_alert</nc-empty>
 }
