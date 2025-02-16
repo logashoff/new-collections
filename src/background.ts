@@ -1,6 +1,6 @@
 import normalizeUrl from 'normalize-url';
 import { addRecent, getCollections } from './app/utils/collections';
-import { BackgroundMessage, TabId } from './app/utils/models';
+import { BackgroundMessage, Tab, TabId } from './app/utils/models';
 
 const tabIdsByUrl = new Map<string, number[]>();
 
@@ -45,12 +45,25 @@ const updateRecent = async (url: string, tabId?: TabId) => {
   }
 };
 
+const onTabCreate = async (tab: Tab) => {
+  if (tab.pendingUrl) {
+    await updateRecent(tab.pendingUrl);
+  }
+};
+
 chrome.runtime.onInstalled.addListener(updateBadgeText);
 chrome.runtime.onStartup.addListener(updateBadgeText);
 chrome.storage.onChanged.addListener(updateBadgeText);
 
+// Helps to handle items opened using context menu
+chrome.tabs.onCreated.addListener(onTabCreate);
+
 chrome.runtime.onMessage.addListener(async (message: BackgroundMessage) => {
   if (message.url) {
+    const { onCreated } = chrome.tabs;
+
+    onCreated.removeListener(onTabCreate);
     await updateRecent(message.url, message.tabId);
+    onCreated.addListener(onTabCreate);
   }
 });
