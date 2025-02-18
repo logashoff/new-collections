@@ -58,12 +58,14 @@ chrome.storage.onChanged.addListener(updateBadgeText);
 // Helps to handle items opened using context menu
 chrome.tabs.onCreated.addListener(onTabCreate);
 
-chrome.runtime.onMessage.addListener(async (message: BackgroundMessage) => {
-  if (message.url) {
-    const { onCreated } = chrome.tabs;
+chrome.runtime.onConnect.addListener((port) => {
+  port.onMessage.addListener(async (message: BackgroundMessage) => {
+    if (message.tabUrl) {
+      const { onCreated } = chrome.tabs;
 
-    onCreated.removeListener(onTabCreate);
-    await updateRecent(message.url, message.tabId);
-    onCreated.addListener(onTabCreate);
-  }
+      onCreated.removeListener(onTabCreate);
+      await updateRecent(message.tabUrl, message.tabId);
+      onCreated.addListener(onTabCreate);
+    }
+  });
 });

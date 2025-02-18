@@ -15,14 +15,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { StopPropagationDirective } from '../../directives';
 import { FaviconPipe, TranslatePipe } from '../../pipes';
-import { Activatable } from '../../services';
+import { Activatable, BackgroundService } from '../../services';
 import {
   Action,
   Actions,
   addRecent,
   BrowserTab,
   scrollIntoView,
-  sendMessage,
   TabAction,
   tabActions,
   TabActions,
@@ -104,18 +103,25 @@ export class ListItemComponent implements Activatable {
 
   @HostListener('auxclick', ['$event'])
   @HostListener('click', ['$event'])
-  private handleClick() {
-    const { url, id: tabId } = this.tab();
+  private async handleClick() {
+    const { url: tabUrl, id: tabId } = this.tab();
 
-    sendMessage({
-      url,
-      tabId,
-    });
+    try {
+      this.backgroundService.sendMessage({
+        tabUrl,
+        tabId,
+      });
+    } catch (error) {
+      console.warn(error);
+
+      await addRecent(tabId);
+    }
   }
 
   constructor(
-    private cdr: ChangeDetectorRef,
-    private el: ElementRef
+    private readonly backgroundService: BackgroundService,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly el: ElementRef
   ) {}
 
   async activate() {

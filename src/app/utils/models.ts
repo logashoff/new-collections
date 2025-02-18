@@ -49,6 +49,7 @@ export type TopSite = MostVisitedURL;
 export type TopSites = TopSite[];
 export type MessageRef = MatSnackBarRef<MessageComponent>;
 export type ImageSource = string | SafeUrl;
+export type Port = chrome.runtime.Port;
 
 /**
  * Group tab groups by time label in hashmap.
@@ -325,7 +326,7 @@ export interface TabAction {
  */
 export interface BackgroundMessage {
   tabId?: TabId;
-  url?: string;
+  tabUrl?: string;
 }
 
 export type TabActions = TabAction[];
