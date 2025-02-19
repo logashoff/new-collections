@@ -1,6 +1,11 @@
 @let tabValue = tab();
 
-<a class="container" matRipple [href]="tabValue.url" [target]="target()">
+<a
+  class="container"
+  [recent]="tabValue"
+  matRipple
+  [href]="tabValue.url"
+  [target]="target()">
   <nc-chip [source]="tabValue.favIconUrl | favicon: tabValue.url" />
   <div class="text-container">
     <div class="title-container">

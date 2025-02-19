@@ -4,7 +4,6 @@ import {
   Component,
   ElementRef,
   HostBinding,
-  HostListener,
   input,
   output,
   ViewEncapsulation,
@@ -13,9 +12,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { StopPropagationDirective } from '../../directives';
+import { RecentDirective, StopPropagationDirective } from '../../directives';
 import { FaviconPipe, TranslatePipe } from '../../pipes';
-import { Activatable, BackgroundService } from '../../services';
+import { Activatable } from '../../services';
 import {
   Action,
   Actions,
@@ -51,6 +50,7 @@ import { RippleComponent } from '../ripple/ripple.component';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
+    RecentDirective,
     RippleComponent,
     StopPropagationDirective,
     TranslatePipe,
@@ -101,25 +101,7 @@ export class ListItemComponent implements Activatable {
     return this._isActive;
   }
 
-  @HostListener('auxclick', ['$event'])
-  @HostListener('click', ['$event'])
-  private async handleClick() {
-    const { url: tabUrl, id: tabId } = this.tab();
-
-    try {
-      this.backgroundService.sendMessage({
-        tabUrl,
-        tabId,
-      });
-    } catch (error) {
-      console.warn(error);
-
-      await addRecent(tabId);
-    }
-  }
-
   constructor(
-    private readonly backgroundService: BackgroundService,
     private readonly cdr: ChangeDetectorRef,
     private readonly el: ElementRef
   ) {}

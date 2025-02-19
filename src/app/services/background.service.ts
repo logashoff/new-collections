@@ -10,6 +10,7 @@ export class BackgroundService {
   constructor() {
     try {
       this.port = chrome.runtime.connect();
+      this.port.onDisconnect.addListener(() => console.warn('Background service disconnected'));
     } catch (error) {
       console.warn(error);
     }
