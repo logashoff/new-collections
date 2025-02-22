@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { flatMap, isNil, isUndefined } from 'lodash-es';
 import { EMPTY, Observable, combineLatest, from, map, shareReplay, switchMap, take } from 'rxjs';
 
 import { SettingsService, TabService } from '../services';
@@ -46,7 +45,7 @@ export class HomeService {
     this.devices$ = this.settings.settings$.pipe(
       take(1),
       switchMap((settings) => {
-        if (isUndefined(settings?.enableDevices) || settings?.enableDevices) {
+        if (typeof settings?.enableDevices === 'undefined' || settings?.enableDevices) {
           return from(this.getDevices()).pipe(map((devices) => (devices?.length > 0 ? devices : null)));
         }
 
@@ -81,7 +80,7 @@ export class HomeService {
 
     this.topSites$ = this.settings.settings$.pipe(
       switchMap((settings) => {
-        if (isUndefined(settings?.enableTopSites) || settings?.enableTopSites) {
+        if (typeof settings?.enableTopSites === 'undefined' || settings?.enableTopSites) {
           return from(this.getTopSites()).pipe(
             map(
               (sites): TopSites =>
@@ -100,7 +99,7 @@ export class HomeService {
     const homeTimeline$ = combineLatest([this.devices$, this.timeline$]).pipe(shareReplay(1));
 
     this.hasAnyData$ = homeTimeline$.pipe(
-      map(([devices, timeline]) => !isNil(timeline) || !isNil(devices)),
+      map(([devices, timeline]) => Boolean(timeline || devices)),
       shareReplay(1)
     );
   }
@@ -117,6 +116,6 @@ export class HomeService {
    * Returns tab list from all synced session's windows
    */
   getTabsFromSessions(sessions: Sessions): Tabs {
-    return flatMap(sessions, (session) => session.tab || session.window?.tabs);
+    return sessions?.map((session) => session.tab || session.window?.tabs).flat();
   }
 }

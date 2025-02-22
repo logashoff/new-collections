@@ -9,7 +9,6 @@ import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { isUndefined } from 'lodash-es';
 import { BehaviorSubject, Observable, map, shareReplay, startWith, take } from 'rxjs';
 
 import { TranslatePipe } from '../../pipes';
@@ -120,19 +119,19 @@ export class OptionsComponent implements OnInit {
 
     this.settings.settings$.pipe(take(1)).subscribe((settings) => {
       if (settings) {
-        if (isUndefined(settings.enableTopSites)) {
+        if (typeof settings.enableTopSites === 'undefined') {
           settings.enableTopSites = true;
         }
 
         this.sitesControl.setValue(settings.enableTopSites);
 
-        if (isUndefined(settings.syncStorage)) {
+        if (typeof settings.syncStorage === 'undefined') {
           settings.syncStorage = true;
         }
 
         this.syncStorage.setValue(settings.syncStorage);
 
-        if (isUndefined(settings.enableDevices)) {
+        if (typeof settings.enableDevices === 'undefined') {
           settings.enableDevices = true;
         }
 

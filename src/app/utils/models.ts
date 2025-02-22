@@ -2,7 +2,7 @@ import { ThemePalette } from '@angular/material/core';
 import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { SafeUrl } from '@angular/platform-browser';
 import { NavigationExtras, Params } from '@angular/router';
-import { keyBy, remove } from 'lodash-es';
+import { remove } from 'lodash-es';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { MessageComponent } from '../components';
 
@@ -212,18 +212,18 @@ export class TabGroup implements Collection {
    * @param sync True if current tabs should be removed if not in new list.
    */
   mergeTabs(tabs: BrowserTabs, sync = false) {
-    const currTabsById = keyBy(this.tabs, 'id');
+    const currTabsById: Map<number, BrowserTab> = new Map(this.tabs.map((tab) => [tab.id, tab]));
 
     if (sync) {
-      const newTabsById = keyBy(tabs, 'id');
-      remove(this.tabs, ({ id }) => !(id in newTabsById));
+      const newTabsById: Map<number, BrowserTab> = new Map(tabs.map((tab) => [tab.id, tab]));
+      remove(this.tabs, ({ id }) => !newTabsById.has(id));
     }
 
     tabs?.forEach((newTab, index) => {
-      if (!(newTab.id in currTabsById)) {
+      if (!currTabsById.has(newTab.id)) {
         this.tabs.splice(index, 0, newTab);
       } else {
-        const currTab = currTabsById[newTab.id];
+        const currTab = currTabsById.get(newTab.id);
         currTab.favIconUrl = newTab.favIconUrl;
         currTab.title = newTab.title;
         currTab.url = newTab.url;

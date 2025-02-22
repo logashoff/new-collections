@@ -1,6 +1,5 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { flatMap } from 'lodash-es';
 import { Observable, map, shareReplay } from 'rxjs';
 
 import { HomeService, NavService, TabService } from '../../services';
@@ -18,7 +17,7 @@ export class NewTabSearchComponent {
   readonly searchSource$: Observable<BrowserTabs> = this.tabService.tabs$;
 
   readonly devices$: Observable<BrowserTabs> = this.homeService.devices$.pipe(
-    map((devices) => flatMap(devices?.map((device) => this.homeService.getTabsFromSessions(device.sessions)))),
+    map((devices) => devices?.map((device) => this.homeService.getTabsFromSessions(device.sessions)).flat()),
     shareReplay(1)
   );
 

@@ -1,6 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { DateArg, format } from 'date-fns';
-import { isNumber } from 'lodash-es';
 
 /**
  * @description
@@ -12,7 +11,7 @@ import { isNumber } from 'lodash-es';
 })
 export class DatePipe implements PipeTransform {
   transform(value: DateArg<Date>, formatStr = 'PP'): string {
-    if (isNumber(value)) {
+    if (typeof value === 'number') {
       value = Math.abs(value);
     }
 

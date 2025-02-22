@@ -16,31 +16,38 @@ const getNormalizedUrl = (url: string) =>
 const updateBadgeText = async () => {
   const collections = await getCollections();
 
-  tabIdsByUrl.clear();
-  collections.forEach((collection) =>
-    collection.tabs.forEach(({ url, id }) => {
-      const normalizedUrl = getNormalizedUrl(url);
+  if (collections?.length > 0) {
+    collections.forEach((collection) =>
+      collection.tabs.forEach(({ url, id }) => {
+        const normalizedUrl = getNormalizedUrl(url);
 
-      if (!tabIdsByUrl.has(normalizedUrl)) {
-        tabIdsByUrl.set(normalizedUrl, []);
-      }
+        if (!tabIdsByUrl.has(normalizedUrl)) {
+          tabIdsByUrl.set(normalizedUrl, []);
+        }
 
-      tabIdsByUrl.get(normalizedUrl).push(id);
-    })
-  );
+        const tabIds = tabIdsByUrl.get(normalizedUrl);
+
+        if (!tabIds.includes(id)) {
+          tabIds.push(id);
+        }
+      })
+    );
+  }
 
   chrome.action.setBadgeText({ text: collections?.length.toString() ?? '' });
 };
 
 const updateRecent = async (url: string, tabId?: TabId) => {
-  const normalizedUrl = getNormalizedUrl(url);
-  const tabIds = tabIdsByUrl.get(normalizedUrl);
+  if (tabId) {
+    await addRecent(tabId);
+  } else {
+    const normalizedUrl = getNormalizedUrl(url);
 
-  if (tabIds?.length > 0) {
-    if (tabId && tabIds.includes(tabId)) {
-      await addRecent(tabId);
-    } else {
-      await addRecent(...tabIds);
+    if (tabIdsByUrl.has(normalizedUrl)) {
+      const tabIds = tabIdsByUrl.get(normalizedUrl);
+      if (tabIds?.length > 0) {
+        await addRecent(...tabIds);
+      }
     }
   }
 };

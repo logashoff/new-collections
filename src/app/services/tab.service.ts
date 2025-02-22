@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { format, isSameDay, isSameWeek, isSameYear, subDays } from 'date-fns';
-import { flatMap, keyBy, remove, uniqBy } from 'lodash-es';
+import { remove, uniqBy } from 'lodash-es';
 import { BehaviorSubject, Observable, firstValueFrom, lastValueFrom } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
 
@@ -71,7 +71,7 @@ export class TabService {
    * Tab list source from all tab groups.
    */
   readonly tabs$: Observable<BrowserTabs> = this.#updated$.pipe(
-    switchMap(() => this.tabGroups$.pipe(map((tabGroups) => flatMap(tabGroups, (tabGroup) => tabGroup.tabs)))),
+    switchMap(() => this.tabGroups$.pipe(map((tabGroups) => tabGroups?.map(({ tabs }) => tabs).flat()))),
     shareReplay(1)
   );
 
@@ -148,12 +148,12 @@ export class TabService {
 
     if (changedGroupIds?.length > 0) {
       const tabGroups = (await firstValueFrom(this.tabGroups$)) ?? [];
-      const groupsById = keyBy(tabGroups, 'id');
+      const groupsById: Map<string, TabGroup> = new Map(tabGroups.map((group) => [group.id, group]));
       const favicon = await getFaviconStore();
 
       changedGroupIds.forEach((groupId) => {
         const { oldValue, newValue } = changes[groupId];
-        const group = groupsById[groupId];
+        const group = groupsById.get(groupId);
         if (oldValue && !newValue && group) {
           remove(tabGroups, ({ id }) => id === groupId);
         } else if (newValue && !oldValue && !group) {
@@ -279,12 +279,11 @@ export class TabService {
       const currentTabGroups = await firstValueFrom(this.tabGroups$);
 
       const newTabGroups: TabGroups = currentTabGroups ?? [];
-      const currentGroupsMap = keyBy(newTabGroups, 'id');
+      const currentGroupsMap: Map<string, TabGroup> = new Map(newTabGroups.map((group) => [group.id, group]));
 
       tabGroups.forEach((newGroup) => {
-        const currentGroup = currentGroupsMap[newGroup.id];
-        if (currentGroup) {
-          currentGroup.mergeTabs(newGroup.tabs);
+        if (currentGroupsMap.has(newGroup.id)) {
+          currentGroupsMap.get(newGroup.id).mergeTabs(newGroup.tabs);
         } else if (isUuid(newGroup.id) && newGroup.timestamp && newGroup.tabs?.length > 0) {
           newTabGroups.push(newGroup);
         }
@@ -303,9 +302,9 @@ export class TabService {
     let tabGroups = await firstValueFrom(this.tabGroups$);
 
     tabGroups = tabGroups ?? [];
-    const groupsMap = keyBy(tabGroups, 'id');
+    const groupsMap: Map<string, TabGroup> = new Map(tabGroups.map((group) => [group.id, group]));
 
-    const existingGroup = groupsMap[tabGroup.id];
+    const existingGroup = groupsMap.get(tabGroup.id);
     if (existingGroup) {
       existingGroup.mergeTabs(tabGroup.tabs);
     } else {
@@ -329,8 +328,8 @@ export class TabService {
     if (filteredTabs.length === 0) {
       this.message.open(translate('invalidTabList'));
     } else {
-      const tabsByUrl = keyBy(group.tabs, 'url');
-      filteredTabs = filteredTabs.filter(({ url }) => !tabsByUrl[url]);
+      const tabsByUrl: Map<string, BrowserTab> = new Map(group.tabs.map((tab) => [tab.url, tab]));
+      filteredTabs = filteredTabs.filter(({ url }) => !tabsByUrl.get(url));
 
       if (filteredTabs?.length > 0) {
         const dialogRef = this.openTabsSelector(filteredTabs);
@@ -489,7 +488,7 @@ export class TabService {
 
         this.save();
 
-        const tabIds: TabId[] = flatMap(removedGroups.map((group) => group.tabs.map((tab) => tab.id)));
+        const tabIds: TabId[] = removedGroups.map(({ tabs }) => tabs.map(({ id }) => id)).flat();
         await removeRecent(tabIds);
 
         if (removedGroups?.length > 0) {

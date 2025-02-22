@@ -1,19 +1,33 @@
 import { Injectable } from '@angular/core';
-import { BackgroundMessage, Port } from '../utils';
+import { BackgroundMessage, Port, sleep } from '../utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BackgroundService {
-  private readonly port: Port;
+  private port: Port;
+  private disconnectCount = 0;
+  private readonly maxReconnects = 10;
 
   constructor() {
-    try {
-      this.port = chrome.runtime.connect();
-      this.port.onDisconnect.addListener(() => console.warn('Background service disconnected'));
-    } catch (error) {
-      console.warn(error);
-    }
+    this.createPort();
+  }
+
+  private createPort() {
+    this.port = chrome.runtime.connect();
+    this.port.onDisconnect.addListener(async () => {
+      console.warn(`Background service disconnected ${this.disconnectCount + 1}`);
+
+      if (this.disconnectCount < this.maxReconnects) {
+        this.disconnectCount++;
+
+        const delay = 2 ** this.disconnectCount * 1_000;
+
+        await sleep(delay);
+
+        this.createPort();
+      }
+    });
   }
 
   sendMessage(message: BackgroundMessage) {

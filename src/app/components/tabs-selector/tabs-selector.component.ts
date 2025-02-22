@@ -7,7 +7,6 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule, MatSelectionList } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { isNil } from 'lodash-es';
 import { filter, map, Observable, shareReplay, startWith, withLatestFrom } from 'rxjs';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -63,7 +62,7 @@ export class TabsSelectorComponent implements AfterViewInit {
    * List of checked items.
    */
   private readonly checkList$: Observable<Tabs> = this.formGroup.valueChanges.pipe(
-    filter((values) => !isNil(values)),
+    filter((values) => Boolean(values)),
     map(({ list }) => list),
     shareReplay(1)
   );

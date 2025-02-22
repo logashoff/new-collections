@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { isUndefined, uniqBy } from 'lodash-es';
+import { uniqBy } from 'lodash-es';
 import { BehaviorSubject, Observable, from, map, shareReplay, switchMap } from 'rxjs';
 import { MostVisitedURL, Settings, StorageArea, copyStorage, getSettings, settingsStorageKey } from '../utils';
 
@@ -58,7 +58,7 @@ export class SettingsService {
 
     this.settingsSource$.next(newSettings);
 
-    if (!isUndefined(newSettings.syncStorage)) {
+    if (typeof newSettings.syncStorage !== 'undefined') {
       const { sync, local } = chrome.storage;
       const source: StorageArea = !newSettings.syncStorage ? sync : local;
       const target: StorageArea = !newSettings.syncStorage ? local : sync;

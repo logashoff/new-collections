@@ -1,7 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { isNil } from 'lodash-es';
 import { Observable, combineLatest, map, shareReplay } from 'rxjs';
 
 import { KeyListenerDirective } from '../../directives';
@@ -52,7 +51,7 @@ export class NewTabComponent extends KeyListenerDirective implements OnInit {
 
   ngOnInit() {
     this.hideTopSites$ = combineLatest([this.topSites$, this.isSearchActive$]).pipe(
-      map(([topSites, isSearchActive]) => isNil(topSites) || topSites?.length === 0 || isSearchActive),
+      map(([topSites, isSearchActive]) => !topSites || topSites?.length === 0 || isSearchActive),
       shareReplay(1)
     );
   }

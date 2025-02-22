@@ -1,5 +1,3 @@
-import { isUndefined, keyBy } from 'lodash-es';
-
 import {
   BrowserTabs,
   Collection,
@@ -23,7 +21,9 @@ import { getSettings, getUrlHost, isUuid } from './utils';
  */
 export async function getStorage(): Promise<StorageArea> {
   const settings: Settings = await getSettings();
-  return isUndefined(settings?.syncStorage) || settings?.syncStorage ? chrome.storage.sync : chrome.storage.local;
+  return typeof settings?.syncStorage === 'undefined' || settings?.syncStorage
+    ? chrome.storage.sync
+    : chrome.storage.local;
 }
 
 /**
@@ -32,11 +32,13 @@ export async function getStorage(): Promise<StorageArea> {
 export async function saveCollections(collections: Collections): Promise<void> {
   const storage = await getStorage();
   const syncData: SyncData = (await storage.get()) ?? {};
-  const collectionsById: { [id: string]: Collection } = keyBy(collections, 'id');
+  const collectionsById: Map<string, Collection> = new Map(
+    collections.map((collection) => [collection.id, collection])
+  );
 
   const removeKeys = [faviconStorageKey];
   for (const groupId in syncData) {
-    if (isUuid(groupId) && !(groupId in collectionsById)) {
+    if (isUuid(groupId) && !collectionsById.has(groupId)) {
       delete syncData[groupId];
       removeKeys.push(groupId);
     }

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, EventType, Router, RouterEvent } from '@angular/router';
-import { isNil } from 'lodash-es';
 import { Observable, distinctUntilChanged, filter, map, shareReplay, startWith } from 'rxjs';
 import { RouterExtras, RouterParams, createUrl } from '../utils';
 
@@ -50,7 +49,7 @@ export class NavService {
 
     this.pathChanges$ = url$.pipe(
       startWith(this.router.url),
-      filter((url) => !isNil(url)),
+      filter((url) => Boolean(url)),
       map((url) => new URL(createUrl(url)).pathname),
       distinctUntilChanged(),
       shareReplay(1)
