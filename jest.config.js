@@ -7,5 +7,6 @@ module.exports = {
     'src/app/utils': '<rootDir>/src/app/utils/index.ts',
     'src/mocks': '<rootDir>/src/mocks/index.ts',
   },
+  transformIgnorePatterns: ['node_modules/(?!normalize-url)/'],
   setupFiles: ['<rootDir>/setupJestMocks.js'],
 };

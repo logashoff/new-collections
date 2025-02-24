@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { groupBy } from 'lodash-es';
+import normalizeUrl from 'normalize-url';
 
 import { BackgroundMessage, BrowserTabs, HostnameGroup, Settings, settingsStorageKey, Tab, uuidRegExp } from './models';
 
@@ -134,3 +135,12 @@ export const uuid = () => self.crypto.randomUUID();
 export const isUuid = (uuid: string) => uuidRegExp.test(uuid);
 
 export const sendMessage = (message: BackgroundMessage) => chrome.runtime.sendMessage(message);
+
+export const getNormalizedUrl = (url: string) =>
+  normalizeUrl(url, {
+    removeSingleSlash: true,
+    removeTrailingSlash: true,
+    stripAuthentication: true,
+    stripProtocol: true,
+    stripWWW: true,
+  });

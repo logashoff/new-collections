@@ -1,19 +1,13 @@
-import normalizeUrl from 'normalize-url';
 import { addRecent, getCollections } from './app/utils/collections';
-import { BackgroundMessage, Tab, TabId } from './app/utils/models';
+import { BackgroundMessage, Tab } from './app/utils/models';
+import { getNormalizedUrl } from './app/utils/utils';
 
+/**
+ * Store tab IDs by tab's normalized URL
+ */
 const tabIdsByUrl = new Map<string, number[]>();
 
-const getNormalizedUrl = (url: string) =>
-  normalizeUrl(url, {
-    removeSingleSlash: true,
-    removeTrailingSlash: true,
-    stripAuthentication: true,
-    stripProtocol: true,
-    stripWWW: true,
-  });
-
-const updateBadgeText = async () => {
+const onRuntimeChanges = async () => {
   const collections = await getCollections();
 
   if (collections?.length > 0) {
@@ -37,42 +31,44 @@ const updateBadgeText = async () => {
   chrome.action.setBadgeText({ text: collections?.length.toString() ?? '' });
 };
 
-const updateRecent = async (url: string, tabId?: TabId) => {
-  if (tabId) {
-    await addRecent(tabId);
-  } else {
-    const normalizedUrl = getNormalizedUrl(url);
+/**
+ * Update recent items list by tab URL if it matches any tab IDs in saved collection
+ */
+const updateRecentByUrl = async (url: string) => {
+  const normalizedUrl = getNormalizedUrl(url);
 
-    if (tabIdsByUrl.has(normalizedUrl)) {
-      const tabIds = tabIdsByUrl.get(normalizedUrl);
-      if (tabIds?.length > 0) {
-        await addRecent(...tabIds);
-      }
+  if (tabIdsByUrl.has(normalizedUrl)) {
+    const tabIds = tabIdsByUrl.get(normalizedUrl);
+    if (tabIds?.length > 0) {
+      await addRecent(...tabIds);
     }
   }
 };
 
 const onTabCreate = async (tab: Tab) => {
   if (tab.pendingUrl) {
-    await updateRecent(tab.pendingUrl);
+    await updateRecentByUrl(tab.pendingUrl);
   }
 };
 
-chrome.runtime.onInstalled.addListener(updateBadgeText);
-chrome.runtime.onStartup.addListener(updateBadgeText);
-chrome.storage.onChanged.addListener(updateBadgeText);
+chrome.runtime.onInstalled.addListener(onRuntimeChanges);
+chrome.runtime.onStartup.addListener(onRuntimeChanges);
+chrome.storage.onChanged.addListener(onRuntimeChanges);
 
 // Helps to handle items opened using context menu
 chrome.tabs.onCreated.addListener(onTabCreate);
 
 chrome.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener(async (message: BackgroundMessage) => {
-    if (message.tabUrl) {
-      const { onCreated } = chrome.tabs;
+    const { onCreated } = chrome.tabs;
+    onCreated.removeListener(onTabCreate);
 
-      onCreated.removeListener(onTabCreate);
-      await updateRecent(message.tabUrl, message.tabId);
-      onCreated.addListener(onTabCreate);
+    if (message.tabId) {
+      await addRecent(message.tabId);
+    } else if (message.tabUrl) {
+      await updateRecentByUrl(message.tabUrl);
     }
+
+    onCreated.addListener(onTabCreate);
   });
 });

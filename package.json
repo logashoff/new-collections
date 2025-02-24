@@ -33,7 +33,7 @@
     "fuse.js": "^7.1.0",
     "lodash-es": "^4.17.21",
     "normalize-url": "^8.0.1",
-    "rxjs": "^7.8.1",
+    "rxjs": "^7.8.2",
     "zone.js": "^0.15.0"
   },
   "devDependencies": {
@@ -60,7 +60,7 @@
     "jest-preset-angular": "^14.5.2",
     "lodash": "^4.17.21",
     "ng-packagr": "^19.1.2",
-    "prettier": "^3.5.1",
+    "prettier": "^3.5.2",
     "stylelint": "^16.14.1",
     "stylelint-config-sass-guidelines": "^12.1.0",
     "typescript": "5.7.3"
