@@ -392,13 +392,16 @@ export interface TimelineElement {
   elements: TabGroups;
 }
 
-export const ESC_KEY_CODE = 'Escape';
+/**
+ * Minimum number of items to display in search view when search query is empty.
+ */
+export const MIN_RECENT_DISPLAY = 15;
 
-export const KEY_UP = 'keyup';
-
-export const KEY_DOWN = 'keydown';
-
-export const RECENT_DISPLAY = 15;
-export const RECENT_STORE = 25;
-
+/**
+ * URL target when opening links
+ */
 export type Target = '_blank' | '_self';
+
+export const ESC_KEY_CODE = 'Escape';
+export const KEY_UP = 'keyup';
+export const KEY_DOWN = 'keydown';

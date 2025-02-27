@@ -39,7 +39,7 @@ import {
   BrowserTab,
   BrowserTabs,
   listItemAnimation,
-  RECENT_DISPLAY,
+  MIN_RECENT_DISPLAY,
   RecentMap,
   removeRecent,
   Target,
@@ -181,7 +181,7 @@ export class SearchComponent extends SubSinkDirective implements OnInit {
             recentTabs
           );
 
-          return sortTabs.slice(0, RECENT_DISPLAY);
+          return sortTabs.slice(0, Math.max(recentTabs?.size ?? 0, MIN_RECENT_DISPLAY));
         }),
         shareReplay(1)
       )

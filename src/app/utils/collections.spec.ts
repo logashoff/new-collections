@@ -1,6 +1,6 @@
 import { getTabGroupMock, getTabGroupsMock } from 'src/mocks';
 import { addRecent, getCollections, removeRecent, saveCollections, syncToTabs, tabsToSync } from './collections';
-import { RECENT_STORE, RecentSync, SyncStorageArea } from './models';
+import { RecentSync, SyncStorageArea } from './models';
 
 describe('collections.ts', () => {
   const setSyncSpy = jest.spyOn(chrome.storage.sync, 'set');
@@ -188,7 +188,9 @@ describe('collections.ts', () => {
     remSyncSpy.mockReset();
     getSyncSpy.mockReset();
 
-    const keys = Array.from({ length: 100 }).map((v, i) => i + 1);
+    const length = 100;
+
+    const keys = Array.from({ length }).map((v, i) => i + 1);
     const recent = {};
     keys.forEach((key) => (recent[key] = key));
 
@@ -196,15 +198,23 @@ describe('collections.ts', () => {
       recent,
     }));
 
-    await addRecent(5);
+    await addRecent(...[5, 6, 7, 8]);
 
     const callArgs: RecentSync = setSyncSpy.mock.calls[0][0];
 
     const recentKeys = Object.keys(callArgs.recent);
 
-    expect(recentKeys.length).toBe(RECENT_STORE);
+    const currentTime = new Date().getTime();
+
+    expect(recentKeys.length).toBe(length);
     expect(recent[5]).toBeDefined();
-    expect(recent[5]).toEqual(new Date().getTime());
+    expect(recent[5]).toEqual(currentTime);
+    expect(recent[6]).toBeDefined();
+    expect(recent[6]).toEqual(currentTime);
+    expect(recent[7]).toBeDefined();
+    expect(recent[7]).toEqual(currentTime);
+    expect(recent[8]).toBeDefined();
+    expect(recent[8]).toEqual(currentTime);
   });
 
   it('should remove recent', async () => {
