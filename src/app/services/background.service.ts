@@ -16,8 +16,6 @@ export class BackgroundService {
   private createPort() {
     this.port = chrome.runtime.connect();
     this.port.onDisconnect.addListener(async () => {
-      console.warn(`Background service disconnected ${this.disconnectCount + 1}`);
-
       if (this.disconnectCount < this.maxReconnects) {
         this.disconnectCount++;
 
