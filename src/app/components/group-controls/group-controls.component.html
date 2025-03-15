@@ -1,30 +1,23 @@
+@let _actions = actions();
+@let _timestamp = timestamp();
+
 <div class="container">
-  <div class="timestamp">
-    {{ group().timestamp | date }}
-  </div>
-  <div class="controls" stopPropagation>
-    @let isReadOnly = readOnly();
+  @if (_timestamp) {
+    <div class="timestamp">
+      {{ _timestamp | date }}
+    </div>
+  }
 
-    @if (!isReadOnly) {
-      <button
-        mat-icon-button
-        (click)="removeTabs()"
-        [matTooltip]="'delete' | translate">
-        <mat-icon>delete_forever</mat-icon>
-      </button>
-    }
-    <button
-      mat-icon-button
-      (click)="restoreTabs()"
-      [matTooltip]="'restore' | translate">
-      <mat-icon>restore</mat-icon>
-    </button>
-
-    <button
-      mat-icon-button
-      (click)="addTabs()"
-      [matTooltip]="(isReadOnly ? 'save' : 'addTabs') | translate">
-      <mat-icon>add</mat-icon>
-    </button>
-  </div>
+  @if (_actions?.length > 0) {
+    <div class="controls" stopPropagation>
+      @for (action of _actions; track action.action) {
+        <button
+          mat-icon-button
+          (click)="clicked.emit(action.action)"
+          [matTooltip]="action.label | translate">
+          <mat-icon>{{ action.icon }}</mat-icon>
+        </button>
+      }
+    </div>
+  }
 </div>

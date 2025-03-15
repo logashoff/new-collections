@@ -16,9 +16,12 @@ export function queryCurrentWindow(): Promise<Tabs> {
 }
 
 /**
- * Restores all tabs from specified tab group.
+ * Restores all tabs from specified tab list.
+ *
+ * @param tabs Tabs to create tab group for.
+ * @param label Tab group label.
  */
-export async function restoreTabs(tabs: BrowserTabs) {
+export async function restoreTabs(tabs: BrowserTabs, label?: string) {
   const createdTabs = await Promise.all(
     tabs.map(({ url }) =>
       chrome.tabs.create({
@@ -28,8 +31,13 @@ export async function restoreTabs(tabs: BrowserTabs) {
     )
   );
 
-  chrome.tabs.group({
+  const groupId = await chrome.tabs.group({
     tabIds: createdTabs.map(({ id }) => id),
+  });
+
+  chrome.tabGroups.update(groupId, {
+    collapsed: true,
+    title: label,
   });
 }
 

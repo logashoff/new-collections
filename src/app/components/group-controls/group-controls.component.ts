@@ -1,12 +1,11 @@
-import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { StopPropagationDirective } from '../../directives';
 import { DatePipe, TranslatePipe } from '../../pipes';
-import { CollectionsService, TabService } from '../../services';
-import { queryCurrentWindow, restoreTabs, TabGroup, Tabs } from '../../utils';
+import { Action, GroupActions } from '../../utils';
 
 /**
  * @description
@@ -22,38 +21,7 @@ import { queryCurrentWindow, restoreTabs, TabGroup, Tabs } from '../../utils';
   imports: [DatePipe, MatButtonModule, MatIconModule, MatTooltipModule, StopPropagationDirective, TranslatePipe],
 })
 export class GroupControlsComponent {
-  readonly group = input.required<TabGroup>();
-  readonly readOnly = input<boolean>(false);
-
-  constructor(
-    private tabService: TabService,
-    private collection: CollectionsService
-  ) {}
-
-  /**
-   * Removes `group` from tab group list and storage.
-   */
-  removeTabs() {
-    this.tabService.removeTabGroup(this.group());
-  }
-
-  /**
-   * Opens all tabs from `group` object.
-   */
-  restoreTabs() {
-    restoreTabs(this.group().tabs);
-  }
-
-  /**
-   * Opens browser tab selector to add new tabs to current group.
-   */
-  async addTabs() {
-    const tabs: Tabs = await queryCurrentWindow();
-
-    if (this.readOnly()) {
-      this.collection.selectTabs(this.group().tabs as Tabs);
-    } else {
-      this.tabService.addTabs(this.group(), tabs);
-    }
-  }
+  readonly timestamp = input<number>();
+  readonly actions = input<GroupActions>();
+  readonly clicked = output<Action>();
 }

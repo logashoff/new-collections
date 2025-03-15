@@ -2,6 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { GroupService } from 'src/app/services/group.service';
 import { TranslatePipe } from '../../pipes';
 import { TabService } from '../../services';
 import { Action, ActionIcon, Actions, CollectionActions, TabGroups, Timeline, translate } from '../../utils';
@@ -38,7 +39,10 @@ export class PopupContentComponent {
 
   readonly tabActions: Actions = [Action.Edit, Action.Delete];
 
-  constructor(private readonly tabService: TabService) {}
+  constructor(
+    private readonly tabService: TabService,
+    readonly groupService: GroupService
+  ) {}
 
   /**`
    * Removes all items in timeline section

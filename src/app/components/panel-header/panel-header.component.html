@@ -1,5 +1,5 @@
 @let titleText = title();
-@let totalVal = total();
+@let _total = total();
 
 <div class="header-container" [ngClass]="{ disabled: readOnly() }">
   <nc-icons-container [icons]="icons()"></nc-icons-container>
@@ -10,7 +10,7 @@
       }
     </div>
   }
-  @if (totalVal > 0) {
+  @if (_total > 0) {
     <div class="description">
       <div
         stopPropagation
@@ -23,7 +23,7 @@
           <mat-icon>keep</mat-icon>
         }
       </div>
-      <div class="total">{{ totalVal }}</div>
+      <div class="total">{{ _total }}</div>
     </div>
   }
 </div>

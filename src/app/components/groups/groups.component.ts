@@ -1,6 +1,6 @@
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, input, output } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -10,9 +10,12 @@ import { Observable, map, shareReplay } from 'rxjs';
 import { IsReadOnlyGroupPipe } from '../../pipes';
 import { NavService, SettingsService, TabService } from '../../services';
 import {
+  Action,
   Actions,
   BrowserTab,
   BrowserTabs,
+  GroupAction,
+  GroupActions,
   GroupExpanded,
   TabGroup,
   TabGroups,
@@ -53,6 +56,8 @@ import { RippleComponent } from '../ripple/ripple.component';
 })
 export class GroupsComponent {
   readonly tabActions = input<Actions>();
+  readonly groupActions = input<GroupActions>();
+  readonly actionClicked = output<GroupAction>();
 
   /**
    * List of tab groups to render.
@@ -161,5 +166,12 @@ export class GroupsComponent {
 
   async deleteTab(tab: BrowserTab) {
     await this.tabService.removeTab(tab);
+  }
+
+  onGroupAction(action: Action, group: TabGroup) {
+    this.actionClicked.emit({
+      group,
+      action,
+    });
   }
 }
