@@ -286,6 +286,8 @@ export interface TabsByHostname {
  * Action icons.
  */
 export enum ActionIcon {
+  Add = 'add',
+  Bookmark = 'bookmark',
   Delete = 'delete_forever',
   Edit = 'edit_note',
   Export = 'save_alt',
@@ -293,6 +295,7 @@ export enum ActionIcon {
   Forget = 'delete_history',
   Import = 'file_upload',
   Remove = 'playlist_remove',
+  Restore = 'restore',
   Save = 'bookmark_add',
   Settings = 'settings',
   Undo = 'undo',
@@ -302,6 +305,7 @@ export enum ActionIcon {
  * Available actions within application.
  */
 export enum Action {
+  Add,
   Delete,
   Edit,
   Export,
@@ -309,8 +313,10 @@ export enum Action {
   Forget,
   Import,
   Remove,
+  Restore,
   Save,
   Settings,
+  Undo,
 }
 
 export type Actions = Action[];
@@ -319,14 +325,6 @@ export interface TabAction {
   action: Action;
   icon: ActionIcon;
   label: string;
-}
-
-/**
- * Background service message
- */
-export interface BackgroundMessage {
-  tabId?: TabId;
-  tabUrl?: string;
 }
 
 export type TabActions = TabAction[];
@@ -366,6 +364,12 @@ export const tabActions = new Map<Action, TabAction>([
   ],
 ]);
 
+export interface GroupAction extends Partial<TabAction> {
+  group?: TabGroup;
+}
+
+export type GroupActions = GroupAction[];
+
 /**
  * Collection Action
  */
@@ -378,6 +382,14 @@ export interface CollectionAction {
 }
 
 export type CollectionActions = CollectionAction[];
+
+/**
+ * Background service message
+ */
+export interface BackgroundMessage {
+  tabId?: TabId;
+  tabUrl?: string;
+}
 
 /**
  * Common icon sizes.

@@ -4,7 +4,12 @@
     <nc-timeline-element
       [timelineLabel]="item.label"
       (removed)="removeGroups(item.elements)">
-      <nc-groups [groups]="item.elements" [tabActions]="tabActions"></nc-groups>
+      <nc-groups
+        [groups]="item.elements"
+        [tabActions]="tabActions"
+        [groupActions]="groupService.commonActions"
+        (actionClicked)="groupService.handleAction($event)">
+      </nc-groups>
     </nc-timeline-element>
   }
 } @else {

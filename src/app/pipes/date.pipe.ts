@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DateArg, format } from 'date-fns';
+import { DateArg } from 'date-fns';
+import { formatDate } from '../utils';
 
 /**
  * @description
@@ -11,10 +12,6 @@ import { DateArg, format } from 'date-fns';
 })
 export class DatePipe implements PipeTransform {
   transform(value: DateArg<Date>, formatStr = 'PP'): string {
-    if (typeof value === 'number') {
-      value = Math.abs(value);
-    }
-
-    return format(value, formatStr);
+    return formatDate(value, formatStr);
   }
 }
