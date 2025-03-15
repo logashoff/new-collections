@@ -1,9 +1,9 @@
-@let topSitesVal = topSites();
+@let _topSites = topSites();
 
-@if (topSitesVal?.length > 0) {
+@if (_topSites?.length > 0) {
   <div class="container">
     <div class="site-container">
-      @for (site of topSitesVal; track site) {
+      @for (site of _topSites; track site) {
         <a class="site" [href]="site.url">
           <nc-image
             [source]="undefined | favicon: site.url"

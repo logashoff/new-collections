@@ -1,7 +1,10 @@
 @if (hasAnyData$ | async) {
   @for (item of devicesTimeline$ | async; track item.label) {
     <nc-timeline-element [timelineLabel]="item.label" [controls]="false">
-      <nc-groups [groups]="item.elements" />
+      <nc-groups
+        [groups]="item.elements"
+        [groupActions]="deviceActions"
+        (actionClicked)="handleDeviceAction($event, item.label)" />
     </nc-timeline-element>
   }
 
@@ -12,7 +15,10 @@
       <nc-groups
         [groups]="item.elements"
         [dragDisabled]="false"
-        [tabActions]="tabActions" />
+        [tabActions]="tabActions"
+        [groupActions]="groupService.commonActions"
+        (actionClicked)="groupService.handleAction($event)">
+      </nc-groups>
     </nc-timeline-element>
   }
 } @else {

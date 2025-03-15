@@ -36,8 +36,9 @@
         </div>
         <div class="expanded">
           <nc-group-controls
-            [group]="group"
-            [readOnly]="group | isReadOnlyGroup" />
+            [timestamp]="group.timestamp"
+            [actions]="groupActions()"
+            (clicked)="onGroupAction($event, group)" />
         </div>
       </mat-expansion-panel-header>
 
