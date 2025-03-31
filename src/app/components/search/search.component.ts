@@ -30,6 +30,7 @@ import {
   withLatestFrom,
 } from 'rxjs';
 
+import { uniqBy } from 'lodash-es';
 import { SubSinkDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
 import { KeyService, NavService, TabService } from '../../services';
@@ -201,8 +202,9 @@ export class SearchComponent extends SubSinkDirective implements OnInit {
           return fuseDevices$.pipe(map((fuse) => fuse.search(search)?.map(({ item }) => item)));
         }
 
-        return of([]);
+        return of<BrowserTabs>([]);
       }),
+      map((results) => uniqBy(results, 'url')),
       shareReplay(1)
     );
   }
