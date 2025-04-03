@@ -1,5 +1,6 @@
 import { inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DateArg, format } from 'date-fns';
 import { groupBy } from 'lodash-es';
 import normalizeUrl from 'normalize-url';
 
@@ -144,3 +145,11 @@ export const getNormalizedUrl = (url: string) =>
     stripProtocol: true,
     stripWWW: true,
   });
+
+export const formatDate = (value: DateArg<Date>, formatStr = 'PP') => {
+  if (typeof value === 'number') {
+    value = Math.abs(value);
+  }
+
+  return format(value, formatStr);
+};

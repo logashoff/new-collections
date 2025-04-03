@@ -1,18 +1,18 @@
-@let tabValue = tab();
+@let _tab = tab();
 
 <a
   class="container"
-  [recent]="tabValue"
+  [recent]="_tab"
   matRipple
-  [href]="tabValue.url"
+  [href]="_tab.url"
   [target]="target()">
-  <nc-chip [source]="tabValue.favIconUrl | favicon: tabValue.url" />
+  <nc-chip [source]="_tab.favIconUrl | favicon: _tab.url" />
   <div class="text-container">
     <div class="title-container">
-      <span class="title">{{ tabValue.title }}</span>
+      <span class="title">{{ _tab.title }}</span>
     </div>
     <div class="subtitle-container">
-      <span class="subtitle">{{ tabValue.url }}</span>
+      <span class="subtitle">{{ _tab.url }}</span>
     </div>
   </div>
 
