@@ -5,6 +5,7 @@
   "rules": {
     "@stylistic/function-parentheses-space-inside": null,
     "color-hex-length": null,
+    "color-named": null,
     "length-zero-no-unit": null,
     "max-nesting-depth": null,
     "property-no-vendor-prefix": null,
