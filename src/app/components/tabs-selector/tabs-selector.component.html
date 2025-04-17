@@ -23,10 +23,17 @@
       <mat-selection-list formControlName="list">
         @for (tab of tabs; track tab) {
           <mat-list-option [value]="tab" color="primary">
-            <div class="list-item">
+            <div
+              class="list-item"
+              [ngClass]="
+                tabGroupById.has(tab.groupId)
+                  ? `group-color-${tabGroupById.get(tab.groupId).color}`
+                  : ''
+              ">
               <nc-chip
                 [source]="tab.favIconUrl | favicon: tab.url"
-                size="small"></nc-chip>
+                size="small">
+              </nc-chip>
               <div class="item-text">
                 <div class="item-title">{{ tab.title }}</div>
                 <span class="item-subtitle">

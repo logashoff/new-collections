@@ -1,5 +1,5 @@
-import { AsyncPipe } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, Component, Inject, viewChild, ViewEncapsulation } from '@angular/core';
+import { AsyncPipe, NgClass } from '@angular/common';
+import { AfterViewInit, Component, Inject, viewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -31,7 +31,6 @@ interface TabSelectorForm {
   selector: 'nc-tabs-selector',
   templateUrl: './tabs-selector.component.html',
   styleUrl: './tabs-selector.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   imports: [
     AsyncPipe,
@@ -46,6 +45,7 @@ interface TabSelectorForm {
     MatInputModule,
     MatListModule,
     MatTooltipModule,
+    NgClass,
     ReactiveFormsModule,
     TranslatePipe,
   ],
@@ -101,10 +101,20 @@ export class TabsSelectorComponent implements AfterViewInit {
     return this.formGroup.get('list') as FormControl;
   }
 
+  readonly tabGroupById = new Map<number, chrome.tabGroups.TabGroup>();
+
   constructor(
     @Inject(MAT_DIALOG_DATA) readonly tabs: Tabs,
     private readonly dialogRef: MatDialogRef<TabsSelectorComponent>
-  ) {}
+  ) {
+    this.tabs?.forEach(async (tab) => {
+      const tabGroup = await chrome.tabGroups.get(tab.groupId);
+
+      if (tabGroup) {
+        this.tabGroupById.set(tabGroup.id, tabGroup);
+      }
+    });
+  }
 
   ngAfterViewInit() {
     this.list.setValue(this.tabs.filter((tab) => tab.active));

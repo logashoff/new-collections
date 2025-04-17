@@ -40,6 +40,16 @@ $_typography-config: (
     #{light.$bg-alpha-4}
   );
 
+  --nc-tab-group-blue: light-dark(royalblue, lightskyblue);
+  --nc-tab-group-cyan: light-dark(teal, darkturquoise);
+  --nc-tab-group-green: light-dark(green, lightgreen);
+  --nc-tab-group-grey: light-dark(dimgray, lightgray);
+  --nc-tab-group-orange: light-dark(darkorange, sandybrown);
+  --nc-tab-group-pink: light-dark(mediumvioletred, hotpink);
+  --nc-tab-group-purple: light-dark(darkviolet, mediumpurple);
+  --nc-tab-group-red: light-dark(orangered, lightcoral);
+  --nc-tab-group-yellow: light-dark(goldenrod, gold);
+
   color-scheme: light dark;
 
   @include mat.theme(

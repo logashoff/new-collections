@@ -76,6 +76,25 @@ nc-tabs-selector {
         gap: 1rem;
         color: var(--nc-secondary-text-color);
 
+        $group-colors:
+          'blue', 'cyan', 'green', 'grey', 'orange', 'pink', 'purple', 'red',
+          'yellow';
+
+        @each $group-color in $group-colors {
+          &.group-color-#{$group-color} {
+            $_color: var(--nc-tab-group-#{$group-color});
+
+            &::before {
+              content: '';
+              position: absolute;
+              left: 0;
+              top: 0;
+              bottom: 0;
+              border-left: 4px solid $_color;
+            }
+          }
+        }
+
         .item-text {
           overflow: hidden;
           text-overflow: ellipsis;
