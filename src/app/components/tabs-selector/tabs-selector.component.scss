@@ -64,6 +64,49 @@ nc-tabs-selector {
 
       .mat-mdc-list-item {
         height: 4rem;
+        box-sizing: border-box;
+
+        &.tab-group {
+          $group-colors:
+            'blue', 'cyan', 'green', 'grey', 'orange', 'pink', 'purple', 'red',
+            'yellow';
+
+          $_border-radius: 0.5rem;
+          $_border-size: 2px;
+
+          @each $group-color in $group-colors {
+            $_color: var(--nc-tab-group-#{$group-color});
+
+            &.group-color-#{$group-color} {
+              .list-item::before {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                top: 0;
+
+                border-left: $_border-size solid $_color;
+                border-right: $_border-size solid $_color;
+                margin: 0 $_border-size;
+              }
+
+              &.first-in-group .list-item::before {
+                border-top-left-radius: $_border-radius;
+                border-top-right-radius: $_border-radius;
+                border-top: $_border-size solid $_color;
+                margin: $_border-size $_border-size 0;
+              }
+
+              &.last-in-group .list-item::before {
+                border-bottom-left-radius: $_border-radius;
+                border-bottom-right-radius: $_border-radius;
+                border-bottom: $_border-size solid $_color;
+                margin: 0 $_border-size $_border-size;
+              }
+            }
+          }
+        }
       }
 
       .mat-mdc-list-base {
@@ -75,25 +118,6 @@ nc-tabs-selector {
         align-items: center;
         gap: 1rem;
         color: var(--nc-secondary-text-color);
-
-        $group-colors:
-          'blue', 'cyan', 'green', 'grey', 'orange', 'pink', 'purple', 'red',
-          'yellow';
-
-        @each $group-color in $group-colors {
-          &.group-color-#{$group-color} {
-            $_color: var(--nc-tab-group-#{$group-color});
-
-            &::before {
-              content: '';
-              position: absolute;
-              left: 0;
-              top: 0;
-              bottom: 0;
-              border-left: 4px solid $_color;
-            }
-          }
-        }
 
         .item-text {
           overflow: hidden;

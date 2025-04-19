@@ -108,16 +108,22 @@ export class TabsSelectorComponent implements AfterViewInit {
     private readonly dialogRef: MatDialogRef<TabsSelectorComponent>
   ) {
     this.tabs?.forEach(async (tab) => {
-      const tabGroup = await chrome.tabGroups.get(tab.groupId);
+      if (tab?.groupId > -1) {
+        const tabGroup = await chrome.tabGroups.get(tab.groupId);
 
-      if (tabGroup) {
-        this.tabGroupById.set(tabGroup.id, tabGroup);
+        if (tabGroup) {
+          this.tabGroupById.set(tabGroup.id, tabGroup);
+        }
       }
     });
   }
 
   ngAfterViewInit() {
-    this.list.setValue(this.tabs.filter((tab) => tab.active));
+    const activeTab = this.tabs.filter((tab) => tab.active);
+
+    if (activeTab?.length > 0) {
+      this.list.setValue(activeTab);
+    }
   }
 
   /**
