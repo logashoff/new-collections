@@ -36,7 +36,7 @@ export async function restoreTabs(tabs: BrowserTabs, label?: string) {
   });
 
   chrome.tabGroups.update(groupId, {
-    collapsed: true,
+    collapsed: false,
     title: label,
   });
 }

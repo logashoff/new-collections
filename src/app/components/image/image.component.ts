@@ -1,4 +1,4 @@
-import { NgClass } from '@angular/common';
+import { NgClass, NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, effect, HostBinding, input, signal } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -14,7 +14,7 @@ import { getFaviconUrl, IconSize, ImageSource } from '../../utils';
   templateUrl: './image.component.html',
   styleUrl: './image.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgClass],
+  imports: [NgClass, NgOptimizedImage],
 })
 export class ImageComponent {
   /**

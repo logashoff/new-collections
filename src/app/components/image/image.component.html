@@ -1,1 +1,7 @@
-<img [src]="imageSrc()" [ngClass]="size()" (error)="onError()" />
+<img
+  [ngSrc]="imageSrc()"
+  [ngClass]="size()"
+  (error)="onError()"
+  width="24"
+  height="24"
+  priority />
