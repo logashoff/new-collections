@@ -1,9 +1,9 @@
 {
-  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./out-tsc/spec",
     "module": "CommonJs",
+    "outDir": "./out-tsc/spec",
     "types": ["jest", "chrome"]
   },
+  "extends": "./tsconfig.json",
   "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }

@@ -38,7 +38,7 @@ export class TopSitesComponent {
       url: site.url,
     });
 
-    const ref = this.message.open(translate('siteMovedToIgnoreList'), ActionIcon.Settings);
+    const ref = this.message.open(translate('siteMovedToIgnoreList'), ActionIcon.Settings, 'settings');
     const { dismissedByAction } = await lastValueFrom(ref.afterDismissed());
 
     if (dismissedByAction) {

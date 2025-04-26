@@ -4,7 +4,16 @@ import { DateArg, format } from 'date-fns';
 import { groupBy } from 'lodash-es';
 import normalizeUrl from 'normalize-url';
 
-import { BackgroundMessage, BrowserTabs, HostnameGroup, Settings, settingsStorageKey, Tab, uuidRegExp } from './models';
+import {
+  BackgroundMessage,
+  BrowserTabs,
+  HostnameGroup,
+  LocaleMessage,
+  Settings,
+  settingsStorageKey,
+  Tab,
+  uuidRegExp,
+} from './models';
 
 /**
  * Returns BrowserTab array grouped by hostnames
@@ -123,7 +132,7 @@ export const sanitizeHtml = () => {
  * @param messageName The name of the message, as specified in the messages.json file.
  * @param substitutions Optional. Up to 9 substitution strings, if the message requires any.
  */
-export const translate = (messageName: string, substitutions?: string | string[]): string =>
+export const translate = (messageName: LocaleMessage, substitutions?: string | string[]): string =>
   chrome.i18n.getMessage(messageName, substitutions);
 
 /**

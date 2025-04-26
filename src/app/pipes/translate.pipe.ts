@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { translate } from '../utils';
+import { LocaleMessage, translate } from '../utils';
 
 /**
  * @description
@@ -10,7 +10,7 @@ import { translate } from '../utils';
   name: 'translate',
 })
 export class TranslatePipe implements PipeTransform {
-  transform(messageName: string, substitutions?: string | string[]): string {
+  transform(messageName: LocaleMessage, substitutions?: string | string[]): string {
     return translate(messageName, substitutions);
   }
 }

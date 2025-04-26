@@ -350,7 +350,8 @@ export class TabService {
           const tabsLen = tabs.length;
           const messageRef = this.message.open(
             translate(tabsLen > 1 ? 'itemsAddedCount' : 'itemAdded', tabsLen.toString()),
-            ActionIcon.Undo
+            ActionIcon.Undo,
+            'undo'
           );
           const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
 
@@ -389,7 +390,7 @@ export class TabService {
             messageRef = await this.removeTabGroup(tabGroup);
           } else {
             this.save();
-            messageRef = this.message.open(translate('itemRemoved'), ActionIcon.Undo);
+            messageRef = this.message.open(translate('itemRemoved'), ActionIcon.Undo, 'undo');
           }
 
           this.#updated$.next(true);
@@ -444,7 +445,7 @@ export class TabService {
   async removeTabGroup(tabGroup: TabGroup): Promise<MessageRef> {
     return new Promise(async (resolve) => {
       const tabGroups = await firstValueFrom(this.tabGroups$);
-      const messageRef = this.message.open(translate('itemRemoved'), ActionIcon.Undo);
+      const messageRef = this.message.open(translate('itemRemoved'), ActionIcon.Undo, 'undo');
       const removedGroups = remove(tabGroups, (tg) => tg === tabGroup);
 
       this.#tabGroupsSource$.next(tabGroups);
@@ -478,7 +479,8 @@ export class TabService {
         const rmLen = removedGroups.length;
         const messageRef = this.message.open(
           translate(rmLen > 1 ? 'itemsRemovedCount' : 'itemRemoved', rmLen.toString()),
-          ActionIcon.Undo
+          ActionIcon.Undo,
+          'undo'
         );
 
         this.navService.reset('groupId');

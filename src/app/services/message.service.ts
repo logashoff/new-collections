@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 import { MessageComponent } from '../components';
-import { ActionIcon } from '../utils';
+import { ActionIcon, LocaleMessage } from '../utils';
 
 /**
  * @description
@@ -18,7 +18,7 @@ export class MessageService {
   /**
    * Displays snackbar message
    */
-  open(message: string, actionIcon?: ActionIcon, config: MatSnackBarConfig = {}) {
+  open(message: string, actionIcon?: ActionIcon, actionLabel?: LocaleMessage, config: MatSnackBarConfig = {}) {
     return this.snackBar.openFromComponent(MessageComponent, {
       duration: 10_000,
       ...config,
@@ -27,6 +27,7 @@ export class MessageService {
       panelClass: 'message-container',
       data: {
         actionIcon,
+        actionLabel,
         message,
       },
     });

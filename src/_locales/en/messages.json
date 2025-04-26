@@ -1,18 +1,6 @@
 {
-  "action_settings": {
-    "message": "Settings"
-  },
-  "action_undo": {
-    "message": "Undo"
-  },
-  "active": {
-    "message": "Active"
-  },
   "addCollection": {
     "message": "Add Collection"
-  },
-  "addSelected": {
-    "message": "Add Selected"
   },
   "addTabs": {
     "message": "Add Tabs"
@@ -31,9 +19,6 @@
   },
   "dismiss": {
     "message": "Dismiss"
-  },
-  "duplicate": {
-    "message": "Duplicate"
   },
   "edit": {
     "message": "Edit"
@@ -113,17 +98,6 @@
   },
   "itemsRemovedCount": {
     "message": "Removed $count$ items",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "latest": {
-    "message": "Latest"
-  },
-  "latestCount": {
-    "message": "Latest $count$",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -219,17 +193,6 @@
   "syncUsage": {
     "message": "Sync Storage Usage"
   },
-  "tabsCount": {
-    "message": "$selected$ tabs of $total$",
-    "placeholders": {
-      "selected": {
-        "content": "$1"
-      },
-      "total": {
-        "content": "$2"
-      }
-    }
-  },
   "tabsExistError": {
     "message": "No new tabs"
   },
@@ -238,6 +201,9 @@
   },
   "today": {
     "message": "Today"
+  },
+  "undo": {
+    "message": "Undo"
   },
   "unpin": {
     "message": "Unpin"

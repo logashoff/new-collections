@@ -4,7 +4,14 @@ import { SafeUrl } from '@angular/platform-browser';
 import { NavigationExtras, Params } from '@angular/router';
 import { remove } from 'lodash-es';
 import { BehaviorSubject, Observable } from 'rxjs';
+
+import LocaleMessages from '@locales/en/messages.json';
 import { MessageComponent } from '../components';
+
+/**
+ * Translate values key name
+ */
+export type LocaleMessage = keyof typeof LocaleMessages;
 
 /**
  * Local storage key for saving app settings
@@ -324,7 +331,7 @@ export type Actions = Action[];
 export interface TabAction {
   action: Action;
   icon: ActionIcon;
-  label: string;
+  label: LocaleMessage;
 }
 
 export type TabActions = TabAction[];
