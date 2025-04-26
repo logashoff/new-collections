@@ -44,10 +44,8 @@ nc-tabs-selector {
 
   .mat-mdc-dialog-content.container {
     color: var(--nc-secondary-text-color);
-    max-width: $_max-width;
-    min-width: $_max-width;
+    width: $_max-width;
     position: relative;
-    max-height: 50vh;
     overflow: auto;
     padding: 0;
 
@@ -67,19 +65,20 @@ nc-tabs-selector {
         box-sizing: border-box;
 
         &.tab-group {
-          $group-colors:
+          $_group-colors:
             'blue', 'cyan', 'green', 'grey', 'orange', 'pink', 'purple', 'red',
             'yellow';
 
           $_border-radius: 0.5rem;
           $_border-size: 2px;
 
-          @each $group-color in $group-colors {
+          @each $group-color in $_group-colors {
             $_color: var(--nc-tab-group-#{$group-color});
 
             &.group-color-#{$group-color} {
               .list-item::before {
                 content: '';
+                opacity: 0.5;
                 position: absolute;
                 bottom: 0;
                 left: 0;
@@ -95,14 +94,14 @@ nc-tabs-selector {
                 border-top-left-radius: $_border-radius;
                 border-top-right-radius: $_border-radius;
                 border-top: $_border-size solid $_color;
-                margin: $_border-size $_border-size 0;
+                margin-top: $_border-size;
               }
 
               &.last-in-group .list-item::before {
                 border-bottom-left-radius: $_border-radius;
                 border-bottom-right-radius: $_border-radius;
                 border-bottom: $_border-size solid $_color;
-                margin: 0 $_border-size $_border-size;
+                margin-bottom: $_border-size;
               }
             }
           }
