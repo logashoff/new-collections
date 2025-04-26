@@ -1,7 +1,7 @@
 {
   "name": "new-collections",
   "description": "Browser extension to save and restore tabs",
-  "version": "1.11",
+  "version": "1.12",
   "scripts": {
     "build": "ng build --configuration production --output-hashing none",
     "build:dev": "ng build --configuration development",
@@ -48,10 +48,10 @@
     "@angular/compiler-cli": "^19.2.8",
     "@angular/language-service": "^19.2.8",
     "@ngneat/spectator": "^19.4.1",
-    "@types/chrome": "^0.0.316",
+    "@types/chrome": "^0.0.317",
     "@types/jest": "^29.5.14",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^22.14.1",
+    "@types/node": "^22.15.2",
     "@typescript-eslint/eslint-plugin": "^8.31.0",
     "@typescript-eslint/parser": "^8.31.0",
     "esbuild": "^0.25.3",
@@ -61,7 +61,7 @@
     "lodash": "^4.17.21",
     "ng-packagr": "^19.2.2",
     "prettier": "^3.5.3",
-    "stylelint": "^16.19.0",
+    "stylelint": "^16.19.1",
     "stylelint-config-sass-guidelines": "^12.1.0",
     "typescript": "5.8.3"
   }
