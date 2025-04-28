@@ -527,6 +527,7 @@ export class TabService {
   openTabsSelector(tabs: BrowserTabs): MatDialogRef<TabsSelectorComponent> {
     return this.dialog.open(TabsSelectorComponent, {
       data: tabs,
+      autoFocus: false,
     });
   }
 
