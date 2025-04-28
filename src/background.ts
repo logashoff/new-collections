@@ -1,5 +1,5 @@
 import { addRecent, getCollections } from './app/utils/collections';
-import { BackgroundMessage, Tab } from './app/utils/models';
+import type { BackgroundMessage, Tab } from './app/utils/models';
 import { getNormalizedUrl } from './app/utils/utils';
 
 const onRuntimeChanges = async () => {

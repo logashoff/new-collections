@@ -1,4 +1,4 @@
-import { Timeout } from './models';
+import type { Timeout } from './models';
 
 /**
  * Scroll complete event delay targets worst case 15 FPS animation

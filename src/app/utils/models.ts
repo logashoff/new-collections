@@ -5,7 +5,7 @@ import { NavigationExtras, Params } from '@angular/router';
 import { remove } from 'lodash-es';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import LocaleMessages from '@locales/en/messages.json';
+import type LocaleMessages from '@locales/en/messages.json';
 import { MessageComponent } from '../components';
 
 /**
@@ -32,15 +32,6 @@ export const recentKey = 'recent';
  * URLs to ignore when saving tabs.
  */
 export const ignoreUrlsRegExp = new RegExp('^(about:|chrome:|file:|wss:|ws:|chrome-extension:)', 'i');
-
-/**
- * Regex to validate UUID
- * @copyright: https://github.com/uuidjs/uuid
- */
-export const uuidRegExp = new RegExp(
-  '^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
-  'i'
-);
 
 export type SyncStorageArea = chrome.storage.SyncStorageArea;
 export type QueryInfo = chrome.tabs.QueryInfo;

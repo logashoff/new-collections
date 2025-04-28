@@ -1,4 +1,4 @@
-import { BrowserTabs, QueryInfo, Tabs } from './models';
+import type { BrowserTabs, QueryInfo, Tabs } from './models';
 import { createUrl } from './utils';
 
 /**
