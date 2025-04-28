@@ -1,4 +1,4 @@
-import { getBrowserTabMock, getTabGroupMock, randomUuid } from 'src/mocks';
+import { getBrowserTabMock, getTabGroupMock, randomUuids } from 'src/mocks';
 import { getHostname, getHostnameGroup, isUuid } from './utils';
 
 describe('utils.ts', () => {
@@ -29,6 +29,6 @@ describe('utils.ts', () => {
   });
 
   it('should validate uuid', () => {
-    expect(isUuid(randomUuid())).toBeTruthy();
+    randomUuids.forEach((uuid) => expect(isUuid(uuid)).toBeTruthy());
   });
 });
