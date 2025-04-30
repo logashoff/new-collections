@@ -24,18 +24,18 @@
         @for (tab of tabs; track tab; let i = $index) {
           @let tabGroup = tabGroupById.get(tab.groupId);
           @let groupClass = tabGroup ? 'tab-group' : '';
-          @let prevTabGroup = tabGroupById.get(tabs[i - 1]?.groupId);
-          @let nextTabGroup = tabGroupById.get(tabs[i + 1]?.groupId);
-          @let isFirstInGroup = tabGroup && prevTabGroup !== tabGroup;
-          @let isLastInGroup = tabGroup && nextTabGroup !== tabGroup;
+          @let isFirstInGroup =
+            tabGroup && tabs[i - 1]?.groupId !== tabGroup?.id;
+          @let isLastInGroup =
+            tabGroup && tabs[i + 1]?.groupId !== tabGroup?.id;
           @let groupColorClass =
             tabGroup ? `group-color-${tabGroup.color}` : '';
           @let isFirstClass = isFirstInGroup ? 'first-in-group' : '';
           @let isLastClass = isLastInGroup ? 'last-in-group' : '';
 
           <mat-list-option
-            [value]="tab"
             color="primary"
+            [value]="tab"
             [ngClass]="[
               groupClass,
               groupColorClass,

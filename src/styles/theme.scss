@@ -2,6 +2,18 @@
 @use 'dark-colors' as dark;
 @use 'light-colors' as light;
 
+$group-colors: (
+  blue: light-dark(royalblue, lightskyblue),
+  cyan: light-dark(teal, darkturquoise),
+  green: light-dark(green, lightgreen),
+  grey: light-dark(dimgray, lightgray),
+  orange: light-dark(darkorange, sandybrown),
+  pink: light-dark(mediumvioletred, hotpink),
+  purple: light-dark(darkviolet, mediumpurple),
+  red: light-dark(orangered, lightcoral),
+  yellow: light-dark(goldenrod, gold),
+);
+
 $_typography-config: (
   plain-family: Roboto,
   bold-weight: 500,
@@ -40,15 +52,9 @@ $_typography-config: (
     #{light.$bg-alpha-4}
   );
 
-  --nc-tab-group-blue: light-dark(royalblue, lightskyblue);
-  --nc-tab-group-cyan: light-dark(teal, darkturquoise);
-  --nc-tab-group-green: light-dark(green, lightgreen);
-  --nc-tab-group-grey: light-dark(dimgray, lightgray);
-  --nc-tab-group-orange: light-dark(darkorange, sandybrown);
-  --nc-tab-group-pink: light-dark(mediumvioletred, hotpink);
-  --nc-tab-group-purple: light-dark(darkviolet, mediumpurple);
-  --nc-tab-group-red: light-dark(orangered, lightcoral);
-  --nc-tab-group-yellow: light-dark(goldenrod, gold);
+  @each $group-color, $value in $group-colors {
+    --nc-tab-group-#{'' + $group-color}: #{$value};
+  }
 
   color-scheme: light dark;
 
