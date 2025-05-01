@@ -161,24 +161,25 @@ export class SearchComponent extends SubSinkDirective implements OnInit {
       )
     );
 
-    const sourceTabs = combineLatest([
-      this.searchQuery$.pipe(startWith('')),
-      searchResults$.pipe(startWith(null)),
-      this.#source$,
-    ])
+    const sourceTabs = combineLatest({
+      searchQuery: this.searchQuery$.pipe(startWith('')),
+      searchResults: searchResults$.pipe(startWith(null)),
+      source: this.#source$,
+    })
       .pipe(
-        filter(([, , tabs]) => tabs?.length > 0),
+        filter(({ source }) => source?.length > 0),
         distinctUntilChanged(
-          ([query1, results1], [query2, results2]) => query1 === query2 && results1?.length === results2?.length
+          ({ searchQuery: query1, searchResults: results1 }, { searchQuery: query2, searchResults: results2 }) =>
+            query1 === query2 && results1?.length === results2?.length
         ),
         withLatestFrom(this.recentMap$),
-        map(([[searchQuery, searchResults, tabs], recentTabs]) => {
+        map(([{ searchQuery, searchResults, source }, recentTabs]) => {
           if (searchQuery?.length) {
             return searchResults;
           }
 
           const sortTabs = this.tabService.sortByRecent(
-            tabs.sort((a, b) => b.id - a.id),
+            source.sort((a, b) => b.id - a.id),
             recentTabs
           );
 

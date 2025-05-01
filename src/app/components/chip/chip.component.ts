@@ -19,7 +19,7 @@ export class ChipComponent {
   /**
    * Image source URL
    */
-  readonly source = input<ImageSource>();
+  readonly source = input.required<ImageSource>();
 
   /**
    * Image size

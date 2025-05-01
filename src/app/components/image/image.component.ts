@@ -1,5 +1,5 @@
 import { NgClass, NgOptimizedImage } from '@angular/common';
-import { ChangeDetectionStrategy, Component, effect, HostBinding, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, input, model } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { getFaviconUrl, IconSize, ImageSource } from '../../utils';
@@ -20,14 +20,12 @@ export class ImageComponent {
   /**
    * Image source path.
    */
-  readonly source = input.required<ImageSource>();
+  readonly source = model.required<ImageSource>();
 
   /**
    * Icon size.
    */
   readonly size = input<IconSize>('medium');
-
-  readonly imageSrc = signal<ImageSource>('');
 
   @HostBinding('class.medium') get medium(): boolean {
     return this.size() === 'medium';
@@ -37,20 +35,18 @@ export class ImageComponent {
     return this.size() === 'small';
   }
 
-  constructor(private sanitizer: DomSanitizer) {
-    effect(() => this.imageSrc.set(this.source()), { allowSignalWrites: true });
-  }
+  constructor(private sanitizer: DomSanitizer) {}
 
   /**
    * Handles image loading error
    */
   onError() {
     if (typeof this.source() === 'string') {
-      const source = this.source() as string;
       try {
+        const source = this.source() as string;
         const favicon = getFaviconUrl(source);
-        const newSrc = this.sanitizer.bypassSecurityTrustUrl(favicon);
-        this.imageSrc.set(newSrc);
+        const safeUrl = this.sanitizer.bypassSecurityTrustUrl(favicon);
+        this.source.set(safeUrl);
       } catch (e) {}
     }
   }

@@ -50,8 +50,8 @@ export class NewTabComponent extends KeyListenerDirective implements OnInit {
   }
 
   ngOnInit() {
-    this.hideTopSites$ = combineLatest([this.topSites$, this.isSearchActive$]).pipe(
-      map(([topSites, isSearchActive]) => !topSites || topSites?.length === 0 || isSearchActive),
+    this.hideTopSites$ = combineLatest({ topSites: this.topSites$, isSearchActive: this.isSearchActive$ }).pipe(
+      map(({ topSites, isSearchActive }) => !topSites || topSites?.length === 0 || isSearchActive),
       shareReplay(1)
     );
   }
