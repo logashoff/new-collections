@@ -370,46 +370,44 @@ export class TabService {
    * Removes tab from specified tab group.
    */
   async removeTab(removedTab: BrowserTab): Promise<MessageRef> {
-    return new Promise(async (resolve) => {
-      let messageRef: MessageRef;
+    let messageRef: MessageRef;
 
-      const tabGroup = await this.getGroupByTab(removedTab);
+    const tabGroup = await this.getGroupByTab(removedTab);
 
-      let removeIndex = -1;
+    let removeIndex = -1;
 
-      if (tabGroup) {
-        removeIndex = tabGroup.tabs.findIndex((tab) => tab === removedTab);
-
-        if (removeIndex > -1) {
-          this.navService.reset('groupId', 'tabId');
-          tabGroup.removeTabAt(removeIndex);
-
-          await removeRecent(removedTab.id);
-
-          if (tabGroup.tabs.length === 0) {
-            messageRef = await this.removeTabGroup(tabGroup);
-          } else {
-            this.save();
-            messageRef = this.message.open(translate('itemRemoved'), ActionIcon.Undo, 'undo');
-          }
-
-          this.#updated$.next(true);
-        }
-      }
-
-      resolve(messageRef);
+    if (tabGroup) {
+      removeIndex = tabGroup.tabs.findIndex((tab) => tab === removedTab);
 
       if (removeIndex > -1) {
-        const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
+        this.navService.reset('groupId', 'tabId');
+        tabGroup.removeTabAt(removeIndex);
 
-        if (revert) {
-          tabGroup.addTabAt(removeIndex, removedTab);
+        await removeRecent(removedTab.id);
+
+        if (tabGroup.tabs.length === 0) {
+          messageRef = await this.removeTabGroup(tabGroup);
+        } else {
           this.save();
-
-          this.#updated$.next(true);
+          messageRef = this.message.open(translate('itemRemoved'), ActionIcon.Undo, 'undo');
         }
+
+        this.#updated$.next(true);
       }
-    });
+    }
+
+    if (removeIndex > -1) {
+      const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
+
+      if (revert) {
+        tabGroup.addTabAt(removeIndex, removedTab);
+        this.save();
+
+        this.#updated$.next(true);
+      }
+    }
+
+    return messageRef;
   }
 
   /**
@@ -443,65 +441,62 @@ export class TabService {
    * Removed specified tab group from local storage.
    */
   async removeTabGroup(tabGroup: TabGroup): Promise<MessageRef> {
-    return new Promise(async (resolve) => {
-      const tabGroups = await firstValueFrom(this.tabGroups$);
-      const messageRef = this.message.open(translate('itemRemoved'), ActionIcon.Undo, 'undo');
-      const removedGroups = remove(tabGroups, (tg) => tg === tabGroup);
+    const tabGroups = await firstValueFrom(this.tabGroups$);
+    const messageRef = this.message.open(translate('itemRemoved'), ActionIcon.Undo, 'undo');
+    const removedGroups = remove(tabGroups, (tg) => tg === tabGroup);
 
-      this.#tabGroupsSource$.next(tabGroups);
+    this.#tabGroupsSource$.next(tabGroups);
 
-      this.navService.reset('groupId');
-      resolve(messageRef);
+    this.navService.reset('groupId');
 
-      this.save();
+    this.save();
 
-      await removeRecent(tabGroup.tabs.map((tab) => tab.id));
+    await removeRecent(tabGroup.tabs.map((tab) => tab.id));
 
-      if (removedGroups?.length > 0) {
-        const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
+    if (removedGroups?.length > 0) {
+      const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
 
-        if (revert) {
-          await this.addTabGroup(tabGroup);
-        }
+      if (revert) {
+        await this.addTabGroup(tabGroup);
       }
-    });
+    }
+
+    return messageRef;
   }
 
   /**
    * Removed multiple tab groups.
    */
   async removeTabGroups(tabGroups: TabGroups): Promise<MessageRef> {
-    return new Promise(async (resolve) => {
-      const currentTabGroups = await firstValueFrom(this.tabGroups$);
-      const removedGroups = remove(currentTabGroups, (tabGroup) => tabGroups.includes(tabGroup));
+    const currentTabGroups = await firstValueFrom(this.tabGroups$);
+    const removedGroups = remove(currentTabGroups, (tabGroup) => tabGroups.includes(tabGroup));
+
+    if (removedGroups?.length > 0) {
+      const rmLen = removedGroups.length;
+      const messageRef = this.message.open(
+        translate(rmLen > 1 ? 'itemsRemovedCount' : 'itemRemoved', rmLen.toString()),
+        ActionIcon.Undo,
+        'undo'
+      );
+
+      this.navService.reset('groupId');
+      this.#tabGroupsSource$.next(currentTabGroups);
+
+      this.save();
+
+      const tabIds: TabId[] = removedGroups.map(({ tabs }) => tabs.map(({ id }) => id)).flat();
+      await removeRecent(tabIds);
 
       if (removedGroups?.length > 0) {
-        const rmLen = removedGroups.length;
-        const messageRef = this.message.open(
-          translate(rmLen > 1 ? 'itemsRemovedCount' : 'itemRemoved', rmLen.toString()),
-          ActionIcon.Undo,
-          'undo'
-        );
+        const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
 
-        this.navService.reset('groupId');
-        this.#tabGroupsSource$.next(currentTabGroups);
-
-        resolve(messageRef);
-
-        this.save();
-
-        const tabIds: TabId[] = removedGroups.map(({ tabs }) => tabs.map(({ id }) => id)).flat();
-        await removeRecent(tabIds);
-
-        if (removedGroups?.length > 0) {
-          const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
-
-          if (revert) {
-            await this.addTabGroups(removedGroups);
-          }
+        if (revert) {
+          await this.addTabGroups(removedGroups);
         }
       }
-    });
+
+      return messageRef;
+    }
   }
 
   /**

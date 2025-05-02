@@ -52,7 +52,7 @@ interface SearchForm {
 export class SearchFormComponent extends SubSinkDirective implements OnInit {
   readonly activated = output();
   readonly canceled = output();
-  readonly blur = output();
+  readonly blurred = output();
 
   #disabled = false;
 
@@ -157,7 +157,7 @@ export class SearchFormComponent extends SubSinkDirective implements OnInit {
 
   onBlur() {
     this.focused$.next(false);
-    this.blur.emit();
+    this.blurred.emit();
   }
 
   async searchChange(value: string) {

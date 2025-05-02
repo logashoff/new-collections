@@ -10,7 +10,7 @@
   [disabled]="!hasData"
   (activated)="navigate('search')"
   (canceled)="navigate('main')"
-  (blur)="onBlur()" />
+  (blurred)="onBlur()" />
 <section class="content" [@routeAnimations]="urlChanges$ | async">
   <router-outlet />
 </section>

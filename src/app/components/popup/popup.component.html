@@ -5,7 +5,7 @@
   [disabled]="!hasData"
   (activated)="navigate('search')"
   (canceled)="navigate('main')"
-  (blur)="onBlur()" />
+  (blurred)="onBlur()" />
 <div class="content" [@routeAnimations]="urlChanges$ | async">
   <router-outlet />
 </div>
