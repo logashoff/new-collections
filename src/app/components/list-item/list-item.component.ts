@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  inject,
   input,
   output,
   ViewEncapsulation,
@@ -57,6 +58,9 @@ import { RippleComponent } from '../ripple/ripple.component';
   ],
 })
 export class ListItemComponent implements Activatable {
+  readonly #cdr = inject(ChangeDetectorRef);
+  readonly #el = inject(ElementRef);
+
   readonly tab = input.required<BrowserTab>();
   readonly actions = input<Actions>();
 
@@ -96,11 +100,6 @@ export class ListItemComponent implements Activatable {
     return this.actions()?.map((action) => tabActions.get(action));
   }
 
-  constructor(
-    private readonly cdr: ChangeDetectorRef,
-    private readonly el: ElementRef
-  ) {}
-
   async activate() {
     const { id, url } = this.tab();
     await addRecent(id);
@@ -128,13 +127,13 @@ export class ListItemComponent implements Activatable {
 
   async setActiveStyles() {
     this.isActive = true;
-    this.cdr.markForCheck();
+    this.#cdr.markForCheck();
 
-    await scrollIntoView(this.el.nativeElement, { block: 'center' });
+    await scrollIntoView(this.#el.nativeElement, { block: 'center' });
   }
 
   setInactiveStyles() {
     this.isActive = false;
-    this.cdr.markForCheck();
+    this.#cdr.markForCheck();
   }
 }

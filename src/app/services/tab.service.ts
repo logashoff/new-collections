@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { format, isSameDay, isSameWeek, isSameYear, subDays } from 'date-fns';
 import { remove, uniqBy } from 'lodash-es';
@@ -48,6 +48,10 @@ import { NavService } from './nav.service';
   providedIn: 'root',
 })
 export class TabService {
+  readonly #dialog = inject(MatDialog);
+  readonly #message = inject(MessageService);
+  readonly #navService = inject(NavService);
+
   /**
    * Behavior subject will be used to populate tabs data when managing tabs.
    */
@@ -87,11 +91,7 @@ export class TabService {
     shareReplay(1)
   );
 
-  constructor(
-    private dialog: MatDialog,
-    private message: MessageService,
-    private navService: NavService
-  ) {
+  constructor() {
     this.initService();
   }
 
@@ -242,7 +242,7 @@ export class TabService {
    * Toggles pinned status for group specified.
    */
   favGroupToggle(group: TabGroup) {
-    this.navService.reset();
+    this.#navService.reset();
     group.favToggle();
     this.save();
   }
@@ -326,7 +326,7 @@ export class TabService {
     );
 
     if (filteredTabs.length === 0) {
-      this.message.open(translate('invalidTabList'));
+      this.#message.open(translate('invalidTabList'));
     } else {
       const tabsByUrl: Map<string, BrowserTab> = new Map(group.tabs.map((tab) => [tab.url, tab]));
       filteredTabs = filteredTabs.filter(({ url }) => !tabsByUrl.get(url));
@@ -348,7 +348,7 @@ export class TabService {
           await this.save();
 
           const tabsLen = tabs.length;
-          const messageRef = this.message.open(
+          const messageRef = this.#message.open(
             translate(tabsLen > 1 ? 'itemsAddedCount' : 'itemAdded', tabsLen.toString()),
             ActionIcon.Undo,
             'undo'
@@ -361,7 +361,7 @@ export class TabService {
           }
         }
       } else {
-        this.message.open(translate('tabsExistError'));
+        this.#message.open(translate('tabsExistError'));
       }
     }
   }
@@ -380,7 +380,7 @@ export class TabService {
       removeIndex = tabGroup.tabs.findIndex((tab) => tab === removedTab);
 
       if (removeIndex > -1) {
-        this.navService.reset('groupId', 'tabId');
+        this.#navService.reset('groupId', 'tabId');
         tabGroup.removeTabAt(removeIndex);
 
         await removeRecent(removedTab.id);
@@ -389,7 +389,7 @@ export class TabService {
           messageRef = await this.removeTabGroup(tabGroup);
         } else {
           this.save();
-          messageRef = this.message.open(translate('itemRemoved'), ActionIcon.Undo, 'undo');
+          messageRef = this.#message.open(translate('itemRemoved'), ActionIcon.Undo, 'undo');
         }
 
         this.#updated$.next(true);
@@ -414,7 +414,7 @@ export class TabService {
    * Opens tab edit dialog.
    */
   async updateTab(tab: BrowserTab): Promise<BrowserTab> {
-    const dialogRef = this.dialog.open(RenameDialogComponent, { data: tab, disableClose: true });
+    const dialogRef = this.#dialog.open(RenameDialogComponent, { data: tab, disableClose: true });
     let updatedTab: BrowserTab = await lastValueFrom(dialogRef.afterClosed());
 
     if (updatedTab && (tab.title !== updatedTab.title || tab.url !== updatedTab.url)) {
@@ -442,12 +442,12 @@ export class TabService {
    */
   async removeTabGroup(tabGroup: TabGroup): Promise<MessageRef> {
     const tabGroups = await firstValueFrom(this.tabGroups$);
-    const messageRef = this.message.open(translate('itemRemoved'), ActionIcon.Undo, 'undo');
+    const messageRef = this.#message.open(translate('itemRemoved'), ActionIcon.Undo, 'undo');
     const removedGroups = remove(tabGroups, (tg) => tg === tabGroup);
 
     this.#tabGroupsSource$.next(tabGroups);
 
-    this.navService.reset('groupId');
+    this.#navService.reset('groupId');
 
     this.save();
 
@@ -473,13 +473,13 @@ export class TabService {
 
     if (removedGroups?.length > 0) {
       const rmLen = removedGroups.length;
-      const messageRef = this.message.open(
+      const messageRef = this.#message.open(
         translate(rmLen > 1 ? 'itemsRemovedCount' : 'itemRemoved', rmLen.toString()),
         ActionIcon.Undo,
         'undo'
       );
 
-      this.navService.reset('groupId');
+      this.#navService.reset('groupId');
       this.#tabGroupsSource$.next(currentTabGroups);
 
       this.save();
@@ -520,7 +520,7 @@ export class TabService {
    * Opens tabs selector bottom sheet.
    */
   openTabsSelector(tabs: BrowserTabs): MatDialogRef<TabsSelectorComponent> {
-    return this.dialog.open(TabsSelectorComponent, {
+    return this.#dialog.open(TabsSelectorComponent, {
       data: tabs,
       autoFocus: false,
     });

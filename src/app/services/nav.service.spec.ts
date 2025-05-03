@@ -36,15 +36,15 @@ describe('NavService', () => {
   });
 
   it('should navigate with values', () => {
-    jest.spyOn(spectator.service['router'], 'navigate');
+    jest.spyOn(spectator.service.router, 'navigate');
 
     spectator.service.setParams('6ab9c99e-8942-4236-ad6e-7e38c51da810', 218);
 
-    expect(spectator.service['router'].navigate).toHaveBeenCalled();
+    expect(spectator.service.router.navigate).toHaveBeenCalled();
 
     spectator.service.reset();
 
-    expect(spectator.service['router'].navigate).toHaveBeenCalledTimes(2);
+    expect(spectator.service.router.navigate).toHaveBeenCalledTimes(2);
   });
 
   it('should have params set', async () => {

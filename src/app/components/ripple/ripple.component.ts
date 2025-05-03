@@ -4,6 +4,7 @@ import {
   Component,
   effect,
   ElementRef,
+  inject,
   input,
   ViewEncapsulation,
 } from '@angular/core';
@@ -30,7 +31,10 @@ export class RippleComponent {
 
   animate = false;
 
-  constructor(el: ElementRef, cdr: ChangeDetectorRef) {
+  constructor() {
+    const el = inject(ElementRef);
+    const cdr = inject(ChangeDetectorRef);
+
     effect(async () => {
       if (this.focused()) {
         await sleep(225);

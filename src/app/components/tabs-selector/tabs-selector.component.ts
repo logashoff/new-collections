@@ -1,5 +1,5 @@
 import { AsyncPipe, NgClass } from '@angular/common';
-import { AfterViewInit, Component, Inject, viewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, inject, viewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -51,6 +51,9 @@ interface TabSelectorForm {
   ],
 })
 export class TabsSelectorComponent implements AfterViewInit {
+  readonly #dialogRef = inject<MatDialogRef<TabsSelectorComponent>>(MatDialogRef);
+  readonly tabs = inject<Tabs>(MAT_DIALOG_DATA);
+
   /**
    * Root group form.
    */
@@ -103,10 +106,7 @@ export class TabsSelectorComponent implements AfterViewInit {
 
   readonly tabGroupById = new Map<number, chrome.tabGroups.TabGroup>();
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) readonly tabs: Tabs,
-    private readonly dialogRef: MatDialogRef<TabsSelectorComponent>
-  ) {
+  constructor() {
     this.tabs?.forEach(async (tab) => {
       if (tab?.groupId > -1) {
         const tabGroup = await chrome.tabGroups.get(tab.groupId);
@@ -138,6 +138,6 @@ export class TabsSelectorComponent implements AfterViewInit {
    * Handles form submit.
    */
   save() {
-    this.dialogRef.close(this.list.value);
+    this.#dialogRef.close(this.list.value);
   }
 }

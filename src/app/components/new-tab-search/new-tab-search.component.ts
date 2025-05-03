@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Observable, map, shareReplay } from 'rxjs';
 
 import { HomeService, NavService, TabService } from '../../services';
@@ -14,27 +14,25 @@ import { SearchComponent } from '../search/search.component';
   imports: [AsyncPipe, SearchComponent],
 })
 export class NewTabSearchComponent {
-  readonly searchSource$: Observable<BrowserTabs> = this.tabService.tabs$;
+  readonly #homeService = inject(HomeService);
+  readonly #navService = inject(NavService);
+  readonly #tabService = inject(TabService);
 
-  readonly devices$: Observable<BrowserTabs> = this.homeService.devices$.pipe(
-    map((devices) => devices?.map((device) => this.homeService.getTabsFromSessions(device.sessions)).flat()),
+  readonly searchSource$: Observable<BrowserTabs> = this.#tabService.tabs$;
+
+  readonly devices$: Observable<BrowserTabs> = this.#homeService.devices$.pipe(
+    map((devices) => devices?.map((device) => this.#homeService.getTabsFromSessions(device.sessions)).flat()),
     shareReplay(1)
   );
-
-  constructor(
-    private readonly homeService: HomeService,
-    private readonly navService: NavService,
-    private readonly tabService: TabService
-  ) {}
 
   /**
    * Scroll specified tab into view
    */
   async findItem(tab: BrowserTab) {
-    const group = await this.tabService.getGroupByTab(tab);
+    const group = await this.#tabService.getGroupByTab(tab);
 
     if (group) {
-      await this.navService.navigate(['/new-tab', 'main'], {
+      await this.#navService.navigate(['/new-tab', 'main'], {
         queryParams: {
           groupId: group.id,
           tabId: tab.id,

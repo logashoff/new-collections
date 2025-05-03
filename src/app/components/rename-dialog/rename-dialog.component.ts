@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -29,24 +29,22 @@ interface RenameForm {
   imports: [MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, TranslatePipe],
 })
 export class RenameDialogComponent implements OnInit {
-  formGroup: FormGroup<RenameForm>;
+  readonly #dialogRef = inject<MatDialogRef<RenameDialogComponent>>(MatDialogRef);
+  readonly #tab = inject<BrowserTab>(MAT_DIALOG_DATA);
 
-  constructor(
-    public dialogRef: MatDialogRef<RenameDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private tab: BrowserTab
-  ) {}
+  formGroup: FormGroup<RenameForm>;
 
   ngOnInit(): void {
     this.formGroup = new FormGroup<RenameForm>({
-      title: new FormControl<string>(this.tab.title, Validators.required),
-      url: new FormControl<string>(this.tab.url, Validators.required),
+      title: new FormControl<string>(this.#tab.title, Validators.required),
+      url: new FormControl<string>(this.#tab.url, Validators.required),
     });
   }
 
   save(): void {
     const { title, url } = this.formGroup.value;
-    this.dialogRef.close({
-      ...this.tab,
+    this.#dialogRef.close({
+      ...this.#tab,
       title,
       url,
     });

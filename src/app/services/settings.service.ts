@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { uniqBy } from 'lodash-es';
 import { BehaviorSubject, Observable, from, map, shareReplay, switchMap } from 'rxjs';
@@ -13,6 +13,8 @@ import { MostVisitedURL, Settings, StorageArea, copyStorage, getSettings, settin
   providedIn: 'root',
 })
 export class SettingsService {
+  readonly #router = inject(Router);
+
   private readonly settingsSource$ = new BehaviorSubject<Settings>(null);
 
   /**
@@ -27,11 +29,9 @@ export class SettingsService {
    * Hashmap of expanded panel states by group ID
    */
   readonly panelStates$ = this.settings$.pipe(
-    map((settings) => settings?.panels?.[this.router.url]),
+    map((settings) => settings?.panels?.[this.#router.url]),
     shareReplay(1)
   );
-
-  constructor(private router: Router) {}
 
   private saveSettings(settings: Settings): Promise<void> {
     return new Promise((resolve) => {
@@ -91,7 +91,7 @@ export class SettingsService {
    * @param state True if panel is expanded
    */
   async savePanelState(groupId: string, state: boolean) {
-    const { url } = this.router;
+    const { url } = this.#router;
 
     const settings = (await getSettings()) ?? {};
 

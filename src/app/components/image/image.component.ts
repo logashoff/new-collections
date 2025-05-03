@@ -1,5 +1,5 @@
 import { NgClass, NgOptimizedImage } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, model, inject } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { getFaviconUrl, IconSize, ImageSource } from '../../utils';
@@ -21,6 +21,8 @@ import { getFaviconUrl, IconSize, ImageSource } from '../../utils';
   },
 })
 export class ImageComponent {
+  readonly #sanitizer = inject(DomSanitizer);
+
   /**
    * Image source path.
    */
@@ -39,8 +41,6 @@ export class ImageComponent {
     return this.size() === 'small';
   }
 
-  constructor(private sanitizer: DomSanitizer) {}
-
   /**
    * Handles image loading error
    */
@@ -49,7 +49,7 @@ export class ImageComponent {
       try {
         const source = this.source() as string;
         const favicon = getFaviconUrl(source);
-        const safeUrl = this.sanitizer.bypassSecurityTrustUrl(favicon);
+        const safeUrl = this.#sanitizer.bypassSecurityTrustUrl(favicon);
         this.source.set(safeUrl);
       } catch (e) {}
     }

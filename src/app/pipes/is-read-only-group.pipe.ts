@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, inject } from '@angular/core';
 import { TabService } from '../services';
 import { TabGroup } from '../utils';
 
@@ -11,9 +11,9 @@ import { TabGroup } from '../utils';
   name: 'isReadOnlyGroup',
 })
 export class IsReadOnlyGroupPipe implements PipeTransform {
-  constructor(private readonly tabService: TabService) {}
+  readonly #tabService = inject(TabService);
 
   transform(group: TabGroup): boolean {
-    return !this.tabService.hasTabGroup(group);
+    return !this.#tabService.hasTabGroup(group);
   }
 }

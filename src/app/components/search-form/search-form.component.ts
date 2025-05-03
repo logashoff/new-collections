@@ -2,8 +2,10 @@ import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  effect,
   ElementRef,
-  Input,
+  inject,
+  input,
   OnInit,
   output,
   viewChild,
@@ -47,32 +49,20 @@ interface SearchForm {
   ],
   host: {
     '(document:keyup.escape)': 'onKeyUp($event)',
-    '[class.disabled]': 'disabled',
+    '[class.disabled]': 'disabled()',
     '[class.is-active]': 'isActive',
     '[class.is-focused]': 'isFocused',
   },
 })
 export class SearchFormComponent implements OnInit {
+  readonly #collectionsService = inject(CollectionsService);
+  readonly #navService = inject(NavService);
+
   readonly activated = output();
-  readonly canceled = output();
   readonly blurred = output();
+  readonly canceled = output();
 
-  #disabled = false;
-
-  @Input()
-  set disabled(disabled: boolean) {
-    if (disabled) {
-      this.#searchControl.disable();
-    } else {
-      this.#searchControl.enable();
-    }
-
-    this.#disabled = disabled;
-  }
-
-  get disabled(): boolean {
-    return this.#disabled;
-  }
+  readonly disabled = input<boolean>(false);
 
   private readonly searchInput = viewChild.required<ElementRef>('searchInput');
 
@@ -90,29 +80,35 @@ export class SearchFormComponent implements OnInit {
   readonly focused$ = new BehaviorSubject<boolean>(false);
 
   get isActive() {
-    return this.navService.isActive('search');
+    return this.#navService.isActive('search');
   }
 
   get isFocused() {
     return this.focused$.value;
   }
 
-  readonly isActive$ = this.navService.pathChanges$.pipe(
+  readonly isActive$ = this.#navService.pathChanges$.pipe(
     map(() => this.isActive),
     shareReplay(1)
   );
 
   readonly #activated$ = this.focused$.pipe(
+    filter((focused) => focused && !this.isActive),
     takeUntilDestroyed(),
-    filter((focused) => focused && !this.isActive)
+    shareReplay(1)
   );
 
-  readonly #searchParams$ = this.navService.paramsSearch$.pipe(takeUntilDestroyed(), shareReplay(1));
+  readonly #searchParams$ = this.#navService.paramsSearch$.pipe(takeUntilDestroyed(), shareReplay(1));
 
-  constructor(
-    private collectionsService: CollectionsService,
-    private navService: NavService
-  ) {}
+  constructor() {
+    effect(() => {
+      if (this.disabled()) {
+        this.#searchControl.disable();
+      } else {
+        this.#searchControl.enable();
+      }
+    });
+  }
 
   ngOnInit() {
     this.#searchParams$.subscribe((value) =>
@@ -143,7 +139,7 @@ export class SearchFormComponent implements OnInit {
   }
 
   handleAction(action: Action) {
-    this.collectionsService.handleAction(action);
+    this.#collectionsService.handleAction(action);
   }
 
   onBlur() {
@@ -152,7 +148,7 @@ export class SearchFormComponent implements OnInit {
   }
 
   async searchChange(value: string) {
-    await this.navService.search(value);
+    await this.#navService.search(value);
     scrollTop({ top: 0 });
   }
 }

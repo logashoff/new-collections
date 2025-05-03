@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, ViewEncapsulation } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { map, Observable, shareReplay } from 'rxjs';
 
@@ -24,21 +24,17 @@ import { SearchFormComponent } from '../search-form/search-form.component';
   providers: [KeyService],
 })
 export class PopupComponent extends KeyListenerDirective {
-  readonly urlChanges$ = this.navService.pathChanges$.pipe(shareReplay(1));
-  readonly hasData$: Observable<boolean> = this.tabService.groupsTimeline$.pipe(
+  readonly #navService = inject(NavService);
+  readonly #tabService = inject(TabService);
+
+  readonly urlChanges$ = this.#navService.pathChanges$.pipe(shareReplay(1));
+  readonly hasData$: Observable<boolean> = this.#tabService.groupsTimeline$.pipe(
     map((timeline) => timeline?.length > 0),
     shareReplay(1)
   );
 
-  constructor(
-    private readonly navService: NavService,
-    private readonly tabService: TabService
-  ) {
-    super();
-  }
-
   async navigate(...commands: string[]) {
-    await this.navService.navigate(['/popup', ...commands]);
+    await this.#navService.navigate(['/popup', ...commands]);
     scrollTop();
   }
 

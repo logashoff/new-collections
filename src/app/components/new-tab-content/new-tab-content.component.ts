@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { GroupService } from 'src/app/services/group.service';
@@ -35,6 +35,11 @@ import { TimelineElementComponent } from '../timeline-element/timeline-element.c
   imports: [AsyncPipe, EmptyComponent, GroupsComponent, TimelineElementComponent, TranslatePipe],
 })
 export class NewTabContentComponent {
+  readonly #collection = inject(CollectionsService);
+  readonly #homeService = inject(HomeService);
+  readonly #tabService = inject(TabService);
+  readonly groupService = inject(GroupService);
+
   readonly defaultActions: CollectionActions = [
     {
       action: Action.Import,
@@ -57,30 +62,23 @@ export class NewTabContentComponent {
     },
   ];
 
-  readonly devicesTimeline$: Observable<Timeline> = this.homeService.devicesTimeline$;
-  readonly hasAnyData$: Observable<boolean> = this.homeService.hasAnyData$;
-  readonly timeline$: Observable<Timeline> = this.homeService.timeline$;
+  readonly devicesTimeline$: Observable<Timeline> = this.#homeService.devicesTimeline$;
+  readonly hasAnyData$: Observable<boolean> = this.#homeService.hasAnyData$;
+  readonly timeline$: Observable<Timeline> = this.#homeService.timeline$;
 
   readonly tabActions: Actions = [Action.Edit, Action.Delete];
-
-  constructor(
-    private readonly collection: CollectionsService,
-    private readonly homeService: HomeService,
-    private readonly tabService: TabService,
-    readonly groupService: GroupService
-  ) {}
 
   /**`
    * Removes all items in timeline section
    */
   async removeGroups(groups: TabGroups) {
-    await this.tabService.removeTabGroups(groups);
+    await this.#tabService.removeTabGroups(groups);
   }
 
   handleDeviceAction({ action, group }: GroupAction, label: string) {
     switch (action) {
       case Action.Add:
-        this.collection.selectTabs(group.tabs as Tabs);
+        this.#collection.selectTabs(group.tabs as Tabs);
         break;
       case Action.Restore:
         restoreTabs(group.tabs, label);

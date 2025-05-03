@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import {
   Action,
@@ -16,6 +16,8 @@ import { TabService } from './tab.service';
   providedIn: 'root',
 })
 export class GroupService {
+  readonly #tabService = inject(TabService);
+
   readonly commonActions: Readonly<GroupActions> = Object.freeze([
     {
       action: Action.Delete,
@@ -34,20 +36,18 @@ export class GroupService {
     },
   ]);
 
-  constructor(private readonly tabService: TabService) {}
-
   async handleAction({ action, group }: GroupAction) {
     if (group) {
       switch (action) {
         case Action.Add:
           const tabs: Tabs = await queryCurrentWindow();
-          this.tabService.addTabs(group, tabs);
+          this.#tabService.addTabs(group, tabs);
           break;
         case Action.Restore:
           restoreTabs(group.tabs, formatDate(group.timestamp));
           break;
         case Action.Delete:
-          this.tabService.removeTabGroup(group);
+          this.#tabService.removeTabGroup(group);
           break;
       }
     }

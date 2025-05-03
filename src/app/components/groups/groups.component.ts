@@ -1,6 +1,6 @@
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, inject, input, output } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -55,6 +55,10 @@ import { RippleComponent } from '../ripple/ripple.component';
   ],
 })
 export class GroupsComponent {
+  readonly #navService = inject(NavService);
+  readonly #tabService = inject(TabService);
+  readonly #settings = inject(SettingsService);
+
   readonly tabActions = input<Actions>();
   readonly groupActions = input<GroupActions>();
   readonly actionClicked = output<GroupAction>();
@@ -98,18 +102,14 @@ export class GroupsComponent {
   readonly isNaN = isNaN;
 
   get target(): Target {
-    return this.navService.isPopup ? '_blank' : '_self';
+    return this.#navService.isPopup ? '_blank' : '_self';
   }
 
-  constructor(
-    private readonly navService: NavService,
-    private readonly tabService: TabService,
-    private readonly settings: SettingsService
-  ) {
+  constructor() {
     this.groups$ = toObservable(this.groups);
 
     this.tabsByHostname$ = this.groups$.pipe(
-      map((tabGroups) => (tabGroups?.length > 0 ? this.tabService.createHostnameGroups(tabGroups) : null)),
+      map((tabGroups) => (tabGroups?.length > 0 ? this.#tabService.createHostnameGroups(tabGroups) : null)),
       shareReplay(1)
     );
 
@@ -129,27 +129,27 @@ export class GroupsComponent {
       shareReplay(1)
     );
 
-    this.panelStates$ = this.settings.panelStates$.pipe(map((states) => states ?? {}));
-    this.activeGroupId$ = this.navService.paramsGroupId$;
-    this.activeTabId$ = this.navService.paramsTabId$;
+    this.panelStates$ = this.#settings.panelStates$.pipe(map((states) => states ?? {}));
+    this.activeGroupId$ = this.#navService.paramsGroupId$;
+    this.activeTabId$ = this.#navService.paramsTabId$;
   }
 
   favGroup(group: TabGroup) {
-    this.tabService.favGroupToggle(group);
+    this.#tabService.favGroupToggle(group);
   }
 
   /**
    * Saves open panel state to local storage
    */
   opened(groupId: string) {
-    this.settings.savePanelState(groupId, true);
+    this.#settings.savePanelState(groupId, true);
   }
 
   /**
    * Removes open panel state from storage
    */
   closed(groupId: string) {
-    this.settings.savePanelState(groupId, false);
+    this.#settings.savePanelState(groupId, false);
   }
 
   /**
@@ -157,15 +157,15 @@ export class GroupsComponent {
    */
   drop(event: CdkDragDrop<BrowserTabs>, tabs: BrowserTabs) {
     moveItemInArray(tabs, event.previousIndex, event.currentIndex);
-    this.tabService.save();
+    this.#tabService.save();
   }
 
   async editTab(tab: BrowserTab) {
-    await this.tabService.updateTab(tab);
+    await this.#tabService.updateTab(tab);
   }
 
   async deleteTab(tab: BrowserTab) {
-    await this.tabService.removeTab(tab);
+    await this.#tabService.removeTab(tab);
   }
 
   onGroupAction(action: Action, group: TabGroup) {

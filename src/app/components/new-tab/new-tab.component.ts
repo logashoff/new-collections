@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Observable, combineLatest, map, shareReplay } from 'rxjs';
 
@@ -25,15 +25,18 @@ import { TopSitesComponent } from '../top-sites/top-sites.component';
   providers: [KeyService],
 })
 export class NewTabComponent extends KeyListenerDirective implements OnInit {
-  readonly urlChanges$: Observable<string> = this.navService.pathChanges$;
-  readonly topSites$: Observable<TopSites> = this.homeService.topSites$;
-  readonly hasData$: Observable<boolean> = this.homeService.hasAnyData$;
+  readonly #homeService = inject(HomeService);
+  readonly #navService = inject(NavService);
+
+  readonly urlChanges$: Observable<string> = this.#navService.pathChanges$;
+  readonly topSites$: Observable<TopSites> = this.#homeService.topSites$;
+  readonly hasData$: Observable<boolean> = this.#homeService.hasAnyData$;
 
   /**
    * Check if search is active
    */
-  readonly isSearchActive$ = this.navService.pathChanges$.pipe(
-    map(() => this.navService.isActive('search')),
+  readonly isSearchActive$ = this.#navService.pathChanges$.pipe(
+    map(() => this.#navService.isActive('search')),
     shareReplay(1)
   );
 
@@ -41,13 +44,6 @@ export class NewTabComponent extends KeyListenerDirective implements OnInit {
    * Hide top sites component when search is active
    */
   hideTopSites$: Observable<boolean>;
-
-  constructor(
-    private readonly homeService: HomeService,
-    private readonly navService: NavService
-  ) {
-    super();
-  }
 
   ngOnInit() {
     this.hideTopSites$ = combineLatest({ topSites: this.topSites$, isSearchActive: this.isSearchActive$ }).pipe(
@@ -57,7 +53,7 @@ export class NewTabComponent extends KeyListenerDirective implements OnInit {
   }
 
   async navigate(...command: string[]) {
-    await this.navService.navigate(['/new-tab', ...command]);
+    await this.#navService.navigate(['/new-tab', ...command]);
     scrollTop();
   }
 

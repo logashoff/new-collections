@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { uniqBy } from 'lodash-es';
 import { lastValueFrom } from 'rxjs';
 import {
@@ -22,11 +22,9 @@ import { TabService } from './tab.service';
   providedIn: 'root',
 })
 export class CollectionsService {
-  constructor(
-    private message: MessageService,
-    private nav: NavService,
-    private tabsService: TabService
-  ) {}
+  readonly #message = inject(MessageService);
+  readonly #nav = inject(NavService);
+  readonly #tabsService = inject(TabService);
 
   /**
    * Writes provided tab groups to JSON file.
@@ -63,15 +61,15 @@ export class CollectionsService {
     );
 
     if (tabs?.length > 0) {
-      const dialogRef = this.tabsService.openTabsSelector(tabs);
+      const dialogRef = this.#tabsService.openTabsSelector(tabs);
       tabs = await lastValueFrom(dialogRef.afterClosed());
       if (tabs?.length > 0) {
-        const tabGroup = await this.tabsService.createTabGroup(tabs);
-        await this.tabsService.addTabGroup(tabGroup);
-        this.nav.setParams(tabGroup.id);
+        const tabGroup = await this.#tabsService.createTabGroup(tabs);
+        await this.#tabsService.addTabGroup(tabGroup);
+        this.#nav.setParams(tabGroup.id);
       }
     } else {
-      this.message.open(translate('invalidTabList'));
+      this.#message.open(translate('invalidTabList'));
     }
   }
 
@@ -92,17 +90,17 @@ export class CollectionsService {
           if (collections?.length > 0) {
             this.exportCollections(collections);
           } else {
-            this.message.open(translate('emptyListError'));
+            this.#message.open(translate('emptyListError'));
           }
           break;
         case Action.Import:
           collections = await this.importCollections();
           const tabGroups = collections.map((collection) => new TabGroup(collection));
-          await this.tabsService.addTabGroups(tabGroups);
+          await this.#tabsService.addTabGroups(tabGroups);
           break;
       }
     } catch (e) {
-      this.message.open(e);
+      this.#message.open(e);
     }
   }
 }

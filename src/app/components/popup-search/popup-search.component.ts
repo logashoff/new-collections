@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { NavService, TabService } from '../../services';
@@ -14,21 +14,19 @@ import { SearchComponent } from '../search/search.component';
   imports: [AsyncPipe, SearchComponent],
 })
 export class PopupSearchComponent {
-  readonly searchSource$: Observable<BrowserTabs> = this.tabService.tabs$;
+  readonly #navService = inject(NavService);
+  readonly #tabService = inject(TabService);
 
-  constructor(
-    private readonly navService: NavService,
-    private readonly tabService: TabService
-  ) {}
+  readonly searchSource$: Observable<BrowserTabs> = this.#tabService.tabs$;
 
   /**
    * Scroll specified tab into view
    */
   async findItem(tab: BrowserTab) {
-    const group = await this.tabService.getGroupByTab(tab);
+    const group = await this.#tabService.getGroupByTab(tab);
 
     if (group) {
-      await this.navService.navigate(['/popup', 'main'], {
+      await this.#navService.navigate(['/popup', 'main'], {
         queryParams: {
           groupId: group.id,
           tabId: tab.id,

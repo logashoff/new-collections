@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { EMPTY, Observable, combineLatest, from, map, shareReplay, switchMap, take } from 'rxjs';
 
 import { SettingsService, TabService } from '../services';
@@ -11,6 +11,9 @@ import { Devices, MostVisitedURL, Sessions, TabGroup, Tabs, Timeline, TopSites }
  */
 @Injectable()
 export class HomeService {
+  readonly #settings = inject(SettingsService);
+  readonly #tabsService = inject(TabService);
+
   /**
    * Top sites list
    */
@@ -36,13 +39,10 @@ export class HomeService {
    */
   readonly hasAnyData$: Observable<boolean>;
 
-  constructor(
-    private settings: SettingsService,
-    private tabsService: TabService
-  ) {
-    this.timeline$ = this.tabsService.groupsTimeline$;
+  constructor() {
+    this.timeline$ = this.#tabsService.groupsTimeline$;
 
-    this.devices$ = this.settings.settings$.pipe(
+    this.devices$ = this.#settings.settings$.pipe(
       take(1),
       switchMap((settings) => {
         if (typeof settings?.enableDevices === 'undefined' || settings?.enableDevices) {
@@ -78,7 +78,7 @@ export class HomeService {
       shareReplay(1)
     );
 
-    this.topSites$ = this.settings.settings$.pipe(
+    this.topSites$ = this.#settings.settings$.pipe(
       switchMap((settings) => {
         if (typeof settings?.enableTopSites === 'undefined' || settings?.enableTopSites) {
           return from(this.getTopSites()).pipe(

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRoute, EventType, Router, RouterEvent } from '@angular/router';
 import { Observable, distinctUntilChanged, filter, map, shareReplay, startWith } from 'rxjs';
 import { RouterExtras, RouterParams, createUrl } from '../utils';
@@ -7,6 +7,13 @@ import { RouterExtras, RouterParams, createUrl } from '../utils';
   providedIn: 'root',
 })
 export class NavService {
+  readonly #activeRoute = inject(ActivatedRoute);
+  readonly #router = inject(Router);
+
+  get router(): Router {
+    return this.#router;
+  }
+
   /**
    * Group ID set by URL query params
    */
@@ -35,11 +42,8 @@ export class NavService {
     return this.isActive('popup');
   }
 
-  constructor(
-    private activeRoute: ActivatedRoute,
-    private router: Router
-  ) {
-    const url$ = this.router.events.pipe(
+  constructor() {
+    const url$ = this.#router.events.pipe(
       filter((events) => events?.type === EventType.NavigationEnd),
       map((events) => {
         const e: RouterEvent = events as RouterEvent;
@@ -48,26 +52,26 @@ export class NavService {
     );
 
     this.pathChanges$ = url$.pipe(
-      startWith(this.router.url),
+      startWith(this.#router.url),
       filter((url) => Boolean(url)),
       map((url) => new URL(createUrl(url)).pathname),
       distinctUntilChanged(),
       shareReplay(1)
     );
 
-    this.paramsGroupId$ = this.activeRoute.queryParams.pipe(
+    this.paramsGroupId$ = this.#activeRoute.queryParams.pipe(
       map((params) => params.groupId),
       distinctUntilChanged(),
       shareReplay(1)
     );
 
-    this.paramsTabId$ = this.activeRoute.queryParams.pipe(
+    this.paramsTabId$ = this.#activeRoute.queryParams.pipe(
       map((params) => +params.tabId),
       distinctUntilChanged(),
       shareReplay(1)
     );
 
-    this.paramsSearch$ = this.activeRoute.queryParams.pipe(
+    this.paramsSearch$ = this.#activeRoute.queryParams.pipe(
       map((params) => params?.query as string),
       distinctUntilChanged(),
       shareReplay(1)
@@ -78,7 +82,7 @@ export class NavService {
    * Check if URL contains path
    */
   isActive(path: string | RegExp) {
-    return this.router.url.match(new RegExp(path, 'gi'))?.length > 0;
+    return this.#router.url.match(new RegExp(path, 'gi'))?.length > 0;
   }
 
   reset(...params: string[]) {
@@ -92,7 +96,7 @@ export class NavService {
     }, {});
 
     return this.navigate([], {
-      relativeTo: this.activeRoute,
+      relativeTo: this.#activeRoute,
       queryParams,
       queryParamsHandling: 'merge',
     });
@@ -100,7 +104,7 @@ export class NavService {
 
   search(value: string) {
     return this.navigate([], {
-      relativeTo: this.activeRoute,
+      relativeTo: this.#activeRoute,
       queryParams: {
         groupId: undefined,
         tabId: undefined,
@@ -111,7 +115,7 @@ export class NavService {
 
   setParams(groupId: string, tabId?: number) {
     return this.navigate([], {
-      relativeTo: this.activeRoute,
+      relativeTo: this.#activeRoute,
       queryParams: {
         groupId,
         tabId,
@@ -121,7 +125,7 @@ export class NavService {
   }
 
   navigate(commands: string[], extras: RouterExtras = {}): Promise<boolean> {
-    return this.router.navigate(commands, {
+    return this.#router.navigate(commands, {
       replaceUrl: true,
       ...extras,
     });

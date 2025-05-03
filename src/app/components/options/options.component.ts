@@ -1,5 +1,5 @@
 import { AsyncPipe, DecimalPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -68,6 +68,9 @@ interface OptionsForm {
   ],
 })
 export class OptionsComponent implements OnInit {
+  readonly #collectionsService = inject(CollectionsService);
+  readonly #settings = inject(SettingsService);
+
   readonly collectionActions: CollectionActions = [
     {
       action: Action.Export,
@@ -112,15 +115,10 @@ export class OptionsComponent implements OnInit {
 
   readonly #formValues$ = this.formGroup.valueChanges.pipe(takeUntilDestroyed(), shareReplay(1));
 
-  constructor(
-    private collectionsService: CollectionsService,
-    private settings: SettingsService
-  ) {}
-
   async ngOnInit() {
-    this.storageUsageSource$.next(await this.settings.getUsageBytes());
+    this.storageUsageSource$.next(await this.#settings.getUsageBytes());
 
-    this.settings.settings$.pipe(take(1)).subscribe((settings) => {
+    this.#settings.settings$.pipe(take(1)).subscribe((settings) => {
       if (settings) {
         if (typeof settings.enableTopSites === 'undefined') {
           settings.enableTopSites = true;
@@ -146,15 +144,15 @@ export class OptionsComponent implements OnInit {
       }
 
       this.#formValues$.subscribe(async (settings) => {
-        await this.settings.update(settings);
+        await this.#settings.update(settings);
 
-        const storageBytes = await this.settings.getUsageBytes();
+        const storageBytes = await this.#settings.getUsageBytes();
         this.storageUsageSource$.next(storageBytes);
       });
     });
   }
 
   handleAction(action: Action) {
-    this.collectionsService.handleAction(action);
+    this.#collectionsService.handleAction(action);
   }
 }

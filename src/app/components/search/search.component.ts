@@ -4,6 +4,7 @@ import {
   Component,
   DestroyRef,
   effect,
+  inject,
   input,
   OnInit,
   output,
@@ -84,6 +85,11 @@ const fuseOptions: IFuseOptions<BrowserTab> = {
   ],
 })
 export class SearchComponent implements OnInit {
+  readonly #destroyRef = inject(DestroyRef);
+  readonly #keyService = inject<KeyService<ListItemComponent>>(KeyService);
+  readonly #navService = inject(NavService);
+  readonly #tabService = inject(TabService);
+
   readonly Action = Action;
 
   readonly source = input.required<BrowserTabs>();
@@ -108,32 +114,27 @@ export class SearchComponent implements OnInit {
   deviceTabs$: Observable<BrowserTabs>;
 
   get target(): Target {
-    return this.navService.isPopup ? '_blank' : '_self';
+    return this.#navService.isPopup ? '_blank' : '_self';
   }
 
   private listItems = viewChildren(ListItemComponent);
 
-  readonly searchQuery$: Observable<string> = this.navService.paramsSearch$;
-  readonly recentMap$: Observable<RecentMap> = this.tabService.recentTabs$;
+  readonly searchQuery$: Observable<string> = this.#navService.paramsSearch$;
+  readonly recentMap$: Observable<RecentMap> = this.#tabService.recentTabs$;
 
   readonly defaultActions: Actions = [Action.Find, Action.Edit, Action.Delete];
   readonly recentActions: Actions = [Action.Forget, ...this.defaultActions];
 
-  constructor(
-    private readonly destroyRef: DestroyRef,
-    private readonly keyService: KeyService<ListItemComponent>,
-    private readonly navService: NavService,
-    private readonly tabService: TabService
-  ) {
+  constructor() {
     effect(async () => {
       const listItems = this.listItems();
-      this.keyService.clear();
-      this.keyService.setItems(listItems);
+      this.#keyService.clear();
+      this.#keyService.setItems(listItems);
 
       const searchQuery = await firstValueFrom(this.searchQuery$);
 
       if (searchQuery?.length > 0) {
-        this.keyService.setActive(0);
+        this.#keyService.setActive(0);
       }
     });
   }
@@ -166,7 +167,6 @@ export class SearchComponent implements OnInit {
       source: this.#source$,
     })
       .pipe(
-        takeUntilDestroyed(this.destroyRef),
         filter(({ source }) => source?.length > 0),
         distinctUntilChanged(
           ({ searchQuery: query1, searchResults: results1 }, { searchQuery: query2, searchResults: results2 }) =>
@@ -178,13 +178,14 @@ export class SearchComponent implements OnInit {
             return searchResults;
           }
 
-          const sortTabs = this.tabService.sortByRecent(
+          const sortTabs = this.#tabService.sortByRecent(
             source.sort((a, b) => b.id - a.id),
             recentTabs
           );
 
           return sortTabs.slice(0, Math.max(recentTabs?.size ?? 0, MIN_RECENT_DISPLAY));
         }),
+        takeUntilDestroyed(this.#destroyRef),
         shareReplay(1)
       )
       .subscribe((tabs) => this.sourceTabs$.next(tabs));
@@ -212,7 +213,7 @@ export class SearchComponent implements OnInit {
    * Handles tab update
    */
   async itemModified(tab: BrowserTab) {
-    const updatedTab = await this.tabService.updateTab(tab);
+    const updatedTab = await this.#tabService.updateTab(tab);
 
     if (updatedTab) {
       const results = this.sourceTabs$.value;
@@ -229,7 +230,7 @@ export class SearchComponent implements OnInit {
    * Handles tab deletion
    */
   async itemDeleted(tab: BrowserTab) {
-    const messageRef = await this.tabService.removeTab(tab);
+    const messageRef = await this.#tabService.removeTab(tab);
     const sourceTabs = this.sourceTabs$.value;
     const index = this.getSearchIndex(tab, sourceTabs);
 

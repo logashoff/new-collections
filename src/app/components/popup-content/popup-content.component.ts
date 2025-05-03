@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { GroupService } from 'src/app/services/group.service';
@@ -23,6 +23,9 @@ import { TimelineElementComponent } from '../timeline-element/timeline-element.c
   imports: [AsyncPipe, EmptyComponent, GroupsComponent, TranslatePipe, TimelineElementComponent],
 })
 export class PopupContentComponent {
+  readonly #tabService = inject(TabService);
+  readonly groupService = inject(GroupService);
+
   readonly defaultActions: CollectionActions = [
     {
       action: Action.Save,
@@ -35,19 +38,14 @@ export class PopupContentComponent {
   /**
    * Tab groups grouped by time
    */
-  readonly groupsTimeline$: Observable<Timeline> = this.tabService.groupsTimeline$;
+  readonly groupsTimeline$: Observable<Timeline> = this.#tabService.groupsTimeline$;
 
   readonly tabActions: Actions = [Action.Edit, Action.Delete];
-
-  constructor(
-    private readonly tabService: TabService,
-    readonly groupService: GroupService
-  ) {}
 
   /**`
    * Removes all items in timeline section
    */
   async removeGroups(groups: TabGroups) {
-    await this.tabService.removeTabGroups(groups);
+    await this.#tabService.removeTabGroups(groups);
   }
 }

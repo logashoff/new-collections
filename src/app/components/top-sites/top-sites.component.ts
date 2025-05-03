@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { lastValueFrom } from 'rxjs';
@@ -22,23 +22,21 @@ import { ImageComponent } from '../image/image.component';
   imports: [FaviconPipe, ImageComponent, MatButtonModule, MatIconModule, StopPropagationDirective],
 })
 export class TopSitesComponent {
-  readonly topSites = input<TopSites>();
+  readonly #message = inject(MessageService);
+  readonly #settings = inject(SettingsService);
 
-  constructor(
-    private message: MessageService,
-    private settings: SettingsService
-  ) {}
+  readonly topSites = input<TopSites>();
 
   /**
    * Removes site from the list for top sites by ignoring it from the settings config
    */
   async removeSite(site: TopSite) {
-    await this.settings.ignoreSite({
+    await this.#settings.ignoreSite({
       title: site.title,
       url: site.url,
     });
 
-    const ref = this.message.open(translate('siteMovedToIgnoreList'), ActionIcon.Settings, 'settings');
+    const ref = this.#message.open(translate('siteMovedToIgnoreList'), ActionIcon.Settings, 'settings');
     const { dismissedByAction } = await lastValueFrom(ref.afterDismissed());
 
     if (dismissedByAction) {
