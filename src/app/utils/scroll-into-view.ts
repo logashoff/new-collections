@@ -3,7 +3,7 @@ import type { Timeout } from './models';
 /**
  * Scroll complete event delay targets worst case 15 FPS animation
  */
-const callbackTimeout = (1 / 15) * 1000;
+const callbackTimeout = (1 / 15) * 1_000;
 
 /**
  * Clear complete event timeout to prevent promise resolve before scrolling has finished

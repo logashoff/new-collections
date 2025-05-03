@@ -2,6 +2,7 @@ import { AsyncPipe, NgPlural, NgPluralCase } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   effect,
   input,
   OnInit,
@@ -9,10 +10,11 @@ import {
   viewChildren,
   ViewEncapsulation,
 } from '@angular/core';
-import { toObservable } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import Fuse, { IFuseOptions } from 'fuse.js';
+import { uniqBy } from 'lodash-es';
 import {
   BehaviorSubject,
   combineLatest,
@@ -30,8 +32,6 @@ import {
   withLatestFrom,
 } from 'rxjs';
 
-import { uniqBy } from 'lodash-es';
-import { SubSinkDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
 import { KeyService, NavService, TabService } from '../../services';
 import {
@@ -83,7 +83,7 @@ const fuseOptions: IFuseOptions<BrowserTab> = {
     TranslatePipe,
   ],
 })
-export class SearchComponent extends SubSinkDirective implements OnInit {
+export class SearchComponent implements OnInit {
   readonly Action = Action;
 
   readonly source = input.required<BrowserTabs>();
@@ -120,12 +120,11 @@ export class SearchComponent extends SubSinkDirective implements OnInit {
   readonly recentActions: Actions = [Action.Forget, ...this.defaultActions];
 
   constructor(
+    private readonly destroyRef: DestroyRef,
+    private readonly keyService: KeyService<ListItemComponent>,
     private readonly navService: NavService,
-    private readonly tabService: TabService,
-    private readonly keyService: KeyService<ListItemComponent>
+    private readonly tabService: TabService
   ) {
-    super();
-
     effect(async () => {
       const listItems = this.listItems();
       this.keyService.clear();
@@ -161,12 +160,13 @@ export class SearchComponent extends SubSinkDirective implements OnInit {
       )
     );
 
-    const sourceTabs = combineLatest({
+    combineLatest({
       searchQuery: this.searchQuery$.pipe(startWith('')),
       searchResults: searchResults$.pipe(startWith(null)),
       source: this.#source$,
     })
       .pipe(
+        takeUntilDestroyed(this.destroyRef),
         filter(({ source }) => source?.length > 0),
         distinctUntilChanged(
           ({ searchQuery: query1, searchResults: results1 }, { searchQuery: query2, searchResults: results2 }) =>
@@ -188,8 +188,6 @@ export class SearchComponent extends SubSinkDirective implements OnInit {
         shareReplay(1)
       )
       .subscribe((tabs) => this.sourceTabs$.next(tabs));
-
-    this.subscribe(sourceTabs);
 
     const fuseDevices$: Observable<Fuse<BrowserTab>> = this.#devices$.pipe(
       filter((devices) => devices?.length > 0),

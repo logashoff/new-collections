@@ -4,7 +4,6 @@ import {
   Component,
   effect,
   ElementRef,
-  HostBinding,
   input,
   ViewEncapsulation,
 } from '@angular/core';
@@ -22,12 +21,14 @@ import { scrollIntoView, sleep } from '../../utils';
   styleUrl: './ripple.component.scss',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class.focused]': 'animate',
+  },
 })
 export class RippleComponent {
   readonly focused = input<boolean>(false);
 
-  @HostBinding('class.focused')
-  private _focused = false;
+  animate = false;
 
   constructor(el: ElementRef, cdr: ChangeDetectorRef) {
     effect(async () => {
@@ -35,14 +36,14 @@ export class RippleComponent {
         await sleep(225);
         await scrollIntoView(el.nativeElement);
 
-        this._focused = true;
+        this.animate = true;
         cdr.markForCheck();
 
-        await sleep(1000);
+        await sleep(1_000);
 
-        this._focused = false;
+        this.animate = false;
       } else {
-        this._focused = false;
+        this.animate = false;
       }
 
       cdr.markForCheck();

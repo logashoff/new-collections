@@ -1,17 +1,15 @@
 import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
-  HostBinding,
-  HostListener,
   Input,
   OnInit,
   output,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -20,10 +18,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BehaviorSubject, filter, map, shareReplay } from 'rxjs';
 
-import { SubSinkDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
 import { CollectionsService, NavService } from '../../services';
-import { Action, ESC_KEY_CODE, KEY_UP, scrollTop } from '../../utils';
+import { Action, ESC_KEY_CODE, scrollTop } from '../../utils';
 
 /**
  * Search input form.
@@ -48,8 +45,14 @@ interface SearchForm {
     ReactiveFormsModule,
     TranslatePipe,
   ],
+  host: {
+    '(document:keyup.escape)': 'onKeyUp($event)',
+    '[class.disabled]': 'disabled',
+    '[class.is-active]': 'isActive',
+    '[class.is-focused]': 'isFocused',
+  },
 })
-export class SearchFormComponent extends SubSinkDirective implements OnInit {
+export class SearchFormComponent implements OnInit {
   readonly activated = output();
   readonly canceled = output();
   readonly blurred = output();
@@ -57,7 +60,6 @@ export class SearchFormComponent extends SubSinkDirective implements OnInit {
   #disabled = false;
 
   @Input()
-  @HostBinding('class.disabled')
   set disabled(disabled: boolean) {
     if (disabled) {
       this.#searchControl.disable();
@@ -80,16 +82,18 @@ export class SearchFormComponent extends SubSinkDirective implements OnInit {
     search: this.#searchControl,
   });
 
+  readonly #formValues$ = this.formGroup.valueChanges.pipe(takeUntilDestroyed(), shareReplay(1));
+
   /**
    * Indicates search input is focused
    */
   readonly focused$ = new BehaviorSubject<boolean>(false);
 
-  @HostBinding('class.is-active') get isActive() {
+  get isActive() {
     return this.navService.isActive('search');
   }
 
-  @HostBinding('class.is-focused') get isFocused() {
+  get isFocused() {
     return this.focused$.value;
   }
 
@@ -98,47 +102,34 @@ export class SearchFormComponent extends SubSinkDirective implements OnInit {
     shareReplay(1)
   );
 
-  private scrollTop: number;
+  readonly #activated$ = this.focused$.pipe(
+    takeUntilDestroyed(),
+    filter((focused) => focused && !this.isActive)
+  );
 
-  @HostBinding('class.scrolled') get scrolled(): boolean {
-    return this.scrollTop > 0;
-  }
+  readonly #searchParams$ = this.navService.paramsSearch$.pipe(takeUntilDestroyed(), shareReplay(1));
 
   constructor(
-    private cdr: ChangeDetectorRef,
     private collectionsService: CollectionsService,
     private navService: NavService
-  ) {
-    super();
-  }
+  ) {}
 
   ngOnInit() {
-    const paramChanges = this.navService.paramsSearch$.subscribe((value) =>
+    this.#searchParams$.subscribe((value) =>
       this.#searchControl.setValue(value, {
         emitEvent: false,
       })
     );
 
-    const focusChanges = this.focused$
-      .pipe(filter((focused) => focused && !this.isActive))
-      .subscribe(() => this.activated.emit());
+    this.#activated$.subscribe(() => this.activated.emit());
 
-    this.formGroup.valueChanges.subscribe(({ search }) => this.searchChange(search));
-
-    this.subscribe(paramChanges, focusChanges);
+    this.#formValues$.subscribe(({ search }) => this.searchChange(search));
   }
 
-  @HostListener(`document:${KEY_UP}`, ['$event'])
-  private onKeyUp(e: KeyboardEvent) {
+  onKeyUp(e: KeyboardEvent) {
     if (e.code === ESC_KEY_CODE && this.isActive) {
       this.clearSearch();
     }
-  }
-
-  @HostListener('body:scroll', ['$event'])
-  private onScroll(e: Event) {
-    this.scrollTop = (e.target as HTMLElement).scrollTop;
-    this.cdr.markForCheck();
   }
 
   /**

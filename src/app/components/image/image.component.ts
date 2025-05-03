@@ -1,5 +1,5 @@
 import { NgClass, NgOptimizedImage } from '@angular/common';
-import { ChangeDetectionStrategy, Component, HostBinding, input, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, model } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { getFaviconUrl, IconSize, ImageSource } from '../../utils';
@@ -15,6 +15,10 @@ import { getFaviconUrl, IconSize, ImageSource } from '../../utils';
   styleUrl: './image.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgClass, NgOptimizedImage],
+  host: {
+    '[class.medium]': 'medium',
+    '[class.small]': 'small',
+  },
 })
 export class ImageComponent {
   /**
@@ -27,11 +31,11 @@ export class ImageComponent {
    */
   readonly size = input<IconSize>('medium');
 
-  @HostBinding('class.medium') get medium(): boolean {
+  get medium(): boolean {
     return this.size() === 'medium';
   }
 
-  @HostBinding('class.small') get small(): boolean {
+  get small(): boolean {
     return this.size() === 'small';
   }
 

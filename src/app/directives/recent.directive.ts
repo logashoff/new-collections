@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, input } from '@angular/core';
+import { Directive, ElementRef, input } from '@angular/core';
 import { BackgroundService, NavService } from '../services';
 import { addRecent, Tab } from '../utils';
 /**
@@ -6,13 +6,17 @@ import { addRecent, Tab } from '../utils';
  *
  * Save tab ID to storage when tab is clicked
  */
-@Directive({ selector: '[recent]' })
+@Directive({
+  selector: '[recent]',
+  host: {
+    '(auxclick)': 'eventHandler($event)',
+    '(click)': 'eventHandler($event)',
+  },
+})
 export class RecentDirective {
   readonly recent = input.required<Tab>();
 
-  @HostListener('auxclick', ['$event'])
-  @HostListener('click', ['$event'])
-  private async eventHandler(event: PointerEvent) {
+  async eventHandler(event: PointerEvent) {
     const tab = this.recent();
 
     if (tab) {

@@ -1,5 +1,6 @@
 import { AsyncPipe, DecimalPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -109,6 +110,8 @@ export class OptionsComponent implements OnInit {
     syncStorage: this.syncStorage,
   });
 
+  readonly #formValues$ = this.formGroup.valueChanges.pipe(takeUntilDestroyed(), shareReplay(1));
+
   constructor(
     private collectionsService: CollectionsService,
     private settings: SettingsService
@@ -142,7 +145,7 @@ export class OptionsComponent implements OnInit {
         }
       }
 
-      this.formGroup.valueChanges.subscribe(async (settings) => {
+      this.#formValues$.subscribe(async (settings) => {
         await this.settings.update(settings);
 
         const storageBytes = await this.settings.getUsageBytes();

@@ -3,7 +3,6 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  HostBinding,
   input,
   output,
   ViewEncapsulation,
@@ -41,8 +40,9 @@ import { RippleComponent } from '../ripple/ripple.component';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    tabindex: '-1',
+    '[class.active]': 'isActive',
     role: 'list-item',
+    tabindex: '-1',
   },
   imports: [
     ChipComponent,
@@ -90,15 +90,10 @@ export class ListItemComponent implements Activatable {
    */
   readonly target = input<Target>('_self');
 
-  private _isActive = false;
+  isActive = false;
 
   get tabActions(): TabActions {
     return this.actions()?.map((action) => tabActions.get(action));
-  }
-
-  @HostBinding('class.active')
-  private get isActive() {
-    return this._isActive;
   }
 
   constructor(
@@ -132,14 +127,14 @@ export class ListItemComponent implements Activatable {
   }
 
   async setActiveStyles() {
-    this._isActive = true;
+    this.isActive = true;
     this.cdr.markForCheck();
 
     await scrollIntoView(this.el.nativeElement, { block: 'center' });
   }
 
   setInactiveStyles() {
-    this._isActive = false;
+    this.isActive = false;
     this.cdr.markForCheck();
   }
 }
