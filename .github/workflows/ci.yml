@@ -38,3 +38,9 @@ jobs:
 
       - name: Build
         run: yarn build
+
+      - name: Upload extension package
+        uses: actions/upload-artifact@v4
+        with:
+          name: new-collections
+          path: ./dist/new-collections
