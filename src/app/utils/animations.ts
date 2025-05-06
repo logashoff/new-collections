@@ -24,7 +24,7 @@ export const listItemAnimation: AnimationTriggerMetadata = trigger('listItemAnim
         })
       ),
     ]),
-  ])
+  ]),
 ]);
 
 const routerTimings = '250ms ease';
@@ -35,10 +35,7 @@ export const routeAnimations: AnimationTriggerMetadata = trigger('routeAnimation
     query(':enter, :leave', [
       style({
         position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
+        inset: 0,
       }),
     ]),
     query(':enter', style({ opacity: 0, transform: 'translate(0, -1rem)' }), { optional: true }),

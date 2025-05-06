@@ -2,13 +2,15 @@
 
 nc-tabs-selector {
   $_max-width: 25rem;
-
-  .mat-mdc-dialog-title::before {
-    content: none;
-  }
+  $_border-radius: 0.5rem;
+  $_border-size: 2px;
 
   .mat-mdc-dialog-title {
     padding: 0;
+
+    &::before {
+      content: none;
+    }
   }
 
   .header-container {
@@ -35,11 +37,11 @@ nc-tabs-selector {
       margin-right: 0.25rem;
 
       .checkbox-container {
-        align-items: center;
         display: flex;
-        height: 2.5rem;
+        align-items: center;
         justify-content: center;
         width: 2rem;
+        height: 2.5rem;
       }
     }
   }
@@ -51,63 +53,68 @@ nc-tabs-selector {
     overflow: auto;
     padding: 0;
 
-    .mat-mdc-list-base .mat-mdc-list-option .mat-mdc-list-text {
-      display: block;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    .mat-mdc-list-base {
+      padding: 0;
+
+      .mat-mdc-list-option .mat-mdc-list-text {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
 
     .list-container {
       position: relative;
       display: block;
 
+      .mdc-list-item:hover.tab-group {
+        &.first-in-group::before {
+          border-top-left-radius: $_border-radius;
+          border-top-right-radius: $_border-radius;
+        }
+
+        &.last-in-group::before {
+          border-bottom-left-radius: $_border-radius;
+          border-bottom-right-radius: $_border-radius;
+        }
+      }
+
       .mat-mdc-list-item {
         height: 4rem;
         box-sizing: border-box;
 
         &.tab-group {
-          $_border-radius: 0.5rem;
-          $_border-size: 2px;
-
           @each $group-color, $value in theme.$group-colors {
             $_color: var(--nc-tab-group-#{'' + $group-color});
 
             &.group-color-#{'' + $group-color} {
               .list-item::before {
                 content: '';
-                opacity: 0.5;
                 position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                top: 0;
-
+                inset: 0;
+                opacity: 0.8;
                 border-left: $_border-size solid $_color;
                 border-right: $_border-size solid $_color;
                 margin: 0 $_border-size;
               }
 
               &.first-in-group .list-item::before {
+                border-top: $_border-size solid $_color;
                 border-top-left-radius: $_border-radius;
                 border-top-right-radius: $_border-radius;
-                border-top: $_border-size solid $_color;
                 margin-top: $_border-size;
               }
 
               &.last-in-group .list-item::before {
+                border-bottom: $_border-size solid $_color;
                 border-bottom-left-radius: $_border-radius;
                 border-bottom-right-radius: $_border-radius;
-                border-bottom: $_border-size solid $_color;
                 margin-bottom: $_border-size;
               }
             }
           }
         }
-      }
-
-      .mat-mdc-list-base {
-        padding: 0;
       }
 
       .list-item {
@@ -124,10 +131,6 @@ nc-tabs-selector {
             font: var(--mat-sys-body-medium);
             font-weight: 500;
             color: var(--nc-primary-text-color);
-          }
-
-          .item-title,
-          .item-subtitle {
             overflow: hidden;
             text-overflow: ellipsis;
           }
@@ -135,7 +138,6 @@ nc-tabs-selector {
           .item-subtitle {
             font: var(--mat-sys-body-small);
             color: var(--nc-secondary-text-color);
-
             display: flex;
             align-items: center;
             gap: 0.25rem;
@@ -148,8 +150,8 @@ nc-tabs-selector {
             }
 
             .subtitle {
-              overflow: hidden;
               flex: 1 0 0;
+              overflow: hidden;
               text-overflow: ellipsis;
             }
 
