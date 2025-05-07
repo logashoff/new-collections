@@ -7,7 +7,7 @@
         type="text"
         matInput
         formControlName="search"
-        (focus)="focused$.next(true)"
+        (focus)="focused.set(true)"
         (blur)="onBlur()"
         autocomplete="off" />
     </mat-form-field>

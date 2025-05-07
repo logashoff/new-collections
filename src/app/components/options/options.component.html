@@ -27,15 +27,15 @@
         </section>
       </section>
       <section class="section">
-        @let storageUsage = storageUsage$ | async;
-        @let storageRemaining = 100 - storageUsage | number: '1.0-0';
+        @let _storageUsage = storageUsage();
+        @let storageRemaining = 100 - _storageUsage | number: '1.0-0';
 
         <h3 class="storage-heading">{{ 'syncUsage' | translate }}</h3>
         <mat-hint>{{ 'hintDataUsage' | translate: storageRemaining }}</mat-hint>
         <mat-progress-bar
           mode="determinate"
-          [value]="storageUsage"
-          [color]="storageUsage > 80 ? 'warn' : 'primary'" />
+          [value]="_storageUsage"
+          [color]="_storageUsage > 80 ? 'warn' : 'primary'" />
       </section>
       <section class="section toggles">
         <mat-slide-toggle formControlName="syncStorage" color="primary">

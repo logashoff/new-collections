@@ -1,5 +1,5 @@
-import { AsyncPipe, DecimalPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation, inject } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,7 +10,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { BehaviorSubject, Observable, map, shareReplay, startWith, take } from 'rxjs';
+import { shareReplay, take } from 'rxjs';
 
 import { TranslatePipe } from '../../pipes';
 import { CollectionsService, SettingsService } from '../../services';
@@ -53,7 +53,6 @@ interface OptionsForm {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   imports: [
-    AsyncPipe,
     DecimalPipe,
     MatButtonModule,
     MatCardModule,
@@ -90,21 +89,17 @@ export class OptionsComponent implements OnInit {
   readonly #devicesControl = new FormControl<boolean>(true);
   readonly sitesControl = new FormControl<boolean>(true);
   readonly syncStorage = new FormControl<boolean>(true);
-  readonly ignoreSitesControl = new FormArray([]);
+  readonly ignoreSitesControl = new FormArray<FormControl<MostVisitedURL>>([]);
 
   /**
    * Sync storage used
    */
-  private readonly storageUsageSource$ = new BehaviorSubject<number>(0);
+  readonly #storageUsageSource = signal<number>(0);
 
   /**
    * Chrome sync storage has limited quota (~100KB), this will show how much storage is currently inuse.
    */
-  readonly storageUsage$: Observable<number> = this.storageUsageSource$.pipe(
-    startWith(0),
-    map((usage) => (usage / chrome.storage.sync.QUOTA_BYTES) * 100),
-    shareReplay(1)
-  );
+  readonly storageUsage = computed<number>(() => (this.#storageUsageSource() / chrome.storage.sync.QUOTA_BYTES) * 100);
 
   readonly formGroup = new FormGroup<OptionsForm>({
     enableDevices: this.#devicesControl,
@@ -116,7 +111,7 @@ export class OptionsComponent implements OnInit {
   readonly #formValues$ = this.formGroup.valueChanges.pipe(takeUntilDestroyed(), shareReplay(1));
 
   async ngOnInit() {
-    this.storageUsageSource$.next(await this.#settings.getUsageBytes());
+    this.#storageUsageSource.set(await this.#settings.getUsageBytes());
 
     this.#settings.settings$.pipe(take(1)).subscribe((settings) => {
       if (settings) {
@@ -147,7 +142,7 @@ export class OptionsComponent implements OnInit {
         await this.#settings.update(settings);
 
         const storageBytes = await this.#settings.getUsageBytes();
-        this.storageUsageSource$.next(storageBytes);
+        this.#storageUsageSource.set(storageBytes);
       });
     });
   }

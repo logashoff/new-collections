@@ -2,12 +2,14 @@ import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   effect,
   ElementRef,
   inject,
   input,
   OnInit,
   output,
+  signal,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
@@ -18,7 +20,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { BehaviorSubject, filter, map, shareReplay } from 'rxjs';
+import { map, shareReplay } from 'rxjs';
 
 import { TranslatePipe } from '../../pipes';
 import { CollectionsService, NavService } from '../../services';
@@ -51,7 +53,7 @@ interface SearchForm {
     '(document:keyup.escape)': 'onKeyUp($event)',
     '[class.disabled]': 'disabled()',
     '[class.is-active]': 'isActive',
-    '[class.is-focused]': 'isFocused',
+    '[class.is-focused]': 'focused()',
   },
 })
 export class SearchFormComponent implements OnInit {
@@ -77,14 +79,10 @@ export class SearchFormComponent implements OnInit {
   /**
    * Indicates search input is focused
    */
-  readonly focused$ = new BehaviorSubject<boolean>(false);
+  readonly focused = signal<boolean>(false);
 
   get isActive() {
     return this.#navService.isActive('search');
-  }
-
-  get isFocused() {
-    return this.focused$.value;
   }
 
   readonly isActive$ = this.#navService.pathChanges$.pipe(
@@ -92,11 +90,7 @@ export class SearchFormComponent implements OnInit {
     shareReplay(1)
   );
 
-  readonly #activated$ = this.focused$.pipe(
-    filter((focused) => focused && !this.isActive),
-    takeUntilDestroyed(),
-    shareReplay(1)
-  );
+  readonly #activated = computed<boolean>(() => this.focused() && !this.isActive);
 
   readonly #searchParams$ = this.#navService.paramsSearch$.pipe(takeUntilDestroyed(), shareReplay(1));
 
@@ -107,6 +101,10 @@ export class SearchFormComponent implements OnInit {
       } else {
         this.#searchControl.enable();
       }
+
+      if (this.#activated()) {
+        this.activated.emit();
+      }
     });
   }
 
@@ -116,8 +114,6 @@ export class SearchFormComponent implements OnInit {
         emitEvent: false,
       })
     );
-
-    this.#activated$.subscribe(() => this.activated.emit());
 
     this.#formValues$.subscribe(({ search }) => this.searchChange(search));
   }
@@ -143,7 +139,7 @@ export class SearchFormComponent implements OnInit {
   }
 
   onBlur() {
-    this.focused$.next(false);
+    this.focused.set(false);
     this.blurred.emit();
   }
 
