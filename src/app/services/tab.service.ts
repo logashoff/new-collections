@@ -519,7 +519,7 @@ export class TabService {
   /**
    * Opens tabs selector bottom sheet.
    */
-  openTabsSelector(tabs: BrowserTabs): MatDialogRef<TabsSelectorComponent> {
+  openTabsSelector(tabs: BrowserTabs): MatDialogRef<TabsSelectorComponent, Tabs> {
     return this.#dialog.open(TabsSelectorComponent, {
       data: tabs,
       autoFocus: false,

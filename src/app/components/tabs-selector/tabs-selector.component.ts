@@ -51,14 +51,14 @@ interface TabSelectorForm {
   ],
 })
 export class TabsSelectorComponent implements AfterViewInit {
-  readonly #dialogRef = inject<MatDialogRef<TabsSelectorComponent>>(MatDialogRef);
+  readonly #dialogRef = inject<MatDialogRef<TabsSelectorComponent, Tabs>>(MatDialogRef);
   readonly tabs = inject<Tabs>(MAT_DIALOG_DATA);
 
   /**
    * Root group form.
    */
   readonly formGroup = new FormGroup<TabSelectorForm>({
-    list: new FormControl([], [Validators.required, Validators.minLength(1)]),
+    list: new FormControl<Tabs>([], [Validators.required, Validators.minLength(1)]),
   });
 
   /**
@@ -100,7 +100,7 @@ export class TabsSelectorComponent implements AfterViewInit {
    */
   private listComponent = viewChild(MatSelectionList);
 
-  private get list(): FormControl {
+  private get list(): FormControl<Tabs> {
     return this.formGroup.get('list') as FormControl;
   }
 

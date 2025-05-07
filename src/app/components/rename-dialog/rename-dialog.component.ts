@@ -29,7 +29,7 @@ interface RenameForm {
   imports: [MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, TranslatePipe],
 })
 export class RenameDialogComponent implements OnInit {
-  readonly #dialogRef = inject<MatDialogRef<RenameDialogComponent>>(MatDialogRef);
+  readonly #dialogRef = inject<MatDialogRef<RenameDialogComponent, BrowserTab>>(MatDialogRef);
   readonly #tab = inject<BrowserTab>(MAT_DIALOG_DATA);
 
   formGroup: FormGroup<RenameForm>;
