@@ -1,8 +1,8 @@
-@let sourceTabs = sourceTabs$ | async;
+@let _sourceTabs = sourceTabs();
+@let sourceLen = _sourceTabs?.length;
 @let deviceTabs = deviceTabs$ | async;
 @let searchQuery = searchQuery$ | async;
 @let baseSource = source();
-@let sourceLen = sourceTabs?.length;
 @let devLen = deviceTabs?.length;
 @let recentMap = recentMap$ | async;
 
@@ -42,7 +42,7 @@
   @if (sourceLen > 0) {
     <mat-card class="search-container">
       <nc-tab-list>
-        @for (tab of sourceTabs; track tab) {
+        @for (tab of _sourceTabs; track tab) {
           <nc-list-item
             [@listItemAnimation]
             [tab]="tab"

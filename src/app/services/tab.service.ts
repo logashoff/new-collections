@@ -353,12 +353,13 @@ export class TabService {
             ActionIcon.Undo,
             'undo'
           );
-          const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
 
-          if (revert) {
-            group.removeTabs(tabs);
-            this.save();
-          }
+          messageRef.afterDismissed().subscribe(({ dismissedByAction: revert }) => {
+            if (revert) {
+              group.removeTabs(tabs);
+              this.save();
+            }
+          });
         }
       } else {
         this.#message.open(translate('tabsExistError'));
@@ -397,14 +398,14 @@ export class TabService {
     }
 
     if (removeIndex > -1) {
-      const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
+      messageRef.afterDismissed().subscribe(({ dismissedByAction: revert }) => {
+        if (revert) {
+          tabGroup.addTabAt(removeIndex, removedTab);
+          this.save();
 
-      if (revert) {
-        tabGroup.addTabAt(removeIndex, removedTab);
-        this.save();
-
-        this.#updated$.next(true);
-      }
+          this.#updated$.next(true);
+        }
+      });
     }
 
     return messageRef;
@@ -454,11 +455,11 @@ export class TabService {
     await removeRecent(tabGroup.tabs.map((tab) => tab.id));
 
     if (removedGroups?.length > 0) {
-      const { dismissedByAction: revert } = await lastValueFrom(messageRef.afterDismissed());
-
-      if (revert) {
-        await this.addTabGroup(tabGroup);
-      }
+      messageRef.afterDismissed().subscribe(({ dismissedByAction: revert }) => {
+        if (revert) {
+          this.addTabGroup(tabGroup);
+        }
+      });
     }
 
     return messageRef;

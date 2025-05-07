@@ -8,6 +8,7 @@ import {
   input,
   OnInit,
   output,
+  signal,
   viewChildren,
   ViewEncapsulation,
 } from '@angular/core';
@@ -17,12 +18,10 @@ import { MatIconModule } from '@angular/material/icon';
 import Fuse, { IFuseOptions } from 'fuse.js';
 import { uniqBy } from 'lodash-es';
 import {
-  BehaviorSubject,
   combineLatest,
   distinctUntilChanged,
   filter,
   firstValueFrom,
-  lastValueFrom,
   map,
   Observable,
   of,
@@ -106,7 +105,7 @@ export class SearchComponent implements OnInit {
   /**
    * Tabs data from search results
    */
-  readonly sourceTabs$ = new BehaviorSubject<BrowserTabs>(null);
+  readonly sourceTabs = signal<BrowserTabs>(null);
 
   /**
    * Tabs from synced devices
@@ -188,7 +187,7 @@ export class SearchComponent implements OnInit {
         takeUntilDestroyed(this.#destroyRef),
         shareReplay(1)
       )
-      .subscribe((tabs) => this.sourceTabs$.next(tabs));
+      .subscribe((tabs) => this.sourceTabs.set(tabs));
 
     const fuseDevices$: Observable<Fuse<BrowserTab>> = this.#devices$.pipe(
       filter((devices) => devices?.length > 0),
@@ -216,12 +215,12 @@ export class SearchComponent implements OnInit {
     const updatedTab = await this.#tabService.updateTab(tab);
 
     if (updatedTab) {
-      const results = this.sourceTabs$.value;
+      const results = this.sourceTabs();
       const index = this.getSearchIndex(tab, results);
 
       if (index > -1) {
         results.splice(index, 1, updatedTab);
-        this.sourceTabs$.next(results);
+        this.sourceTabs.set(results);
       }
     }
   }
@@ -230,22 +229,22 @@ export class SearchComponent implements OnInit {
    * Handles tab deletion
    */
   async itemDeleted(tab: BrowserTab) {
-    const messageRef = await this.#tabService.removeTab(tab);
-    const sourceTabs = this.sourceTabs$.value;
+    const sourceTabs = this.sourceTabs();
     const index = this.getSearchIndex(tab, sourceTabs);
 
     if (index > -1) {
       sourceTabs.splice(index, 1);
-      this.sourceTabs$.next(sourceTabs);
+      this.sourceTabs.set(sourceTabs);
 
       await removeRecent(tab?.id);
 
-      const { dismissedByAction } = await lastValueFrom(messageRef.afterDismissed());
-
-      if (dismissedByAction) {
-        sourceTabs.splice(index, 0, tab);
-        this.sourceTabs$.next(sourceTabs);
-      }
+      const messageRef = await this.#tabService.removeTab(tab);
+      messageRef?.afterDismissed().subscribe(({ dismissedByAction }) => {
+        if (dismissedByAction) {
+          sourceTabs.splice(index, 0, tab);
+          this.sourceTabs.set(sourceTabs);
+        }
+      });
     }
   }
 
@@ -257,12 +256,12 @@ export class SearchComponent implements OnInit {
     if (tab) {
       await removeRecent(tab?.id);
 
-      const sourceTabs = this.sourceTabs$.value;
+      const sourceTabs = this.sourceTabs();
       const index = this.getSearchIndex(tab, sourceTabs);
 
       if (index > -1) {
         sourceTabs.splice(index, 1);
-        this.sourceTabs$.next(sourceTabs);
+        this.sourceTabs.set(sourceTabs);
 
         return index;
       }
