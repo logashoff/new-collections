@@ -6,7 +6,7 @@
     @if (data.actionIcon) {
       <button
         mat-icon-button
-        [matTooltip]="data.actionLabel | translate"
+        [matTooltip]="data.actionLabel ? (data.actionLabel | translate) : ''"
         (click)="dismissWithAction()">
         <mat-icon>{{ data.actionIcon }}</mat-icon>
       </button>

@@ -8,8 +8,8 @@ import { TranslatePipe } from '../../pipes';
 import { ActionIcon, LocaleMessage } from '../../utils';
 
 interface MessageData {
-  actionIcon: ActionIcon;
-  actionLabel: LocaleMessage;
+  actionIcon?: ActionIcon;
+  actionLabel?: LocaleMessage;
   message: string;
 }
 
