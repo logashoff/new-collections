@@ -32,7 +32,7 @@ export async function saveCollections(collections: Collections): Promise<void> {
   const storage = await getStorage();
   const syncData: SyncData = (await storage.get()) ?? {};
   const collectionsById: Map<string, Collection> = new Map(
-    collections.map((collection) => [collection.id, collection])
+    collections?.map((collection) => [collection.id, collection])
   );
 
   const removeKeys = [faviconStorageKey];
