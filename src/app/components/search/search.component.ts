@@ -24,11 +24,8 @@ import {
   firstValueFrom,
   map,
   Observable,
-  of,
   shareReplay,
   startWith,
-  switchMap,
-  take,
   withLatestFrom,
 } from 'rxjs';
 
@@ -93,9 +90,7 @@ export class SearchComponent implements OnInit {
 
   readonly source = input.required<BrowserTabs>();
   readonly #source$ = toObservable(this.source);
-
   readonly devices = input<BrowserTabs>();
-  readonly #devices$ = toObservable(this.devices);
 
   /**
    * Scroll list item into view
@@ -124,6 +119,9 @@ export class SearchComponent implements OnInit {
   readonly defaultActions: Actions = [Action.Find, Action.Edit, Action.Delete];
   readonly recentActions: Actions = [Action.Forget, ...this.defaultActions];
 
+  readonly #fuseDevices = new Fuse<BrowserTab>([], fuseOptions);
+  readonly #fuseSource = new Fuse<BrowserTab>([], fuseOptions);
+
   constructor() {
     effect(async () => {
       const listItems = this.listItems();
@@ -135,29 +133,17 @@ export class SearchComponent implements OnInit {
       if (searchQuery?.length > 0) {
         this.#keyService.setActive(0);
       }
+
+      this.#fuseDevices.setCollection(this.devices() ?? []);
+      this.#fuseSource.setCollection(this.source());
     });
   }
 
   ngOnInit() {
-    const fuse = new Fuse<BrowserTab>([], fuseOptions);
-
-    const fuse$: Observable<Fuse<BrowserTab>> = this.#source$.pipe(
-      filter((source) => source?.length > 0),
-      map((source) => {
-        fuse.setCollection(source);
-        return fuse;
-      })
-    );
-
     const searchResults$ = this.searchQuery$.pipe(
       filter((searchQuery) => searchQuery?.length > 0),
       distinctUntilChanged(),
-      switchMap((searchValue) =>
-        fuse$.pipe(
-          take(1),
-          map((fuse) => fuse.search(searchValue).map(({ item }) => item))
-        )
-      )
+      map((searchValue) => this.#fuseSource.search(searchValue).map(({ item }) => item))
     );
 
     combineLatest({
@@ -174,7 +160,7 @@ export class SearchComponent implements OnInit {
         withLatestFrom(this.recentMap$),
         map(([{ searchQuery, searchResults, source }, recentTabs]) => {
           if (searchQuery?.length) {
-            return searchResults;
+            return searchResults?.slice();
           }
 
           const sortTabs = this.#tabService.sortByRecent(
@@ -184,26 +170,19 @@ export class SearchComponent implements OnInit {
 
           return sortTabs.slice(0, Math.max(recentTabs?.size ?? 0, MIN_RECENT_DISPLAY));
         }),
-        takeUntilDestroyed(this.#destroyRef),
-        shareReplay(1)
+        takeUntilDestroyed(this.#destroyRef)
       )
       .subscribe((tabs) => this.sourceTabs.set(tabs));
 
-    const fuseDevices$: Observable<Fuse<BrowserTab>> = this.#devices$.pipe(
-      filter((devices) => devices?.length > 0),
-      map((devices) => new Fuse(devices, fuseOptions)),
-      take(1)
-    );
-
     this.deviceTabs$ = this.searchQuery$.pipe(
-      switchMap((search) => {
+      map((search) => {
         if (search) {
-          return fuseDevices$.pipe(map((fuse) => fuse.search(search)?.map(({ item }) => item)));
+          const searchResults = this.#fuseDevices.search(search)?.map(({ item }) => item);
+          return uniqBy(searchResults, 'url');
         }
 
-        return of<BrowserTabs>([]);
+        return [];
       }),
-      map((results) => uniqBy(results, 'url')),
       shareReplay(1)
     );
   }
