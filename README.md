@@ -15,12 +15,15 @@ Extension can be used as a popup or New Tab page. New Tab page can optionally di
 - [x] New tabs can be added to existing tab groups
 - [x] Display top sites on New Tab page
 - [x] Display synced tabs from other devices on New Tab page
+
 ## Build
 
 Run `yarn build` to build the project. The build artifacts will be stored in the `dist/` directory.
+
 ## Running unit tests
 
 Run `yarn test` or `yarn test:watch` to execute the unit tests.
+
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.

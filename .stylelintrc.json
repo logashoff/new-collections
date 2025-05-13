@@ -1,7 +1,5 @@
 {
-  "extends": [
-    "stylelint-config-sass-guidelines"
-  ],
+  "extends": ["stylelint-config-sass-guidelines"],
   "rules": {
     "@stylistic/function-parentheses-space-inside": null,
     "color-hex-length": null,

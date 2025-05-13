@@ -8,6 +8,7 @@
     "build:service": "esbuild ./src/background.ts --legal-comments=none --bundle --outfile=./dist/new-collections/background.js",
     "build": "ng build --configuration production --output-hashing none",
     "ci": "yarn lint && yarn test:coverage && yarn build",
+    "fmt": "prettier -w . && stylelint --fix \"**/*.scss\"",
     "lint": "ng lint && stylelint ./src/**/*.scss",
     "postbuild:dev": "yarn build:service",
     "postbuild": "yarn build:service --minify",

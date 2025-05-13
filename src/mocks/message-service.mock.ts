@@ -1,4 +1,4 @@
-import { of } from "rxjs";
+import { of } from 'rxjs';
 
 export class MessageServiceMock {
   open() {
