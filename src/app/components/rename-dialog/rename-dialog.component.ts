@@ -5,8 +5,8 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
-import { TranslatePipe } from '../../pipes';
-import { BrowserTab } from '../../utils';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import type { BrowserTab } from '../../utils/models';
 
 /**
  * Rename form

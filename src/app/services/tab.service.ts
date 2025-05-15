@@ -5,7 +5,7 @@ import { remove, uniqBy } from 'lodash-es';
 import { BehaviorSubject, Observable, firstValueFrom, lastValueFrom } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
 
-import { RenameDialogComponent, TabsSelectorComponent } from '../components';
+import { TabsSelectorComponent } from '../components';
 import {
   ActionIcon,
   BrowserTab,
@@ -415,6 +415,8 @@ export class TabService {
    * Opens tab edit dialog.
    */
   async updateTab(tab: BrowserTab): Promise<BrowserTab> {
+    const { RenameDialogComponent } = await import('../components/rename-dialog/rename-dialog.component');
+
     const dialogRef = this.#dialog.open(RenameDialogComponent, { data: tab, disableClose: true });
     let updatedTab: BrowserTab = await lastValueFrom(dialogRef.afterClosed());
 
