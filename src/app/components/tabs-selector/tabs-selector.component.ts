@@ -11,8 +11,10 @@ import { MatListModule, MatSelectionList } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { filter, map, Observable, shareReplay, startWith, withLatestFrom } from 'rxjs';
 
-import { FaviconPipe, HostnamePipe, TranslatePipe } from '../../pipes';
-import type { Tabs } from '../../utils';
+import { FaviconPipe } from '../../pipes/favicon.pipe';
+import { HostnamePipe } from '../../pipes/hostname.pipe';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import type { Tabs } from '../../utils/models';
 import { ChipComponent } from '../chip/chip.component';
 
 /**

@@ -1,9 +1,9 @@
 import { ApplicationConfig } from '@angular/core';
 
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { PreloadAllModules, provideRouter, withHashLocation, withPreloading } from '@angular/router';
+import { provideRouter, withHashLocation } from '@angular/router';
 import { appRoutes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideAnimations(), provideRouter(appRoutes, withPreloading(PreloadAllModules), withHashLocation())],
+  providers: [provideAnimations(), provideRouter(appRoutes, withHashLocation())],
 };

@@ -61,7 +61,7 @@ export class CollectionsService {
     );
 
     if (tabs?.length > 0) {
-      const dialogRef = this.#tabsService.openTabsSelector(tabs);
+      const dialogRef = await this.#tabsService.openTabsSelector(tabs);
       tabs = await lastValueFrom(dialogRef.afterClosed());
       if (tabs?.length > 0) {
         const tabGroup = await this.#tabsService.createTabGroup(tabs);

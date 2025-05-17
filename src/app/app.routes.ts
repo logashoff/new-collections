@@ -5,16 +5,31 @@ export const appRoutes: Routes = [
   {
     path: 'new-tab',
     providers: [HomeService],
-    loadComponent: () => import('./components/new-tab/new-tab.component').then((m) => m.NewTabComponent),
-    loadChildren: () => import('./components/new-tab/new-tab.routes').then((m) => m.newTabRoutes),
+    loadComponent: async () => {
+      const { NewTabComponent } = await import('./components/new-tab/new-tab.component');
+      return NewTabComponent;
+    },
+    loadChildren: async () => {
+      const { newTabRoutes } = await import('./components/new-tab/new-tab.routes');
+      return newTabRoutes;
+    },
   },
   {
     path: 'popup',
-    loadComponent: () => import('./components/popup/popup.component').then((m) => m.PopupComponent),
-    loadChildren: () => import('./components/popup/popup.routes').then((m) => m.popupRoutes),
+    loadComponent: async () => {
+      const { PopupComponent } = await import('./components/popup/popup.component');
+      return PopupComponent;
+    },
+    loadChildren: async () => {
+      const { popupRoutes } = await import('./components/popup/popup.routes');
+      return popupRoutes;
+    },
   },
   {
     path: 'options',
-    loadComponent: () => import('./components/options/options.component').then((m) => m.OptionsComponent),
+    loadComponent: async () => {
+      const { OptionsComponent } = await import('./components/options/options.component');
+      return OptionsComponent;
+    },
   },
 ];

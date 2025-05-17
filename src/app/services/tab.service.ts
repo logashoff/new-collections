@@ -5,7 +5,7 @@ import { remove, uniqBy } from 'lodash-es';
 import { BehaviorSubject, Observable, firstValueFrom, lastValueFrom } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
 
-import { TabsSelectorComponent } from '../components';
+import type { TabsSelectorComponent } from '../components';
 import {
   ActionIcon,
   BrowserTab,
@@ -332,7 +332,7 @@ export class TabService {
       filteredTabs = filteredTabs.filter(({ url }) => !tabsByUrl.get(url));
 
       if (filteredTabs?.length > 0) {
-        const dialogRef = this.openTabsSelector(filteredTabs);
+        const dialogRef = await this.openTabsSelector(filteredTabs);
         const tabs: BrowserTabs = await lastValueFrom(dialogRef.afterClosed());
 
         if (tabs?.length > 0) {
@@ -522,7 +522,9 @@ export class TabService {
   /**
    * Opens tabs selector bottom sheet.
    */
-  openTabsSelector(tabs: BrowserTabs): MatDialogRef<TabsSelectorComponent, Tabs> {
+  async openTabsSelector(tabs: BrowserTabs): Promise<MatDialogRef<TabsSelectorComponent, Tabs>> {
+    const { TabsSelectorComponent } = await import('../components/tabs-selector/tabs-selector.component');
+
     return this.#dialog.open(TabsSelectorComponent, {
       data: tabs,
       autoFocus: false,
