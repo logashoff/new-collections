@@ -1,25 +1,21 @@
+import { provideZonelessChangeDetection } from '@angular/core';
 import { Router } from '@angular/router';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
+
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { MostVisitedURL, Settings } from '../utils';
 import { SettingsService } from './settings.service';
+import { chrome } from 'src/mocks';
 
-jest.mock('src/app/utils', () => ({
-  getSettings: jest.fn().mockImplementation(
-    () =>
-      new Promise((resolve) =>
-        resolve({
-          enableDevices: true,
-          enableTopSites: true,
-        })
-      )
-  ),
-}));
+vi.stubGlobal('chrome', chrome);
 
 describe('SettingsService', () => {
   let spectator: SpectatorService<SettingsService>;
   const createService = createServiceFactory({
     service: SettingsService,
     providers: [
+      provideZonelessChangeDetection(),
       {
         provide: Router,
         useValue: {
@@ -42,8 +38,6 @@ describe('SettingsService', () => {
     const newSettings = await spectator.service.ignoreSite(site);
 
     expect(newSettings).toEqual({
-      enableDevices: true,
-      enableTopSites: true,
       ignoreTopSites: [site],
     });
   });
@@ -69,8 +63,6 @@ describe('SettingsService', () => {
     const newSettings = await spectator.service.update(updateSettings);
 
     expect(newSettings).toEqual({
-      enableDevices: true,
-      enableTopSites: true,
       ignoreTopSites: [
         {
           title: 'Site 1',

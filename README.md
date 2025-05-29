@@ -28,11 +28,12 @@ Run `yarn build` or `yarn build:dev` to build the project. The build artifacts w
 
 ## Running unit tests
 
-Run `yarn test` or `yarn test:watch` to execute the unit tests.
+Run `yarn test` to execute the unit tests.
 
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 ## Lint
+
 Run `yarn lint` to check for lint errors. Run `yarn fmt` to quickly format pending code changes and fix lint errors.

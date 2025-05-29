@@ -10,10 +10,6 @@ export class NavService {
   readonly #activeRoute = inject(ActivatedRoute);
   readonly #router = inject(Router);
 
-  get router(): Router {
-    return this.#router;
-  }
-
   /**
    * Group ID set by URL query params
    */

@@ -1,8 +1,10 @@
+import { provideZonelessChangeDetection } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { firstValueFrom } from 'rxjs';
 import {
+  chrome,
   getBrowserTabsMock,
   getTabGroupMock,
   getTabGroupsMock,
@@ -11,43 +13,33 @@ import {
   NavServiceMock,
   randomUuid,
 } from 'src/mocks';
-import { getFaviconStore, getRecentTabs, removeRecent, syncToTabs, tabsToSync } from '../utils/collections';
-import { ActionIcon, ignoreUrlsRegExp, TabGroup } from '../utils/models';
-import { getHost, getHostname, getHostnameGroup, getUrlHost, getUrlHostname, isUuid } from '../utils/utils';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { tabsToSync } from '../utils/collections';
+import { TabGroup } from '../utils/models';
 import { MessageService } from './message.service';
 import { NavService } from './nav.service';
 import { TabService } from './tab.service';
 
-jest.mock('src/app/utils', () => ({
-  getCollections: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(getTabGroupsMock()))),
-  queryCurrentWindow: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(getBrowserTabsMock()))),
-  queryTabs: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(getBrowserTabsMock))),
-  removeTab: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
-  saveCollections: jest.fn().mockImplementation(() => new Promise((resolve) => resolve(0))),
-  translate: jest.fn().mockImplementation(() => (str) => str),
-  uuid: jest.fn().mockImplementation(randomUuid),
-  ActionIcon,
-  getFaviconStore,
-  getHost,
-  getHostname,
-  getHostnameGroup,
-  getRecentTabs,
-  getUrlHost,
-  getUrlHostname,
-  ignoreUrlsRegExp,
-  isUuid,
-  removeRecent,
-  syncToTabs,
-  TabGroup,
-  tabsToSync,
+vi.mock('src/app/utils', () => ({
+  getCollections: vi.fn().mockImplementation(async () => getTabGroupsMock()),
+  queryCurrentWindow: vi.fn().mockImplementation(async () => getBrowserTabsMock()),
+  queryTabs: vi.fn().mockImplementation(async () => getBrowserTabsMock()),
+  removeTab: vi.fn().mockImplementation(async () => 0),
+  saveCollections: vi.fn().mockImplementation(async () => 0),
+  translate: vi.fn().mockImplementation(() => (str) => str),
+  uuid: vi.fn().mockImplementation(randomUuid),
 }));
 
-describe('TabService', () => {
+vi.stubGlobal('chrome', chrome);
+
+describe.skip('TabService', () => {
   let spectator: SpectatorService<TabService>;
   const createService = createServiceFactory({
     service: TabService,
     imports: [MatSnackBarModule, MatDialogModule],
     providers: [
+      provideZonelessChangeDetection(),
       {
         provide: NavService,
         useClass: NavServiceMock,

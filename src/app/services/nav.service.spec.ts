@@ -4,6 +4,8 @@ import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { EMPTY, firstValueFrom, of } from 'rxjs';
 
 import { NavService } from './nav.service';
+import { describe, beforeEach, it, expect, vitest } from 'vitest';
+import { provideZonelessChangeDetection } from '@angular/core';
 
 describe('NavService', () => {
   let spectator: SpectatorService<NavService>;
@@ -11,6 +13,7 @@ describe('NavService', () => {
     service: NavService,
     imports: [MatSnackBarModule],
     providers: [
+      provideZonelessChangeDetection(),
       {
         provide: ActivatedRoute,
         useValue: {
@@ -36,15 +39,17 @@ describe('NavService', () => {
   });
 
   it('should navigate with values', () => {
-    jest.spyOn(spectator.service.router, 'navigate');
+    const router = spectator.inject(Router);
+
+    vitest.spyOn(router, 'navigate');
 
     spectator.service.setParams('6ab9c99e-8942-4236-ad6e-7e38c51da810', 218);
 
-    expect(spectator.service.router.navigate).toHaveBeenCalled();
+    expect(router.navigate).toHaveBeenCalled();
 
     spectator.service.reset();
 
-    expect(spectator.service.router.navigate).toHaveBeenCalledTimes(2);
+    expect(router.navigate).toHaveBeenCalledTimes(2);
   });
 
   it('should have params set', async () => {

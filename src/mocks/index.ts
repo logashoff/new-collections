@@ -1,3 +1,4 @@
+export * from './chrome';
 export * from './collections';
 export * from './devices';
 export * from './helper';

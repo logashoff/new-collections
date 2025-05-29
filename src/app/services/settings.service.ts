@@ -42,7 +42,7 @@ export class SettingsService {
   /**
    * Updates and saves new settings
    */
-  async update(settings: Settings) {
+  async update(settings: Settings): Promise<Settings> {
     const currentSettings = (await getSettings()) ?? {};
 
     const newSettings = {

@@ -1,4 +1,4 @@
-chrome = {
+export const chrome = {
   action: {},
   runtime: {
     openOptionsPage: function () {},
@@ -9,9 +9,9 @@ chrome = {
       get: (key) => new Promise((resolve) => resolve(key)),
     },
     sync: {
-      set: (config) => new Promise((resolve) => resolve(config)),
-      get: (key) => new Promise((resolve) => resolve(key)),
-      remove(key) {},
+      set: (config) => new Promise<void>((resolve) => resolve(config)),
+      get: (key) => new Promise<void>((resolve) => resolve(key)),
+      remove: (key) => new Promise<void>((resolve) => resolve(key)),
     },
     onChanged: {
       addListener: function (callback) {

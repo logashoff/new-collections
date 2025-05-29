@@ -8,14 +8,11 @@
     "build:service": "esbuild ./src/background.ts --legal-comments=none --bundle --outfile=./dist/new-collections/background.js",
     "build": "ng build --configuration production --output-hashing none",
     "ci": "yarn lint && yarn test:coverage && yarn build",
-    "fmt": "git diff --name-only | grep -E \"\\.ts$|\\.json$|\\.html$|\\.scss$\" | xargs prettier -w",
+    "fmt": "git diff --name-only --diff-filter=d | grep -E \"\\.ts$|\\.json$|\\.html$|\\.scss$\" | xargs prettier -w",
     "lint": "ng lint && stylelint ./src/**/*.scss",
     "postbuild:dev": "yarn build:service",
     "postbuild": "yarn build:service --minify",
-    "test:coverage:watch": "yarn test:coverage --watch",
-    "test:coverage": "yarn test --coverage=true",
-    "test:watch": "jest --watch",
-    "test": "jest"
+    "test": "ng test"
   },
   "engines": {
     "yarn": "^1.22.17",
@@ -36,8 +33,7 @@
     "fuse.js": "^7.1.0",
     "lodash-es": "^4.17.21",
     "normalize-url": "^8.0.1",
-    "rxjs": "^7.8.2",
-    "zone.js": "^0.15.1"
+    "rxjs": "^7.8.2"
   },
   "devDependencies": {
     "@angular-devkit/architect": "^0.2000.0",
@@ -52,20 +48,20 @@
     "@angular/language-service": "^20.0.0",
     "@ngneat/spectator": "^19.6.1",
     "@types/chrome": "^0.0.323",
-    "@types/jest": "^29.5.14",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^22.15.24",
     "@typescript-eslint/eslint-plugin": "^8.33.0",
     "@typescript-eslint/parser": "^8.33.0",
+    "@vitest/coverage-v8": "^3.1.4",
     "esbuild": "^0.25.5",
     "eslint": "^9.27.0",
-    "jest": "^29.7.0",
-    "jest-preset-angular": "^14.5.5",
+    "jsdom": "^26.1.0",
     "lodash": "^4.17.21",
     "ng-packagr": "^20.0.0",
     "prettier": "^3.5.3",
-    "stylelint": "^16.19.1",
+    "stylelint": "^16.20.0",
     "stylelint-config-sass-guidelines": "^12.1.0",
-    "typescript": "5.8.3"
+    "typescript": "5.8.3",
+    "vitest": "^3.1.4"
   }
 }
