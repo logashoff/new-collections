@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
-    "module": "CommonJs",
     "outDir": "./out-tsc/spec",
-    "types": ["jest", "chrome"]
+    "types": ["chrome"]
   },
   "extends": "./tsconfig.json",
-  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
+  "include": ["src/**/*.spec.ts"]
 }

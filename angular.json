@@ -22,17 +22,10 @@
               "browser": ""
             },
             "index": "src/index.html",
-            "polyfills": ["src/polyfills.ts"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "aot": true,
-            "assets": [
-              "src/assets/icons",
-              "src/assets/i18n",
-              "src/assets/workers",
-              "src/manifest.json",
-              "src/_locales"
-            ],
+            "assets": ["src/assets/icons", "src/manifest.json", "src/_locales"],
             "styles": [
               "src/styles/_dark-colors.scss",
               "src/styles/_light-colors.scss",
@@ -97,6 +90,16 @@
           "builder": "@angular-eslint/builder:lint",
           "options": {
             "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
+          }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "tsconfig.spec.json",
+            "buildTarget": "::development",
+            "codeCoverage": true,
+            "watch": false,
+            "runner": "vitest"
           }
         }
       }

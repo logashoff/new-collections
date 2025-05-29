@@ -1,14 +1,18 @@
-import { getTabGroupMock, getTabGroupsMock } from 'src/mocks';
+import { chrome, getTabGroupMock, getTabGroupsMock } from 'src/mocks';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { addRecent, getCollections, removeRecent, saveCollections, syncToTabs, tabsToSync } from './collections';
+
 import { RecentSync, SyncStorageArea } from './models';
 
+vi.stubGlobal('chrome', chrome);
+
 describe('collections.ts', () => {
-  const setSyncSpy = jest.spyOn(chrome.storage.sync, 'set');
-  const remSyncSpy = jest.spyOn(chrome.storage.sync, 'remove');
-  const getSyncSpy = jest.spyOn<SyncStorageArea, 'get'>(chrome.storage.sync, 'get');
+  const setSyncSpy = vi.spyOn(chrome.storage.sync, 'set');
+  const remSyncSpy = vi.spyOn(chrome.storage.sync, 'remove');
+  const getSyncSpy = vi.spyOn<Partial<SyncStorageArea>, 'get'>(chrome.storage.sync, 'get');
 
   beforeAll(() => {
-    jest.useFakeTimers().setSystemTime(new Date('2024-11-15'));
+    vi.useFakeTimers().setSystemTime(new Date('2024-11-15'));
   });
 
   beforeEach(() => {
