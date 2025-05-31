@@ -1,9 +1,6 @@
 <form [formGroup]="formGroup" (ngSubmit)="save()">
   <mat-dialog-content class="container">
     <div class="header-container">
-      @let selectionLength = selectionLength$ | async;
-      @let tabsLen = tabs.length;
-
       <h2 class="heading">
         {{ 'selectTabs' | translate }}
       </h2>
@@ -21,27 +18,13 @@
     </div>
     <div class="list-container">
       <mat-selection-list formControlName="list">
-        @for (tab of tabs; track tab; let i = $index) {
-          @let tabGroup = tabGroupById.get(tab.groupId);
-          @let groupClass = tabGroup ? 'tab-group' : '';
-          @let isFirstInGroup =
-            tabGroup && tabs[i - 1]?.groupId !== tabGroup?.id;
-          @let isLastInGroup =
-            tabGroup && tabs[i + 1]?.groupId !== tabGroup?.id;
-          @let groupColorClass =
-            tabGroup ? `group-color-${tabGroup.color}` : '';
-          @let isFirstClass = isFirstInGroup ? 'first-in-group' : '';
-          @let isLastClass = isLastInGroup ? 'last-in-group' : '';
+        @let _groupClasses = groupClasses();
 
+        @for (tab of tabs(); track tab.id) {
           <mat-list-option
             color="primary"
             [value]="tab"
-            [ngClass]="[
-              groupClass,
-              groupColorClass,
-              isFirstClass,
-              isLastClass,
-            ]">
+            [ngClass]="_groupClasses?.get(tab.id)">
             <div class="list-item">
               <nc-chip
                 [source]="tab.favIconUrl | favicon: tab.url"

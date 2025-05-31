@@ -1,5 +1,14 @@
 import { AsyncPipe, NgClass } from '@angular/common';
-import { AfterViewInit, Component, inject, viewChild, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  signal,
+  viewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -18,6 +27,11 @@ import type { Tabs } from '../../utils/models';
 import { ChipComponent } from '../chip/chip.component';
 
 /**
+ * Map tab ID to aux group classes
+ */
+type GroupClasses = Map<number, string[]>;
+
+/**
  * Form for selecting new tabs to add to existing or new group.
  */
 interface TabSelectorForm {
@@ -34,6 +48,7 @@ interface TabSelectorForm {
   templateUrl: './tabs-selector.component.html',
   styleUrl: './tabs-selector.component.scss',
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     AsyncPipe,
     ChipComponent,
@@ -54,7 +69,9 @@ interface TabSelectorForm {
 })
 export class TabsSelectorComponent implements AfterViewInit {
   readonly #dialogRef = inject<MatDialogRef<TabsSelectorComponent, Tabs>>(MatDialogRef);
-  readonly tabs = inject<Tabs>(MAT_DIALOG_DATA);
+
+  readonly #tabs = inject<Tabs>(MAT_DIALOG_DATA);
+  readonly tabs = signal<Tabs>(this.#tabs);
 
   /**
    * Root group form.
@@ -85,7 +102,7 @@ export class TabsSelectorComponent implements AfterViewInit {
    * True if all list items are selected.
    */
   readonly allSelected$: Observable<boolean> = this.selectionLength$.pipe(
-    map((len) => len === this.tabs.length),
+    map((len) => len === this.tabs().length),
     shareReplay(1)
   );
 
@@ -106,22 +123,35 @@ export class TabsSelectorComponent implements AfterViewInit {
     return this.formGroup.get('list') as FormControl;
   }
 
-  readonly tabGroupById = new Map<number, chrome.tabGroups.TabGroup>();
+  readonly groupClasses = signal<GroupClasses>(null);
 
   constructor() {
-    this.tabs?.forEach(async (tab) => {
-      if (tab?.groupId > -1) {
-        const tabGroup = await chrome.tabGroups.get(tab.groupId);
+    effect(async () => {
+      const tabs = this.tabs().filter((tab) => tab.groupId > -1);
 
-        if (tabGroup) {
-          this.tabGroupById.set(tabGroup.id, tabGroup);
+      if (tabs?.length > 0) {
+        const groupClasses: GroupClasses = new Map();
+
+        for (const [i, tab] of tabs.entries()) {
+          const tabGroup = await chrome.tabGroups.get(tab.groupId);
+
+          if (tabGroup) {
+            const isFirstInGroup = !i || tabs[i - 1]?.groupId !== tabGroup.id;
+            const isLastInGroup = i === tabs.length - 1 || tabs[i + 1]?.groupId !== tabGroup.id;
+            const prefixClass: string = isFirstInGroup ? 'prefix-group' : '';
+            const suffixClass: string = isLastInGroup ? 'suffix-group' : '';
+
+            groupClasses.set(tab.id, ['tab-group', `group-color-${tabGroup.color}`, prefixClass, suffixClass]);
+          }
         }
+
+        this.groupClasses.set(groupClasses);
       }
     });
   }
 
   ngAfterViewInit() {
-    const activeTab = this.tabs.filter((tab) => tab.active);
+    const activeTab = this.tabs().filter((tab) => tab.active);
 
     if (activeTab?.length > 0) {
       this.list.setValue(activeTab);
