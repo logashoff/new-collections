@@ -1,6 +1,6 @@
 import { provideZonelessChangeDetection } from '@angular/core';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
-import { openOptions, queryCurrentWindow } from 'src/app/utils';
+import { openOptions } from 'src/app/utils';
 import {
   chrome,
   getBrowserTabMock,

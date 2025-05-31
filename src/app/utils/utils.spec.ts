@@ -1,7 +1,7 @@
 import { getBrowserTabMock, getTabGroupMock, randomUuids } from 'src/mocks';
 import { getHostname, getHostnameGroup, isUuid } from './utils';
 
-import { describe, beforeEach, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 describe('utils.ts', () => {
   it('should create hostname groups', () => {
