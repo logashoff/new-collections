@@ -6,6 +6,7 @@ import {
   ElementRef,
   inject,
   input,
+  signal,
   ViewEncapsulation,
 } from '@angular/core';
 
@@ -23,13 +24,13 @@ import { scrollIntoView, sleep } from '../../utils';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    '[class.focused]': 'animate',
+    '[class.focused]': 'animate()',
   },
 })
 export class RippleComponent {
   readonly focused = input<boolean>(false);
 
-  animate = false;
+  readonly animate = signal<boolean>(false);
 
   constructor() {
     const el = inject(ElementRef);
@@ -40,14 +41,14 @@ export class RippleComponent {
         await sleep(225);
         await scrollIntoView(el.nativeElement);
 
-        this.animate = true;
+        this.animate.set(true);
         cdr.markForCheck();
 
         await sleep(1_000);
 
-        this.animate = false;
+        this.animate.set(false);
       } else {
-        this.animate = false;
+        this.animate.set(false);
       }
 
       cdr.markForCheck();

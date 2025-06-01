@@ -4,7 +4,8 @@
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": false
+    "strictTemplates": false,
+    "typeCheckHostBindings": true
   },
   "compileOnSave": false,
   "compilerOptions": {
