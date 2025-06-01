@@ -6,6 +6,7 @@ import {
   inject,
   input,
   output,
+  signal,
   ViewEncapsulation,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -41,7 +42,7 @@ import { RippleComponent } from '../ripple/ripple.component';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    '[class.active]': 'isActive',
+    '[class.active]': 'isActive()',
     role: 'list-item',
     tabindex: '-1',
   },
@@ -94,7 +95,7 @@ export class ListItemComponent implements Activatable {
    */
   readonly target = input<Target>('_self');
 
-  isActive = false;
+  readonly isActive = signal<boolean>(false);
 
   get tabActions(): TabActions {
     return this.actions()?.map((action) => tabActions.get(action));
@@ -126,14 +127,16 @@ export class ListItemComponent implements Activatable {
   }
 
   async setActiveStyles() {
-    this.isActive = true;
+    this.isActive.set(true);
+
     this.#cdr.markForCheck();
 
     await scrollIntoView(this.#el.nativeElement, { block: 'center' });
   }
 
   setInactiveStyles() {
-    this.isActive = false;
+    this.isActive.set(false);
+
     this.#cdr.markForCheck();
   }
 }
