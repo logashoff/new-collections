@@ -4,16 +4,12 @@ import { createUrl } from './utils';
 /**
  * Returns tabs promise based on provided config.
  */
-export function queryTabs(config: QueryInfo): Promise<Tabs> {
-  return new Promise((resolve) => chrome.tabs.query(config, (tabs) => resolve(tabs)));
-}
+export const queryTabs = async (config: QueryInfo): Promise<Tabs> => chrome.tabs.query(config);
 
 /**
  * Returns tab list from current window.
  */
-export function queryCurrentWindow(): Promise<Tabs> {
-  return queryTabs({ currentWindow: true });
-}
+export const queryCurrentWindow = async (): Promise<Tabs> => queryTabs({ currentWindow: true });
 
 /**
  * Restores all tabs from specified tab list.

@@ -2,38 +2,26 @@ import { provideZonelessChangeDetection } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, lastValueFrom, take, takeWhile } from 'rxjs';
 import {
-  chrome,
+  getBrowserApi,
   getBrowserTabsMock,
   getTabGroupMock,
-  getTabGroupsMock,
   MatDialogMock,
   MessageServiceMock,
+  MockStorageArea,
+  mockStorageArea,
   NavServiceMock,
-  randomUuid,
 } from 'src/mocks';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { tabsToSync } from '../utils/collections';
-import { TabGroup } from '../utils/models';
+import { Collection, Collections, TabGroup } from '../utils/models';
 import { MessageService } from './message.service';
 import { NavService } from './nav.service';
 import { TabService } from './tab.service';
 
-vi.mock('src/app/utils', () => ({
-  getCollections: vi.fn().mockImplementation(async () => getTabGroupsMock()),
-  queryCurrentWindow: vi.fn().mockImplementation(async () => getBrowserTabsMock()),
-  queryTabs: vi.fn().mockImplementation(async () => getBrowserTabsMock()),
-  removeTab: vi.fn().mockImplementation(async () => 0),
-  saveCollections: vi.fn().mockImplementation(async () => 0),
-  translate: vi.fn().mockImplementation(() => (str) => str),
-  uuid: vi.fn().mockImplementation(randomUuid),
-}));
-
-vi.stubGlobal('chrome', chrome);
-
-describe.skip('TabService', () => {
+describe('TabService', () => {
   let spectator: SpectatorService<TabService>;
   const createService = createServiceFactory({
     service: TabService,
@@ -56,33 +44,37 @@ describe.skip('TabService', () => {
   });
 
   beforeEach(() => {
+    vi.stubGlobal('chrome', getBrowserApi([], new MockStorageArea(mockStorageArea)));
+
     spectator = createService();
   });
 
-  it('should be created', () => {
+  test('should be created', () => {
     expect(spectator.service).toBeTruthy();
   });
 
-  it('should initialize tabs', async () => {
-    const tabGroups = await firstValueFrom(spectator.service['tabGroups$']);
+  test('should initialize tabs', async () => {
+    const tabGroups = await lastValueFrom(spectator.service['tabGroups$'].pipe(takeWhile((v) => !v, true)));
 
     expect(tabGroups.length).toBe(3);
-    expect(tabGroups[0].tabs.length).toBe(5);
-    expect(tabGroups[1].tabs.length).toBe(2);
-    expect(tabGroups[2].tabs.length).toBe(4);
+    expect(tabGroups[0].tabs.length).toBe(4);
+    expect(tabGroups[1].tabs.length).toBe(4);
+    expect(tabGroups[2].tabs.length).toBe(6);
   });
 
-  it('should generate tab group', async () => {
+  test('should generate tab group', async () => {
     const tabGroup = await spectator.service.createTabGroup(getBrowserTabsMock());
 
     expect(tabGroup.tabs.length).toBe(3);
   });
 
-  it('should save tab group', async () => {
+  test('should save tab group', async () => {
+    let tabGroups = await lastValueFrom(spectator.service['tabGroups$'].pipe(takeWhile((v) => !v, true)));
+
     const tabGroup = spectator.service.createTabGroup(getBrowserTabsMock());
     await spectator.service.addTabGroup(tabGroup);
 
-    const tabGroups = await firstValueFrom(spectator.service['tabGroups$']);
+    tabGroups = await firstValueFrom(spectator.service['tabGroups$'].pipe(take(1)));
 
     expect(tabGroups.length).toBe(4);
     expect(tabGroups[0].tabs.length).toBe(3);
@@ -102,59 +94,63 @@ describe.skip('TabService', () => {
     expect(tab3.url).toBe('https://getfedora.org/');
   });
 
-  it('should generate icon groups', async () => {
-    const tabGroups = await firstValueFrom(spectator.service['tabGroups$']);
-
+  test('should generate icon groups', async () => {
+    const tabGroups = await lastValueFrom(spectator.service['tabGroups$'].pipe(takeWhile((v) => !v, true)));
     expect(tabGroups.length).toBe(3);
   });
 
-  it('should merge new tab groups with current ones', async () => {
-    let groups = await firstValueFrom(spectator.service['tabGroups$']);
+  test('should merge new tab groups with current ones', async () => {
+    let groups = await lastValueFrom(spectator.service['tabGroups$'].pipe(takeWhile((v) => !v, true)));
 
     expect(groups.length).toBe(3);
 
     let [group1, group2, group3] = groups;
 
-    expect(group1.tabs.length).toBe(5);
-    expect(group2.tabs.length).toBe(2);
-    expect(group3.tabs.length).toBe(4);
+    expect(group1.tabs.length).toBe(4);
+    expect(group2.tabs.length).toBe(4);
+    expect(group3.tabs.length).toBe(6);
 
     let [tab1, tab2] = group2.tabs;
-    expect(tab1.id).toBe(51);
-    expect(tab1.title).toBe('GitHub: Where the world builds software · GitHub');
-    expect(tab1.url).toBe('https://github.com/');
-    expect(tab2.id).toBe(52);
-    expect(tab2.title).toBe('DuckDuckGo — Privacy, simplified.');
-    expect(tab2.url).toBe('https://duckduckgo.com/');
+    expect(tab1.id).toBe(669393880);
+    expect(tab1.title).toBe("openSUSE - Linux OS. The makers' choice for sysadmins, developers and desktop users.");
+    expect(tab1.url).toBe('https://www.opensuse.org/');
+    expect(tab2.id).toBe(669393881);
+    expect(tab2.title).toBe('Enterprise Open Source and Linux | Ubuntu');
+    expect(tab2.url).toBe('https://ubuntu.com/');
 
     // add same groups and groups array should be the same
-    const collections = getTabGroupsMock();
+    const collections: Collections = groups?.map(
+      ({ id, timestamp, tabs }): Collection => ({
+        id,
+        timestamp,
+        tabs,
+      })
+    );
+
     await spectator.service.addTabGroups(collections.map((collection) => new TabGroup(collection)));
 
-    groups = await firstValueFrom(spectator.service['tabGroups$']);
+    groups = await lastValueFrom(spectator.service['tabGroups$'].pipe(take(1)));
 
     expect(groups.length).toBe(3);
 
     [group1, group2, group3] = groups;
 
-    expect(group1.tabs.length).toBe(5);
-    expect(group2.tabs.length).toBe(2);
-    expect(group3.tabs.length).toBe(4);
+    expect(group1.tabs.length).toBe(4);
+    expect(group2.tabs.length).toBe(4);
+    expect(group3.tabs.length).toBe(6);
 
     // update groups with group ID that already exists
     await spectator.service.addTabGroups([
       new TabGroup({
-        id: 'e200698d-d053-45f7-b917-e03b104ae127',
+        id: '533a389c-acc7-4fd9-9776-3e2b497d5635',
         tabs: [
           {
-            favIconUrl: 'https://github.githubassets.com/favicons/favicon.svg',
-            id: 51,
+            id: 669393886,
             title: 'NEW TITLE 1',
             url: 'https://newlink.com/',
           },
           {
-            favIconUrl: 'https://duckduckgo.com/favicon.ico',
-            id: 52,
+            id: 669393887,
             title: 'NEW TITLE 2',
             url: 'https://anotherlink.com/',
           },
@@ -165,25 +161,25 @@ describe.skip('TabService', () => {
             url: 'https://duckduckgo.com/',
           },
         ],
-        timestamp: 1650858875455,
+        timestamp: 1711225971015,
       }),
     ]);
 
-    groups = await firstValueFrom(spectator.service['tabGroups$']);
+    groups = await lastValueFrom(spectator.service['tabGroups$'].pipe(take(1)));
 
     expect(groups.length).toBe(3);
 
     [group1, group2, group3] = groups;
 
     // tabs list should be updated
-    expect(group2.tabs.length).toBe(3);
+    expect(group1.tabs.length).toBe(5);
 
     // tabs titles and urls for existing tabs should be updated
-    [tab1, tab2] = group2.tabs;
-    expect(tab1.id).toBe(51);
+    [tab1, tab2] = group1.tabs;
+    expect(tab1.id).toBe(669393886);
     expect(tab1.title).toBe('NEW TITLE 1');
     expect(tab1.url).toBe('https://newlink.com/');
-    expect(tab2.id).toBe(52);
+    expect(tab2.id).toBe(669393887);
     expect(tab2.title).toBe('NEW TITLE 2');
     expect(tab2.url).toBe('https://anotherlink.com/');
 
@@ -203,7 +199,7 @@ describe.skip('TabService', () => {
       }),
     ]);
 
-    groups = await firstValueFrom(spectator.service['tabGroups$']);
+    groups = await lastValueFrom(spectator.service['tabGroups$'].pipe(take(1)));
 
     expect(groups.length).toBe(4);
 
@@ -212,8 +208,8 @@ describe.skip('TabService', () => {
     expect(group1.tabs.length).toBe(1);
   });
 
-  it('should sync collections', async () => {
-    let groups = await firstValueFrom(spectator.service['tabGroups$']);
+  test('should sync collections', async () => {
+    let groups = await lastValueFrom(spectator.service['tabGroups$'].pipe(takeWhile((v) => !v, true)));
 
     expect(groups.length).toBe(3);
 
@@ -225,13 +221,13 @@ describe.skip('TabService', () => {
       },
     });
 
-    groups = await firstValueFrom(spectator.service['tabGroups$']);
+    groups = await lastValueFrom(spectator.service['tabGroups$'].pipe(take(1)));
 
     expect(groups.length).toBe(4);
   });
 
-  it('should generate timeline', async () => {
-    const timeline = await firstValueFrom(spectator.service.groupsTimeline$);
+  test('should generate timeline', async () => {
+    const timeline = await lastValueFrom(spectator.service.groupsTimeline$.pipe(takeWhile((v) => !v, true)));
 
     expect(timeline).toBeDefined();
 
@@ -240,27 +236,26 @@ describe.skip('TabService', () => {
     expect(timeline[0].label).toBeDefined();
   });
 
-  it('should remove groups', async () => {
-    let groups = await firstValueFrom(spectator.service['tabGroups$']);
+  test('should remove groups', async () => {
+    let groups = await lastValueFrom(spectator.service['tabGroups$'].pipe(takeWhile((v) => !v, true)));
 
     await spectator.service.removeTabGroups(groups);
 
-    groups = await firstValueFrom(spectator.service['tabGroups$']);
+    groups = await firstValueFrom(spectator.service['tabGroups$'].pipe(take(1)));
     expect(groups).toBeNull();
   });
 
-  it('should remove group', async () => {
-    let groups = await firstValueFrom(spectator.service['tabGroups$']);
+  test('should remove group', async () => {
+    let groups = await lastValueFrom(spectator.service['tabGroups$'].pipe(takeWhile((v) => !v, true)));
 
     expect(groups.length).toBe(3);
 
     await spectator.service.removeTabGroup(groups[0]);
-    groups = await firstValueFrom(spectator.service['tabGroups$']);
-
+    groups = await firstValueFrom(spectator.service['tabGroups$'].pipe(take(1)));
     expect(groups.length).toBe(2);
   });
 
-  it('should sort recent tabs', () => {
+  test('should sort recent tabs', () => {
     const tabs = [
       {
         id: 787499525277.7153,
