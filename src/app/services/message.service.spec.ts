@@ -2,13 +2,11 @@ import { provideZonelessChangeDetection } from '@angular/core';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
+import { getBrowserApi } from 'src/mocks';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { chrome } from 'src/mocks';
 import { ActionIcon } from '../utils';
 import { MessageService } from './message.service';
-
-vi.stubGlobal('chrome', chrome);
 
 describe('MessageService', () => {
   let spectator: SpectatorService<MessageService>;
@@ -19,6 +17,8 @@ describe('MessageService', () => {
   });
 
   beforeEach(() => {
+    vi.stubGlobal('chrome', getBrowserApi());
+
     spectator = createService();
   });
 

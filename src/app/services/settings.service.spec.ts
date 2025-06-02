@@ -1,14 +1,13 @@
 import { provideZonelessChangeDetection } from '@angular/core';
 import { Router } from '@angular/router';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
-
+import { getBrowserApi } from 'src/mocks';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { MostVisitedURL, Settings } from '../utils';
 import { SettingsService } from './settings.service';
-import { chrome } from 'src/mocks';
 
-vi.stubGlobal('chrome', chrome);
+vi.stubGlobal('chrome', getBrowserApi());
 
 describe('SettingsService', () => {
   let spectator: SpectatorService<SettingsService>;

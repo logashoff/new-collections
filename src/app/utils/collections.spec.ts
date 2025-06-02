@@ -1,10 +1,10 @@
-import { chrome, getTabGroupMock, getTabGroupsMock } from 'src/mocks';
+import { getBrowserApi, getBrowserTabsMock, getTabGroupMock, getTabGroupsMock } from 'src/mocks';
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { addRecent, getCollections, removeRecent, saveCollections, syncToTabs, tabsToSync } from './collections';
 
 import { RecentSync, SyncStorageArea } from './models';
 
-vi.stubGlobal('chrome', chrome);
+vi.stubGlobal('chrome', getBrowserApi(getBrowserTabsMock()));
 
 describe('collections.ts', () => {
   const setSyncSpy = vi.spyOn(chrome.storage.sync, 'set');
