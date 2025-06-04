@@ -3,7 +3,7 @@ import { getHostname, getHostnameGroup, isUuid } from './utils';
 
 import { describe, expect, it } from 'vitest';
 
-describe('utils.ts', () => {
+describe.concurrent('utils.ts', () => {
   it('should create hostname groups', () => {
     const collection = getTabGroupMock();
     expect(getHostnameGroup(collection.tabs)).toEqual([

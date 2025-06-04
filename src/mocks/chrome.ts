@@ -4,6 +4,15 @@ import { Tab, Tabs } from 'src/app/utils';
 export class MockStorageArea implements Partial<chrome.storage.StorageArea> {
   #storage = {};
 
+  MAX_ITEMS = 0;
+  MAX_SUSTAINED_WRITE_OPERATIONS_PER_MINUTE = 0;
+  MAX_WRITE_OPERATIONS_PER_HOUR = 0;
+  MAX_WRITE_OPERATIONS_PER_MINUTE = 0;
+  QUOTA_BYTES = 0;
+  QUOTA_BYTES_PER_ITEM = 0;
+
+  onChanged: chrome.storage.StorageAreaChangedEvent;
+
   constructor(storage = {}) {
     this.#storage = cloneDeep(storage);
   }
@@ -37,26 +46,38 @@ export class MockStorageArea implements Partial<chrome.storage.StorageArea> {
   async getKeys() {
     return Object.keys(this.#storage);
   }
+
+  async getBytesInUse(keys?: unknown): Promise<number> {
+    return 0;
+  }
+
+  async setAccessLevel(accessOptions: unknown): Promise<void> {}
 }
 
-export const getBrowserApi = (browserTabs: Tabs = [], storage = new MockStorageArea()) => ({
+export const getBrowserApi = (browserTabs: Tabs = [], storage = new MockStorageArea()): Partial<typeof chrome> => ({
   runtime: {
-    openOptionsPage: () => {},
+    openOptionsPage: async () => {},
     connect: () => ({
       onDisconnect: {
         addListener: (callback) => callback(),
       },
     }),
     getURL: (path) => path,
-  },
+  } as Partial<typeof chrome.runtime>,
   storage: {
+    AccessLevel: {
+      TRUSTED_AND_UNTRUSTED_CONTEXTS: 'TRUSTED_AND_UNTRUSTED_CONTEXTS',
+      TRUSTED_CONTEXTS: 'TRUSTED_CONTEXTS',
+    },
+    session: storage,
+    managed: storage,
     local: storage,
     sync: storage,
     onChanged: {
       addListener(callback) {
-        callback({});
+        callback({}, 'sync');
       },
-    },
+    } as any,
   },
   tabs: {
     query: async () => browserTabs,
@@ -75,13 +96,13 @@ export const getBrowserApi = (browserTabs: Tabs = [], storage = new MockStorageA
       ...config,
     }),
     group: async () => (Math.random() * 1_000) >> 0,
-  },
+  } as Partial<typeof chrome.tabs>,
   tabGroups: {
-    update() {},
-  },
+    update: async (groupId, updateProperties) => null,
+  } as Partial<typeof chrome.tabGroups>,
   i18n: {
     getMessage(messageName) {
       return messageName;
     },
-  },
+  } as Partial<typeof chrome.i18n>,
 });
