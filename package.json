@@ -11,7 +11,8 @@
     "lint": "ng lint && stylelint ./src/**/*.scss",
     "postbuild:dev": "yarn build:service",
     "postbuild": "yarn build:service --minify",
-    "test": "ng test"
+    "test": "ng test",
+    "e2e": "yarn build:dev && yarn vitest"
   },
   "engines": {
     "yarn": "^1.22.17",
@@ -36,11 +37,11 @@
   },
   "devDependencies": {
     "@angular-devkit/architect": "^0.2000.0",
-    "@angular-eslint/builder": "^19.7.0",
-    "@angular-eslint/eslint-plugin": "^19.7.0",
-    "@angular-eslint/eslint-plugin-template": "^19.7.0",
-    "@angular-eslint/schematics": "^19.7.0",
-    "@angular-eslint/template-parser": "^19.7.0",
+    "@angular-eslint/builder": "^19.7.1",
+    "@angular-eslint/eslint-plugin": "^19.7.1",
+    "@angular-eslint/eslint-plugin-template": "^19.7.1",
+    "@angular-eslint/schematics": "^19.7.1",
+    "@angular-eslint/template-parser": "^19.7.1",
     "@angular/build": "^20.0.0",
     "@angular/cli": "^20.0.0",
     "@angular/compiler-cli": "^20.0.0",
@@ -51,16 +52,18 @@
     "@types/node": "^22.15.29",
     "@typescript-eslint/eslint-plugin": "^8.33.1",
     "@typescript-eslint/parser": "^8.33.1",
-    "@vitest/coverage-v8": "^3.2.0",
+    "@vitest/coverage-v8": "^3.2.1",
     "esbuild": "^0.25.5",
     "eslint": "^9.28.0",
     "jsdom": "^26.1.0",
     "lodash": "^4.17.21",
     "ng-packagr": "^20.0.0",
     "prettier": "^3.5.3",
+    "puppeteer": "^24.10.0",
     "stylelint": "^16.20.0",
     "stylelint-config-sass-guidelines": "^12.1.0",
     "typescript": "5.8.3",
-    "vitest": "^3.2.0"
+    "vitest": "^3.2.1",
+    "vitest-puppeteer": "^11.0.3"
   }
 }
