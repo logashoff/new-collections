@@ -38,8 +38,7 @@ yarn-error.log
 testem.log
 /typings
 /.nx
-/e2e/screenshots
-/e2e/media
+/e2e/.media
 
 # System Files
 .DS_Store

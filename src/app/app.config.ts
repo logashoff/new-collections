@@ -1,9 +1,13 @@
-import { ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
+import { ApplicationConfig, Provider, provideZonelessChangeDetection } from '@angular/core';
 
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideAnimations, provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withHashLocation } from '@angular/router';
+
+import { environment } from '../environments/environment';
 import { appRoutes } from './app.routes';
 
+const animations: Provider[] = environment.e2e ? provideNoopAnimations() : provideAnimations();
+
 export const appConfig: ApplicationConfig = {
-  providers: [provideAnimations(), provideRouter(appRoutes, withHashLocation()), provideZonelessChangeDetection()],
+  providers: [animations, provideRouter(appRoutes, withHashLocation()), provideZonelessChangeDetection()],
 };

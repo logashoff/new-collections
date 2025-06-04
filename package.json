@@ -5,14 +5,16 @@
   "private": true,
   "scripts": {
     "build:dev": "ng build --configuration development",
+    "build:e2e": "ng build --configuration e2e",
     "build:service": "esbuild ./src/background.ts --legal-comments=none --bundle --outfile=./dist/new-collections/background.js",
     "build": "ng build --configuration production --output-hashing none",
+    "e2e": "yarn build:e2e && yarn vitest",
     "fmt": "git diff --name-only --diff-filter=d | grep -E \"\\.ts$|\\.json$|\\.html$|\\.scss$\" | xargs prettier -w",
     "lint": "ng lint && stylelint ./src/**/*.scss",
     "postbuild:dev": "yarn build:service",
+    "postbuild:e2e": "yarn build:service",
     "postbuild": "yarn build:service --minify",
-    "test": "ng test",
-    "e2e": "yarn build:dev && yarn vitest"
+    "test": "ng test"
   },
   "engines": {
     "yarn": "^1.22.17",

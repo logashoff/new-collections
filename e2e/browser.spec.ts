@@ -7,7 +7,6 @@ const EXTENSION_ID = 'epapmilbbjgnlheogbhblbnnbmbjoadd';
 const EXTENSION_BASE_URL = `chrome-extension://${EXTENSION_ID}/index.html#`;
 const EXTENSION_PATH = path.join(process.cwd(), 'dist/new-collections');
 const NEW_TAB_MAIN_PAGE = '/new-tab/main';
-const NEW_TAB_SEARCH_PAGE = '/new-tab/search';
 
 describe('Browser', () => {
   let browser: Browser;
@@ -15,6 +14,7 @@ describe('Browser', () => {
 
   beforeAll(async () => {
     browser = await launch({
+      headless: true,
       pipe: true,
       enableExtensions: true,
     });
@@ -26,14 +26,15 @@ describe('Browser', () => {
     await page.setViewport({
       width: 1280,
       height: 720,
-      deviceScaleFactor: 1,
     });
 
     await page.goto(`${EXTENSION_BASE_URL}/${NEW_TAB_MAIN_PAGE}`, { waitUntil: 'networkidle0' });
   });
 
-  afterAll(() => {
-    browser.close();
+  afterAll(async () => {
+    await browser.uninstallExtension(EXTENSION_ID);
+    await browser.close();
+    browser = undefined;
   });
 
   test('check blank page content', async () => {
@@ -59,10 +60,8 @@ describe('Browser', () => {
     let tabGroups = await page.$$('nc-groups .mat-expansion-panel');
     expect(tabGroups.length).toBe(3);
 
-    tabGroups = await page.$$('nc-groups .mat-expansion-panel:not(.mat-expanded)');
-    for (let [i, el] of tabGroups.entries()) {
-      await el.scrollIntoView();
-      await el.focus();
+    tabGroups = await page.$$('nc-groups .mat-expansion-panel-header');
+    for (const [, el] of tabGroups.entries()) {
       await el.click();
     }
 
@@ -70,7 +69,31 @@ describe('Browser', () => {
     expect(tabEl.length).toBe(14);
   });
 
-  test.todo('edit existing tabs');
+  test('edit existing tabs', async () => {
+    await page.locator('nc-list-item').hover();
+    await page.locator('nc-list-item .controls .mat-mdc-icon-button').click();
+
+    const nameInput = await page.waitForSelector('nc-rename-dialog .mat-mdc-input-element');
+    await nameInput.click({ count: 3 });
+    await nameInput.press('Backspace');
+    await nameInput.type('Test title');
+
+    const submitButton = await page.waitForSelector(
+      'nc-rename-dialog .mat-mdc-dialog-actions .mdc-button[type="submit"]'
+    );
+
+    expect(submitButton).toBeTruthy();
+
+    await submitButton.click({ delay: 1000 });
+
+    const newTitle = await page
+      .locator('nc-list-item .title')
+      .map((el) => el.textContent)
+      .wait();
+
+    expect(newTitle).toBe('Test title');
+  });
+
   test.todo('restore tabs and check tab selector grouped tabs');
   test.todo('test search input results');
   test.todo('delete items');
