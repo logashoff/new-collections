@@ -13,6 +13,8 @@ export class MockStorageArea implements Partial<chrome.storage.StorageArea> {
 
   onChanged: chrome.storage.StorageAreaChangedEvent;
 
+  accessLevel: chrome.storage.AccessLevel;
+
   constructor(storage = {}) {
     this.#storage = cloneDeep(storage);
   }
@@ -48,10 +50,16 @@ export class MockStorageArea implements Partial<chrome.storage.StorageArea> {
   }
 
   async getBytesInUse(keys?: unknown): Promise<number> {
-    return 0;
+    if (!keys) {
+      return 0;
+    }
   }
 
-  async setAccessLevel(accessOptions: unknown): Promise<void> {}
+  async setAccessLevel(accessOptions: { accessLevel: chrome.storage.AccessLevel }): Promise<void> {
+    if (accessOptions) {
+      this.accessLevel = accessOptions.accessLevel;
+    }
+  }
 }
 
 export const getBrowserApi = (browserTabs: Tabs = [], storage = new MockStorageArea()): Partial<typeof chrome> => ({
@@ -74,10 +82,16 @@ export const getBrowserApi = (browserTabs: Tabs = [], storage = new MockStorageA
     local: storage,
     sync: storage,
     onChanged: {
+      addRules() {},
+      getRules() {},
+      hasListener: () => false,
+      hasListeners: () => false,
+      removeListener() {},
+      removeRules() {},
       addListener(callback) {
-        callback({}, 'sync');
+        callback(storage?.['recent'] ?? {}, 'sync');
       },
-    } as any,
+    },
   },
   tabs: {
     query: async () => browserTabs,
@@ -98,7 +112,7 @@ export const getBrowserApi = (browserTabs: Tabs = [], storage = new MockStorageA
     group: async () => (Math.random() * 1_000) >> 0,
   } as Partial<typeof chrome.tabs>,
   tabGroups: {
-    update: async (groupId, updateProperties) => null,
+    update: async (groupId, updateProperties) => ({ groupId, ...updateProperties }),
   } as Partial<typeof chrome.tabGroups>,
   i18n: {
     getMessage(messageName) {
