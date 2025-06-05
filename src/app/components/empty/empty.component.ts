@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, input, ViewEncapsulation } 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
+import { DataTestIdDirective } from '../../directives';
 import { HtmlPipe } from '../../pipes/html.pipe';
 import { CollectionsService } from '../../services';
 import { Action, CollectionActions } from '../../utils';
@@ -17,7 +18,7 @@ import { Action, CollectionActions } from '../../utils';
   styleUrl: './empty.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [HtmlPipe, MatButtonModule, MatIconModule],
+  imports: [DataTestIdDirective, HtmlPipe, MatButtonModule, MatIconModule],
 })
 export class EmptyComponent {
   readonly #collectionsService = inject(CollectionsService);

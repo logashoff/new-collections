@@ -14,7 +14,8 @@
         <button
           mat-icon-button
           (click)="clicked.emit(action.action)"
-          [matTooltip]="action.label | translate">
+          [matTooltip]="action.label | translate"
+          dataTestId="group-action-{{ action.label }}">
           <mat-icon>{{ action.icon }}</mat-icon>
         </button>
       }

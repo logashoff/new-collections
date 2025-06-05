@@ -23,7 +23,8 @@
           stopPropagation
           mat-icon-button
           [matTooltip]="action.label | translate"
-          (click)="handleAction(action)">
+          (click)="handleAction(action)"
+          dataTestId="list-item-action-{{ action.label }}">
           <mat-icon>{{ action.icon }}</mat-icon>
         </button>
       }

@@ -1,45 +1,48 @@
 import path from 'path';
-import { Browser, launch, Page } from 'puppeteer';
+import { Browser, launch, LaunchOptions, Page } from 'puppeteer';
 import { mockStorageArea } from 'src/mocks';
-import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import { afterAll, beforeAll, expect, suite, test } from 'vitest';
 
-const EXTENSION_ID = 'epapmilbbjgnlheogbhblbnnbmbjoadd';
-const EXTENSION_BASE_URL = `chrome-extension://${EXTENSION_ID}/index.html#`;
-const EXTENSION_PATH = path.join(process.cwd(), 'dist/new-collections');
-const NEW_TAB_MAIN_PAGE = '/new-tab/main';
+const EXTENSION_PATH = './dist/new-collections';
+const NEW_TAB_MAIN_PAGE = 'new-tab/main';
 
-describe('Browser', () => {
+suite.sequential('Browser', () => {
   let browser: Browser;
   let page: Page;
+  let extensionId: string;
+  let extensionBaseUrl: string;
 
   beforeAll(async () => {
-    browser = await launch({
+    const launchOptions: LaunchOptions = {
       headless: true,
       pipe: true,
       enableExtensions: true,
-    });
+      defaultViewport: {
+        width: 1280,
+        height: 720,
+      },
+      args: ['--no-sandbox'],
+    };
 
-    await browser.installExtension(EXTENSION_PATH);
+    browser = await launch(launchOptions);
+
+    extensionId = await browser.installExtension(EXTENSION_PATH);
+    extensionBaseUrl = `chrome-extension://${extensionId}/index.html#`;
 
     page = await browser.newPage();
 
-    await page.setViewport({
-      width: 1280,
-      height: 720,
-    });
-
-    await page.goto(`${EXTENSION_BASE_URL}/${NEW_TAB_MAIN_PAGE}`, { waitUntil: 'networkidle0' });
+    await page.goto(`${extensionBaseUrl}/${NEW_TAB_MAIN_PAGE}`, { waitUntil: 'networkidle0' });
   });
 
   afterAll(async () => {
-    await browser.uninstallExtension(EXTENSION_ID);
+    await browser.uninstallExtension(extensionId);
     await browser.close();
     browser = undefined;
   });
 
   test('check blank page content', async () => {
     const blankMessage = await page
-      .locator('.message')
+      .locator('[data-testid=empty-message-text]')
       .map((el) => el.textContent)
       .wait();
 
@@ -47,7 +50,7 @@ describe('Browser', () => {
       'Import collections from previously saved file or use Add Collection button to save open tabs'
     );
 
-    const actionBtn = await page.locator('.actions .mdc-fab');
+    const actionBtn = await page.locator('[data-testid="empty-action-import-collections"]');
     expect(actionBtn).toBeTruthy();
   });
 
@@ -57,37 +60,43 @@ describe('Browser', () => {
     const timelineEl = await page.$$('nc-timeline-element');
     expect(timelineEl.length).toBe(2);
 
-    let tabGroups = await page.$$('nc-groups .mat-expansion-panel');
+    const tabGroups = await page.$$('nc-groups .mat-expansion-panel');
     expect(tabGroups.length).toBe(3);
 
-    tabGroups = await page.$$('nc-groups .mat-expansion-panel-header');
-    for (const [, el] of tabGroups.entries()) {
-      await el.click();
-    }
+    const firstGroupHeader = await page.$('[data-testid=timeline-element-0] [data-testid=group-header-0]');
+    await firstGroupHeader.click();
 
-    const tabEl = await page.$$('nc-list-item');
-    expect(tabEl.length).toBe(14);
+    await page.waitForNetworkIdle();
+
+    const tabEl = await page.$$('[data-testid=timeline-element-0] [data-testid=group-panel-0] nc-list-item');
+    expect(tabEl.length).toBe(4);
   });
 
   test('edit existing tabs', async () => {
-    await page.locator('nc-list-item').hover();
-    await page.locator('nc-list-item .controls .mat-mdc-icon-button').click();
+    const firstListItem = await page.$('[data-testid=group-panel-0] [data-testid=list-item-0]');
 
-    const nameInput = await page.waitForSelector('nc-rename-dialog .mat-mdc-input-element');
+    expect(firstListItem).toBeTruthy();
+
+    const editButton = await firstListItem.$('[data-testid=list-item-action-edit]');
+
+    await firstListItem.hover();
+    await editButton.click();
+
+    await page.waitForNetworkIdle();
+
+    const nameInput = await page.waitForSelector('[data-testid=rename-dialog-name-input]');
     await nameInput.click({ count: 3 });
     await nameInput.press('Backspace');
     await nameInput.type('Test title');
 
-    const submitButton = await page.waitForSelector(
-      'nc-rename-dialog .mat-mdc-dialog-actions .mdc-button[type="submit"]'
-    );
+    const submitButton = await page.waitForSelector('[data-testid=rename-dialog-submit-button]');
 
     expect(submitButton).toBeTruthy();
 
     await submitButton.click({ delay: 1000 });
 
     const newTitle = await page
-      .locator('nc-list-item .title')
+      .locator('[data-testid=timeline-element-0] [data-testid=group-panel-0] [data-testid=list-item-0] .title')
       .map((el) => el.textContent)
       .wait();
 

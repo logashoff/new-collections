@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { GroupService } from 'src/app/services/group.service';
+import { DataTestIdDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
 import { CollectionsService, HomeService, TabService } from '../../services';
 import {
@@ -32,7 +33,7 @@ import { TimelineElementComponent } from '../timeline-element/timeline-element.c
   templateUrl: './new-tab-content.component.html',
   styleUrls: ['./new-tab-content.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [AsyncPipe, EmptyComponent, GroupsComponent, TimelineElementComponent, TranslatePipe],
+  imports: [AsyncPipe, DataTestIdDirective, EmptyComponent, GroupsComponent, TimelineElementComponent, TranslatePipe],
 })
 export class NewTabContentComponent {
   readonly #collection = inject(CollectionsService);

@@ -8,10 +8,11 @@
     </nc-timeline-element>
   }
 
-  @for (item of timeline$ | async; track item.label) {
+  @for (item of timeline$ | async; track item.label; let i = $index) {
     <nc-timeline-element
       [timelineLabel]="item.label"
-      (removed)="removeGroups(item.elements)">
+      (removed)="removeGroups(item.elements)"
+      dataTestId="timeline-element-{{ i }}">
       <nc-groups
         [groups]="item.elements"
         [dragDisabled]="false"

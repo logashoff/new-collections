@@ -8,7 +8,8 @@
         formControlName="title"
         matInput
         autocomplete="off"
-        cdkFocusInitial />
+        cdkFocusInitial
+        data-testid="rename-dialog-name-input" />
       <mat-error>{{ 'required' | translate }}</mat-error>
     </mat-form-field>
     <mat-form-field>
@@ -25,7 +26,8 @@
       type="submit"
       mat-flat-button
       color="primary"
-      [disabled]="!formGroup.valid">
+      [disabled]="!formGroup.valid"
+      data-testid="rename-dialog-submit-button">
       {{ 'save' | translate }}
     </button>
   </mat-dialog-actions>

@@ -1,5 +1,5 @@
 <mat-accordion [multi]="true">
-  @for (group of groups$ | async; track group.id) {
+  @for (group of groups$ | async; track group.id; let i = $index) {
     @let activeGroupId = activeGroupId$ | async;
     @let activeTabId = activeTabId$ | async;
     @let hasTabId = !isNaN(activeTabId);
@@ -13,8 +13,9 @@
       [expanded]="panel.expanded || expandPanel"
       (opened)="opened(groupId)"
       (closed)="closed(groupId)"
-      hideToggle>
-      <mat-expansion-panel-header>
+      hideToggle
+      dataTestId="group-panel-{{ i }}">
+      <mat-expansion-panel-header dataTestId="group-header-{{ i }}">
         @if (activeGroupId === groupId && !hasTabId) {
           <nc-ripple [focused]="true" />
         }
@@ -49,7 +50,7 @@
 
         @if (group.tabs$ | async; as tabs) {
           <nc-tab-list cdkDropList (cdkDropListDropped)="drop($event, tabs)">
-            @for (tab of tabs; track tab.id) {
+            @for (tab of tabs; track tab.id; let i = $index) {
               <nc-list-item
                 cdkDrag
                 [@listItemAnimation]
@@ -59,9 +60,8 @@
                 [target]="target"
                 (modified)="editTab(tab)"
                 (deleted)="deleteTab(tab)"
-                [focused]="
-                  activeGroupId === groupId && activeTabId === tab.id
-                " />
+                [focused]="activeGroupId === groupId && activeTabId === tab.id"
+                dataTestId="list-item-{{ i }}" />
             }
           </nc-tab-list>
         }

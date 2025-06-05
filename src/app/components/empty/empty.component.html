@@ -2,23 +2,27 @@
 @let messageStr = message();
 
 @if (!actionList) {
-  <mat-icon class="icon">
+  <mat-icon class="icon" data-testid="empty-icon">
     <ng-content />
   </mat-icon>
 }
 
 @if (messageStr) {
-  <section class="message" [innerHTML]="messageStr | html"></section>
+  <section
+    class="message"
+    [innerHTML]="messageStr | html"
+    data-testid="empty-message-text"></section>
 }
 
 @if (actionList?.length) {
-  <section class="actions">
+  <section class="actions" data-testid="empty-actions">
     @for (action of actionList; track action) {
       <button
         mat-fab
         extended
         [color]="action.color"
-        (click)="handleAction(action.action)">
+        (click)="handleAction(action.action)"
+        dataTestId="empty-action-{{ action.label }}">
         @if (action.icon) {
           <mat-icon>{{ action.icon }}</mat-icon>
         }
