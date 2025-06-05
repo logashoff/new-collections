@@ -7,6 +7,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { Observable, map, shareReplay } from 'rxjs';
 
+import { DataTestIdDirective } from '../../directives';
 import { IsReadOnlyGroupPipe } from '../../pipes';
 import { NavService, SettingsService, TabService } from '../../services';
 import {
@@ -44,6 +45,7 @@ import { RippleComponent } from '../ripple/ripple.component';
     AsyncPipe,
     CdkDrag,
     CdkDropList,
+    DataTestIdDirective,
     GroupControlsComponent,
     IsReadOnlyGroupPipe,
     ListItemComponent,

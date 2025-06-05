@@ -3,7 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { StopPropagationDirective } from '../../directives';
+import { DataTestIdDirective, StopPropagationDirective } from '../../directives';
 import { DatePipe, TranslatePipe } from '../../pipes';
 import { Action, GroupActions } from '../../utils';
 
@@ -18,7 +18,15 @@ import { Action, GroupActions } from '../../utils';
   styleUrl: './group-controls.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [DatePipe, MatButtonModule, MatIconModule, MatTooltipModule, StopPropagationDirective, TranslatePipe],
+  imports: [
+    DataTestIdDirective,
+    DatePipe,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    StopPropagationDirective,
+    TranslatePipe,
+  ],
 })
 export class GroupControlsComponent {
   readonly timestamp = input<number>();
