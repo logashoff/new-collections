@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="list-container">
-      <mat-selection-list formControlName="list">
+      <mat-selection-list formControlName="list" data-testid="tabs-list">
         @let _groupClasses = groupClasses();
 
         @for (tab of tabs(); track tab.id) {

@@ -27,7 +27,8 @@
         mat-icon-button
         color="primary"
         [matTooltip]="'addCollection' | translate"
-        (click)="handleAction(Action.Save)">
+        (click)="handleAction(Action.Save)"
+        data-testid="add-collections">
         <mat-icon>add</mat-icon>
       </button>
     }
