@@ -1,4 +1,3 @@
-import path from 'path';
 import { Browser, launch, LaunchOptions, Page } from 'puppeteer';
 import { mockStorageArea } from 'src/mocks';
 import { afterAll, beforeAll, expect, suite, test } from 'vitest';
@@ -103,7 +102,22 @@ suite.sequential('Browser', () => {
     expect(newTitle).toBe('Test title');
   });
 
-  test.todo('restore tabs and check tab selector grouped tabs');
+  test('restore tabs and check tab selector grouped tabs', async () => {
+    const restoreGroupButton = await page.$('[data-testid=group-panel-0] [data-testid=group-action-restore]');
+    await restoreGroupButton.click();
+
+    page.waitForNetworkIdle();
+
+    const addCollectionsButton = await page.$('[data-testid=add-collections]');
+    await addCollectionsButton.click();
+
+    await page.waitForNetworkIdle();
+
+    const tabGroupsSelector = await page.$$('[data-testid=tabs-list] .tab-group');
+    expect(tabGroupsSelector?.length).toBeGreaterThan(0);
+    expect(tabGroupsSelector?.length).toBe(4);
+  });
+
   test.todo('test search input results');
   test.todo('delete items');
 });
