@@ -110,7 +110,6 @@ nc-search-form {
     $_control-background-color: var(--mat-sys-surface-container-low);
     $_border-color: var(--mat-sys-surface-container-highest);
 
-    background-color: $_app-background;
     background-color: rgba(from $_app-background r g b / 0.25);
     backdrop-filter: blur(20px) saturate(2);
 

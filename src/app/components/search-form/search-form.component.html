@@ -9,7 +9,8 @@
         formControlName="search"
         (focus)="focused.set(true)"
         (blur)="onBlur()"
-        autocomplete="off" />
+        autocomplete="off"
+        data-testid="search-input" />
     </mat-form-field>
   </form>
 
@@ -19,7 +20,8 @@
         mat-icon-button
         color="primary"
         [matTooltip]="'cancelSearch' | translate"
-        (click)="clearSearch()">
+        (click)="clearSearch()"
+        data-testid="cancel-search">
         <mat-icon>close</mat-icon>
       </button>
     } @else {

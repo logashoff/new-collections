@@ -49,7 +49,7 @@ suite.sequential('Browser', () => {
       'Import collections from previously saved file or use Add Collection button to save open tabs'
     );
 
-    const actionBtn = await page.locator('[data-testid="empty-action-import-collections"]');
+    const actionBtn = await page.locator('[data-testid="empty-action-import-collections"]').wait();
     expect(actionBtn).toBeTruthy();
   });
 
@@ -106,7 +106,7 @@ suite.sequential('Browser', () => {
     const restoreGroupButton = await page.$('[data-testid=group-panel-0] [data-testid=group-action-restore]');
     await restoreGroupButton.click();
 
-    page.waitForNetworkIdle();
+    await page.waitForNetworkIdle();
 
     const addCollectionsButton = await page.$('[data-testid=add-collections]');
     await addCollectionsButton.click();
@@ -118,6 +118,49 @@ suite.sequential('Browser', () => {
     expect(tabGroupsSelector?.length).toBe(4);
   });
 
-  test.todo('test search input results');
+  test('test search input results', async () => {
+    const searchInput = await page.$('[data-testid=search-input]');
+
+    await searchInput.focus();
+    await searchInput.click();
+
+    await page.waitForNetworkIdle();
+
+    let recentList = await page.$$('nc-list-item');
+    expect(recentList.length).toBe(14);
+
+    await searchInput.type('arch');
+
+    await page.waitForNetworkIdle();
+
+    recentList = await page.$$('nc-list-item');
+    expect(recentList.length).toBe(1);
+
+    const resultsLabel = await page
+      .locator('nc-timeline-label')
+      .map((el) => el.textContent.trim())
+      .wait();
+
+    expect(resultsLabel).toEqual('One result');
+
+    await searchInput.click({ count: 3 });
+    await searchInput.press('Backspace');
+    await searchInput.type('noop');
+
+    await page.waitForNetworkIdle();
+
+    const noResultsMessage = await page
+      .locator('[data-testid=empty-message-text]')
+      .map((el) => el.textContent.trim())
+      .wait();
+
+    await page.waitForNetworkIdle();
+
+    expect(noResultsMessage).toEqual('Nothing found for ‘noop’');
+
+    const cancelButton = await page.$('[data-testid=cancel-search]');
+    await cancelButton.click();
+  });
+
   test.todo('delete items');
 });
