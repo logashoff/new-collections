@@ -105,7 +105,6 @@ export const getBrowserApi = (browserTabs: Tabs = [], storage = new MockStorageA
       incognito: false,
       index: 0,
       pinned: false,
-      selected: false,
       windowId: 0,
       ...config,
     }),

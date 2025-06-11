@@ -1,6 +1,6 @@
 @keyframes ripple {
   from {
-    background-size: 0%;
+    background-size: 0;
     opacity: 0.35;
   }
 
@@ -26,13 +26,12 @@ nc-ripple {
   &.focused {
     animation: ripple 1s ease;
     background: radial-gradient(
-      circle,
-      $_color 0%,
-      $_color 49%,
-      $_alpha 50%,
-      $_alpha 100%
-    );
-    background-position: 50%;
-    background-repeat: no-repeat;
+        circle,
+        $_color 0%,
+        $_color 49%,
+        $_alpha 50%,
+        $_alpha 100%
+      )
+      no-repeat 50%;
   }
 }

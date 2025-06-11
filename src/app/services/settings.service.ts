@@ -54,7 +54,7 @@ export class SettingsService {
       newSettings.ignoreTopSites = uniqBy(newSettings.ignoreTopSites, (site) => site.url);
     }
 
-    this.saveSettings(newSettings);
+    await this.saveSettings(newSettings);
 
     this.settingsSource$.next(newSettings);
 
@@ -105,7 +105,7 @@ export class SettingsService {
 
     settings.panels[url][groupId] = state;
 
-    this.update(settings);
+    await this.update(settings);
   }
 
   /**

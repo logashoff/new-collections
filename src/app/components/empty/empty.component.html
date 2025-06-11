@@ -18,7 +18,7 @@
   <section class="actions" data-testid="empty-actions">
     @for (action of actionList; track action) {
       <button
-        mat-fab
+        matFab
         extended
         [color]="action.color"
         (click)="handleAction(action.action)"

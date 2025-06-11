@@ -41,13 +41,13 @@ export class GroupService {
       switch (action) {
         case Action.Add:
           const tabs: Tabs = await queryCurrentWindow();
-          this.#tabService.addTabs(group, tabs);
+          await this.#tabService.addTabs(group, tabs);
           break;
         case Action.Restore:
-          restoreTabs(group.tabs, formatDate(group.timestamp));
+          await restoreTabs(group.tabs, formatDate(group.timestamp));
           break;
         case Action.Delete:
-          this.#tabService.removeTabGroup(group);
+          await this.#tabService.removeTabGroup(group);
           break;
       }
     }

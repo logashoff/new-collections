@@ -16,8 +16,7 @@ export const uuidRegExp = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89a
  */
 export function getHostnameGroup(tabs: BrowserTabs): HostnameGroup {
   const groupByHostname = groupBy(tabs, getHost);
-  const values = Object.values(groupByHostname);
-  return values;
+  return Object.values(groupByHostname);
 }
 
 /**

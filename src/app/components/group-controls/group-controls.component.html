@@ -12,7 +12,7 @@
     <div class="controls" stopPropagation>
       @for (action of _actions; track action.action) {
         <button
-          mat-icon-button
+          matIconButton
           (click)="clicked.emit(action.action)"
           [matTooltip]="action.label | translate"
           dataTestId="group-action-{{ action.label }}">

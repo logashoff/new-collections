@@ -31,7 +31,7 @@ export async function restoreTabs(tabs: BrowserTabs, label?: string) {
     tabIds: createdTabs.map(({ id }) => id),
   });
 
-  chrome.tabGroups.update(groupId, {
+  await chrome.tabGroups.update(groupId, {
     collapsed: false,
     title: label,
   });

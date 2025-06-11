@@ -21,7 +21,7 @@
       @for (action of tabActions; track action) {
         <button
           stopPropagation
-          mat-icon-button
+          matIconButton
           [matTooltip]="action.label | translate"
           (click)="handleAction(action)"
           dataTestId="list-item-action-{{ action.label }}">

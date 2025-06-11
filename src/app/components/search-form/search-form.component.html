@@ -17,7 +17,7 @@
   <div class="controls">
     @if (isActive$ | async) {
       <button
-        mat-icon-button
+        matIconButton
         color="primary"
         [matTooltip]="'cancelSearch' | translate"
         (click)="clearSearch()"
@@ -26,7 +26,7 @@
       </button>
     } @else {
       <button
-        mat-icon-button
+        matIconButton
         color="primary"
         [matTooltip]="'addCollection' | translate"
         (click)="handleAction(Action.Save)"

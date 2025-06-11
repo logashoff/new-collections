@@ -107,6 +107,11 @@ suite.sequential('Browser', () => {
     const restoreGroupButton = await page.$('[data-testid=group-panel-0] [data-testid=group-action-restore]');
     await restoreGroupButton.click();
 
+    const pages = await browser.pages();
+    for (const [, page] of pages.entries()) {
+      await page.waitForNetworkIdle();
+    }
+
     await page.waitForNetworkIdle();
 
     const addCollectionsButton = await page.$('[data-testid=add-collections]');
@@ -115,14 +120,19 @@ suite.sequential('Browser', () => {
     await page.waitForNetworkIdle();
 
     const tabGroupsSelector = await page.$$('[data-testid=tab-selector-list] .tab-group');
-    expect(tabGroupsSelector?.length).toBeGreaterThan(0);
-    expect(tabGroupsSelector?.length).toBe(4);
+    expect(tabGroupsSelector.length).toBeGreaterThan(0);
+    expect(tabGroupsSelector.length).toBe(4);
 
     const selectAll = await page.$('[data-testid=tab-selector-select-all]');
     await selectAll.click();
 
     const submitButton = await page.$('[data-testid=tab-selector-submit]');
     await submitButton.click();
+
+    await page.waitForNetworkIdle();
+
+    const tabGroups = await page.$$('nc-timeline-element');
+    expect(tabGroups.length).toBe(3);
   });
 
   test('test search input results', async () => {

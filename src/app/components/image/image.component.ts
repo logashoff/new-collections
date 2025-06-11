@@ -18,6 +18,7 @@ import { getFaviconUrl, IconSize, ImageSource } from '../../utils';
   host: {
     '[class.medium]': 'medium()',
     '[class.small]': 'small()',
+    '[class.large]': 'large()',
   },
 })
 export class ImageComponent {
@@ -33,9 +34,9 @@ export class ImageComponent {
    */
   readonly size = input<IconSize>('medium');
 
-  readonly medium = computed(() => this.size() === 'medium');
-
   readonly small = computed(() => this.size() === 'small');
+  readonly medium = computed(() => this.size() === 'medium');
+  readonly large = computed(() => this.size() === 'large');
 
   /**
    * Handles image loading error

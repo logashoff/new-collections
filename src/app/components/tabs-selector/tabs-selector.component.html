@@ -51,14 +51,14 @@
   <mat-dialog-actions align="end">
     <button
       type="button"
-      mat-stroked-button
+      matButton="outlined"
       [mat-dialog-close]
       data-testid="tab-selector-cancel">
       {{ 'close' | translate }}
     </button>
     <button
       type="submit"
-      mat-flat-button
+      matButton="filled"
       color="primary"
       [disabled]="!formGroup.valid"
       data-testid="tab-selector-submit">

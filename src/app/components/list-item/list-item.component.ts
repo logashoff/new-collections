@@ -29,6 +29,7 @@ import {
 } from '../../utils';
 import { ChipComponent } from '../chip/chip.component';
 import { RippleComponent } from '../ripple/ripple.component';
+import { MatRipple } from '@angular/material/core';
 
 /**
  * @description
@@ -57,6 +58,7 @@ import { RippleComponent } from '../ripple/ripple.component';
     RippleComponent,
     StopPropagationDirective,
     TranslatePipe,
+    MatRipple,
   ],
 })
 export class ListItemComponent implements Activatable {

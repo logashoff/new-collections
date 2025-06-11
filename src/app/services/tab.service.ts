@@ -112,17 +112,17 @@ export class TabService {
    * Initialize service and load stored tab groups.
    */
   private async initService() {
-    this.updateRecent();
+    await this.updateRecent();
 
     const collections = await getCollections();
     this.#tabGroupsSource$.next(collections?.map((collection) => new TabGroup(collection)));
 
     chrome.storage.onChanged.addListener(async (changes: StorageChanges) => {
       if (changes[recentKey]) {
-        this.updateRecent();
+        await this.updateRecent();
       }
 
-      this.syncCollections(changes);
+      await this.syncCollections(changes);
     });
   }
 
@@ -291,7 +291,7 @@ export class TabService {
 
       this.#tabGroupsSource$.next(newTabGroups);
 
-      this.save();
+      await this.save();
     }
   }
 
@@ -313,7 +313,7 @@ export class TabService {
 
     this.#tabGroupsSource$.next(tabGroups);
 
-    this.save();
+    await this.save();
   }
 
   /**
@@ -381,7 +381,7 @@ export class TabService {
       removeIndex = tabGroup.tabs.findIndex((tab) => tab === removedTab);
 
       if (removeIndex > -1) {
-        this.#navService.reset('groupId', 'tabId');
+        await this.#navService.reset('groupId', 'tabId');
         tabGroup.removeTabAt(removeIndex);
 
         await removeRecent(removedTab.id);
@@ -389,7 +389,7 @@ export class TabService {
         if (tabGroup.tabs.length === 0) {
           messageRef = await this.removeTabGroup(tabGroup);
         } else {
-          this.save();
+          await this.save();
           messageRef = this.#message.open(translate('itemRemoved'), ActionIcon.Undo, 'undo');
         }
 
@@ -425,7 +425,7 @@ export class TabService {
       updatedTab = group.updateTab(tab, updatedTab);
 
       this.#updated$.next(true);
-      this.save();
+      await this.save();
 
       return updatedTab;
     }
@@ -450,9 +450,9 @@ export class TabService {
 
     this.#tabGroupsSource$.next(tabGroups);
 
-    this.#navService.reset('groupId');
+    await this.#navService.reset('groupId');
 
-    this.save();
+    await this.save();
 
     await removeRecent(tabGroup.tabs.map((tab) => tab.id));
 
@@ -482,10 +482,10 @@ export class TabService {
         'undo'
       );
 
-      this.#navService.reset('groupId');
+      await this.#navService.reset('groupId');
       this.#tabGroupsSource$.next(currentTabGroups);
 
-      this.save();
+      await this.save();
 
       const tabIds: TabId[] = removedGroups.map(({ tabs }) => tabs.map(({ id }) => id)).flat();
       await removeRecent(tabIds);

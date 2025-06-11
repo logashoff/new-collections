@@ -9,7 +9,7 @@ nc-timeline-element {
   transition-duration: 250ms;
 
   .timeline-header {
-    transition-property: color margin;
+    transition-property: color, margin;
     transition-timing-function: common.$cubic-ease;
     transition-duration: 250ms;
 

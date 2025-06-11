@@ -66,7 +66,7 @@ export class CollectionsService {
       if (tabs?.length > 0) {
         const tabGroup = await this.#tabsService.createTabGroup(tabs);
         await this.#tabsService.addTabGroup(tabGroup);
-        this.#nav.setParams(tabGroup.id);
+        await this.#nav.setParams(tabGroup.id);
       }
     } else {
       this.#message.open(translate('invalidTabList'));
@@ -83,7 +83,7 @@ export class CollectionsService {
           await this.selectTabs(tabs);
           break;
         case Action.Settings:
-          openOptions();
+          await openOptions();
           break;
         case Action.Export:
           collections = await getCollections();

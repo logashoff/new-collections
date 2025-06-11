@@ -1,11 +1,11 @@
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, output, ViewEncapsulation } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
-import { Observable, map, shareReplay } from 'rxjs';
+import { map, Observable, shareReplay } from 'rxjs';
 
 import { DataTestIdDirective } from '../../directives';
 import { IsReadOnlyGroupPipe } from '../../pipes';
@@ -18,16 +18,17 @@ import {
   GroupAction,
   GroupActions,
   GroupExpanded,
+  listItemAnimation,
   TabGroup,
   TabGroups,
   TabsByHostname,
   Target,
-  listItemAnimation,
 } from '../../utils';
 import { GroupControlsComponent } from '../group-controls/group-controls.component';
 import { ListItemComponent } from '../list-item/list-item.component';
 import { PanelHeaderComponent } from '../panel-header/panel-header.component';
 import { RippleComponent } from '../ripple/ripple.component';
+import { TabListComponent } from '../tab-list/tab-list.component';
 
 /**
  * @description
@@ -54,6 +55,7 @@ import { RippleComponent } from '../ripple/ripple.component';
     MatIconModule,
     PanelHeaderComponent,
     RippleComponent,
+    TabListComponent,
   ],
 })
 export class GroupsComponent {

@@ -4,7 +4,7 @@ import { getNormalizedUrl } from './app/utils/utils';
 
 const onRuntimeChanges = async () => {
   const collections = await getCollections();
-  chrome.action.setBadgeText({ text: collections?.length.toString() ?? '' });
+  await chrome.action.setBadgeText({ text: collections?.length.toString() ?? '' });
 };
 
 /**

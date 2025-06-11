@@ -40,7 +40,7 @@ export class TopSitesComponent {
     const { dismissedByAction } = await lastValueFrom(ref.afterDismissed());
 
     if (dismissedByAction) {
-      chrome.runtime.openOptionsPage();
+      await chrome.runtime.openOptionsPage();
     }
   }
 }
