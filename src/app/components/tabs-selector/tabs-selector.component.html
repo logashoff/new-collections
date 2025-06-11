@@ -1,4 +1,7 @@
-<form [formGroup]="formGroup" (ngSubmit)="save()">
+<form
+  [formGroup]="formGroup"
+  (ngSubmit)="save()"
+  data-testid="tab-selector-form">
   <mat-dialog-content class="container">
     <div class="header-container">
       <h2 class="heading">
@@ -11,13 +14,16 @@
             tabIndex="-1"
             [checked]="allSelected$ | async"
             [indeterminate]="someSelected$ | async"
-            (change)="selectAll($event.checked)">
+            (change)="selectAll($event.checked)"
+            data-testid="tab-selector-select-all">
           </mat-checkbox>
         </div>
       </div>
     </div>
     <div class="list-container">
-      <mat-selection-list formControlName="list" data-testid="tabs-list">
+      <mat-selection-list
+        formControlName="list"
+        data-testid="tab-selector-list">
         @let _groupClasses = groupClasses();
 
         @for (tab of tabs(); track tab.id) {
@@ -43,14 +49,19 @@
     </div>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <button type="button" mat-stroked-button [mat-dialog-close]>
+    <button
+      type="button"
+      mat-stroked-button
+      [mat-dialog-close]
+      data-testid="tab-selector-cancel">
       {{ 'close' | translate }}
     </button>
     <button
       type="submit"
       mat-flat-button
       color="primary"
-      [disabled]="!formGroup.valid">
+      [disabled]="!formGroup.valid"
+      data-testid="tab-selector-submit">
       {{ 'save' | translate }}
     </button>
   </mat-dialog-actions>

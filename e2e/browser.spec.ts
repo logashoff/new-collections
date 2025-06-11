@@ -21,6 +21,7 @@ suite.sequential('Browser', () => {
         height: 720,
       },
       args: ['--no-sandbox'],
+      slowMo: 25,
     };
 
     browser = await launch(launchOptions);
@@ -113,9 +114,15 @@ suite.sequential('Browser', () => {
 
     await page.waitForNetworkIdle();
 
-    const tabGroupsSelector = await page.$$('[data-testid=tabs-list] .tab-group');
+    const tabGroupsSelector = await page.$$('[data-testid=tab-selector-list] .tab-group');
     expect(tabGroupsSelector?.length).toBeGreaterThan(0);
     expect(tabGroupsSelector?.length).toBe(4);
+
+    const selectAll = await page.$('[data-testid=tab-selector-select-all]');
+    await selectAll.click();
+
+    const submitButton = await page.$('[data-testid=tab-selector-submit]');
+    await submitButton.click();
   });
 
   test('test search input results', async () => {
@@ -127,9 +134,9 @@ suite.sequential('Browser', () => {
     await page.waitForNetworkIdle();
 
     let recentList = await page.$$('nc-list-item');
-    expect(recentList.length).toBe(14);
+    expect(recentList.length).toBe(15);
 
-    await searchInput.type('arch');
+    await searchInput.type('test title');
 
     await page.waitForNetworkIdle();
 
