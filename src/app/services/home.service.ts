@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { EMPTY, Observable, combineLatest, from, map, shareReplay, switchMap, take } from 'rxjs';
+import { Observable, combineLatest, from, map, of, shareReplay, switchMap, take } from 'rxjs';
 
 import { SettingsService, TabService } from '../services';
 import { Devices, MostVisitedURL, Sessions, TabGroup, Tabs, Timeline, TopSites } from '../utils';
@@ -49,7 +49,7 @@ export class HomeService {
           return from(this.getDevices()).pipe(map((devices) => (devices?.length > 0 ? devices : null)));
         }
 
-        return EMPTY;
+        return of(null);
       }),
       shareReplay(1)
     );
@@ -91,7 +91,7 @@ export class HomeService {
           );
         }
 
-        return EMPTY;
+        return of(null);
       }),
       shareReplay(1)
     );
@@ -105,11 +105,11 @@ export class HomeService {
   }
 
   private getDevices(): Promise<Devices> {
-    return new Promise((resolve) => chrome.sessions.getDevices((devices) => resolve(devices)));
+    return chrome.sessions.getDevices();
   }
 
   private getTopSites(): Promise<MostVisitedURL[]> {
-    return new Promise((resolve) => chrome.topSites.get((data) => resolve(data)));
+    return chrome.topSites.get();
   }
 
   /**

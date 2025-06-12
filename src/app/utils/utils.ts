@@ -4,7 +4,7 @@ import { DateArg, format } from 'date-fns';
 import { groupBy } from 'lodash-es';
 import normalizeUrl from 'normalize-url';
 
-import { BrowserTabs, HostnameGroup, LocaleMessage, Settings, settingsStorageKey, Tab } from './models';
+import { BrowserTabs, HostnameGroup, LocaleMessage, Settings, settingsStorageKey, Tab, UUID } from './models';
 
 /**
  * Regex to validate UUID
@@ -137,7 +137,7 @@ export const sleep = (timeout: number): Promise<void> => new Promise((resolve) =
 
 export const uuid = () => self.crypto.randomUUID();
 
-export const isUuid = (uuid: string) => uuidRegExp.test(uuid);
+export const isUuid = (uuid: UUID) => uuidRegExp.test(uuid);
 
 export const getNormalizedUrl = (url: string) =>
   normalizeUrl(url, {

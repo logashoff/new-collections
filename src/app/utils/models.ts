@@ -7,26 +7,31 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import type LocaleMessages from '@locales/en/messages.json';
 import { MessageComponent } from '../components';
+import { uuid } from './utils';
 
 /**
  * Translate values key name
  */
 export type LocaleMessage = keyof typeof LocaleMessages;
 
+export type UUID = ReturnType<typeof uuid>;
+
+export type StorageKey = 'settings' | 'favicon' | 'recent' | UUID;
+
 /**
  * Local storage key for saving app settings
  */
-export const settingsStorageKey = 'settings';
+export const settingsStorageKey: StorageKey = 'settings';
 
 /**
  * Storage key to store tabs favicon URLs by hostname in separate object
  */
-export const faviconStorageKey = 'favicon';
+export const faviconStorageKey: StorageKey = 'favicon';
 
 /**
  * Storage key to store tab ID maps to number of clicks
  */
-export const recentKey = 'recent';
+export const recentKey: StorageKey = 'recent';
 
 /**
  * URLs to ignore when saving tabs.
@@ -165,7 +170,7 @@ export type Collections = Collection[];
  * Group that contains tabs and is saved to local storage.
  */
 export class TabGroup implements Collection {
-  readonly id: string;
+  readonly id: UUID;
 
   #timestamp: number;
 
@@ -189,7 +194,7 @@ export class TabGroup implements Collection {
   }
 
   constructor({ id, timestamp, tabs }: Collection) {
-    this.id = id;
+    this.id = id as UUID;
     this.#timestamp = timestamp;
 
     this.tabsSource$.next(tabs);

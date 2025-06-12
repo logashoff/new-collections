@@ -1,4 +1,6 @@
-export const randomUuids = [
+import { UUID } from 'src/app/utils';
+
+export const randomUuids: UUID[] = [
   '8e7b7294-9204-4097-a148-d64c577fe420',
   'a9f158c6-699d-4992-bda3-7054f9db38c1',
   '23125fdd-3bb0-4a2f-b935-f61ee856a4f0',

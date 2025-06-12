@@ -69,10 +69,13 @@ describe('TabService', () => {
   });
 
   test('should save tab group', async () => {
+    let tabGroups = await lastValueFrom(spectator.service['tabGroups$'].pipe(takeWhile((v) => !v, true)));
+    expect(tabGroups.length).toBe(3);
+
     const tabGroup = spectator.service.createTabGroup(getBrowserTabsMock());
     await spectator.service.addTabGroup(tabGroup);
 
-    const tabGroups = await firstValueFrom(spectator.service['tabGroups$'].pipe(take(1)));
+    tabGroups = await firstValueFrom(spectator.service['tabGroups$'].pipe(take(1)));
 
     expect(tabGroups.length).toBe(4);
     expect(tabGroups[0].tabs.length).toBe(3);

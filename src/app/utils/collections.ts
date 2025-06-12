@@ -4,7 +4,6 @@ import {
   Collections,
   FaviconHost,
   faviconStorageKey,
-  FaviconSync,
   recentKey,
   RecentTabs,
   Settings,
@@ -12,6 +11,7 @@ import {
   SyncData,
   SyncTabs,
   TabId,
+  UUID,
 } from './models';
 import { getSettings, getUrlHost, isUuid } from './utils';
 
@@ -37,13 +37,13 @@ export async function saveCollections(collections: Collections): Promise<void> {
 
   const removeKeys = [faviconStorageKey];
   for (const groupId in syncData) {
-    if (isUuid(groupId) && !collectionsById.has(groupId)) {
+    if (isUuid(groupId as UUID) && !collectionsById.has(groupId)) {
       delete syncData[groupId];
-      removeKeys.push(groupId);
+      removeKeys.push(groupId as UUID);
     }
   }
 
-  await storage.remove([...removeKeys, faviconStorageKey]);
+  await storage.remove(removeKeys as string[]);
 
   delete syncData[faviconStorageKey];
 
@@ -55,7 +55,7 @@ export async function saveCollections(collections: Collections): Promise<void> {
       tabs.filter(({ favIconUrl }) => favIconUrl).forEach((tab) => (favicon[getUrlHost(tab.url)] = tab.favIconUrl))
     );
 
-    return storage.set({
+    return await storage.set({
       [faviconStorageKey]: favicon,
       ...syncData,
     });
@@ -96,7 +96,7 @@ export async function removeRecent(tabId: TabId | TabId[]) {
     delete recentTabs[tabId];
   }
 
-  await storage.remove(recentKey);
+  await storage.remove(recentKey as string);
   await storage.set({
     [recentKey]: recentTabs,
   });
@@ -113,7 +113,7 @@ export const getCollections = async (): Promise<Collections> => {
     const favicon = await getFaviconStore();
 
     const collections: Collections = Object.keys(syncData)
-      .filter((groupId) => isUuid(groupId))
+      .filter((groupId: UUID) => isUuid(groupId))
       .map((groupId) => ({
         id: groupId,
         timestamp: syncData[groupId][0],
@@ -150,13 +150,17 @@ export function syncToTabs(sync: SyncTabs): BrowserTabs {
  */
 export async function copyStorage(source: StorageArea, target: StorageArea) {
   const sourceData: SyncData = await source.get();
-  const faviconData: FaviconSync = {
-    [faviconStorageKey]: sourceData[faviconStorageKey],
-  };
-  const newData = { ...faviconData };
+  const newData = {};
 
-  const sourceKeys = Object.keys(sourceData).filter((groupId) => isUuid(groupId));
-  sourceKeys.forEach((key) => (newData[key] = sourceData[key]));
-  await source.remove([faviconStorageKey, ...sourceKeys.map((key) => key)]);
+  [faviconStorageKey, recentKey].forEach((key) => {
+    if (sourceData[key]) {
+      newData[key] = sourceData[key];
+    }
+  });
+
+  const groupUuidKeys = Object.keys(sourceData).filter((groupId: UUID) => isUuid(groupId)) as UUID[];
+  groupUuidKeys.forEach((key) => (newData[key] = sourceData[key]));
+
+  await source.remove([faviconStorageKey, recentKey, ...groupUuidKeys] as string[]);
   await target.set(newData);
 }

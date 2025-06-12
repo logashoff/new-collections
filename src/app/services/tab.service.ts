@@ -22,6 +22,7 @@ import {
   TabsByHostname,
   Timeline,
   TimelineElement,
+  UUID,
   getCollections,
   getFaviconStore,
   getHostnameGroup,
@@ -144,7 +145,7 @@ export class TabService {
    * Sync local storage collection with loaded UI tab groups.
    */
   private async syncCollections(changes: StorageChanges) {
-    const changedGroupIds = Object.keys(changes).filter((groupId) => isUuid(groupId));
+    const changedGroupIds = Object.keys(changes).filter((groupId) => isUuid(groupId as UUID)) as UUID[];
 
     if (changedGroupIds?.length > 0) {
       const tabGroups = (await firstValueFrom(this.tabGroups$)) ?? [];

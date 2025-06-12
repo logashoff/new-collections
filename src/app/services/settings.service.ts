@@ -34,9 +34,7 @@ export class SettingsService {
   );
 
   private saveSettings(settings: Settings): Promise<void> {
-    return new Promise((resolve) => {
-      chrome.storage.local.set({ [settingsStorageKey]: settings }, () => resolve());
-    });
+    return chrome.storage.local.set({ [settingsStorageKey]: settings });
   }
 
   /**
