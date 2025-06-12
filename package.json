@@ -1,7 +1,7 @@
 {
   "name": "new-collections",
   "description": "Browser extension to save and restore tabs",
-  "version": "1.14",
+  "version": "1.15",
   "private": true,
   "scripts": {
     "build:dev": "ng build --configuration development",
