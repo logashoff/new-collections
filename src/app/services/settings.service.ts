@@ -52,17 +52,20 @@ export class SettingsService {
       newSettings.ignoreTopSites = uniqBy(newSettings.ignoreTopSites, (site) => site.url);
     }
 
-    await this.saveSettings(newSettings);
+    if (typeof newSettings.syncStorage === 'undefined') {
+      newSettings.syncStorage = true;
+    }
 
-    this.settingsSource$.next(newSettings);
-
-    if (typeof newSettings.syncStorage !== 'undefined') {
+    if (currentSettings.syncStorage !== newSettings.syncStorage) {
       const { sync, local } = chrome.storage;
-      const source: StorageArea = !newSettings.syncStorage ? sync : local;
-      const target: StorageArea = !newSettings.syncStorage ? local : sync;
+      const source: StorageArea = newSettings.syncStorage ? local : sync;
+      const target: StorageArea = newSettings.syncStorage ? sync : local;
 
       await copyStorage(source, target);
     }
+
+    await this.saveSettings(newSettings);
+    this.settingsSource$.next(newSettings);
 
     return newSettings;
   }

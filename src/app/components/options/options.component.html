@@ -38,15 +38,21 @@
           [color]="_storageUsage > 80 ? 'warn' : 'primary'" />
       </section>
       <section class="section toggles">
-        <mat-slide-toggle formControlName="syncStorage" color="primary">
+        <mat-slide-toggle
+          formControlName="syncStorage"
+          data-testid="settings-toggle-sync">
           <div class="toggle-label">{{ 'syncCollections' | translate }}</div>
           <mat-hint>{{ 'hintSyncCollections' | translate }}</mat-hint>
         </mat-slide-toggle>
-        <mat-slide-toggle formControlName="enableDevices" color="primary">
+        <mat-slide-toggle
+          formControlName="enableDevices"
+          data-testid="settings-toggle-devices">
           <div class="toggle-label">{{ 'enableDevices' | translate }}</div>
           <mat-hint>{{ 'hintShowDevices' | translate }}</mat-hint>
         </mat-slide-toggle>
-        <mat-slide-toggle formControlName="enableTopSites" color="primary">
+        <mat-slide-toggle
+          formControlName="enableTopSites"
+          data-testid="settings-toggle-sites">
           <div class="toggle-label">{{ 'enableSites' | translate }}</div>
           <mat-hint>{{ 'hintShowTopSites' | translate }}</mat-hint>
         </mat-slide-toggle>

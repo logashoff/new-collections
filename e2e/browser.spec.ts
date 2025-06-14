@@ -4,6 +4,7 @@ import { afterAll, beforeAll, expect, suite, test } from 'vitest';
 
 const EXTENSION_PATH = './dist/new-collections';
 const NEW_TAB_MAIN_PAGE = 'new-tab/main';
+const OPTIONS_PAGE = 'options';
 
 suite.sequential('Browser', () => {
   let browser: Browser;
@@ -20,6 +21,7 @@ suite.sequential('Browser', () => {
         width: 1280,
         height: 720,
       },
+      devtools: false,
       args: ['--no-sandbox'],
       slowMo: 25,
     };
@@ -32,6 +34,15 @@ suite.sequential('Browser', () => {
     page = await browser.newPage();
 
     await page.goto(`${extensionBaseUrl}/${NEW_TAB_MAIN_PAGE}`, { waitUntil: 'networkidle0' });
+    await page.evaluate(
+      `chrome.storage.local.set(${JSON.stringify({
+        settings: {
+          enableDevices: true,
+          enableTopSites: true,
+          syncStorage: true,
+        },
+      })})`
+    );
   });
 
   afterAll(async () => {
@@ -107,7 +118,7 @@ suite.sequential('Browser', () => {
     const restoreGroupButton = await page.$('[data-testid=group-panel-0] [data-testid=group-action-restore]');
     await restoreGroupButton.click();
 
-    const pages = await browser.pages();
+    let pages = await browser.pages();
     for (const [, page] of pages.entries()) {
       await page.waitForNetworkIdle();
     }
@@ -133,6 +144,13 @@ suite.sequential('Browser', () => {
 
     const tabGroups = await page.$$('nc-timeline-element');
     expect(tabGroups.length).toBe(3);
+
+    pages = await browser.pages();
+    for (const [, p] of pages.entries()) {
+      if (p !== page) {
+        await p.close();
+      }
+    }
   });
 
   test('test search input results', async () => {
@@ -179,5 +197,70 @@ suite.sequential('Browser', () => {
     await cancelButton.click();
   });
 
-  test.todo('delete items');
+  test('delete items', async () => {
+    const groupHeader = await page.$('[data-testid=timeline-element-0] [data-testid=group-header-0]');
+    await groupHeader.click();
+
+    await page.waitForNetworkIdle();
+
+    for (let i = 0; i < 2; i++) {
+      const timeline = await page.$('[data-testid=timeline-element-0]');
+      const listItem = await timeline.$('[data-testid=list-item-0]');
+      expect(listItem).toBeTruthy();
+      const removeButton = await listItem.$('[data-testid=list-item-action-remove]');
+      await listItem.hover();
+      await removeButton.click();
+      const listItems = await timeline.$$('nc-list-item');
+      expect(listItems.length).toBe(3 - i);
+    }
+
+    const removeAll = await page.$('[data-testid=timeline-element-0] [data-testid=remove-all]');
+    await removeAll.click();
+
+    const timelines = await page.$$('nc-timeline-element');
+    expect(timelines.length).toBe(2);
+
+    const panels = await page.$$('.mat-expansion-panel');
+    expect(panels.length).toBe(3);
+  });
+
+  test('toggle options', async () => {
+    const optionsPage = `${extensionBaseUrl}/${OPTIONS_PAGE}`;
+    await page.goto(optionsPage, { waitUntil: 'networkidle0' });
+
+    let option = await page.$('[data-testid=settings-toggle-sync]');
+    await option.click();
+    await page.goBack();
+    await page.reload({ waitUntil: 'networkidle0' });
+    let timelines = await page.$$('nc-timeline-element');
+    expect(timelines.length).toBe(2);
+
+    await page.goto(optionsPage, { waitUntil: 'networkidle0' });
+    option = await page.$('[data-testid=settings-toggle-devices]');
+    await option.click();
+    await page.goBack();
+    await page.reload({ waitUntil: 'networkidle0' });
+    timelines = await page.$$('nc-timeline-element');
+    expect(timelines.length).toBe(2);
+
+    await page.goto(optionsPage, { waitUntil: 'networkidle0' });
+    option = await page.$('[data-testid=settings-toggle-sites]');
+    await option.click();
+    await page.goBack();
+    await page.reload({ waitUntil: 'networkidle0' });
+    timelines = await page.$$('nc-timeline-element');
+    expect(timelines.length).toBe(2);
+
+    await page.goto(optionsPage, { waitUntil: 'networkidle0' });
+    option = await page.$('[data-testid=settings-toggle-sync]');
+    await option.click();
+    option = await page.$('[data-testid=settings-toggle-devices]');
+    await option.click();
+    option = await page.$('[data-testid=settings-toggle-sites]');
+    await option.click();
+    await page.goBack();
+    await page.reload({ waitUntil: 'networkidle0' });
+    timelines = await page.$$('nc-timeline-element');
+    expect(timelines.length).toBe(2);
+  });
 });

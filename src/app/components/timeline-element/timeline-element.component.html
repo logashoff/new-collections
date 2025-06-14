@@ -6,7 +6,8 @@
     <button
       matIconButton
       [matTooltip]="'deleteAll' | translate"
-      (click)="remove()">
+      (click)="remove()"
+      data-testid="remove-all">
       <mat-icon>sweep</mat-icon>
     </button>
   }
