@@ -52,11 +52,7 @@ export class SettingsService {
       newSettings.ignoreTopSites = uniqBy(newSettings.ignoreTopSites, (site) => site.url);
     }
 
-    if (typeof newSettings.syncStorage === 'undefined') {
-      newSettings.syncStorage = true;
-    }
-
-    if (currentSettings.syncStorage !== newSettings.syncStorage) {
+    if (typeof newSettings.syncStorage !== 'undefined') {
       const { sync, local } = chrome.storage;
       const source: StorageArea = newSettings.syncStorage ? local : sync;
       const target: StorageArea = newSettings.syncStorage ? sync : local;
