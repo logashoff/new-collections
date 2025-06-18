@@ -20,7 +20,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { map, shareReplay } from 'rxjs';
+import { distinctUntilChanged, map, shareReplay } from 'rxjs';
 
 import { TranslatePipe } from '../../pipes';
 import { CollectionsService, NavService } from '../../services';
@@ -115,7 +115,12 @@ export class SearchFormComponent implements OnInit {
       })
     );
 
-    this.#formValues$.subscribe(({ search }) => this.searchChange(search));
+    this.#formValues$
+      .pipe(
+        map(({ search }) => search),
+        distinctUntilChanged()
+      )
+      .subscribe((search) => this.searchChange(search));
   }
 
   onKeyUp(e: KeyboardEvent) {
