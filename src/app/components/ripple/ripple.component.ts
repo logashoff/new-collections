@@ -28,9 +28,8 @@ import { scrollIntoView, sleep } from '../../utils';
   },
 })
 export class RippleComponent {
-  readonly focused = input<boolean>(false);
-
   readonly animate = signal<boolean>(false);
+  readonly focused = input<boolean>(false);
 
   constructor() {
     const el = inject(ElementRef);
@@ -43,10 +42,6 @@ export class RippleComponent {
 
         this.animate.set(true);
         cdr.markForCheck();
-
-        await sleep(1_000);
-
-        this.animate.set(false);
       } else {
         this.animate.set(false);
       }

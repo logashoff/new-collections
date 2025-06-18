@@ -1,37 +1,65 @@
-@keyframes ripple {
-  from {
-    background-size: 0;
-    opacity: 0.35;
-  }
+@use 'common' as common;
 
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes rotate {
+  from {
+    --angle: 0deg;
+  }
   to {
-    background-size: 300%;
+    --angle: 360deg;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 1;
+  }
+  to {
     opacity: 0;
   }
 }
 
 nc-ripple {
-  $_color: var(--mat-sys-inverse-surface);
-  $_alpha: rgba(0, 0, 0, 0);
+  --angle: 0deg;
 
+  contain: layout;
+  border: 3px solid transparent;
+  mask:
+    linear-gradient(#000 0 0, #000) padding-box,
+    linear-gradient(#000 0 0, #000);
+  mask-composite: exclude;
   display: block;
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: 0;
+  inset: 0;
   pointer-events: none;
-  opacity: 0;
 
-  &.focused {
-    animation: ripple 1s ease;
-    background: radial-gradient(
-        circle,
-        $_color 0%,
-        $_color 49%,
-        $_alpha 50%,
-        $_alpha 100%
-      )
-      no-repeat 50%;
+  &::after {
+    content: '';
+    background: conic-gradient(
+      #aa93ff00,
+      #aa93ff,
+      #ff4e60,
+      #6fb4ff,
+      #a5ff00,
+      #a5ff0000,
+      #aa93ff00
+    );
+    height: 200px;
+    inset: 0;
+    position: absolute;
+    scale: 8 1;
+    translate: 0 -64px;
+    transform: rotate(var(--angle));
+  }
+
+  &.focused::after {
+    animation:
+      rotate 8s common.$cubic-bezier forwards,
+      fade 4s common.$cubic-bezier 2s forwards;
   }
 }

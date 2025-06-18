@@ -145,15 +145,19 @@ export class GroupsComponent {
   /**
    * Saves open panel state to local storage
    */
-  opened(groupId: string) {
-    this.#settings.savePanelState(groupId, true);
+  async opened(groupId: string) {
+    await this.#settings.savePanelState(groupId, true);
   }
 
   /**
    * Removes open panel state from storage
    */
-  closed(groupId: string) {
-    this.#settings.savePanelState(groupId, false);
+  async closed(groupId: string) {
+    await this.#settings.savePanelState(groupId, false);
+  }
+
+  async onClick() {
+    await this.#navService.reset();
   }
 
   /**

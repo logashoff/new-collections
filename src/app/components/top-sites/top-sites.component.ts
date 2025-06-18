@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject, input, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatRipple } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { lastValueFrom } from 'rxjs';
+
 import { StopPropagationDirective } from '../../directives';
 import { FaviconPipe } from '../../pipes';
 import { MessageService, SettingsService } from '../../services';
@@ -19,7 +21,7 @@ import { ImageComponent } from '../image/image.component';
   styleUrl: './top-sites.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [FaviconPipe, ImageComponent, MatButtonModule, MatIconModule, StopPropagationDirective],
+  imports: [FaviconPipe, ImageComponent, MatButtonModule, MatIconModule, MatRipple, StopPropagationDirective],
 })
 export class TopSitesComponent {
   readonly #message = inject(MessageService);
