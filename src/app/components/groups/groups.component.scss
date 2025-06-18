@@ -1,7 +1,30 @@
 @use 'common' as common;
 
 nc-groups {
+  $border-radius: var(--mat-expansion-container-shape);
+
   display: block;
+  position: relative;
+
+  .mat-expansion-panel {
+    &:only-child .mat-expansion-panel-header > .mat-content > nc-ripple {
+      border-radius: $border-radius;
+    }
+
+    &:first-child:not(:only-child)
+      .mat-expansion-panel-header
+      > .mat-content
+      > nc-ripple {
+      border-radius: $border-radius $border-radius 0 0;
+    }
+
+    &:last-child:not(:only-child)
+      .mat-expansion-panel-header
+      > .mat-content
+      > nc-ripple {
+      border-radius: 0 0 $border-radius $border-radius;
+    }
+  }
 
   .mat-expansion-panel-header {
     .expanded {

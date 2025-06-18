@@ -13,13 +13,10 @@
       [expanded]="panel.expanded || expandPanel"
       (opened)="opened(groupId)"
       (closed)="closed(groupId)"
-      hideToggle
+      (click)="onClick()"
+      [hideToggle]="true"
       dataTestId="group-panel-{{ i }}">
       <mat-expansion-panel-header dataTestId="group-header-{{ i }}">
-        @if (activeGroupId === groupId && !hasTabId) {
-          <nc-ripple [focused]="true" />
-        }
-
         <div class="collapsed">
           @let tabsByHostname = tabsByHostname$ | async;
 
@@ -41,6 +38,10 @@
             [actions]="groupActions()"
             (clicked)="onGroupAction($event, group)" />
         </div>
+
+        @if (!panel.expanded && activeGroupId === groupId && !hasTabId) {
+          <nc-ripple [focused]="true" />
+        }
       </mat-expansion-panel-header>
 
       <ng-template matExpansionPanelContent>
