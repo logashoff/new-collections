@@ -13,7 +13,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { DataTestIdDirective, RecentDirective, StopPropagationDirective } from '../../directives';
+import {
+  DataTestIdDirective,
+  RecentDirective,
+  ScrollIntoViewDirective,
+  StopPropagationDirective,
+} from '../../directives';
 import { FaviconPipe, TranslatePipe } from '../../pipes';
 import { Activatable } from '../../services';
 import {
@@ -56,6 +61,7 @@ import { MatRipple } from '@angular/material/core';
     MatTooltipModule,
     RecentDirective,
     RippleComponent,
+    ScrollIntoViewDirective,
     StopPropagationDirective,
     TranslatePipe,
     MatRipple,

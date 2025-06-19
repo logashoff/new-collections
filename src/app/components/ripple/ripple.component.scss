@@ -57,7 +57,7 @@ nc-ripple {
     transform: rotate(var(--angle));
   }
 
-  &.focused::after {
+  &.animated::after {
     animation:
       rotate 8s common.$cubic-bezier forwards,
       fade 4s common.$cubic-bezier 2s forwards;

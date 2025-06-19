@@ -7,7 +7,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { map, Observable, shareReplay } from 'rxjs';
 
-import { DataTestIdDirective } from '../../directives';
+import { DataTestIdDirective, ScrollIntoViewDirective } from '../../directives';
 import { IsReadOnlyGroupPipe } from '../../pipes';
 import { NavService, SettingsService, TabService } from '../../services';
 import {
@@ -55,6 +55,7 @@ import { TabListComponent } from '../tab-list/tab-list.component';
     MatIconModule,
     PanelHeaderComponent,
     RippleComponent,
+    ScrollIntoViewDirective,
     TabListComponent,
   ],
 })

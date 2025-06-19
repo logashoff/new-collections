@@ -1,16 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  effect,
-  ElementRef,
-  inject,
-  input,
-  signal,
-  ViewEncapsulation,
-} from '@angular/core';
-
-import { scrollIntoView, sleep } from '../../utils';
+import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
 
 /**
  * @description
@@ -24,29 +12,9 @@ import { scrollIntoView, sleep } from '../../utils';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    '[class.focused]': 'animate()',
+    '[class.animated]': 'animate()',
   },
 })
 export class RippleComponent {
-  readonly animate = signal<boolean>(false);
-  readonly focused = input<boolean>(false);
-
-  constructor() {
-    const el = inject(ElementRef);
-    const cdr = inject(ChangeDetectorRef);
-
-    effect(async () => {
-      if (this.focused()) {
-        await sleep(225);
-        await scrollIntoView(el.nativeElement);
-
-        this.animate.set(true);
-        cdr.markForCheck();
-      } else {
-        this.animate.set(false);
-      }
-
-      cdr.markForCheck();
-    });
-  }
+  readonly animate = input.required<boolean>();
 }

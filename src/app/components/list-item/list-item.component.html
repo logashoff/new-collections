@@ -5,7 +5,8 @@
   [recent]="_tab"
   matRipple
   [href]="_tab.url"
-  [target]="target()">
+  [target]="target()"
+  [scrollIntoView]="focused()">
   <nc-chip [source]="_tab.favIconUrl | favicon: _tab.url" />
   <div class="text-container">
     <div class="title-container">
@@ -33,5 +34,5 @@
 </a>
 
 @if (focused()) {
-  <nc-ripple [focused]="focused()" />
+  <nc-ripple [animate]="focused()" />
 }
