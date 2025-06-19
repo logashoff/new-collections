@@ -170,6 +170,9 @@
       }
     }
   },
+  "searchDisabled": {
+    "message": "Search Disabled"
+  },
   "searchEmptyMessage": {
     "message": "Nothing found for ‘<strong>$query$</strong>’",
     "placeholders": {

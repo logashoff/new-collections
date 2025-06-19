@@ -1,21 +1,25 @@
 <section class="controls-wrapper">
+  @let isActive = isActive$ | async;
+
   <form class="search-form" [formGroup]="formGroup">
     <mat-form-field class="search-field" appearance="fill">
       <mat-icon matPrefix>search</mat-icon>
       <input
         #searchInput
         type="text"
+        tabindex="1"
         matInput
         formControlName="search"
         (focus)="focused.set(true)"
         (blur)="onBlur()"
         autocomplete="off"
+        placeholder="{{ disabled() ? ('searchDisabled' | translate) : '' }}"
         data-testid="search-input" />
     </mat-form-field>
   </form>
 
   <div class="controls">
-    @if (isActive$ | async) {
+    @if (isActive) {
       <button
         matIconButton
         color="primary"
@@ -35,4 +39,10 @@
       </button>
     }
   </div>
+
+  @let hasActivated = hasActivated$ | async;
+
+  @if (!hasActivated) {
+    <nc-ripple [animate]="true"></nc-ripple>
+  }
 </section>

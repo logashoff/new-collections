@@ -36,8 +36,11 @@ nc-search-form {
     transition-timing-function: ease;
     transition-duration: 250ms;
 
+    $_border-radius: math.div($_height, 2);
+
     display: flex;
-    border-radius: math.div($_height, 2);
+    position: relative;
+    border-radius: $_border-radius;
     box-sizing: border-box;
     z-index: 1;
 
@@ -100,6 +103,12 @@ nc-search-form {
       height: auto;
       padding: 0;
       line-height: 0;
+    }
+
+    nc-ripple {
+      $_offset: 3px;
+      border-radius: math.div($_height + $_offset, 2);
+      inset: -$_offset;
     }
   }
 }

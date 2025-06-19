@@ -20,11 +20,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { distinctUntilChanged, map, shareReplay } from 'rxjs';
+import { distinctUntilChanged, map, shareReplay, takeWhile } from 'rxjs';
 
 import { TranslatePipe } from '../../pipes';
 import { CollectionsService, NavService } from '../../services';
 import { Action, ESC_KEY_CODE, scrollTop } from '../../utils';
+import { RippleComponent } from '../ripple/ripple.component';
 
 /**
  * Search input form.
@@ -47,6 +48,7 @@ interface SearchForm {
     MatInputModule,
     MatTooltipModule,
     ReactiveFormsModule,
+    RippleComponent,
     TranslatePipe,
   ],
   host: {
@@ -87,6 +89,11 @@ export class SearchFormComponent implements OnInit {
 
   readonly isActive$ = this.#navService.pathChanges$.pipe(
     map(() => this.isActive),
+    shareReplay(1)
+  );
+
+  readonly hasActivated$ = this.isActive$.pipe(
+    takeWhile((active) => !active, true),
     shareReplay(1)
   );
 

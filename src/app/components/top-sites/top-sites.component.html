@@ -4,7 +4,7 @@
   <div class="container">
     <div class="site-container">
       @for (site of _topSites; track site) {
-        <a class="site" [href]="site.url" matRipple>
+        <a class="site" [href]="site.url" matRipple tabindex="-1">
           <nc-image
             [source]="undefined | favicon: site.url"
             size="medium"></nc-image>

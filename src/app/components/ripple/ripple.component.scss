@@ -15,12 +15,21 @@
   }
 }
 
-@keyframes fade {
+@keyframes fade-out {
   from {
     opacity: 1;
   }
   to {
     opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
@@ -41,13 +50,13 @@ nc-ripple {
   &::after {
     content: '';
     background: conic-gradient(
-      #aa93ff00,
-      #aa93ff,
-      #ff4e60,
-      #6fb4ff,
-      #a5ff00,
-      #a5ff0000,
-      #aa93ff00
+      from 270deg,
+      #ff2d3e00,
+      #ff2d3e,
+      #ffed48,
+      #4498ff,
+      #7eff22,
+      #7eff2200 270deg
     );
     height: 200px;
     inset: 0;
@@ -59,7 +68,8 @@ nc-ripple {
 
   &.animated::after {
     animation:
+      fade-in 2s common.$cubic-bezier forwards,
       rotate 8s common.$cubic-bezier forwards,
-      fade 4s common.$cubic-bezier 2s forwards;
+      fade-out 4s common.$cubic-bezier 4s forwards;
   }
 }
