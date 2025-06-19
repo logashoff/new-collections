@@ -1,6 +1,7 @@
 import { Directive, ElementRef, inject, input } from '@angular/core';
 import { BackgroundService, NavService } from '../services';
-import { addRecent, Tab } from '../utils';
+import { addRecent, BrowserTab } from '../utils';
+
 /**
  * @description
  *
@@ -18,7 +19,7 @@ export class RecentDirective {
   readonly #el = inject(ElementRef);
   readonly #navService = inject(NavService);
 
-  readonly recent = input.required<Tab>();
+  readonly recent = input.required<BrowserTab>();
 
   async eventHandler(event: PointerEvent) {
     const tab = this.recent();
