@@ -7,6 +7,7 @@
     @let groupId = group.id;
     @let expandPanel =
       panelStates?.[groupId] || (activeGroupId === groupId && hasTabId);
+    @let isActiveGroup = activeGroupId === groupId && !hasTabId;
 
     <mat-expansion-panel
       #panel
@@ -16,7 +17,9 @@
       (click)="onClick()"
       [hideToggle]="true"
       dataTestId="group-panel-{{ i }}">
-      <mat-expansion-panel-header dataTestId="group-header-{{ i }}">
+      <mat-expansion-panel-header
+        [scrollIntoView]="isActiveGroup"
+        dataTestId="group-header-{{ i }}">
         <div class="collapsed">
           @let tabsByHostname = tabsByHostname$ | async;
 
@@ -39,8 +42,8 @@
             (clicked)="onGroupAction($event, group)" />
         </div>
 
-        @if (!panel.expanded && activeGroupId === groupId && !hasTabId) {
-          <nc-ripple [focused]="true" />
+        @if (!panel.expanded && isActiveGroup) {
+          <nc-ripple [animate]="true" />
         }
       </mat-expansion-panel-header>
 
