@@ -48,15 +48,20 @@ nc-ripple {
   pointer-events: none;
 
   &::after {
+    $_c1: #4498ff;
+    $_c2: #7eff22;
+    $_c3: #ffed48;
+    $_c4: #ff2d3e;
+
     content: '';
     background: conic-gradient(
       from 270deg,
-      #ff2d3e00,
-      #ff2d3e,
-      #ffed48,
-      #4498ff,
-      #7eff22,
-      #7eff2200 270deg
+      rgba(from $_c1 r g b / 0),
+      $_c1,
+      $_c2,
+      $_c3,
+      $_c4,
+      rgba(from $_c4 r g b / 0) 270deg
     );
     height: 200px;
     inset: 0;
