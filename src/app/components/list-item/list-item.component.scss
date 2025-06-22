@@ -8,8 +8,8 @@ nc-list-item {
   overflow: hidden;
   box-sizing: border-box;
 
-  &:last-child > nc-ripple,
-  &:only-child > nc-ripple {
+  &:last-child .container > .ripple,
+  &:only-child .container > .ripple {
     border-radius: 0 0 $border-radius $border-radius;
   }
 

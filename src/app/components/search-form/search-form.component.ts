@@ -22,10 +22,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { distinctUntilChanged, map, shareReplay, takeWhile } from 'rxjs';
 
+import { RippleDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
 import { CollectionsService, NavService } from '../../services';
 import { Action, ESC_KEY_CODE, scrollTop } from '../../utils';
-import { RippleComponent } from '../ripple/ripple.component';
 
 /**
  * Search input form.
@@ -48,7 +48,7 @@ interface SearchForm {
     MatInputModule,
     MatTooltipModule,
     ReactiveFormsModule,
-    RippleComponent,
+    RippleDirective,
     TranslatePipe,
   ],
   host: {

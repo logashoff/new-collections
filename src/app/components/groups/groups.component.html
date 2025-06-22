@@ -16,6 +16,7 @@
       (closed)="closed(groupId)"
       (click)="onClick()"
       [hideToggle]="true"
+      [ripple]="!panel.expanded && isActiveGroup"
       dataTestId="group-panel-{{ i }}">
       <mat-expansion-panel-header
         [scrollIntoView]="isActiveGroup"
@@ -41,10 +42,6 @@
             [actions]="groupActions()"
             (clicked)="onGroupAction($event, group)" />
         </div>
-
-        @if (!panel.expanded && isActiveGroup) {
-          <nc-ripple [animate]="true" />
-        }
       </mat-expansion-panel-header>
 
       <ng-template matExpansionPanelContent>

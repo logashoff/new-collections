@@ -29,6 +29,7 @@
             "styles": [
               "src/styles/_dark-colors.scss",
               "src/styles/_light-colors.scss",
+              "src/styles/_ripple.scss",
               "src/styles/common.scss",
               "src/styles/styles.scss",
               "src/styles/theme.scss",

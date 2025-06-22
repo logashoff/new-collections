@@ -7,7 +7,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { map, Observable, shareReplay } from 'rxjs';
 
-import { DataTestIdDirective, ScrollIntoViewDirective } from '../../directives';
+import { DataTestIdDirective, RippleDirective, ScrollIntoViewDirective } from '../../directives';
 import { IsReadOnlyGroupPipe } from '../../pipes';
 import { NavService, SettingsService, TabService } from '../../services';
 import {
@@ -27,7 +27,6 @@ import {
 import { GroupControlsComponent } from '../group-controls/group-controls.component';
 import { ListItemComponent } from '../list-item/list-item.component';
 import { PanelHeaderComponent } from '../panel-header/panel-header.component';
-import { RippleComponent } from '../ripple/ripple.component';
 import { TabListComponent } from '../tab-list/tab-list.component';
 
 /**
@@ -54,7 +53,7 @@ import { TabListComponent } from '../tab-list/tab-list.component';
     MatExpansionModule,
     MatIconModule,
     PanelHeaderComponent,
-    RippleComponent,
+    RippleDirective,
     ScrollIntoViewDirective,
     TabListComponent,
   ],

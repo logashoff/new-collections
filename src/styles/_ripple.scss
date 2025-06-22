@@ -1,0 +1,37 @@
+@use 'common' as common;
+
+.ripple {
+  contain: layout;
+  border: 3px solid transparent;
+  mask:
+    linear-gradient(#000 0 0, #000) padding-box,
+    linear-gradient(#000 0 0, #000);
+  mask-composite: exclude;
+  display: block;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  .ripple-gradient {
+    $_color1: #4498ff;
+    $_color2: #7eff22;
+    $_color3: #ffed48;
+    $_color4: #ff2d3e;
+
+    background: conic-gradient(
+      from 270deg,
+      rgba(from $_color1 r g b / 0),
+      $_color1,
+      $_color2,
+      $_color3,
+      $_color4,
+      rgba(from $_color4 r g b / 0) 270deg
+    );
+    position: absolute;
+    inset: 0;
+    translate: 0 -50%;
+    top: 50%;
+    aspect-ratio: 1 / 0.5;
+    scale: 8 1;
+  }
+}

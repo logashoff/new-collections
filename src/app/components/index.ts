@@ -8,7 +8,6 @@ export * from './list-item/list-item.component';
 export * from './message/message.component';
 export * from './panel-header/panel-header.component';
 export * from './rename-dialog/rename-dialog.component';
-export * from './ripple/ripple.component';
 export * from './search-form/search-form.component';
 export * from './tab-list/tab-list.component';
 export * from './tabs-selector/tabs-selector.component';

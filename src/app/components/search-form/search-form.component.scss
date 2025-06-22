@@ -105,8 +105,8 @@ nc-search-form {
       line-height: 0;
     }
 
-    nc-ripple {
-      $_offset: 3px;
+    .ripple {
+      $_offset: 2px;
       border-radius: math.div($_height + $_offset, 2);
       inset: -$_offset;
     }

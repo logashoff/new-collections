@@ -16,6 +16,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import {
   DataTestIdDirective,
   RecentDirective,
+  RippleDirective,
   ScrollIntoViewDirective,
   StopPropagationDirective,
 } from '../../directives';
@@ -33,7 +34,6 @@ import {
   Target,
 } from '../../utils';
 import { ChipComponent } from '../chip/chip.component';
-import { RippleComponent } from '../ripple/ripple.component';
 import { MatRipple } from '@angular/material/core';
 
 /**
@@ -60,7 +60,7 @@ import { MatRipple } from '@angular/material/core';
     MatIconModule,
     MatTooltipModule,
     RecentDirective,
-    RippleComponent,
+    RippleDirective,
     ScrollIntoViewDirective,
     StopPropagationDirective,
     TranslatePipe,

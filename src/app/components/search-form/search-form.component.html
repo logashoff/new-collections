@@ -1,4 +1,6 @@
-<section class="controls-wrapper">
+@let hasActivated = hasActivated$ | async;
+
+<section class="controls-wrapper" [ripple]="!hasActivated">
   @let isActive = isActive$ | async;
 
   <form class="search-form" [formGroup]="formGroup">
@@ -39,10 +41,4 @@
       </button>
     }
   </div>
-
-  @let hasActivated = hasActivated$ | async;
-
-  @if (!hasActivated) {
-    <nc-ripple [animate]="true"></nc-ripple>
-  }
 </section>
