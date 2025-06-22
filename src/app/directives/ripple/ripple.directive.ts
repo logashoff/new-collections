@@ -1,4 +1,15 @@
-import { Directive, effect, ElementRef, inject, input, OnDestroy } from '@angular/core';
+import { _CdkPrivateStyleLoader } from '@angular/cdk/private';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Directive,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  OnDestroy,
+  ViewEncapsulation,
+} from '@angular/core';
 
 const fadeIn: Keyframe[] = [
   {
@@ -29,16 +40,32 @@ const rotate: Keyframe[] = [
 
 const cubicEase = 'cubic-bezier(0.4, 0, 0.2, 1)';
 
+@Component({
+  template: '',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: 'ripple.scss',
+  host: { 'ripple-style-loader': '' },
+})
+class RippleStylesLoader {}
+
 @Directive({
   selector: '[ripple]',
 })
 export class RippleDirective implements OnDestroy {
+  readonly #elRef = inject(ElementRef);
+  readonly #styleLoader = inject(_CdkPrivateStyleLoader);
+
+  /**
+   * True to add ripple animation, false will remove ripple.
+   */
   readonly ripple = input.required<boolean>();
 
-  readonly #el = inject(ElementRef);
-  #ripple: HTMLDivElement;
+  #ripple: HTMLElement;
 
   constructor() {
+    this.#styleLoader.load(RippleStylesLoader);
+
     effect(() => {
       if (!this.#ripple) {
         this.#ripple = this.create();
@@ -46,7 +73,7 @@ export class RippleDirective implements OnDestroy {
 
       if (this.ripple()) {
         if (!document.body.contains(this.#ripple)) {
-          this.#el.nativeElement.appendChild(this.#ripple);
+          this.#elRef.nativeElement.appendChild(this.#ripple);
         }
       } else {
         this.destroy();
@@ -54,7 +81,7 @@ export class RippleDirective implements OnDestroy {
     });
   }
 
-  private create() {
+  private create(): HTMLElement {
     const ripple = document.createElement('div');
     ripple.classList.add('ripple');
 
@@ -62,27 +89,26 @@ export class RippleDirective implements OnDestroy {
     gradient.classList.add('ripple-gradient');
     ripple.appendChild(gradient);
 
-    gradient.animate(fadeIn, {
-      duration: 1_000,
-      easing: 'linear',
-      fill: 'forwards',
-    });
-
-    gradient.animate(fadeOut, {
-      duration: 4_000,
-      delay: 4_000,
-      easing: cubicEase,
-      fill: 'forwards',
-    });
-
-    const animation = gradient.animate(rotate, {
-      duration: 8_000,
-      easing: cubicEase,
-      fill: 'forwards',
-    });
-
     queueMicrotask(async () => {
-      await animation.finished;
+      gradient.animate(fadeIn, {
+        duration: 1_000,
+        easing: 'linear',
+        fill: 'forwards',
+      });
+
+      gradient.animate(fadeOut, {
+        duration: 4_000,
+        delay: 4_000,
+        easing: cubicEase,
+        fill: 'forwards',
+      });
+
+      await gradient.animate(rotate, {
+        duration: 8_000,
+        easing: cubicEase,
+        fill: 'forwards',
+      }).finished;
+
       this.destroy();
     });
 
