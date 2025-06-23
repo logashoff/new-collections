@@ -67,12 +67,12 @@ export class RippleDirective implements OnDestroy {
     this.#styleLoader.load(RippleStylesLoader);
 
     effect(() => {
-      if (!this.#ripple) {
-        this.#ripple = this.create();
-      }
-
       if (this.ripple()) {
         if (!document.body.contains(this.#ripple)) {
+          if (!this.#ripple) {
+            this.#ripple = this.create();
+          }
+
           this.#elRef.nativeElement.appendChild(this.#ripple);
         }
       } else {
