@@ -34,11 +34,9 @@ const rotate: Keyframe[] = [
     transform: 'rotate(0deg)',
   },
   {
-    transform: 'rotate(360deg)',
+    transform: 'rotate(450deg)',
   },
 ];
-
-const cubicEase = 'cubic-bezier(0.4, 0, 0.2, 1)';
 
 @Component({
   template: '',
@@ -96,19 +94,18 @@ export class RippleDirective implements OnDestroy {
         fill: 'forwards',
       });
 
-      gradient.animate(fadeOut, {
-        duration: 4_000,
-        delay: 4_000,
-        easing: cubicEase,
+      gradient.animate(rotate, {
+        duration: 8_000,
+        easing: 'cubic-bezier(0.2, 0, 0, 1)',
         fill: 'forwards',
       });
 
-      await gradient.animate(rotate, {
-        duration: 8_000,
-        easing: cubicEase,
+      await gradient.animate(fadeOut, {
+        duration: 2_000,
+        delay: 6_000,
+        easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
         fill: 'forwards',
       }).finished;
-
       this.destroy();
     });
 
