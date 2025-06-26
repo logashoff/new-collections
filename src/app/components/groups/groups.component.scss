@@ -7,16 +7,21 @@ nc-groups {
   position: relative;
 
   .mat-expansion-panel {
-    &:only-child > .ripple {
-      border-radius: $border-radius;
+    &:only-child,
+    &.mat-expanded {
+      & > .ripple {
+        border-radius: $border-radius;
+      }
     }
 
-    &:first-child:not(:only-child) > .ripple {
-      border-radius: $border-radius $border-radius 0 0;
-    }
+    &:not(:is(.mat-expanded, :only-child)) {
+      &:first-child > .ripple {
+        border-radius: $border-radius $border-radius 0 0;
+      }
 
-    &:last-child:not(:only-child) > .ripple {
-      border-radius: 0 0 $border-radius $border-radius;
+      &:last-child > .ripple {
+        border-radius: 0 0 $border-radius $border-radius;
+      }
     }
   }
 

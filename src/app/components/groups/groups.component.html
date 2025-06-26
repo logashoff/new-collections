@@ -14,9 +14,8 @@
       [expanded]="panel.expanded || expandPanel"
       (opened)="opened(groupId)"
       (closed)="closed(groupId)"
-      (click)="onClick()"
       [hideToggle]="true"
-      [ripple]="!panel.expanded && isActiveGroup"
+      [ripple]="isActiveGroup"
       dataTestId="group-panel-{{ i }}">
       <mat-expansion-panel-header
         [scrollIntoView]="isActiveGroup"
