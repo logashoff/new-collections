@@ -156,10 +156,6 @@ export class GroupsComponent {
     await this.#settings.savePanelState(groupId, false);
   }
 
-  async onClick() {
-    await this.#navService.reset();
-  }
-
   /**
    * Handles tab group drag and drop event
    */
