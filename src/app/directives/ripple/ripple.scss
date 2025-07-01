@@ -34,13 +34,12 @@
     inset: 0;
     translate: 0 -50%;
     top: 50%;
-    scale: 4;
+    aspect-ratio: 1 / 1;
   }
 }
 
 @container ripple (orientation: landscape) {
   .ripple .ripple-gradient {
-    aspect-ratio: 1 / 1;
     scale: 8 1;
   }
 }
