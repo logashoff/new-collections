@@ -61,6 +61,25 @@ export class RippleDirective implements OnDestroy {
 
   #ripple: HTMLElement;
 
+  readonly #resizeObserver = new ResizeObserver((entries) => {
+    const [
+      {
+        contentRect: { width, height },
+        target,
+      },
+    ] = entries;
+
+    const gradient: HTMLElement = target.querySelector('.ripple-gradient');
+    if (gradient) {
+      if (width > height) {
+        gradient.style.scale = null;
+      } else {
+        const ratio = height / width;
+        gradient.style.scale = `${ratio} ${2 * ratio}`;
+      }
+    }
+  });
+
   constructor() {
     this.#styleLoader.load(RippleStylesLoader);
 
@@ -87,6 +106,8 @@ export class RippleDirective implements OnDestroy {
     gradient.classList.add('ripple-gradient');
     ripple.appendChild(gradient);
 
+    this.#resizeObserver.observe(ripple);
+
     queueMicrotask(async () => {
       gradient.animate(fadeIn, {
         duration: 1_000,
@@ -106,6 +127,7 @@ export class RippleDirective implements OnDestroy {
         easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
         fill: 'forwards',
       }).finished;
+
       this.destroy();
     });
 
@@ -114,6 +136,7 @@ export class RippleDirective implements OnDestroy {
 
   private destroy() {
     if (this.#ripple) {
+      this.#resizeObserver.disconnect();
       this.#ripple.remove();
       this.#ripple = null;
     }
