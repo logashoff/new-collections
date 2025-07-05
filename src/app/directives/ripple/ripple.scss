@@ -1,5 +1,3 @@
-@use 'common' as common;
-
 .ripple {
   container-type: size;
   container-name: ripple;
@@ -35,11 +33,5 @@
     translate: 0 -50%;
     top: 50%;
     aspect-ratio: 1 / 1;
-  }
-}
-
-@container ripple (orientation: landscape) {
-  .ripple .ripple-gradient {
-    scale: 8 1;
   }
 }

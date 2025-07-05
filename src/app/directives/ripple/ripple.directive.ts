@@ -10,6 +10,7 @@ import {
   OnDestroy,
   ViewEncapsulation,
 } from '@angular/core';
+import { clamp } from 'lodash-es';
 
 const fadeIn: Keyframe[] = [
   {
@@ -69,13 +70,14 @@ export class RippleDirective implements OnDestroy {
       },
     ] = entries;
 
-    const gradient: HTMLElement = target.querySelector('.ripple-gradient');
+    const gradient: HTMLElement = target.children[0] as HTMLElement;
     if (gradient) {
+      const ratio = width > height ? width / height : height / width;
+
       if (width > height) {
-        gradient.style.scale = null;
+        gradient.style.scale = `${clamp(ratio, 2, 8)} 1`;
       } else {
-        const ratio = height / width;
-        gradient.style.scale = `${ratio} ${2 * ratio}`;
+        gradient.style.scale = `${Math.max(ratio, 2)} ${2 * ratio}`;
       }
     }
   });
