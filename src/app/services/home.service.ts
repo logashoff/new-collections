@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, combineLatest, from, map, of, shareReplay, switchMap, take } from 'rxjs';
+import { Observable, combineLatest, defer, map, of, shareReplay, switchMap, take } from 'rxjs';
 
 import { SettingsService, TabService } from '../services';
 import { Devices, MostVisitedURL, Sessions, TabGroup, Tabs, Timeline, TopSites } from '../utils';
@@ -46,7 +46,7 @@ export class HomeService {
       take(1),
       switchMap((settings) => {
         if (typeof settings?.enableDevices === 'undefined' || settings?.enableDevices) {
-          return from(this.getDevices()).pipe(map((devices) => (devices?.length > 0 ? devices : null)));
+          return defer(() => this.getDevices()).pipe(map((devices) => (devices?.length > 0 ? devices : null)));
         }
 
         return of(null);
@@ -81,7 +81,7 @@ export class HomeService {
     this.topSites$ = this.#settings.settings$.pipe(
       switchMap((settings) => {
         if (typeof settings?.enableTopSites === 'undefined' || settings?.enableTopSites) {
-          return from(this.getTopSites()).pipe(
+          return defer(() => this.getTopSites()).pipe(
             map(
               (sites): TopSites =>
                 sites?.length > 0

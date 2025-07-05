@@ -10,6 +10,7 @@ import {
   OnDestroy,
   ViewEncapsulation,
 } from '@angular/core';
+import { clamp } from 'lodash-es';
 
 const fadeIn: Keyframe[] = [
   {
@@ -34,11 +35,9 @@ const rotate: Keyframe[] = [
     transform: 'rotate(0deg)',
   },
   {
-    transform: 'rotate(360deg)',
+    transform: 'rotate(450deg)',
   },
 ];
-
-const cubicEase = 'cubic-bezier(0.4, 0, 0.2, 1)';
 
 @Component({
   template: '',
@@ -62,6 +61,26 @@ export class RippleDirective implements OnDestroy {
   readonly ripple = input.required<boolean>();
 
   #ripple: HTMLElement;
+
+  readonly #resizeObserver = new ResizeObserver((entries) => {
+    const [
+      {
+        contentRect: { width, height },
+        target,
+      },
+    ] = entries;
+
+    const gradient: HTMLElement = target.children[0] as HTMLElement;
+    if (gradient) {
+      const ratio = width > height ? width / height : height / width;
+
+      if (width > height) {
+        gradient.style.scale = `${clamp(ratio, 2, 8)} 1`;
+      } else {
+        gradient.style.scale = `${Math.max(ratio, 2)} ${2 * ratio}`;
+      }
+    }
+  });
 
   constructor() {
     this.#styleLoader.load(RippleStylesLoader);
@@ -89,6 +108,8 @@ export class RippleDirective implements OnDestroy {
     gradient.classList.add('ripple-gradient');
     ripple.appendChild(gradient);
 
+    this.#resizeObserver.observe(ripple);
+
     queueMicrotask(async () => {
       gradient.animate(fadeIn, {
         duration: 1_000,
@@ -96,16 +117,16 @@ export class RippleDirective implements OnDestroy {
         fill: 'forwards',
       });
 
-      gradient.animate(fadeOut, {
-        duration: 4_000,
-        delay: 4_000,
-        easing: cubicEase,
+      gradient.animate(rotate, {
+        duration: 8_000,
+        easing: 'cubic-bezier(0.2, 0, 0, 1)',
         fill: 'forwards',
       });
 
-      await gradient.animate(rotate, {
-        duration: 8_000,
-        easing: cubicEase,
+      await gradient.animate(fadeOut, {
+        duration: 2_000,
+        delay: 6_000,
+        easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
         fill: 'forwards',
       }).finished;
 
@@ -117,6 +138,7 @@ export class RippleDirective implements OnDestroy {
 
   private destroy() {
     if (this.#ripple) {
+      this.#resizeObserver.disconnect();
       this.#ripple.remove();
       this.#ripple = null;
     }

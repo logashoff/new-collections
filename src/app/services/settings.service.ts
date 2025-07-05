@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { uniqBy } from 'lodash-es';
-import { BehaviorSubject, Observable, from, map, shareReplay, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, defer, map, shareReplay, switchMap } from 'rxjs';
 import { MostVisitedURL, Settings, StorageArea, copyStorage, getSettings, settingsStorageKey } from '../utils';
 
 /**
@@ -21,7 +21,7 @@ export class SettingsService {
    * Settings config
    */
   readonly settings$: Observable<Settings> = this.settingsSource$.pipe(
-    switchMap(() => from(getSettings())),
+    switchMap(() => defer(() => getSettings())),
     shareReplay(1)
   );
 
