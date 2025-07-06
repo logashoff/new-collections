@@ -14,10 +14,10 @@
   pointer-events: none;
 
   .ripple-gradient {
-    $_color1: #4498ff;
-    $_color2: #7eff22;
-    $_color3: #ffed48;
-    $_color4: #ff2d3e;
+    $_color1: light-dark(#ff0000, #4498ff);
+    $_color2: light-dark(#ffee00, #7eff22);
+    $_color3: light-dark(#00e80f, #ffed48);
+    $_color4: light-dark(#006aff, #ff2d3e);
 
     opacity: 0;
 
