@@ -101,6 +101,10 @@ export class SearchFormComponent implements OnInit {
 
   readonly #searchParams$ = this.#navService.paramsSearch$.pipe(takeUntilDestroyed(), shareReplay(1));
 
+  get rippleDelay(): number {
+    return Math.max(2_000, Math.random() * 8_000);
+  }
+
   constructor() {
     effect(() => {
       if (this.disabled()) {

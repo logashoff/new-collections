@@ -1,6 +1,9 @@
 @let hasActivated = hasActivated$ | async;
 
-<section class="controls-wrapper" [ripple]="!hasActivated">
+<section
+  class="controls-wrapper"
+  [ripple]="!hasActivated"
+  [rippleDelay]="rippleDelay">
   @let isActive = isActive$ | async;
 
   <form class="search-form" [formGroup]="formGroup">

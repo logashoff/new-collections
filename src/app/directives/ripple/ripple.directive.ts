@@ -60,6 +60,8 @@ export class RippleDirective implements OnDestroy {
    */
   readonly ripple = input.required<boolean>();
 
+  readonly rippleDelay = input<number>(0);
+
   #ripple: HTMLElement;
 
   readonly #resizeObserver = new ResizeObserver((entries) => {
@@ -111,21 +113,25 @@ export class RippleDirective implements OnDestroy {
     this.#resizeObserver.observe(ripple);
 
     queueMicrotask(async () => {
+      const delay = this.rippleDelay();
+
       gradient.animate(fadeIn, {
         duration: 1_000,
+        delay,
         easing: 'linear',
         fill: 'forwards',
       });
 
       gradient.animate(rotate, {
         duration: 8_000,
+        delay,
         easing: 'cubic-bezier(0.2, 0, 0, 1)',
         fill: 'forwards',
       });
 
       await gradient.animate(fadeOut, {
         duration: 2_000,
-        delay: 6_000,
+        delay: 6_000 + delay,
         easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
         fill: 'forwards',
       }).finished;
