@@ -116,7 +116,7 @@ export class RippleDirective implements OnDestroy {
       const delay = this.rippleDelay();
 
       gradient.animate(fadeIn, {
-        duration: 1_000,
+        duration: 2_000,
         delay,
         easing: 'linear',
         fill: 'forwards',
