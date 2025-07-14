@@ -1,10 +1,17 @@
 import { Routes } from '@angular/router';
 import { HomeService } from './services';
+import { IS_POPUP } from './utils';
 
 export const appRoutes: Routes = [
   {
     path: 'new-tab',
-    providers: [HomeService],
+    providers: [
+      HomeService,
+      {
+        provide: IS_POPUP,
+        useValue: false,
+      },
+    ],
     loadComponent: async () => {
       const { NewTabComponent } = await import('./components/new-tab/new-tab.component');
       return NewTabComponent;
@@ -24,6 +31,12 @@ export const appRoutes: Routes = [
       const { popupRoutes } = await import('./components/popup/popup.routes');
       return popupRoutes;
     },
+    providers: [
+      {
+        provide: IS_POPUP,
+        useValue: true,
+      },
+    ],
   },
   {
     path: 'options',

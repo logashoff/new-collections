@@ -18,6 +18,7 @@ import {
   GroupAction,
   GroupActions,
   GroupExpanded,
+  IS_POPUP,
   listItemAnimation,
   TabGroup,
   TabGroups,
@@ -59,9 +60,10 @@ import { TabListComponent } from '../tab-list/tab-list.component';
   ],
 })
 export class GroupsComponent {
+  readonly #isPopup = inject(IS_POPUP);
   readonly #navService = inject(NavService);
-  readonly #tabService = inject(TabService);
   readonly #settings = inject(SettingsService);
+  readonly #tabService = inject(TabService);
 
   readonly tabActions = input<Actions>();
   readonly groupActions = input<GroupActions>();
@@ -106,7 +108,7 @@ export class GroupsComponent {
   readonly isNaN = isNaN;
 
   get target(): Target {
-    return this.#navService.isPopup ? '_blank' : '_self';
+    return this.#isPopup ? '_blank' : '_self';
   }
 
   constructor() {

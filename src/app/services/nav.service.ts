@@ -30,14 +30,6 @@ export class NavService {
    */
   readonly pathChanges$: Observable<string>;
 
-  /**
-   * Checks is current nav state is popup.
-   * TODO: Does chrome API has extension type indicator?
-   */
-  get isPopup(): boolean {
-    return this.isActive('popup');
-  }
-
   constructor() {
     const url$ = this.#router.events.pipe(
       filter((events) => events?.type === EventType.NavigationEnd),

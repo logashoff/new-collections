@@ -1,3 +1,4 @@
+import { InjectionToken } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { SafeUrl } from '@angular/platform-browser';
@@ -420,3 +421,8 @@ export type Target = '_blank' | '_self';
 export const ESC_KEY_CODE = 'Escape';
 export const KEY_UP = 'keyup';
 export const KEY_DOWN = 'keydown';
+
+/**
+ * Indicates extension is running in popup
+ */
+export const IS_POPUP = new InjectionToken<boolean>('PopupToken');

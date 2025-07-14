@@ -1,6 +1,6 @@
 import { Directive, ElementRef, inject, input } from '@angular/core';
-import { BackgroundService, NavService } from '../services';
-import { addRecent, BrowserTab } from '../utils';
+import { BackgroundService } from '../services';
+import { addRecent, BrowserTab, IS_POPUP } from '../utils';
 
 /**
  * @description
@@ -17,7 +17,7 @@ import { addRecent, BrowserTab } from '../utils';
 export class RecentDirective {
   readonly #bgService = inject(BackgroundService);
   readonly #el = inject(ElementRef);
-  readonly #navService = inject(NavService);
+  readonly #isPopup = inject(IS_POPUP);
 
   readonly recent = input.required<BrowserTab>();
 
@@ -35,15 +35,13 @@ export class RecentDirective {
       } catch (error) {
         console.warn(error);
 
-        const { isPopup } = this.#navService;
-
-        if (isPopup) {
+        if (this.#isPopup) {
           event.preventDefault();
         }
 
         await addRecent(tabId);
 
-        if (isPopup) {
+        if (this.#isPopup) {
           this.#el.nativeElement.dispatchEvent(new MouseEvent('click', { ...event }));
         }
       }

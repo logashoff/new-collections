@@ -39,6 +39,7 @@ import {
   Actions,
   BrowserTab,
   BrowserTabs,
+  IS_POPUP,
   listItemAnimation,
   MIN_RECENT_DISPLAY,
   RecentMap,
@@ -85,6 +86,7 @@ const fuseOptions: IFuseOptions<BrowserTab> = {
 })
 export class SearchComponent implements OnInit {
   readonly #destroyRef = inject(DestroyRef);
+  readonly #isPopup = inject(IS_POPUP);
   readonly #keyService = inject<KeyService<ListItemComponent>>(KeyService);
   readonly #navService = inject(NavService);
   readonly #tabService = inject(TabService);
@@ -113,7 +115,7 @@ export class SearchComponent implements OnInit {
   deviceTabs$: Observable<BrowserTabs>;
 
   get target(): Target {
-    return this.#navService.isPopup ? '_blank' : '_self';
+    return this.#isPopup ? '_blank' : '_self';
   }
 
   private listItems = viewChildren(ListItemComponent);
