@@ -27,14 +27,18 @@ export async function restoreTabs(tabs: BrowserTabs, label?: string) {
     )
   );
 
-  const groupId = await chrome.tabs.group({
-    tabIds: createdTabs.map(({ id }) => id),
-  });
+  if (createdTabs.length > 0) {
+    const [{ id: tabId }] = createdTabs;
 
-  await chrome.tabGroups.update(groupId, {
-    collapsed: false,
-    title: label,
-  });
+    const groupId = await chrome.tabs.group({
+      tabIds: [tabId, ...createdTabs.splice(1).map(({ id }) => id)],
+    });
+
+    await chrome.tabGroups.update(groupId, {
+      collapsed: false,
+      title: label,
+    });
+  }
 }
 
 /**
