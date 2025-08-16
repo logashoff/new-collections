@@ -347,20 +347,6 @@ export class TabService {
           );
 
           await this.save();
-
-          const tabsLen = tabs.length;
-          const messageRef = this.#message.open(
-            translate(tabsLen > 1 ? 'itemsAddedCount' : 'itemAdded', tabsLen.toString()),
-            ActionIcon.Undo,
-            'undo'
-          );
-
-          messageRef.afterDismissed().subscribe(({ dismissedByAction: revert }) => {
-            if (revert) {
-              group.removeTabs(tabs);
-              this.save();
-            }
-          });
         }
       } else {
         this.#message.open(translate('tabsExistError'));

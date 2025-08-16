@@ -82,19 +82,8 @@
   "invalidTabList": {
     "message": "Open tabs are invalid"
   },
-  "itemAdded": {
-    "message": "Item added"
-  },
   "itemRemoved": {
     "message": "Item removed"
-  },
-  "itemsAddedCount": {
-    "message": "Added $count$ items",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
   },
   "itemsRemovedCount": {
     "message": "Removed $count$ items",
