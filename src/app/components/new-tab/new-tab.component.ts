@@ -5,7 +5,7 @@ import { Observable, combineLatest, map, shareReplay } from 'rxjs';
 
 import { KeyListenerDirective } from '../../directives';
 import { HomeService, KeyService, NavService } from '../../services';
-import { TopSites, routeAnimations, scrollTop } from '../../utils';
+import { TopSites, scrollTop } from '../../utils';
 import { SearchFormComponent } from '../search-form/search-form.component';
 import { TopSitesComponent } from '../top-sites/top-sites.component';
 
@@ -20,7 +20,6 @@ import { TopSitesComponent } from '../top-sites/top-sites.component';
   styleUrls: ['./new-tab.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  animations: [routeAnimations],
   imports: [AsyncPipe, RouterOutlet, SearchFormComponent, TopSitesComponent],
   providers: [KeyService],
 })
@@ -28,7 +27,6 @@ export class NewTabComponent extends KeyListenerDirective implements OnInit {
   readonly #homeService = inject(HomeService);
   readonly #navService = inject(NavService);
 
-  readonly urlChanges$: Observable<string> = this.#navService.pathChanges$;
   readonly topSites$: Observable<TopSites> = this.#homeService.topSites$;
   readonly hasData$: Observable<boolean> = this.#homeService.hasAnyData$;
 

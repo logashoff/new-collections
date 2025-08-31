@@ -15,7 +15,7 @@
     <mat-card class="search-container">
       <nc-tab-list>
         @for (tab of deviceTabs; track tab) {
-          <nc-list-item [@listItemAnimation] [tab]="tab" />
+          <nc-list-item [tab]="tab" />
         }
       </nc-tab-list>
     </mat-card>
@@ -44,7 +44,6 @@
       <nc-tab-list>
         @for (tab of _sourceTabs; track tab) {
           <nc-list-item
-            [@listItemAnimation]
             [tab]="tab"
             [actions]="
               recentMap?.has(tab.id) && !searchQuery

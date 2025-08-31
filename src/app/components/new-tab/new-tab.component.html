@@ -11,6 +11,6 @@
   (activated)="navigate('search')"
   (canceled)="navigate('main')"
   (blurred)="onBlur()" />
-<section class="content" [@routeAnimations]="urlChanges$ | async">
+<section class="content">
   <router-outlet />
 </section>

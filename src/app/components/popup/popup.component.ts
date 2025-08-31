@@ -5,7 +5,7 @@ import { map, Observable, shareReplay } from 'rxjs';
 
 import { KeyListenerDirective } from '../../directives';
 import { KeyService, NavService, TabService } from '../../services';
-import { routeAnimations, scrollTop } from '../../utils';
+import { scrollTop } from '../../utils';
 import { SearchFormComponent } from '../search-form/search-form.component';
 
 /**
@@ -19,15 +19,12 @@ import { SearchFormComponent } from '../search-form/search-form.component';
   styleUrl: './popup.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  animations: [routeAnimations],
   imports: [AsyncPipe, RouterOutlet, SearchFormComponent],
   providers: [KeyService],
 })
 export class PopupComponent extends KeyListenerDirective {
   readonly #navService = inject(NavService);
   readonly #tabService = inject(TabService);
-
-  readonly urlChanges$ = this.#navService.pathChanges$.pipe(shareReplay(1));
   readonly hasData$: Observable<boolean> = this.#tabService.groupsTimeline$.pipe(
     map((timeline) => timeline?.length > 0),
     shareReplay(1)

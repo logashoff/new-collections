@@ -19,7 +19,6 @@ import {
   GroupActions,
   GroupExpanded,
   IS_POPUP,
-  listItemAnimation,
   TabGroup,
   TabGroups,
   TabsByHostname,
@@ -41,7 +40,6 @@ import { TabListComponent } from '../tab-list/tab-list.component';
   styleUrl: './groups.component.scss',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [listItemAnimation],
   imports: [
     AsyncPipe,
     CdkDrag,

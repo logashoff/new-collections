@@ -53,7 +53,6 @@
             @for (tab of tabs; track tab.id; let i = $index) {
               <nc-list-item
                 cdkDrag
-                [@listItemAnimation]
                 [cdkDragDisabled]="dragDisabled()"
                 [tab]="tab"
                 [actions]="tabActions()"

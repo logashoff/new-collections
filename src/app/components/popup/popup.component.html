@@ -6,6 +6,6 @@
   (activated)="navigate('search')"
   (canceled)="navigate('main')"
   (blurred)="onBlur()" />
-<div class="content" [@routeAnimations]="urlChanges$ | async">
+<div class="content">
   <router-outlet />
 </div>

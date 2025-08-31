@@ -40,7 +40,6 @@ import {
   BrowserTab,
   BrowserTabs,
   IS_POPUP,
-  listItemAnimation,
   MIN_RECENT_DISPLAY,
   RecentMap,
   removeRecent,
@@ -70,7 +69,6 @@ const fuseOptions: IFuseOptions<BrowserTab> = {
   styleUrl: './search.component.scss',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [listItemAnimation],
   imports: [
     AsyncPipe,
     EmptyComponent,
