@@ -14,8 +14,7 @@ nc-search-form {
   top: 0;
 
   color: var(--nc-primary-text-color);
-  background-color: rgba(from $_app-background r g b / 0.75);
-  backdrop-filter: blur(20px) grayscale(1);
+  background-color: $_app-background;
 
   &.is-focused .controls-wrapper {
     $_dark-focus: var(--mat-sys-surface-variant);
@@ -119,8 +118,7 @@ nc-search-form {
     $_control-background-color: var(--mat-sys-surface-container-low);
     $_border-color: var(--mat-sys-surface-container-highest);
 
-    background-color: rgba(from $_app-background r g b / 0.25);
-    backdrop-filter: blur(20px) saturate(2);
+    background-color: $_app-background;
 
     .controls-wrapper {
       background-color: $_control-background-color;
