@@ -20,9 +20,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { distinctUntilChanged, map, shareReplay, takeWhile } from 'rxjs';
+import { distinctUntilChanged, map, shareReplay } from 'rxjs';
 
-import { RippleDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
 import { CollectionsService, NavService } from '../../services';
 import { Action, ESC_KEY_CODE, scrollTop } from '../../utils';
@@ -48,7 +47,6 @@ interface SearchForm {
     MatInputModule,
     MatTooltipModule,
     ReactiveFormsModule,
-    RippleDirective,
     TranslatePipe,
   ],
   host: {
@@ -92,18 +90,9 @@ export class SearchFormComponent implements OnInit {
     shareReplay(1)
   );
 
-  readonly hasActivated$ = this.isActive$.pipe(
-    takeWhile((active) => !active, true),
-    shareReplay(1)
-  );
-
   readonly #activated = computed<boolean>(() => this.focused() && !this.isActive);
 
   readonly #searchParams$ = this.#navService.paramsSearch$.pipe(takeUntilDestroyed(), shareReplay(1));
-
-  get rippleDelay(): number {
-    return Math.max(2_000, Math.random() * 8_000);
-  }
 
   constructor() {
     effect(() => {

@@ -103,12 +103,6 @@ nc-search-form {
       padding: 0;
       line-height: 0;
     }
-
-    .ripple {
-      $_offset: 2px;
-      border-radius: math.div($_height + $_offset, 2);
-      inset: -$_offset;
-    }
   }
 }
 
