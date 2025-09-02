@@ -28,6 +28,7 @@ nc-popup {
   .content {
     @include common.vertical-flex;
     margin: 0 $padding $padding;
+    view-transition-name: content;
   }
 
   .search-form .controls-wrapper {

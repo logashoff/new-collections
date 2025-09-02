@@ -20,6 +20,7 @@ nc-new-tab {
 
   .content {
     @include common.vertical-flex;
+    view-transition-name: content;
   }
 
   .top-sites {
