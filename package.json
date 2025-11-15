@@ -65,7 +65,7 @@
     "stylelint": "^16.25.0",
     "stylelint-config-sass-guidelines": "^12.1.0",
     "typescript": "5.9.3",
-    "vitest": "^4.0.8",
+    "vitest": "3.2.4",
     "vitest-puppeteer": "^11.0.3"
   }
 }
