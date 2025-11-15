@@ -64,13 +64,13 @@ export async function saveCollections(collections: Collections): Promise<void> {
 
 export async function getFaviconStore(): Promise<FaviconHost> {
   const storage = await getStorage();
-  const favicon = await storage.get(faviconStorageKey);
+  const favicon: { [faviconStorageKey]: FaviconHost } = await storage.get(faviconStorageKey);
   return favicon[faviconStorageKey] ?? {};
 }
 
 export async function getRecentTabs(): Promise<RecentTabs> {
   const storage = await getStorage();
-  const recentStore = await storage.get(recentKey);
+  const recentStore: { [recentKey]: RecentTabs } = await storage.get(recentKey);
   return recentStore[recentKey];
 }
 

@@ -77,7 +77,7 @@ export type ExpandedGroupsByUrl = { [url: string]: GroupExpanded };
 
 export type TabId = number;
 
-export type RecentTabs = { [tabId: TabId]: number };
+export type RecentTabs = Record<TabId, number>;
 export type RecentMap = Map<TabId, number>;
 
 export interface RouterParams extends Params {
@@ -110,7 +110,7 @@ export type SyncTabs = SyncTab[];
 /**
  * Map hostname to icon's URL
  */
-export type FaviconHost = { [hostname: string]: string };
+export type FaviconHost = Record<string, string>;
 
 /**
  * Favicon data in sync storage

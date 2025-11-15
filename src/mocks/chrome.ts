@@ -5,14 +5,13 @@ export class MockStorageArea implements Partial<chrome.storage.StorageArea> {
   #storage = {};
 
   MAX_ITEMS = 0;
-  MAX_SUSTAINED_WRITE_OPERATIONS_PER_MINUTE = 0;
+  readonly  MAX_SUSTAINED_WRITE_OPERATIONS_PER_MINUTE = 1000000;
   MAX_WRITE_OPERATIONS_PER_HOUR = 0;
   MAX_WRITE_OPERATIONS_PER_MINUTE = 0;
-  QUOTA_BYTES = 0;
+  readonly QUOTA_BYTES: 10485760 | 102400 = 10485760;
   QUOTA_BYTES_PER_ITEM = 0;
 
-  onChanged: chrome.storage.StorageAreaChangedEvent;
-
+  onChanged: chrome.storage.StorageArea['onChanged']
   accessLevel: chrome.storage.AccessLevel;
 
   constructor(storage = {}) {
@@ -49,7 +48,7 @@ export class MockStorageArea implements Partial<chrome.storage.StorageArea> {
     return Object.keys(this.#storage);
   }
 
-  async getBytesInUse(keys?: unknown): Promise<number> {
+  async getBytesInUse(keys?: unknown): Promise<0> {
     if (!keys) {
       return 0;
     }
@@ -92,7 +91,7 @@ export const getBrowserApi = (browserTabs: Tabs = [], storage = new MockStorageA
         callback(storage?.['recent'] ?? {}, 'sync');
       },
     },
-  },
+  } as Partial<typeof chrome.storage>,
   tabs: {
     query: async () => browserTabs,
     create: async (config): Promise<Tab> => ({
