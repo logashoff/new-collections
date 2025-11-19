@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { Field, form, required } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,9 +12,9 @@ import type { BrowserTab } from '../../utils/models';
 /**
  * Rename form
  */
-interface RenameForm {
-  title: FormControl<string>;
-  url: FormControl<string>;
+interface RenameModel {
+  title: string;
+  url: string;
 }
 
 /**
@@ -26,23 +27,39 @@ interface RenameForm {
   templateUrl: './rename-dialog.component.html',
   styleUrl: './rename-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, TranslatePipe],
+  imports: [
+    Field,
+    MatButtonModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    TranslatePipe,
+  ],
 })
 export class RenameDialogComponent implements OnInit {
   readonly #dialogRef = inject<MatDialogRef<RenameDialogComponent, BrowserTab>>(MatDialogRef);
   readonly #tab = inject<BrowserTab>(MAT_DIALOG_DATA);
 
-  formGroup: FormGroup<RenameForm>;
+  readonly renameModel = signal<RenameModel>({
+    title: '',
+    url: '',
+  });
 
-  ngOnInit(): void {
-    this.formGroup = new FormGroup<RenameForm>({
-      title: new FormControl<string>(this.#tab.title, Validators.required),
-      url: new FormControl<string>(this.#tab.url, Validators.required),
-    });
+  readonly renameForm = form(this.renameModel, (schemaPath) => {
+    required(schemaPath.title);
+    required(schemaPath.url);
+  });
+
+  ngOnInit() {
+    this.renameForm.title().value.set(this.#tab.title);
+    this.renameForm.url().value.set(this.#tab.url);
   }
 
-  save(): void {
-    const { title, url } = this.formGroup.value;
+  save(event: Event): void {
+    event.preventDefault();
+
+    const { title, url } = this.renameModel();
     this.#dialogRef.close({
       ...this.#tab,
       title,

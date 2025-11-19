@@ -47,6 +47,7 @@ export default defineConfig([
       '@angular-eslint/directive-selector': [
         'error',
         {
+          prefix: '',
           style: 'camelCase',
           type: 'attribute',
         },
