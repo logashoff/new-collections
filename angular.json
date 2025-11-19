@@ -116,7 +116,7 @@
           "options": {
             "tsConfig": "tsconfig.spec.json",
             "buildTarget": "::development",
-            "codeCoverage": true,
+            "coverage": true,
             "watch": false,
             "runner": "vitest"
           }

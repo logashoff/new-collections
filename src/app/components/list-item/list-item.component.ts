@@ -10,6 +10,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatRipple } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
@@ -34,7 +35,6 @@ import {
   Target,
 } from '../../utils';
 import { ChipComponent } from '../chip/chip.component';
-import { MatRipple } from '@angular/material/core';
 
 /**
  * @description

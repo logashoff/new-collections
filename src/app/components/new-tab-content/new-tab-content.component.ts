@@ -64,7 +64,6 @@ export class NewTabContentComponent {
   ];
 
   readonly devicesTimeline$: Observable<Timeline> = this.#homeService.devicesTimeline$;
-  readonly hasAnyData$: Observable<boolean> = this.#homeService.hasAnyData$;
   readonly timeline$: Observable<Timeline> = this.#homeService.timeline$;
 
   readonly tabActions: Actions = [Action.Edit, Action.Delete];

@@ -7,14 +7,14 @@ import {
   ElementRef,
   inject,
   input,
-  OnInit,
   output,
   signal,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { ReactiveFormsModule } from '@angular/forms';
+import { disabled, Field, form } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,8 +29,8 @@ import { Action, ESC_KEY_CODE, scrollTop } from '../../utils';
 /**
  * Search input form.
  */
-interface SearchForm {
-  search: FormControl<string>;
+interface SearchModel {
+  search: string;
 }
 
 @Component({
@@ -41,6 +41,7 @@ interface SearchForm {
   encapsulation: ViewEncapsulation.None,
   imports: [
     AsyncPipe,
+    Field,
     MatButtonModule,
     MatFormFieldModule,
     MatIconModule,
@@ -56,7 +57,7 @@ interface SearchForm {
     '[class.is-focused]': 'focused()',
   },
 })
-export class SearchFormComponent implements OnInit {
+export class SearchFormComponent {
   readonly #collectionsService = inject(CollectionsService);
   readonly #navService = inject(NavService);
 
@@ -69,12 +70,14 @@ export class SearchFormComponent implements OnInit {
   private readonly searchInput = viewChild.required<ElementRef>('searchInput');
 
   readonly Action = Action;
-  readonly #searchControl = new FormControl<string>('');
-  readonly formGroup = new FormGroup<SearchForm>({
-    search: this.#searchControl,
+
+  readonly searchModel = signal<SearchModel>({
+    search: '',
   });
 
-  readonly #formValues$ = this.formGroup.valueChanges.pipe(takeUntilDestroyed(), shareReplay(1));
+  readonly searchForm = form(this.searchModel, (schemaPath) => {
+    disabled(schemaPath.search, () => this.disabled());
+  });
 
   /**
    * Indicates search input is focused
@@ -92,35 +95,34 @@ export class SearchFormComponent implements OnInit {
 
   readonly #activated = computed<boolean>(() => this.focused() && !this.isActive);
 
-  readonly #searchParams$ = this.#navService.paramsSearch$.pipe(takeUntilDestroyed(), shareReplay(1));
-
   constructor() {
-    effect(() => {
-      if (this.disabled()) {
-        this.#searchControl.disable();
-      } else {
-        this.#searchControl.enable();
-      }
-
+    effect(async () => {
       if (this.#activated()) {
         this.activated.emit();
       }
     });
-  }
 
-  ngOnInit() {
-    this.#searchParams$.subscribe((value) =>
-      this.#searchControl.setValue(value, {
-        emitEvent: false,
-      })
-    );
+    this.#navService.paramsSearch$.pipe(distinctUntilChanged(), takeUntilDestroyed()).subscribe((query) => {
+      const { value } = this.searchForm.search();
 
-    this.#formValues$
+      if (typeof query === 'string' && value() !== query) {
+        value.set(query);
+      } else if (!query) {
+        value.set('');
+      }
+    });
+
+    toObservable(this.searchModel)
       .pipe(
+        takeUntilDestroyed(),
         map(({ search }) => search),
         distinctUntilChanged()
       )
-      .subscribe((search) => this.searchChange(search));
+      .subscribe((search) => {
+        if (this.isActive) {
+          this.searchChange(search);
+        }
+      });
   }
 
   onKeyUp(e: KeyboardEvent) {
@@ -151,5 +153,9 @@ export class SearchFormComponent implements OnInit {
   async searchChange(value: string) {
     await this.#navService.search(value);
     scrollTop({ top: 0 });
+  }
+
+  onSubmit(e: Event) {
+    e.preventDefault()
   }
 }

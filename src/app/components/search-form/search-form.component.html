@@ -1,7 +1,7 @@
 <section class="controls-wrapper">
   @let isActive = isActive$ | async;
 
-  <form class="search-form" [formGroup]="formGroup">
+  <form (submit)="onSubmit($event)" class="search-form">
     <mat-form-field class="search-field" appearance="fill">
       <mat-icon matPrefix>search</mat-icon>
       <input
@@ -9,7 +9,7 @@
         type="text"
         tabindex="1"
         matInput
-        formControlName="search"
+        [field]="searchForm.search"
         (focus)="focused.set(true)"
         (blur)="onBlur()"
         autocomplete="off"

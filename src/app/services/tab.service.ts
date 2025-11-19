@@ -1,8 +1,8 @@
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { format, isSameDay, isSameWeek, isSameYear, subDays } from 'date-fns';
 import { remove, uniqBy } from 'lodash-es';
-import { BehaviorSubject, Observable, firstValueFrom, lastValueFrom } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, lastValueFrom, Observable } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
 
 import type { TabsSelectorComponent } from '../components';
@@ -12,17 +12,6 @@ import {
   BrowserTabs,
   Collection,
   Collections,
-  MessageRef,
-  RecentMap,
-  StorageChanges,
-  TabGroup,
-  TabGroups,
-  TabId,
-  Tabs,
-  TabsByHostname,
-  Timeline,
-  TimelineElement,
-  UUID,
   getCollections,
   getFaviconStore,
   getHostnameGroup,
@@ -30,11 +19,22 @@ import {
   getUrlHost,
   ignoreUrlsRegExp,
   isUuid,
+  MessageRef,
   recentKey,
+  RecentMap,
   removeRecent,
   saveCollections,
+  StorageChanges,
   syncToTabs,
+  TabGroup,
+  TabGroups,
+  TabId,
+  Tabs,
+  TabsByHostname,
+  Timeline,
+  TimelineElement,
   translate,
+  UUID,
   uuid,
 } from '../utils';
 import { MessageService } from './message.service';

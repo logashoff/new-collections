@@ -1,7 +1,15 @@
 import { DecimalPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation, computed, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  OnInit,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,7 +18,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { shareReplay, take } from 'rxjs';
+import { take } from 'rxjs';
+import { Field, form } from '@angular/forms/signals';
 
 import { TranslatePipe } from '../../pipes';
 import { CollectionsService, SettingsService } from '../../services';
@@ -19,26 +28,26 @@ import { Action, ActionIcon, CollectionActions, MostVisitedURL, translate } from
 /**
  * Options form.
  */
-interface OptionsForm {
+interface OptionsModel {
   /**
    * Show/hide synced devices on new tab page.
    */
-  enableDevices: FormControl<boolean>;
+  enableDevices: boolean;
 
   /**
    * Show/hide top site on new tab page.
    */
-  enableTopSites: FormControl<boolean>;
+  enableTopSites: boolean;
 
   /**
    * List of site to hide from top sites list.
    */
-  ignoreTopSites: FormArray<FormControl<MostVisitedURL>>;
+  ignoreTopSites: MostVisitedURL[];
 
   /**
    * Use synced storage Chrome feature.
    */
-  syncStorage: FormControl<boolean>;
+  syncStorage: boolean;
 }
 
 /**
@@ -54,6 +63,7 @@ interface OptionsForm {
   encapsulation: ViewEncapsulation.None,
   imports: [
     DecimalPipe,
+    Field,
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
@@ -86,11 +96,6 @@ export class OptionsComponent implements OnInit {
     },
   ];
 
-  readonly #devicesControl = new FormControl<boolean>(true);
-  readonly sitesControl = new FormControl<boolean>(true);
-  readonly syncStorage = new FormControl<boolean>(true);
-  readonly ignoreSitesControl = new FormArray<FormControl<MostVisitedURL>>([]);
-
   /**
    * Sync storage used
    */
@@ -101,14 +106,23 @@ export class OptionsComponent implements OnInit {
    */
   readonly storageUsage = computed<number>(() => (this.#storageUsageSource() / chrome.storage.sync.QUOTA_BYTES) * 100);
 
-  readonly formGroup = new FormGroup<OptionsForm>({
-    enableDevices: this.#devicesControl,
-    enableTopSites: this.sitesControl,
-    ignoreTopSites: this.ignoreSitesControl,
-    syncStorage: this.syncStorage,
+  readonly optionsModel = signal<OptionsModel>({
+    enableDevices: false,
+    enableTopSites: false,
+    ignoreTopSites: [],
+    syncStorage: false,
   });
 
-  readonly #formValues$ = this.formGroup.valueChanges.pipe(takeUntilDestroyed(), shareReplay(1));
+  readonly optionsForm = form(this.optionsModel);
+
+  constructor() {
+    effect(async () => {
+      await this.#settings.update(this.optionsModel());
+
+      const storageBytes = await this.#settings.getUsageBytes();
+      this.#storageUsageSource.set(storageBytes);
+    });
+  }
 
   async ngOnInit() {
     this.#storageUsageSource.set(await this.#settings.getUsageBytes());
@@ -119,35 +133,38 @@ export class OptionsComponent implements OnInit {
           settings.enableTopSites = true;
         }
 
-        this.sitesControl.setValue(settings.enableTopSites);
+        this.optionsForm.enableTopSites().value.set(settings.enableTopSites);
 
         if (typeof settings.syncStorage === 'undefined') {
           settings.syncStorage = true;
         }
 
-        this.syncStorage.setValue(settings.syncStorage);
+        this.optionsForm.syncStorage().value.set(settings.syncStorage);
 
         if (typeof settings.enableDevices === 'undefined') {
           settings.enableDevices = true;
         }
 
-        this.#devicesControl.setValue(settings.enableDevices);
+        this.optionsForm.enableDevices().value.set(settings.enableDevices);
 
         if (settings.ignoreTopSites?.length > 0) {
-          settings.ignoreTopSites.forEach((site) => this.ignoreSitesControl.push(new FormControl(site)));
+          this.optionsForm.ignoreTopSites().value.set(settings.ignoreTopSites);
         }
       }
-
-      this.#formValues$.subscribe(async (settings) => {
-        await this.#settings.update(settings);
-
-        const storageBytes = await this.#settings.getUsageBytes();
-        this.#storageUsageSource.set(storageBytes);
-      });
     });
   }
 
   handleAction(action: Action) {
     this.#collectionsService.handleAction(action);
+  }
+
+  removeSiteAt(index = 0) {
+    const sites = this.optionsModel().ignoreTopSites;
+    sites.splice(index, 1);
+    this.optionsForm.ignoreTopSites().value.set(sites);
+  }
+
+  onSubmit(event: Event): void {
+    event.preventDefault();
   }
 }
