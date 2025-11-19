@@ -1,4 +1,4 @@
-<form [formGroup]="formGroup">
+<form (submit)="onSubmit($event)">
   <mat-card>
     <mat-card-content>
       <section class="section">
@@ -39,42 +39,43 @@
       </section>
       <section class="section toggles">
         <mat-slide-toggle
-          formControlName="syncStorage"
+          [field]="optionsForm.syncStorage"
           data-testid="settings-toggle-sync">
           <div class="toggle-label">{{ 'syncCollections' | translate }}</div>
           <mat-hint>{{ 'hintSyncCollections' | translate }}</mat-hint>
         </mat-slide-toggle>
         <mat-slide-toggle
-          formControlName="enableDevices"
+          [field]="optionsForm.enableDevices"
           data-testid="settings-toggle-devices">
           <div class="toggle-label">{{ 'enableDevices' | translate }}</div>
           <mat-hint>{{ 'hintShowDevices' | translate }}</mat-hint>
         </mat-slide-toggle>
         <mat-slide-toggle
-          formControlName="enableTopSites"
+          [field]="optionsForm.enableTopSites"
           data-testid="settings-toggle-sites">
           <div class="toggle-label">{{ 'enableSites' | translate }}</div>
           <mat-hint>{{ 'hintShowTopSites' | translate }}</mat-hint>
         </mat-slide-toggle>
       </section>
-      @if (ignoreSitesControl.controls?.length > 0 && sitesControl.value) {
+      @if (
+        optionsModel().ignoreTopSites?.length > 0 &&
+        optionsModel().enableTopSites
+      ) {
         <section class="section">
           <h3 class="storage-heading">{{ 'ignoredSites' | translate }}</h3>
           <mat-hint>{{ 'hintIgnoredSites' | translate }}</mat-hint>
           <mat-list role="list" class="list">
             @for (
-              ignoredSite of ignoreSitesControl.controls;
+              ignoredSite of optionsModel().ignoreTopSites;
               track ignoredSite;
               let i = $index
             ) {
               <mat-list-item role="listitem">
                 <div class="list-item">
                   <span class="list-item-label">
-                    {{ ignoredSite.value?.title }}
+                    {{ ignoredSite?.title }}
                   </span>
-                  <button
-                    matIconButton
-                    (click)="ignoreSitesControl.removeAt(i)">
+                  <button type="button" matIconButton (click)="removeSiteAt(i)">
                     <mat-icon>close</mat-icon>
                   </button>
                 </div>
