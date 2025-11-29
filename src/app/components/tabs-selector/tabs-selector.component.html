@@ -1,7 +1,4 @@
-<form
-  [formGroup]="formGroup"
-  (ngSubmit)="save()"
-  data-testid="tab-selector-form">
+<form (submit)="save($event)" data-testid="tab-selector-form">
   <mat-dialog-content class="container">
     <div class="header-container">
       <h2 class="heading">
@@ -22,7 +19,7 @@
     </div>
     <div class="list-container">
       <mat-selection-list
-        formControlName="list"
+        [field]="tabSelectorForm.list"
         data-testid="tab-selector-list">
         @let _groupClasses = groupClasses();
 
@@ -60,7 +57,7 @@
       type="submit"
       matButton="filled"
       color="primary"
-      [disabled]="!formGroup.valid"
+      [disabled]="tabSelectorForm().invalid()"
       data-testid="tab-selector-submit">
       {{ 'save' | translate }}
     </button>

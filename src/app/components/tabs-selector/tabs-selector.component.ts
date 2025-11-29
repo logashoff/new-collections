@@ -9,7 +9,9 @@ import {
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { ReactiveFormsModule } from '@angular/forms';
+import { Field, form, minLength, required } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -34,8 +36,8 @@ type GroupClasses = Map<number, string[]>;
 /**
  * Form for selecting new tabs to add to existing or new group.
  */
-interface TabSelectorForm {
-  list: FormControl<Tabs>;
+interface TabSelectorModel {
+  list: Tabs;
 }
 
 /**
@@ -51,6 +53,7 @@ interface TabSelectorForm {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     AsyncPipe,
+    Field,
     ChipComponent,
     FaviconPipe,
     HostnamePipe,
@@ -73,17 +76,22 @@ export class TabsSelectorComponent implements AfterViewInit {
   readonly #tabs = inject<Tabs>(MAT_DIALOG_DATA);
   readonly tabs = signal<Tabs>(this.#tabs);
 
+  readonly tabSelectorModel = signal<TabSelectorModel>({
+    list: [],
+  });
+
   /**
    * Root group form.
    */
-  readonly formGroup = new FormGroup<TabSelectorForm>({
-    list: new FormControl<Tabs>([], [Validators.required, Validators.minLength(1)]),
+  readonly tabSelectorForm = form(this.tabSelectorModel, (schemaPath) => {
+    required(schemaPath.list);
+    minLength(schemaPath.list, 1);
   });
 
   /**
    * List of checked items.
    */
-  private readonly checkList$: Observable<Tabs> = this.formGroup.valueChanges.pipe(
+  private readonly checkList$: Observable<Tabs> = toObservable(this.tabSelectorModel).pipe(
     filter((values) => Boolean(values)),
     map(({ list }) => list),
     shareReplay(1)
@@ -119,10 +127,6 @@ export class TabsSelectorComponent implements AfterViewInit {
    */
   private listComponent = viewChild(MatSelectionList);
 
-  private get list(): FormControl<Tabs> {
-    return this.formGroup.get('list') as FormControl;
-  }
-
   readonly groupClasses = signal<GroupClasses>(null);
 
   constructor() {
@@ -154,7 +158,7 @@ export class TabsSelectorComponent implements AfterViewInit {
     const activeTab = this.tabs().filter((tab) => tab.active);
 
     if (activeTab?.length > 0) {
-      this.list.setValue(activeTab);
+      this.tabSelectorForm.list().value.set(activeTab);
     }
   }
 
@@ -169,7 +173,9 @@ export class TabsSelectorComponent implements AfterViewInit {
   /**
    * Handles form submit.
    */
-  save() {
-    this.#dialogRef.close(this.list.value);
+  save(event: Event) {
+    event.preventDefault();
+
+    this.#dialogRef.close(this.tabSelectorModel().list);
   }
 }
