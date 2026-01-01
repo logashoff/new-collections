@@ -1,7 +1,8 @@
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ActivatedRoute, EventType, Router, RouterEvent } from '@angular/router';
-import { Observable, distinctUntilChanged, filter, map, shareReplay, startWith } from 'rxjs';
-import { RouterExtras, RouterParams, createUrl } from '../utils';
+import { distinctUntilChanged, filter, map, Observable, shareReplay, startWith } from 'rxjs';
+
+import { createUrl, RouterExtras, RouterParams } from '../utils';
 
 @Injectable({
   providedIn: 'root',

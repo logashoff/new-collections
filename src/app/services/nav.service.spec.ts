@@ -1,11 +1,11 @@
+import { provideZonelessChangeDetection } from '@angular/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { EMPTY, firstValueFrom, of } from 'rxjs';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 
 import { NavService } from './nav.service';
-import { describe, beforeEach, it, expect, vitest } from 'vitest';
-import { provideZonelessChangeDetection } from '@angular/core';
 
 describe('NavService', () => {
   let spectator: SpectatorService<NavService>;

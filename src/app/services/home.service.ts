@@ -1,5 +1,5 @@
-import { Injectable, inject } from '@angular/core';
-import { Observable, combineLatest, defer, map, of, shareReplay, switchMap, take } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { combineLatest, defer, map, Observable, of, shareReplay, switchMap, take } from 'rxjs';
 
 import { SettingsService, TabService } from '../services';
 import { Devices, MostVisitedURL, Sessions, TabGroup, Tabs, Timeline, TopSites } from '../utils';
@@ -72,7 +72,6 @@ export class HomeService {
               ),
           }));
         }
-
         return null;
       }),
       shareReplay(1)
@@ -90,7 +89,6 @@ export class HomeService {
             )
           );
         }
-
         return of(null);
       }),
       shareReplay(1)

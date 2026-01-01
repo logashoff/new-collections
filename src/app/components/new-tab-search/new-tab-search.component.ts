@@ -1,10 +1,10 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { Observable, map, shareReplay } from 'rxjs';
+import { map, Observable, shareReplay } from 'rxjs';
 
 import { HomeService, NavService, TabService } from '../../services';
-import { BrowserTab, BrowserTabs } from '../../utils';
 import { SearchComponent } from '../search/search.component';
+import { BrowserTab, BrowserTabs } from '../../utils';
 
 @Component({
   selector: 'nc-new-tab-search',

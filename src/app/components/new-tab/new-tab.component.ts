@@ -1,13 +1,13 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Observable, combineLatest, map, shareReplay } from 'rxjs';
+import { combineLatest, map, Observable, shareReplay } from 'rxjs';
 
 import { KeyListenerDirective } from '../../directives';
-import { HomeService, KeyService, NavService } from '../../services';
-import { TopSites, scrollTop } from '../../utils';
 import { SearchFormComponent } from '../search-form/search-form.component';
+import { HomeService, KeyService, NavService } from '../../services';
 import { TopSitesComponent } from '../top-sites/top-sites.component';
+import { scrollTop, TopSites } from '../../utils';
 
 /**
  * @description
