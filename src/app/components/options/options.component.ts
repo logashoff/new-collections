@@ -19,7 +19,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { take } from 'rxjs';
-import { Field, form } from '@angular/forms/signals';
+import { FormField, form } from '@angular/forms/signals';
 
 import { TranslatePipe } from '../../pipes';
 import { CollectionsService, SettingsService } from '../../services';
@@ -63,7 +63,7 @@ interface OptionsModel {
   encapsulation: ViewEncapsulation.None,
   imports: [
     DecimalPipe,
-    Field,
+    FormField,
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,

@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
-import { disabled, Field, form } from '@angular/forms/signals';
+import { disabled, FormField, form } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -41,7 +41,7 @@ interface SearchModel {
   encapsulation: ViewEncapsulation.None,
   imports: [
     AsyncPipe,
-    Field,
+    FormField,
     MatButtonModule,
     MatFormFieldModule,
     MatIconModule,
@@ -156,6 +156,6 @@ export class SearchFormComponent {
   }
 
   onSubmit(e: Event) {
-    e.preventDefault()
+    e.preventDefault();
   }
 }

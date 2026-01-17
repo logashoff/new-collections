@@ -5,7 +5,7 @@
       <mat-label>{{ 'title' | translate }}</mat-label>
       <input
         type="text"
-        [field]="renameForm.title"
+        [formField]="renameForm.title"
         matInput
         autocomplete="off"
         cdkFocusInitial
@@ -16,7 +16,11 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label>{{ 'url' | translate }}</mat-label>
-      <input type="text" [field]="renameForm.url" matInput autocomplete="off" />
+      <input
+        type="text"
+        [formField]="renameForm.url"
+        matInput
+        autocomplete="off" />
       @if (renameForm.url().invalid()) {
         <mat-error>{{ 'required' | translate }}</mat-error>
       }

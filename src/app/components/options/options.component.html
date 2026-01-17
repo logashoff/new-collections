@@ -39,19 +39,19 @@
       </section>
       <section class="section toggles">
         <mat-slide-toggle
-          [field]="optionsForm.syncStorage"
+          [formField]="optionsForm.syncStorage"
           data-testid="settings-toggle-sync">
           <div class="toggle-label">{{ 'syncCollections' | translate }}</div>
           <mat-hint>{{ 'hintSyncCollections' | translate }}</mat-hint>
         </mat-slide-toggle>
         <mat-slide-toggle
-          [field]="optionsForm.enableDevices"
+          [formField]="optionsForm.enableDevices"
           data-testid="settings-toggle-devices">
           <div class="toggle-label">{{ 'enableDevices' | translate }}</div>
           <mat-hint>{{ 'hintShowDevices' | translate }}</mat-hint>
         </mat-slide-toggle>
         <mat-slide-toggle
-          [field]="optionsForm.enableTopSites"
+          [formField]="optionsForm.enableTopSites"
           data-testid="settings-toggle-sites">
           <div class="toggle-label">{{ 'enableSites' | translate }}</div>
           <mat-hint>{{ 'hintShowTopSites' | translate }}</mat-hint>
