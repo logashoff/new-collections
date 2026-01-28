@@ -27,6 +27,6 @@ export class EmptyComponent {
   readonly message = input<string>();
 
   handleAction(action: Action) {
-    this.#collectionsService.handleAction(action);
+    void this.#collectionsService.handleAction(action);
   }
 }

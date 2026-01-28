@@ -120,7 +120,7 @@ export class SearchFormComponent {
       )
       .subscribe((search) => {
         if (this.isActive) {
-          this.searchChange(search);
+          void this.searchChange(search);
         }
       });
   }
@@ -142,7 +142,7 @@ export class SearchFormComponent {
   }
 
   handleAction(action: Action) {
-    this.#collectionsService.handleAction(action);
+    void this.#collectionsService.handleAction(action);
   }
 
   onBlur() {

@@ -161,7 +161,7 @@ export class GroupsComponent {
    */
   drop(event: CdkDragDrop<BrowserTabs>, tabs: BrowserTabs) {
     moveItemInArray(tabs, event.previousIndex, event.currentIndex);
-    this.#tabService.save();
+    void this.#tabService.save();
   }
 
   async editTab(tab: BrowserTab) {

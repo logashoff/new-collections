@@ -10,8 +10,8 @@ import { addRecent, BrowserTab, IS_POPUP } from '../utils';
 @Directive({
   selector: '[recent]',
   host: {
-    '(auxclick)': 'eventHandler($event)',
-    '(click)': 'eventHandler($event)',
+    '(auxclick)': 'void eventHandler($event)',
+    '(click)': 'void eventHandler($event)',
   },
 })
 export class RecentDirective {

@@ -1,5 +1,6 @@
 import { ApplicationConfig, inject, provideZonelessChangeDetection } from '@angular/core';
 import {
+  isActive,
   IsActiveMatchOptions,
   provideRouter,
   Router,
@@ -27,7 +28,9 @@ if (!environment.e2e) {
           queryParams: 'ignored',
         };
 
-        if (router.isActive(targetUrl, config)) {
+        const isTargetRouteCurrent = isActive(targetUrl, router, config);
+
+        if (isTargetRouteCurrent()) {
           transition.skipTransition();
         }
       },

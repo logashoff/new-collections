@@ -93,7 +93,7 @@ export class TabService {
   );
 
   constructor() {
-    this.initService();
+    void this.initService();
   }
 
   sortByRecent(tabs: BrowserTabs, recentTabs: RecentMap) {
@@ -243,9 +243,9 @@ export class TabService {
    * Toggles pinned status for group specified.
    */
   favGroupToggle(group: TabGroup) {
-    this.#navService.reset();
+    void this.#navService.reset();
     group.favToggle();
-    this.save();
+    void this.save();
   }
 
   /**

@@ -78,10 +78,10 @@ export class NewTabContentComponent {
   handleDeviceAction({ action, group }: GroupAction, label: string) {
     switch (action) {
       case Action.Add:
-        this.#collection.selectTabs(group.tabs as Tabs);
+        void this.#collection.selectTabs(group.tabs as Tabs);
         break;
       case Action.Restore:
-        restoreTabs(group.tabs, label);
+        void restoreTabs(group.tabs, label);
         break;
     }
   }

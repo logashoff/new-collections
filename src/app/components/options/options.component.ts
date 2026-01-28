@@ -155,7 +155,7 @@ export class OptionsComponent implements OnInit {
   }
 
   handleAction(action: Action) {
-    this.#collectionsService.handleAction(action);
+    void this.#collectionsService.handleAction(action);
   }
 
   removeSiteAt(index = 0) {
