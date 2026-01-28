@@ -1,5 +1,5 @@
 <div class="icons-container">
-  @for (tabs of icons(); let i = $index; track icons.length) {
+  @for (tabs of icons(); let i = $index; track icons().length) {
     @if (i < maxIconsLength) {
       <span
         class="badged-icon"
@@ -13,7 +13,7 @@
     }
   }
 
-  @if (icons.length > maxIconsLength) {
-    <span class="overflow"> +{{ icons.length - maxIconsLength }} </span>
+  @if (icons().length > maxIconsLength) {
+    <span class="overflow"> +{{ icons().length - maxIconsLength }} </span>
   }
 </div>
