@@ -44,7 +44,7 @@ describe('CollectionsService', () => {
     vi.stubGlobal('chrome', browserApi);
 
     spectator = createService();
-    spectator.service['importCollections'] = vi.fn().mockImplementation(async () => [getTabGroupsMock()]);
+    spectator.service['importCollections'] = vi.fn().mockImplementation(() => [getTabGroupsMock()]);
   });
 
   it('should be created', () => {

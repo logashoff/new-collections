@@ -59,7 +59,7 @@ async function onMessage(message: BackgroundMessage) {
   onCreated.addListener(onTabCreate);
 }
 
-async function onConnect(port: chrome.runtime.Port) {
+function onConnect(port: chrome.runtime.Port) {
   port.onMessage.addListener(onMessage);
 }
 

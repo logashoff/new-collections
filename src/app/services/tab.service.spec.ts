@@ -62,8 +62,8 @@ describe('TabService', () => {
     expect(tabGroups[2].tabs.length).toBe(6);
   });
 
-  test('should generate tab group', async () => {
-    const tabGroup = await spectator.service.createTabGroup(getBrowserTabsMock());
+  test('should generate tab group', () => {
+    const tabGroup = spectator.service.createTabGroup(getBrowserTabsMock());
 
     expect(tabGroup.tabs.length).toBe(3);
   });

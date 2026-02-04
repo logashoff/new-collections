@@ -23,7 +23,7 @@ describe('MessageService', () => {
   });
 
   // Fix: Error Could not parse CSS stylesheet
-  it('should open snackbar with params', async () => {
+  it('should open snackbar with params', () => {
     const snackBar = spectator.inject(MatSnackBar);
 
     const { service } = spectator;

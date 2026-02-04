@@ -96,7 +96,7 @@ export class SearchFormComponent {
   readonly #activated = computed<boolean>(() => this.focused() && !this.isActive);
 
   constructor() {
-    effect(async () => {
+    effect(() => {
       if (this.#activated()) {
         this.activated.emit();
       }

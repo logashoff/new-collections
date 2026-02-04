@@ -116,7 +116,7 @@ export class ListItemComponent implements Activatable {
     open(url, this.target());
   }
 
-  async handleAction(action: TabAction) {
+  handleAction(action: TabAction) {
     const tab = this.tab();
 
     switch (action.action) {
