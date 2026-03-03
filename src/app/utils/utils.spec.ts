@@ -1,4 +1,4 @@
-import { getBrowserTabMock, getTabGroupMock, randomUuids } from 'src/mocks';
+import { getBrowserTabMock, getTabGroupMock, randomUuids } from 'mocks';
 import { getHostname, getHostnameGroup, isUuid } from './utils';
 
 import { describe, expect, it } from 'vitest';

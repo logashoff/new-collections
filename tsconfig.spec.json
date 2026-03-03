@@ -4,5 +4,5 @@
     "types": ["chrome"]
   },
   "extends": "./tsconfig.json",
-  "include": ["src/**/*.spec.ts"]
+  "include": ["src/**/*.spec.ts", "mocks/**/*.ts"]
 }

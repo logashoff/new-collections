@@ -2,7 +2,7 @@ import { provideZonelessChangeDetection } from '@angular/core';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
-import { getBrowserApi } from 'src/mocks';
+import { getBrowserApi } from 'mocks';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ActionIcon } from '../utils';

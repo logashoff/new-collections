@@ -4,8 +4,7 @@ export default defineConfig({
   test: {
     testTimeout: 10_000,
     watch: false,
-    environment: 'puppeteer',
-    globalSetup: 'node_modules/vitest-environment-puppeteer/dist/global-init.js',
+    globalSetup: 'vitest.setup.js',
     include: ['./e2e/**/*.spec.ts'],
     typecheck: {
       tsconfig: './tsconfig.e2e.json',
