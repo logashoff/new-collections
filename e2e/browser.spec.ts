@@ -1,6 +1,7 @@
 import { Browser, launch, LaunchOptions, Page } from 'puppeteer';
-import { mockStorageArea } from 'src/mocks';
 import { afterAll, beforeAll, expect, suite, test } from 'vitest';
+
+import { mockStorageArea } from '../mocks';
 
 const EXTENSION_PATH = './dist/new-collections';
 const NEW_TAB_MAIN_PAGE = 'new-tab/main';

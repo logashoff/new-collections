@@ -12,7 +12,7 @@ import {
   MockStorageArea,
   mockStorageArea,
   NavServiceMock,
-} from 'src/mocks';
+} from 'mocks';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { tabsToSync } from '../utils/collections';

@@ -7,7 +7,7 @@ import {
   MessageServiceMock,
   NavServiceMock,
   TabServiceMock,
-} from 'src/mocks';
+} from 'mocks';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Action } from '../utils/models';
