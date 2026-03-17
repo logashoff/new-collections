@@ -1,7 +1,6 @@
 {
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
-    "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": false,
@@ -10,7 +9,6 @@
   "compileOnSave": false,
   "compilerOptions": {
     "allowJs": false,
-    "baseUrl": "./",
     "declaration": false,
     "esModuleInterop": true,
     "experimentalDecorators": true,
@@ -24,7 +22,9 @@
     "noPropertyAccessFromIndexSignature": false,
     "outDir": "./dist/out-tsc",
     "paths": {
-      "@locales/*": ["src/_locales/*"]
+      "@app/*": ["./src/app/*"],
+      "@locales/*": ["./src/_locales/*"],
+      "@mocks": ["./mocks"]
     },
     "resolveJsonModule": true,
     "skipLibCheck": true,

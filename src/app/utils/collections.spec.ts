@@ -1,4 +1,4 @@
-import { getBrowserApi, getBrowserTabsMock, getTabGroupMock, getTabGroupsMock } from 'mocks';
+import { getBrowserApi, getBrowserTabsMock, getTabGroupMock, getTabGroupsMock } from '@mocks';
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { addRecent, getCollections, removeRecent, saveCollections, syncToTabs, tabsToSync } from './collections';
 

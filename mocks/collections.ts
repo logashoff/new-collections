@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash-es';
-import { Collection, Collections } from 'src/app/utils';
+import { Collection, Collections } from '@app/utils';
 
 const tabGroupMock: Collection = {
   id: 'e200698d-d053-45f7-b917-e03b104ae127',

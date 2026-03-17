@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash-es';
-import { Tab, Tabs } from 'src/app/utils';
+import { Tab, Tabs } from '@app/utils';
 
 const browserTabMock: Tab = {
   active: false,

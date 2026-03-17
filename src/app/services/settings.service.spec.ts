@@ -1,7 +1,7 @@
 import { provideZonelessChangeDetection } from '@angular/core';
 import { Router } from '@angular/router';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
-import { getBrowserApi } from 'mocks';
+import { getBrowserApi } from '@mocks';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { MostVisitedURL, Settings } from '../utils';

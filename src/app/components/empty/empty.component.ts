@@ -25,6 +25,7 @@ export class EmptyComponent {
 
   readonly actions = input<CollectionActions>();
   readonly message = input<string>();
+  readonly hint = input<string>();
 
   handleAction(action: Action) {
     void this.#collectionsService.handleAction(action);

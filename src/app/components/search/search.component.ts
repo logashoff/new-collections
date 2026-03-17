@@ -32,6 +32,7 @@ import {
   withLatestFrom,
 } from 'rxjs';
 
+import { DataTestIdDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
 import { KeyService, NavService, TabService } from '../../services';
 import {
@@ -71,6 +72,7 @@ const fuseOptions: IFuseOptions<BrowserTab> = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     AsyncPipe,
+    DataTestIdDirective,
     EmptyComponent,
     ListItemComponent,
     MatCardModule,
