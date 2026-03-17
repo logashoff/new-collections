@@ -1,5 +1,6 @@
 @let actionList = actions();
 @let messageStr = message();
+@let hintStr = hint();
 
 @if (!actionList) {
   <mat-icon class="icon" data-testid="empty-icon">
@@ -12,6 +13,13 @@
     class="message"
     [innerHTML]="messageStr | html"
     data-testid="empty-message-text"></section>
+}
+
+@if (hintStr) {
+  <span
+    class="hint"
+    [innerHTML]="hintStr"
+    data-testid="empty-message-hint"></span>
 }
 
 @if (actionList?.length) {

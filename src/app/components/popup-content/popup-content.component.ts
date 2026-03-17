@@ -2,9 +2,8 @@ import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { GroupService } from 'src/app/services/group.service';
 import { TranslatePipe } from '../../pipes';
-import { TabService } from '../../services';
+import { GroupService, TabService } from '../../services';
 import { Action, ActionIcon, Actions, CollectionActions, TabGroups, Timeline, translate } from '../../utils';
 import { EmptyComponent } from '../empty/empty.component';
 import { GroupsComponent } from '../groups/groups.component';

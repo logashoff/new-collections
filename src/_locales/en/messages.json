@@ -24,10 +24,13 @@
     "message": "Edit"
   },
   "emptyCollections": {
-    "message": "Collections are empty"
+    "message": "No collections found"
+  },
+  "emptyCollectionsHint": {
+    "message": "Save open tabs or import a collection file to get started."
   },
   "emptyListError": {
-    "message": "No collections to export"
+    "message": "No collections available to export"
   },
   "enableDevices": {
     "message": "Show Synced Tabs"
@@ -48,10 +51,10 @@
     "message": "From other devices"
   },
   "hintCollections": {
-    "message": "Save collection to a file or import saved file"
+    "message": "Export collections to a file or import an existing one"
   },
   "hintDataUsage": {
-    "message": "Data used to store synced collections ($percent$% remaining)",
+    "message": "Synced collections usage ($percent$% remaining)",
     "placeholders": {
       "percent": {
         "content": "$1"
@@ -80,7 +83,7 @@
     "message": "Import Collections"
   },
   "invalidTabList": {
-    "message": "Open tabs are invalid"
+    "message": "Nothing to save"
   },
   "itemRemoved": {
     "message": "Item removed"
@@ -96,8 +99,11 @@
   "manageCollections": {
     "message": "Manage Collections"
   },
+  "newTabEmptyHint": {
+    "message": "Save collections to a file via extension options."
+  },
   "newTabEmptyMessage": {
-    "message": "Import collections from previously saved file or use <strong>Add Collection</strong> button to save open tabs"
+    "message": "Import collections"
   },
   "oneResult": {
     "message": "One result"
@@ -119,14 +125,20 @@
   "pinned": {
     "message": "Pinned"
   },
+  "popupEmptyHint": {
+    "message": "Save open tabs to create new collection."
+  },
   "popupEmptyMessage": {
-    "message": "No collection found. Use button below to create new collection by saving open tabs"
+    "message": "Collections not found"
   },
   "recent": {
     "message": "Recent"
   },
   "recentNotFound": {
     "message": "Recent items are unavailable"
+  },
+  "recentNotFoundHint": {
+    "message": "Your recently saved and used links will appear here."
   },
   "remove": {
     "message": "Remove"
@@ -162,8 +174,11 @@
   "searchDisabled": {
     "message": "Search Disabled"
   },
-  "searchEmptyMessage": {
-    "message": "Nothing found for ‘<strong>$query$</strong>’",
+  "searchEmptyHelpMessage": {
+    "message": "Check your spelling or try a new search."
+  },
+  "searchEmptyResultMessage": {
+    "message": "No results found for \"<strong>$query$</strong>\"",
     "placeholders": {
       "query": {
         "content": "$1"
@@ -183,7 +198,7 @@
     "message": "Sync Collections"
   },
   "syncUsage": {
-    "message": "Sync Storage Usage"
+    "message": "Sync Storage"
   },
   "tabsExistError": {
     "message": "No new tabs"

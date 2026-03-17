@@ -1,17 +1,17 @@
 import { cloneDeep } from 'lodash-es';
-import { Tab, Tabs } from 'src/app/utils';
+import { Tab, Tabs } from '@app/utils';
 
 export class MockStorageArea implements Partial<chrome.storage.StorageArea> {
   #storage = {};
 
   MAX_ITEMS = 0;
-  readonly  MAX_SUSTAINED_WRITE_OPERATIONS_PER_MINUTE = 1000000;
+  readonly MAX_SUSTAINED_WRITE_OPERATIONS_PER_MINUTE = 1000000;
   MAX_WRITE_OPERATIONS_PER_HOUR = 0;
   MAX_WRITE_OPERATIONS_PER_MINUTE = 0;
   readonly QUOTA_BYTES: 10485760 | 102400 = 10485760;
   QUOTA_BYTES_PER_ITEM = 0;
 
-  onChanged: chrome.storage.StorageArea['onChanged']
+  onChanged: chrome.storage.StorageArea['onChanged'];
   accessLevel: chrome.storage.AccessLevel;
 
   constructor(storage = {}) {

@@ -2,10 +2,9 @@ import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { GroupService } from 'src/app/services/group.service';
 import { DataTestIdDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
-import { CollectionsService, HomeService, TabService } from '../../services';
+import { CollectionsService, HomeService, TabService, GroupService } from '../../services';
 import {
   Action,
   ActionIcon,

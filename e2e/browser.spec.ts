@@ -5,6 +5,7 @@ import { mockStorageArea } from '../mocks';
 
 const EXTENSION_PATH = './dist/new-collections';
 const NEW_TAB_MAIN_PAGE = 'new-tab/main';
+const NEW_TAB_SEARCH_PAGE = 'new-tab/search';
 const OPTIONS_PAGE = 'options';
 
 suite.sequential('Browser', () => {
@@ -58,8 +59,17 @@ suite.sequential('Browser', () => {
       .map((el) => el.textContent)
       .wait();
 
+    const blankHint = await page
+      .locator('[data-testid=empty-message-hint]')
+      .map((el) => el.textContent.trim())
+      .wait();
+
     expect(blankMessage).toEqual(
-      'Import collections from previously saved file or use Add Collection button to save open tabs'
+      'Import collections'
+    );
+
+    expect(blankHint).toEqual(
+      'Save collections to a file via extension options.'
     );
 
     const actionBtn = await page.locator('[data-testid="empty-action-import-collections"]').wait();
@@ -190,9 +200,15 @@ suite.sequential('Browser', () => {
       .map((el) => el.textContent.trim())
       .wait();
 
+    const noResultsHint = await page
+      .locator('[data-testid=empty-message-hint]')
+      .map((el) => el.textContent.trim())
+      .wait();
+
     await page.waitForNetworkIdle();
 
-    expect(noResultsMessage).toEqual('Nothing found for ‘noop’');
+    expect(noResultsMessage).toEqual('No results found for "noop"');
+    expect(noResultsHint).toEqual('Check your spelling or try a new search.');
 
     const cancelButton = await page.$('[data-testid=cancel-search]');
     await cancelButton.click();
@@ -264,4 +280,34 @@ suite.sequential('Browser', () => {
     timelines = await page.$$('nc-timeline-element');
     expect(timelines.length).toBe(2);
   });
+
+  test("delete recent items", async () => {
+    const searchPage = `${extensionBaseUrl}/${NEW_TAB_SEARCH_PAGE}`;
+    await page.goto(searchPage, { waitUntil: 'networkidle0' });
+
+    for (let i = 0; i < 14; i++) {
+      const listItem = await page.$('[data-testid=list-item-0]');
+      expect(listItem).toBeTruthy();
+      const removeButton = await listItem.$('[data-testid=list-item-action-remove]');
+      await listItem.hover();
+      await removeButton.click();
+    }
+
+    await page.waitForNetworkIdle();
+
+    const noDataMessage = await page
+      .locator('[data-testid=empty-message-text]')
+      .map((el) => el.textContent.trim())
+      .wait();
+
+    const noDataHint = await page
+      .locator('[data-testid=empty-message-hint]')
+      .map((el) => el.textContent.trim())
+      .wait();
+
+    await page.waitForNetworkIdle();
+
+    expect(noDataMessage).toEqual('No collections found');
+    expect(noDataHint).toEqual('Save open tabs or import a collection file to get started.');
+  }, 20_000)
 });

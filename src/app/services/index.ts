@@ -1,5 +1,6 @@
 export * from './background.service';
 export * from './collections.service';
+export * from './group.service';
 export * from './home.service';
 export * from './key.service';
 export * from './message.service';

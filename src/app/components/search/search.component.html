@@ -14,8 +14,8 @@
     </nc-timeline-label>
     <mat-card class="search-container">
       <nc-tab-list>
-        @for (tab of deviceTabs; track tab) {
-          <nc-list-item [tab]="tab" />
+        @for (tab of deviceTabs; track tab; let i = $index) {
+          <nc-list-item [tab]="tab" dataTestId="list-item-{{ i }}"/>
         }
       </nc-tab-list>
     </mat-card>
@@ -42,7 +42,7 @@
   @if (sourceLen > 0) {
     <mat-card class="search-container">
       <nc-tab-list>
-        @for (tab of _sourceTabs; track tab) {
+        @for (tab of _sourceTabs; track tab; let i = $index) {
           <nc-list-item
             [tab]="tab"
             [actions]="
@@ -54,21 +54,26 @@
             (recent)="recentRemoved($event)"
             (deleted)="itemDeleted($event)"
             (modified)="itemModified($event)"
-            (find)="findItem.emit($event)" />
+            (find)="findItem.emit($event)"
+            dataTestId="list-item-{{ i }}" />
         }
       </nc-tab-list>
     </mat-card>
   }
 } @else if (baseSource?.length > 0) {
   @if (searchQuery) {
-    <nc-empty [message]="'searchEmptyMessage' | translate: searchQuery">
-      block
+    <nc-empty
+      [message]="'searchEmptyResultMessage' | translate: searchQuery"
+      [hint]="'searchEmptyHelpMessage' | translate">
+      search
     </nc-empty>
   } @else {
-    <nc-empty [message]="'recentNotFound' | translate">
+    <nc-empty [message]="'recentNotFound' | translate"
+      [hint]="'recentNotFoundHint' | translate">
       search_activity
     </nc-empty>
   }
 } @else {
-  <nc-empty [message]="'emptyCollections' | translate">data_alert</nc-empty>
+  <nc-empty [message]="'emptyCollections' | translate"
+    [hint]="'emptyCollectionsHint' | translate">database_off</nc-empty>
 }
