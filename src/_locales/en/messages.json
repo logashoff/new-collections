@@ -33,7 +33,7 @@
     "message": "No collections available to export"
   },
   "enableDevices": {
-    "message": "Show Synced Tabs"
+    "message": "Show Devices"
   },
   "enableSites": {
     "message": "Show Top Sites"
