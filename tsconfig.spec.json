@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-    "outDir": "./out-tsc/spec",
-    "types": ["chrome"]
+    "outDir": "./out-tsc/spec"
   },
   "extends": "./tsconfig.json",
-  "include": ["./src/**/*.spec.ts", "./mocks/**/*.ts"]
+  "include": [
+    "./src/**/*.spec.ts",
+    "./mocks/**/*.ts"
+  ]
 }

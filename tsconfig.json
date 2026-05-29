@@ -13,7 +13,10 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "importHelpers": false,
-    "lib": ["ES2022", "dom"],
+    "lib": [
+      "ES2022",
+      "dom"
+    ],
     "module": "ES2022",
     "moduleResolution": "bundler",
     "noFallthroughCasesInSwitch": true,
@@ -22,16 +25,27 @@
     "noPropertyAccessFromIndexSignature": false,
     "outDir": "./dist/out-tsc",
     "paths": {
-      "@app/*": ["./src/app/*"],
-      "@locales/*": ["./src/_locales/*"],
-      "@mocks": ["./mocks"]
+      "@app/*": [
+        "./src/app/*"
+      ],
+      "@locales/*": [
+        "./src/_locales/*"
+      ],
+      "@mocks": [
+        "./mocks"
+      ]
     },
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": false,
     "strict": false,
     "target": "ES2022",
-    "typeRoots": ["node_modules/@types"],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "types": [
+      "chrome"
+    ],
     "useDefineForClassFields": false
   }
 }

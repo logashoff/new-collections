@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "outDir": "./out-tsc/spec",
-    "types": ["chrome"]
+    "outDir": "./out-tsc/spec"
   },
   "extends": "./tsconfig.json",
-  "include": ["e2e/**/*.spec.ts"]
+  "include": [
+    "e2e/**/*.spec.ts"
+  ]
 }
