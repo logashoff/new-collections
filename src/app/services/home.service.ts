@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { combineLatest, defer, map, Observable, of, shareReplay, switchMap, take } from 'rxjs';
 
 import { SettingsService, TabService } from '../services';
-import { Devices, MostVisitedURL, Sessions, TabGroup, Tabs, Timeline, TopSites } from '../utils';
+import { Devices, MostVisitedURL, Sessions, TabGroup, Tabs, Timeline, TopSites, uuid } from '../utils';
 
 /**
  * @description
@@ -65,7 +65,7 @@ export class HomeService {
               .map(
                 (session) =>
                   new TabGroup({
-                    id: session.window.sessionId,
+                    id: uuid(),
                     timestamp: session.lastModified * 1000,
                     tabs: session.window.tabs,
                   })

@@ -17,22 +17,17 @@ export type LocaleMessage = keyof typeof LocaleMessages;
 
 export type UUID = ReturnType<typeof uuid>;
 
-export type StorageKey = 'settings' | 'favicon' | 'recent' | UUID;
+export type StorageKey = `![extension::internal::${'settings' | 'recent'}]` | UUID;
 
 /**
  * Local storage key for saving app settings
  */
-export const settingsStorageKey: StorageKey = 'settings';
-
-/**
- * Storage key to store tabs favicon URLs by hostname in separate object
- */
-export const faviconStorageKey: StorageKey = 'favicon';
+export const settingsStorageKey: StorageKey = '![extension::internal::settings]';
 
 /**
  * Storage key to store tab ID maps to number of clicks
  */
-export const recentKey: StorageKey = 'recent';
+export const recentKey: StorageKey = '![extension::internal::recent]';
 
 /**
  * URLs to ignore when saving tabs.
@@ -107,17 +102,6 @@ export interface Settings {
 export type SyncTab = [id: number, url: string, title: string];
 export type SyncTabs = SyncTab[];
 
-/**
- * Map hostname to icon's URL
- */
-export type FaviconHost = Record<string, string>;
-
-/**
- * Favicon data in sync storage
- */
-export interface FaviconSync {
-  [faviconStorageKey]?: FaviconHost;
-}
 
 /**
  * Settings data in sync storage
@@ -139,13 +123,17 @@ export interface RecentSync {
  * Map group ID to array containing group timestamp and tabs
  */
 export type GroupSync = {
-  [groupId: string]: [timestamp: number, tabs: SyncTabs];
+  [groupId: UUID]: [timestamp: number, tabs: SyncTabs];
 };
+
+export type HostFavIcon = {
+  [hostName: string]: string;
+}
 
 /**
  * Data used to store collections in sync storage
  */
-export type SyncData = SettingsSync & FaviconSync & GroupSync & RecentSync;
+export type StorageData = SettingsSync & GroupSync & RecentSync & HostFavIcon;
 
 /**
  * Storage change event
@@ -160,7 +148,7 @@ export type BrowserTab = Pick<Tab, 'id' | 'url' | 'favIconUrl' | 'title'>;
 export type BrowserTabs = BrowserTab[];
 
 export interface Collection {
-  id: string;
+  id: UUID;
   timestamp: number;
   tabs: BrowserTabs;
 }
