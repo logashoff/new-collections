@@ -1,15 +1,7 @@
-import { DecimalPipe } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  inject,
-  OnInit,
-  signal,
-  ViewEncapsulation,
-} from '@angular/core';
+import { PercentPipe } from '@angular/common';
+import { Component, computed, effect, inject, OnInit, signal, ViewEncapsulation } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { form, FormField } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,36 +11,12 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { take } from 'rxjs';
-import { FormField, form } from '@angular/forms/signals';
 
 import { TranslatePipe } from '../../pipes';
-import { CollectionsService, SettingsService } from '../../services';
-import { Action, ActionIcon, CollectionActions, MostVisitedURL, translate } from '../../utils';
+import { CollectionsService, DEFAULT_SETTINGS, SettingsService } from '../../services';
+import { Action, ActionIcon, CollectionActions, Settings, translate } from '../../utils';
 
-/**
- * Options form.
- */
-interface OptionsModel {
-  /**
-   * Show/hide synced devices on new tab page.
-   */
-  enableDevices: boolean;
-
-  /**
-   * Show/hide top site on new tab page.
-   */
-  enableTopSites: boolean;
-
-  /**
-   * List of site to hide from top sites list.
-   */
-  ignoreTopSites: MostVisitedURL[];
-
-  /**
-   * Use synced storage Chrome feature.
-   */
-  syncStorage: boolean;
-}
+type OptionsModel = Pick<Settings, 'enableDevices' | 'enableTopSites' | 'ignoreTopSites' | 'syncStorage'>;
 
 /**
  * @description
@@ -59,10 +27,8 @@ interface OptionsModel {
   selector: 'nc-options',
   templateUrl: './options.component.html',
   styleUrl: './options.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   imports: [
-    DecimalPipe,
     FormField,
     MatButtonModule,
     MatCardModule,
@@ -72,6 +38,7 @@ interface OptionsModel {
     MatProgressBarModule,
     MatSlideToggleModule,
     MatTooltipModule,
+    PercentPipe,
     ReactiveFormsModule,
     TranslatePipe,
   ],
@@ -99,19 +66,18 @@ export class OptionsComponent implements OnInit {
   /**
    * Sync storage used
    */
-  readonly #storageUsageSource = signal<number>(0);
+  readonly #usagePerItem = signal<number>(0);
+
+  readonly #totalUsage = signal<number>(0);
 
   /**
    * Chrome sync storage has limited quota (~100KB), this will show how much storage is currently inuse.
    */
-  readonly storageUsage = computed<number>(() => (this.#storageUsageSource() / chrome.storage.sync.QUOTA_BYTES) * 100);
+  readonly usagePerItem = computed<number>(() => this.#usagePerItem() / chrome.storage.sync.QUOTA_BYTES_PER_ITEM);
 
-  readonly optionsModel = signal<OptionsModel>({
-    enableDevices: false,
-    enableTopSites: false,
-    ignoreTopSites: [],
-    syncStorage: false,
-  });
+  readonly totalUsage = computed<number>(() => this.#totalUsage() / chrome.storage.sync.QUOTA_BYTES);
+
+  readonly optionsModel = signal<OptionsModel>(DEFAULT_SETTINGS);
 
   readonly optionsForm = form(this.optionsModel);
 
@@ -119,13 +85,13 @@ export class OptionsComponent implements OnInit {
     effect(async () => {
       await this.#settings.update(this.optionsModel());
 
-      const storageBytes = await this.#settings.getUsageBytes();
-      this.#storageUsageSource.set(storageBytes);
+      this.#usagePerItem.set(await this.#settings.getTopUsage());
+      this.#totalUsage.set(await this.#settings.getUsageBytes());
     });
   }
 
   async ngOnInit() {
-    this.#storageUsageSource.set(await this.#settings.getUsageBytes());
+    this.#usagePerItem.set(await this.#settings.getUsageBytes());
 
     this.#settings.settings$.pipe(take(1)).subscribe((settings) => {
       if (settings) {
@@ -159,9 +125,12 @@ export class OptionsComponent implements OnInit {
   }
 
   removeSiteAt(index = 0) {
-    const sites = this.optionsModel().ignoreTopSites;
-    sites.splice(index, 1);
-    this.optionsForm.ignoreTopSites().value.set(sites);
+    const ignoreTopSites = this.optionsModel().ignoreTopSites;
+    ignoreTopSites.splice(index, 1);
+    this.optionsModel.update((model) => ({
+      ...model,
+      ignoreTopSites,
+    }));
   }
 
   onSubmit(event: Event): void {

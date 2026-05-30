@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { uniqBy } from 'lodash-es';
 import { lastValueFrom } from 'rxjs';
 import {
@@ -18,9 +18,7 @@ import { MessageService } from './message.service';
 import { NavService } from './nav.service';
 import { TabService } from './tab.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class CollectionsService {
   readonly #message = inject(MessageService);
   readonly #nav = inject(NavService);

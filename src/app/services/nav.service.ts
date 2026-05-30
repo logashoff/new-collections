@@ -1,12 +1,10 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { ActivatedRoute, EventType, Router, RouterEvent } from '@angular/router';
 import { distinctUntilChanged, filter, map, Observable, shareReplay, startWith } from 'rxjs';
 
 import { createUrl, RouterExtras, RouterParams } from '../utils';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class NavService {
   readonly #activeRoute = inject(ActivatedRoute);
   readonly #router = inject(Router);

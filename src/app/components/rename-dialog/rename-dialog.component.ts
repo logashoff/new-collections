@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FormField, form, required } from '@angular/forms/signals';
+import { form, FormField, required } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,7 +26,6 @@ interface RenameModel {
   selector: 'nc-rename-dialog',
   templateUrl: './rename-dialog.component.html',
   styleUrl: './rename-dialog.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     FormField,
     MatButtonModule,
@@ -46,9 +45,9 @@ export class RenameDialogComponent implements OnInit {
     url: '',
   });
 
-  readonly renameForm = form(this.renameModel, (schemaPath) => {
-    required(schemaPath.title);
-    required(schemaPath.url);
+  readonly renameForm = form(this.renameModel, (schema) => {
+    required(schema.title);
+    required(schema.url);
   });
 
   ngOnInit() {

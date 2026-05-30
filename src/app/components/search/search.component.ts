@@ -1,6 +1,5 @@
 import { AsyncPipe, NgPlural, NgPluralCase } from '@angular/common';
 import {
-  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   effect,
@@ -10,7 +9,7 @@ import {
   output,
   signal,
   viewChildren,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
@@ -69,7 +68,6 @@ const fuseOptions: IFuseOptions<BrowserTab> = {
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     AsyncPipe,
     DataTestIdDirective,

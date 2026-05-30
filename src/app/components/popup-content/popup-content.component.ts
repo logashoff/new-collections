@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { TranslatePipe } from '../../pipes';
@@ -18,7 +18,6 @@ import { TimelineElementComponent } from '../timeline-element/timeline-element.c
   selector: 'nc-popup-content',
   templateUrl: './popup-content.component.html',
   styleUrl: './popup-content.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [AsyncPipe, EmptyComponent, GroupsComponent, TranslatePipe, TimelineElementComponent],
 })
 export class PopupContentComponent {

@@ -1,5 +1,5 @@
-import { cloneDeep } from 'lodash-es';
 import { Tab, Tabs } from '@app/utils';
+import { cloneDeep } from 'lodash-es';
 
 export class MockStorageArea implements Partial<chrome.storage.StorageArea> {
   #storage = {};
@@ -63,7 +63,7 @@ export class MockStorageArea implements Partial<chrome.storage.StorageArea> {
 
 export const getBrowserApi = (browserTabs: Tabs = [], storage = new MockStorageArea()): Partial<typeof chrome> => ({
   runtime: {
-    openOptionsPage: async () => {},
+    openOptionsPage: async () => void 0,
     connect: () => ({
       onDisconnect: {
         addListener: (callback) => callback(),
@@ -81,12 +81,12 @@ export const getBrowserApi = (browserTabs: Tabs = [], storage = new MockStorageA
     local: storage,
     sync: storage,
     onChanged: {
-      addRules() {},
-      getRules() {},
+      addRules: () => 0,
+      getRules: () => 0,
       hasListener: () => false,
       hasListeners: () => false,
-      removeListener() {},
-      removeRules() {},
+      removeListener: () => 0,
+      removeRules: () => 0,
       addListener(callback) {
         callback(storage?.['recent'] ?? {}, 'sync');
       },

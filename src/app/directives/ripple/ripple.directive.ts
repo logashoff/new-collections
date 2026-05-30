@@ -1,6 +1,5 @@
 import { _CdkPrivateStyleLoader } from '@angular/cdk/private';
 import {
-  ChangeDetectionStrategy,
   Component,
   Directive,
   effect,
@@ -8,7 +7,7 @@ import {
   inject,
   input,
   OnDestroy,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { clamp } from 'lodash-es';
 
@@ -41,7 +40,6 @@ const rotate: Keyframe[] = [
 
 @Component({
   template: '',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   styleUrl: 'ripple.scss',
   host: { 'ripple-style-loader': '' },

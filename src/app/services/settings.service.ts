@@ -1,18 +1,23 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { Router } from '@angular/router';
 import { uniqBy } from 'lodash-es';
 import { BehaviorSubject, defer, map, Observable, shareReplay, switchMap } from 'rxjs';
 
 import { copyStorage, getSettings, MostVisitedURL, Settings, settingsStorageKey, StorageArea } from '../utils';
 
+export const DEFAULT_SETTINGS: Settings = {
+  enableDevices: true,
+  enableTopSites: true,
+  ignoreTopSites: [],
+  syncStorage: true,
+};
+
 /**
  * @description
  *
  * Settings config service for retrieving and saving app settings from Options page
  */
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class SettingsService {
   readonly #router = inject(Router);
 
@@ -42,7 +47,7 @@ export class SettingsService {
    * Updates and saves new settings
    */
   async update(settings: Settings): Promise<Settings> {
-    const currentSettings = (await getSettings()) ?? {};
+    const currentSettings: Settings = (await getSettings()) ?? DEFAULT_SETTINGS;
 
     const newSettings = {
       ...currentSettings,
@@ -71,7 +76,7 @@ export class SettingsService {
    * Updates ignore site list with new site specified
    */
   async ignoreSite(site: MostVisitedURL) {
-    const settings = (await getSettings()) ?? {};
+    const settings = (await getSettings()) ?? DEFAULT_SETTINGS;
 
     if (settings.ignoreTopSites?.length > 0) {
       settings.ignoreTopSites.push(site);
@@ -91,7 +96,7 @@ export class SettingsService {
   async savePanelState(groupId: string, state: boolean) {
     const { url } = this.#router;
 
-    const settings = (await getSettings()) ?? {};
+    const settings = (await getSettings()) ?? DEFAULT_SETTINGS;
 
     if (!settings.panels) {
       settings.panels = {};
@@ -113,5 +118,12 @@ export class SettingsService {
    */
   async getUsageBytes() {
     return await chrome.storage.sync.getBytesInUse();
+  }
+
+  async getTopUsage() {
+    const data = await chrome.storage.sync.get();
+    const keys = Object.keys(data);
+
+    return Math.max(0, ...keys.map((key) => new Blob([JSON.stringify(data[key])]).size));
   }
 }
