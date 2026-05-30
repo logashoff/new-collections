@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 import { MessageComponent } from '../components';
@@ -9,9 +9,7 @@ import { ActionIcon, LocaleMessage } from '../utils';
  *
  * Service for displaying SnackBar message
  */
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class MessageService {
   readonly #snackBar = inject(MatSnackBar);
 

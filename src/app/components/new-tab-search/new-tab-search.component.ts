@@ -1,16 +1,15 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { map, Observable, shareReplay } from 'rxjs';
 
 import { HomeService, NavService, TabService } from '../../services';
-import { SearchComponent } from '../search/search.component';
 import { BrowserTab, BrowserTabs } from '../../utils';
+import { SearchComponent } from '../search/search.component';
 
 @Component({
   selector: 'nc-new-tab-search',
   templateUrl: './new-tab-search.component.html',
   styleUrl: './new-tab-search.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [AsyncPipe, SearchComponent],
 })
 export class NewTabSearchComponent {

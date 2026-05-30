@@ -1,5 +1,5 @@
 import { NgClass, NgOptimizedImage } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, input, model } from '@angular/core';
+import { Component, computed, inject, input, model } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { getFaviconUrl, IconSize, ImageSource } from '../../utils';
@@ -13,7 +13,6 @@ import { getFaviconUrl, IconSize, ImageSource } from '../../utils';
   selector: 'nc-image',
   templateUrl: './image.component.html',
   styleUrl: './image.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgClass, NgOptimizedImage],
   host: {
     '[class.medium]': 'medium()',

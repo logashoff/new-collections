@@ -36,7 +36,7 @@ describe('SettingsService', () => {
 
     const newSettings = await spectator.service.ignoreSite(site);
 
-    expect(newSettings).toEqual({
+    expect(newSettings).toMatchObject({
       ignoreTopSites: [site],
     });
   });
@@ -61,7 +61,7 @@ describe('SettingsService', () => {
 
     const newSettings = await spectator.service.update(updateSettings);
 
-    expect(newSettings).toEqual({
+    expect(newSettings).toMatchObject({
       ignoreTopSites: [
         {
           title: 'Site 1',

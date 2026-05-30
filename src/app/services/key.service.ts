@@ -26,7 +26,7 @@ export class KeyService<T extends Activatable> {
     }
   }
 
-  setItems(items: Readonly<T[]>) {
+  setItems(items: readonly T[]) {
     this.keyManager = new ActiveDescendantKeyManager(items).withWrap();
   }
 

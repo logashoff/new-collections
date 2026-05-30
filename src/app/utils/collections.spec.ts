@@ -2,7 +2,7 @@ import { getBrowserApi, getBrowserTabsMock, getTabGroupMock, getTabGroupsMock } 
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { addRecent, getCollections, removeRecent, saveCollections, syncToTabs, tabsToSync } from './collections';
 
-import { RecentSync, SyncStorageArea } from './models';
+import { recentKey, RecentStore, SyncStorageArea } from './models';
 
 vi.stubGlobal('chrome', getBrowserApi(getBrowserTabsMock()));
 
@@ -22,16 +22,6 @@ describe('collections.ts', () => {
   });
 
   const syncedData = {
-    favicon: {
-      'duckduckgo.com': 'https://duckduckgo.com/favicon.ico',
-      'getfedora.org': 'https://getfedora.org/static/images/favicon.ico',
-      'github.com': 'https://github.githubassets.com/favicons/favicon.svg',
-      'linuxmint.com': 'https://linuxmint.com/web/img/favicon.ico',
-      'ubuntu.com': 'https://assets.ubuntu.com/v1/49a1a858-favicon-32x32.png',
-      'www.apple.com': 'https://www.apple.com/favicon.ico',
-      'www.google.com': 'https://www.google.com/favicon.ico',
-      'www.microsoft.com': 'https://c.s-microsoft.com/favicon.ico?v2',
-    },
     '6ab9c99e-8942-4236-ad6e-7e38c51da810': [
       1650847781791,
       [
@@ -62,6 +52,14 @@ describe('collections.ts', () => {
         [52, 'https://duckduckgo.com/', 'DuckDuckGo — Privacy, simplified.'],
       ],
     ],
+    'duckduckgo.com': 'https://duckduckgo.com/favicon.ico',
+    'getfedora.org': 'https://getfedora.org/static/images/favicon.ico',
+    'github.com': 'https://github.githubassets.com/favicons/favicon.svg',
+    'linuxmint.com': 'https://linuxmint.com/web/img/favicon.ico',
+    'ubuntu.com': 'https://assets.ubuntu.com/v1/49a1a858-favicon-32x32.png',
+    'www.apple.com': 'https://www.apple.com/favicon.ico',
+    'www.google.com': 'https://www.google.com/favicon.ico',
+    'www.microsoft.com': 'https://c.s-microsoft.com/favicon.ico?v2',
   };
 
   it('should convert synced tabs', () => {
@@ -199,26 +197,26 @@ describe('collections.ts', () => {
     keys.forEach((key) => (recent[key] = key));
 
     getSyncSpy.mockImplementation(() => ({
-      recent,
+      [recentKey]: { ...recent },
     }));
 
     await addRecent(...[5, 6, 7, 8]);
 
-    const callArgs: RecentSync = setSyncSpy.mock.calls[0][0];
+    const callArgs: Partial<RecentStore> = setSyncSpy.mock.calls[0][0];
 
-    const recentKeys = Object.keys(callArgs.recent);
+    const recentKeys = Object.keys(callArgs[recentKey]);
 
     const currentTime = new Date().getTime();
 
     expect(recentKeys.length).toBe(length);
-    expect(recent[5]).toBeDefined();
-    expect(recent[5]).toEqual(currentTime);
-    expect(recent[6]).toBeDefined();
-    expect(recent[6]).toEqual(currentTime);
-    expect(recent[7]).toBeDefined();
-    expect(recent[7]).toEqual(currentTime);
-    expect(recent[8]).toBeDefined();
-    expect(recent[8]).toEqual(currentTime);
+    expect(callArgs[recentKey][5]).toBeDefined();
+    expect(callArgs[recentKey][5]).toEqual(currentTime);
+    expect(callArgs[recentKey][6]).toBeDefined();
+    expect(callArgs[recentKey][6]).toEqual(currentTime);
+    expect(callArgs[recentKey][7]).toBeDefined();
+    expect(callArgs[recentKey][7]).toEqual(currentTime);
+    expect(callArgs[recentKey][8]).toBeDefined();
+    expect(callArgs[recentKey][8]).toEqual(currentTime);
   });
 
   it('should remove recent', async () => {
@@ -226,7 +224,7 @@ describe('collections.ts', () => {
     setSyncSpy.mockReset();
 
     getSyncSpy.mockImplementation(() => ({
-      recent: {
+      [recentKey]: {
         1: 1,
         2: 2,
         3: 3,
@@ -243,7 +241,7 @@ describe('collections.ts', () => {
 
     expect(setSyncSpy).toHaveBeenCalledWith(
       expect.objectContaining({
-        recent: {
+        [recentKey]: {
           2: 2,
           3: 3,
           4: 4,

@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input, output, ViewEncapsulation } from '@angular/core';
+import { Component, input, output, ViewEncapsulation } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
@@ -15,7 +15,6 @@ import { IconsContainerComponent } from '../icons-container/icons-container.comp
   selector: 'nc-panel-header',
   templateUrl: './panel-header.component.html',
   styleUrl: './panel-header.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   imports: [IconsContainerComponent, MatIconModule, MatTooltipModule, NgClass, StopPropagationDirective, TranslatePipe],
 })

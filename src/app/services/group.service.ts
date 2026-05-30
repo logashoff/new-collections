@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 
 import {
   Action,
@@ -12,9 +12,7 @@ import {
 } from '../utils';
 import { TabService } from './tab.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class GroupService {
   readonly #tabService = inject(TabService);
 

@@ -1,17 +1,16 @@
 import { AsyncPipe, NgClass } from '@angular/common';
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
   Component,
   effect,
   inject,
   signal,
   viewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FormField, form, minLength, required } from '@angular/forms/signals';
+import { form, FormField, minLength, required } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -50,7 +49,6 @@ interface TabSelectorModel {
   templateUrl: './tabs-selector.component.html',
   styleUrl: './tabs-selector.component.scss',
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     AsyncPipe,
     FormField,
@@ -83,9 +81,9 @@ export class TabsSelectorComponent implements AfterViewInit {
   /**
    * Root group form.
    */
-  readonly tabSelectorForm = form(this.tabSelectorModel, (schemaPath) => {
-    required(schemaPath.list);
-    minLength(schemaPath.list, 1);
+  readonly tabSelectorForm = form(this.tabSelectorModel, (schema) => {
+    required(schema.list);
+    minLength(schema.list, 1);
   });
 
   /**

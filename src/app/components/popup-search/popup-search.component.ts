@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { NavService, TabService } from '../../services';
@@ -10,7 +10,6 @@ import { SearchComponent } from '../search/search.component';
   selector: 'nc-popup-search',
   templateUrl: './popup-search.component.html',
   styleUrl: './popup-search.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [AsyncPipe, SearchComponent],
 })
 export class PopupSearchComponent {

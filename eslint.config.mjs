@@ -1,8 +1,12 @@
+import angular from "@angular-eslint/eslint-plugin";
+import angularTemplate from "@angular-eslint/eslint-plugin-template";
+import templateParser from "@angular-eslint/template-parser";
 import { FlatCompat } from '@eslint/eslintrc';
-import js from '@eslint/js';
+import { default as eslint, default as js } from '@eslint/js';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import tseslint from "typescript-eslint";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,13 +20,14 @@ export default defineConfig([
   globalIgnores(['projects/**/*']),
   {
     files: ['**/*.ts'],
-
-    extends: compat.extends(
-      'plugin:@angular-eslint/recommended',
-      'plugin:@angular-eslint/template/process-inline-templates',
-      'eslint:recommended',
-      'plugin:@typescript-eslint/recommended'
-    ),
+    plugins: {
+      '@angular-eslint': angular
+    },
+    extends: [
+      eslint.configs.recommended,
+      ...tseslint.configs.recommended,
+      ...tseslint.configs.stylistic,
+    ],
 
     languageOptions: {
       ecmaVersion: 5,
@@ -55,7 +60,6 @@ export default defineConfig([
 
       '@angular-eslint/no-output-native': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
-
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
@@ -66,33 +70,32 @@ export default defineConfig([
           vars: 'all',
         },
       ],
-
       'no-async-promise-executor': 'warn',
       'no-case-declarations': 'off',
-
       'no-console': [
         'error',
         {
           allow: ['warn', 'error'],
         },
       ],
-
       'no-duplicate-imports': ['error'],
-
       'no-empty': [
         'error',
         {
           allowEmptyCatch: true,
         },
       ],
-
       'no-unused-private-class-members': 'error',
       'no-unused-vars': 'off',
     },
   },
   {
     files: ['**/*.html'],
-    extends: compat.extends('plugin:@angular-eslint/template/recommended'),
-    rules: {},
+    languageOptions: {
+      parser: templateParser,
+    },
+    plugins: {
+      "@angular-eslint/template": angularTemplate,
+    },
   },
 ]);

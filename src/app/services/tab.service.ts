@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { format, isSameDay, isSameWeek, isSameYear, subDays } from 'date-fns';
 import { remove, uniqBy } from 'lodash-es';
@@ -13,9 +13,9 @@ import {
   Collection,
   Collections,
   getCollections,
-  getFaviconStore,
   getHostnameGroup,
   getRecentTabs,
+  getStorage,
   getUrlHost,
   ignoreUrlsRegExp,
   isUuid,
@@ -45,9 +45,7 @@ import { NavService } from './nav.service';
  *
  * Service for managing tabs.
  */
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class TabService {
   readonly #dialog = inject(MatDialog);
   readonly #message = inject(MessageService);
@@ -149,8 +147,8 @@ export class TabService {
 
     if (changedGroupIds?.length > 0) {
       const tabGroups = (await firstValueFrom(this.tabGroups$)) ?? [];
-      const groupsById: Map<string, TabGroup> = new Map(tabGroups.map((group) => [group.id, group]));
-      const favicon = await getFaviconStore();
+      const groupsById = new Map(tabGroups.map((group) => [group.id, group]));
+      const storage = await getStorage();
 
       changedGroupIds.forEach((groupId) => {
         const { oldValue, newValue } = changes[groupId];
@@ -162,7 +160,7 @@ export class TabService {
             id: groupId,
             timestamp: newValue[0],
             tabs: syncToTabs(newValue[1]).map((tab) => {
-              tab.favIconUrl = favicon[getUrlHost(tab.url)];
+              tab.favIconUrl = storage[getUrlHost(tab.url)];
               return tab;
             }),
           });
@@ -171,7 +169,7 @@ export class TabService {
           group.timestamp = newValue[0];
           group.mergeTabs(
             syncToTabs(newValue[1]).map((tab) => {
-              tab.favIconUrl = favicon[getUrlHost(tab.url)];
+              tab.favIconUrl = storage[getUrlHost(tab.url)];
               return tab;
             }),
             true
@@ -198,7 +196,7 @@ export class TabService {
    * Creates timeline array and hashmap that maps each timeline item to groups by their timestamp.
    */
   private createTimeline(tabGroups: TabGroups): Timeline {
-    const timeline: { [label: string]: TimelineElement } = {};
+    const timeline: Record<string, TimelineElement> = {};
 
     tabGroups.forEach((timelineItem) => {
       const timeLabel = this.getTimelineLabel(timelineItem);
@@ -280,7 +278,7 @@ export class TabService {
       const currentTabGroups = await firstValueFrom(this.tabGroups$);
 
       const newTabGroups: TabGroups = currentTabGroups ?? [];
-      const currentGroupsMap: Map<string, TabGroup> = new Map(newTabGroups.map((group) => [group.id, group]));
+      const currentGroupsMap = new Map(newTabGroups.map((group) => [group.id, group]));
 
       tabGroups.forEach((newGroup) => {
         if (currentGroupsMap.has(newGroup.id)) {
@@ -303,7 +301,7 @@ export class TabService {
     let tabGroups = await firstValueFrom(this.tabGroups$);
 
     tabGroups = tabGroups ?? [];
-    const groupsMap: Map<string, TabGroup> = new Map(tabGroups.map((group) => [group.id, group]));
+    const groupsMap = new Map(tabGroups.map((group) => [group.id, group]));
 
     const existingGroup = groupsMap.get(tabGroup.id);
     if (existingGroup) {
@@ -329,7 +327,7 @@ export class TabService {
     if (filteredTabs.length === 0) {
       this.#message.open(translate('invalidTabList'));
     } else {
-      const tabsByUrl: Map<string, BrowserTab> = new Map(group.tabs.map((tab) => [tab.url, tab]));
+      const tabsByUrl = new Map(group.tabs.map((tab) => [tab.url, tab]));
       filteredTabs = filteredTabs.filter(({ url }) => !tabsByUrl.get(url));
 
       if (filteredTabs?.length > 0) {

@@ -1,6 +1,5 @@
 import { AsyncPipe } from '@angular/common';
 import {
-  ChangeDetectionStrategy,
   Component,
   computed,
   effect,
@@ -10,11 +9,11 @@ import {
   output,
   signal,
   viewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
-import { disabled, FormField, form } from '@angular/forms/signals';
+import { disabled, form, FormField } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -37,7 +36,6 @@ interface SearchModel {
   selector: 'nc-search-form',
   templateUrl: './search-form.component.html',
   styleUrl: './search-form.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   imports: [
     AsyncPipe,
@@ -75,8 +73,10 @@ export class SearchFormComponent {
     search: '',
   });
 
-  readonly searchForm = form(this.searchModel, (schemaPath) => {
-    disabled(schemaPath.search, () => this.disabled());
+  readonly searchForm = form(this.searchModel, (schema) => {
+    disabled(schema.search, {
+      when: () => this.disabled()
+    });
   });
 
   /**
