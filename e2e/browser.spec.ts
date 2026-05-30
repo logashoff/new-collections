@@ -8,7 +8,7 @@ const NEW_TAB_MAIN_PAGE = 'new-tab/main';
 const NEW_TAB_SEARCH_PAGE = 'new-tab/search';
 const OPTIONS_PAGE = 'options';
 
-suite.sequential('Browser', () => {
+suite('Browser', () => {
   let browser: Browser;
   let page: Page;
   let extensionId: string;
@@ -293,8 +293,6 @@ suite.sequential('Browser', () => {
       await removeButton.click();
     }
 
-    await page.waitForNetworkIdle();
-
     const noDataMessage = await page
       .locator('[data-testid=empty-message-text]')
       .map((el) => el.textContent.trim())
@@ -304,8 +302,6 @@ suite.sequential('Browser', () => {
       .locator('[data-testid=empty-message-hint]')
       .map((el) => el.textContent.trim())
       .wait();
-
-    await page.waitForNetworkIdle();
 
     expect(noDataMessage).toEqual('No collections found');
     expect(noDataHint).toEqual('Save open tabs or import a collection file to get started.');

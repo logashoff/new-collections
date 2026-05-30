@@ -13,9 +13,9 @@ import {
   Collection,
   Collections,
   getCollections,
-  getFaviconStore,
   getHostnameGroup,
   getRecentTabs,
+  getStorage,
   getUrlHost,
   ignoreUrlsRegExp,
   isUuid,
@@ -150,7 +150,7 @@ export class TabService {
     if (changedGroupIds?.length > 0) {
       const tabGroups = (await firstValueFrom(this.tabGroups$)) ?? [];
       const groupsById: Map<string, TabGroup> = new Map(tabGroups.map((group) => [group.id, group]));
-      const favicon = await getFaviconStore();
+      const storage = await getStorage();
 
       changedGroupIds.forEach((groupId) => {
         const { oldValue, newValue } = changes[groupId];
@@ -162,7 +162,7 @@ export class TabService {
             id: groupId,
             timestamp: newValue[0],
             tabs: syncToTabs(newValue[1]).map((tab) => {
-              tab.favIconUrl = favicon[getUrlHost(tab.url)];
+              tab.favIconUrl = storage[getUrlHost(tab.url)];
               return tab;
             }),
           });
@@ -171,7 +171,7 @@ export class TabService {
           group.timestamp = newValue[0];
           group.mergeTabs(
             syncToTabs(newValue[1]).map((tab) => {
-              tab.favIconUrl = favicon[getUrlHost(tab.url)];
+              tab.favIconUrl = storage[getUrlHost(tab.url)];
               return tab;
             }),
             true
