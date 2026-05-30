@@ -28,7 +28,7 @@ describe('NavService', () => {
         useValue: {
           url: '/',
           events: EMPTY,
-          navigate() {},
+          navigate: () => 0,
         },
       },
     ],

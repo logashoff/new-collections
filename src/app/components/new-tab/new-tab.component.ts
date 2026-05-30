@@ -1,13 +1,13 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { combineLatest, map, Observable, shareReplay } from 'rxjs';
 
 import { KeyListenerDirective } from '../../directives';
-import { SearchFormComponent } from '../search-form/search-form.component';
 import { HomeService, KeyService, NavService } from '../../services';
-import { TopSitesComponent } from '../top-sites/top-sites.component';
 import { scrollTop, TopSites } from '../../utils';
+import { SearchFormComponent } from '../search-form/search-form.component';
+import { TopSitesComponent } from '../top-sites/top-sites.component';
 
 /**
  * @description
@@ -18,7 +18,6 @@ import { scrollTop, TopSites } from '../../utils';
   selector: 'nc-new-tab',
   templateUrl: './new-tab.component.html',
   styleUrls: ['./new-tab.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   imports: [AsyncPipe, RouterOutlet, SearchFormComponent, TopSitesComponent],
   providers: [KeyService],

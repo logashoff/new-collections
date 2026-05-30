@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output, ViewEncapsulation } from '@angular/core';
+import { Component, input, output, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -15,7 +15,6 @@ import { TimelineLabelComponent } from '../timeline-label/timeline-label.compone
   selector: 'nc-timeline-element',
   templateUrl: './timeline-element.component.html',
   styleUrl: './timeline-element.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   imports: [MatButtonModule, MatIconModule, MatTooltipModule, TimelineLabelComponent, TranslatePipe],
 })

@@ -27,7 +27,7 @@
     "message": "No collections found"
   },
   "emptyCollectionsHint": {
-    "message": "Save open tabs or import a collection file to get started."
+    "message": "Save open tabs or import a collection to get started."
   },
   "emptyListError": {
     "message": "No collections available to export"
@@ -54,10 +54,13 @@
     "message": "Export collections to a file or import an existing one"
   },
   "hintDataUsage": {
-    "message": "Synced collections usage ($percent$% remaining)",
+    "message": "Total storage used: $total$. The largest item occupies $percent$ of the per-item quota.",
     "placeholders": {
       "percent": {
         "content": "$1"
+      },
+      "total": {
+        "content": "$2"
       }
     }
   },
@@ -89,7 +92,7 @@
     "message": "Item removed"
   },
   "itemsRemovedCount": {
-    "message": "Removed $count$ items",
+    "message": "$count$ items removed",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -100,7 +103,7 @@
     "message": "Manage Collections"
   },
   "newTabEmptyHint": {
-    "message": "Save collections to a file via extension options."
+    "message": "Export collections via extension options."
   },
   "newTabEmptyMessage": {
     "message": "Import collections"
@@ -126,7 +129,7 @@
     "message": "Pinned"
   },
   "popupEmptyHint": {
-    "message": "Save open tabs to create new collection."
+    "message": "Save open tabs to create a new collection."
   },
   "popupEmptyMessage": {
     "message": "Collections not found"
@@ -138,7 +141,7 @@
     "message": "Recent items are unavailable"
   },
   "recentNotFoundHint": {
-    "message": "Your recently saved and used links will appear here."
+    "message": "Recently saved and used links will appear here."
   },
   "remove": {
     "message": "Remove"
@@ -178,7 +181,7 @@
     "message": "Check your spelling or try a new search."
   },
   "searchEmptyResultMessage": {
-    "message": "No results found for \"<strong>$query$</strong>\"",
+    "message": "No results for \"<strong>$query$</strong>\"",
     "placeholders": {
       "query": {
         "content": "$1"

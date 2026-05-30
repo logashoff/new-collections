@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, ViewEncapsulation } from '@angular/core';
+import { Component, inject, ViewEncapsulation } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { map, Observable, shareReplay } from 'rxjs';
 
@@ -17,7 +17,6 @@ import { SearchFormComponent } from '../search-form/search-form.component';
   selector: 'nc-popup',
   templateUrl: './popup.component.html',
   styleUrl: './popup.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   imports: [AsyncPipe, RouterOutlet, SearchFormComponent],
   providers: [KeyService],

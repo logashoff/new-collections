@@ -1,10 +1,10 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { DataTestIdDirective } from '../../directives';
 import { TranslatePipe } from '../../pipes';
-import { CollectionsService, HomeService, TabService, GroupService } from '../../services';
+import { CollectionsService, GroupService, HomeService, TabService } from '../../services';
 import {
   Action,
   ActionIcon,
@@ -31,7 +31,6 @@ import { TimelineElementComponent } from '../timeline-element/timeline-element.c
   selector: 'nc-new-tab-content',
   templateUrl: './new-tab-content.component.html',
   styleUrls: ['./new-tab-content.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [AsyncPipe, DataTestIdDirective, EmptyComponent, GroupsComponent, TimelineElementComponent, TranslatePipe],
 })
 export class NewTabContentComponent {

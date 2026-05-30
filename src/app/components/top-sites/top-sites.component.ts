@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, ViewEncapsulation } from '@angular/core';
+import { Component, inject, input, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRipple } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,7 +19,6 @@ import { ImageComponent } from '../image/image.component';
   selector: 'nc-top-sites',
   templateUrl: './top-sites.component.html',
   styleUrl: './top-sites.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   imports: [FaviconPipe, ImageComponent, MatButtonModule, MatIconModule, MatRipple, StopPropagationDirective],
 })

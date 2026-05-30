@@ -1,9 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 import { BackgroundMessage, Port, sleep } from '../utils';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class BackgroundService {
   private port: Port;
   private disconnectCount = 0;

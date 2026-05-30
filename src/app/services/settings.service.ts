@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { Router } from '@angular/router';
 import { uniqBy } from 'lodash-es';
 import { BehaviorSubject, defer, map, Observable, shareReplay, switchMap } from 'rxjs';
@@ -10,9 +10,7 @@ import { copyStorage, getSettings, MostVisitedURL, Settings, settingsStorageKey,
  *
  * Settings config service for retrieving and saving app settings from Options page
  */
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class SettingsService {
   readonly #router = inject(Router);
 
@@ -113,5 +111,12 @@ export class SettingsService {
    */
   async getUsageBytes() {
     return await chrome.storage.sync.getBytesInUse();
+  }
+
+  async getTopUsage() {
+    const data = await chrome.storage.sync.get();
+    const keys = Object.keys(data);
+
+    return Math.max(...keys.map(key => new Blob([JSON.stringify(data[key])]).size))
   }
 }

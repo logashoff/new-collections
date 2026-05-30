@@ -8,7 +8,7 @@ const NEW_TAB_MAIN_PAGE = 'new-tab/main';
 const NEW_TAB_SEARCH_PAGE = 'new-tab/search';
 const OPTIONS_PAGE = 'options';
 
-suite.sequential('Browser', () => {
+suite('Browser', () => {
   let browser: Browser;
   let page: Page;
   let extensionId: string;
@@ -69,7 +69,7 @@ suite.sequential('Browser', () => {
     );
 
     expect(blankHint).toEqual(
-      'Save collections to a file via extension options.'
+      'Export collections via extension options.'
     );
 
     const actionBtn = await page.locator('[data-testid="empty-action-import-collections"]').wait();
@@ -207,7 +207,7 @@ suite.sequential('Browser', () => {
 
     await page.waitForNetworkIdle();
 
-    expect(noResultsMessage).toEqual('No results found for "noop"');
+    expect(noResultsMessage).toEqual('No results for "noop"');
     expect(noResultsHint).toEqual('Check your spelling or try a new search.');
 
     const cancelButton = await page.$('[data-testid=cancel-search]');
@@ -293,8 +293,6 @@ suite.sequential('Browser', () => {
       await removeButton.click();
     }
 
-    await page.waitForNetworkIdle();
-
     const noDataMessage = await page
       .locator('[data-testid=empty-message-text]')
       .map((el) => el.textContent.trim())
@@ -305,9 +303,7 @@ suite.sequential('Browser', () => {
       .map((el) => el.textContent.trim())
       .wait();
 
-    await page.waitForNetworkIdle();
-
     expect(noDataMessage).toEqual('No collections found');
-    expect(noDataHint).toEqual('Save open tabs or import a collection file to get started.');
+    expect(noDataHint).toEqual('Save open tabs or import a collection to get started.');
   }, 20_000)
 });

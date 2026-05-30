@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -7,7 +6,7 @@ import {
   input,
   output,
   signal,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRipple } from '@angular/material/core';
@@ -46,7 +45,6 @@ import { ChipComponent } from '../chip/chip.component';
   templateUrl: './list-item.component.html',
   styleUrl: './list-item.component.scss',
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.active]': 'isActive()',
     role: 'list-item',

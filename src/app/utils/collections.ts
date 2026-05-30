@@ -1,15 +1,13 @@
 import {
   BrowserTabs,
-  Collection,
   Collections,
-  FaviconHost,
-  faviconStorageKey,
   recentKey,
   RecentTabs,
   Settings,
+  settingsStorageKey,
   StorageArea,
-  SyncData,
-  SyncTabs,
+  StorageData,
+  TabsStore,
   TabId,
   UUID,
 } from './models';
@@ -30,42 +28,30 @@ export async function getStorage(): Promise<StorageArea> {
  */
 export async function saveCollections(collections: Collections): Promise<void> {
   const storage = await getStorage();
-  const syncData: SyncData = (await storage.get()) ?? {};
-  const collectionsById: Map<string, Collection> = new Map(
-    collections?.map((collection) => [collection.id, collection])
-  );
+  const storageData: StorageData = (await storage.get()) ?? {};
+  const collectionsById = new Map(collections?.map((collection) => [collection.id, collection]));
 
-  const removeKeys = [faviconStorageKey];
-  for (const groupId in syncData) {
-    if (isUuid(groupId as UUID) && !collectionsById.has(groupId)) {
-      delete syncData[groupId];
+  const removeKeys = [];
+  for (const groupId in storageData) {
+    if (isUuid(groupId as UUID) && !collectionsById.has(groupId as UUID)) {
+      delete storageData[groupId];
       removeKeys.push(groupId as UUID);
     }
   }
 
   await storage.remove(removeKeys as string[]);
 
-  delete syncData[faviconStorageKey];
-
   if (collections?.length > 0) {
-    collections.forEach(({ tabs, timestamp, id }) => (syncData[id] = [timestamp, tabsToSync(tabs)]));
+    collections.forEach(({ tabs, timestamp, id }) => (storageData[id] = [timestamp, tabsToSync(tabs)]));
 
-    const favicon: FaviconHost = {};
     collections.forEach(({ tabs }) =>
-      tabs.filter(({ favIconUrl }) => favIconUrl).forEach((tab) => (favicon[getUrlHost(tab.url)] = tab.favIconUrl))
+      tabs.filter(({ favIconUrl }) => favIconUrl).forEach((tab) => (storageData[getUrlHost(tab.url)] = tab.favIconUrl))
     );
 
     return await storage.set({
-      [faviconStorageKey]: favicon,
-      ...syncData,
+      ...storageData,
     });
   }
-}
-
-export async function getFaviconStore(): Promise<FaviconHost> {
-  const storage = await getStorage();
-  const favicon: { [faviconStorageKey]: FaviconHost } = await storage.get(faviconStorageKey);
-  return favicon[faviconStorageKey] ?? {};
 }
 
 export async function getRecentTabs(): Promise<RecentTabs> {
@@ -107,18 +93,19 @@ export async function removeRecent(tabId: TabId | TabId[]) {
  */
 export const getCollections = async (): Promise<Collections> => {
   const storage = await getStorage();
-  const syncData: SyncData = await storage.get();
+  const storageData: StorageData = await storage.get();
 
-  if (syncData) {
-    const favicon = await getFaviconStore();
-
-    const collections: Collections = Object.keys(syncData)
+  if (storageData) {
+    const collections: Collections = Object.keys(storageData)
       .filter((groupId: UUID) => isUuid(groupId))
-      .map((groupId) => ({
+      .map((groupId: UUID) => ({
         id: groupId,
-        timestamp: syncData[groupId][0],
-        tabs: syncToTabs(syncData[groupId][1]).map((tab) => {
-          tab.favIconUrl = favicon[getUrlHost(tab.url)];
+        timestamp: storageData[groupId][0],
+        tabs: syncToTabs(storageData[groupId][1]).map((tab) => {
+          const host = getUrlHost(tab.url);
+          if (typeof storageData[host] === 'string') {
+            tab.favIconUrl = storageData[host];
+          }
           return tab;
         }),
       }));
@@ -130,14 +117,14 @@ export const getCollections = async (): Promise<Collections> => {
 /**
  * Converts BrowserTabs to tabs structure used in storage.
  */
-export function tabsToSync(tabs: BrowserTabs): SyncTabs {
+export function tabsToSync(tabs: BrowserTabs): TabsStore {
   return tabs.map(({ id, url, title }) => [id, url, title]);
 }
 
 /**
  * Converts storage tabs to BrowserTabs.
  */
-export function syncToTabs(sync: SyncTabs): BrowserTabs {
+export function syncToTabs(sync: TabsStore): BrowserTabs {
   return sync.map(([id, url, title]) => ({
     id,
     title,
@@ -149,18 +136,12 @@ export function syncToTabs(sync: SyncTabs): BrowserTabs {
  * Copies source storage collection to target storage.
  */
 export async function copyStorage(source: StorageArea, target: StorageArea) {
-  const sourceData: SyncData = await source.get();
+  const sourceData: StorageData = await source.get();
   const newData = {};
 
-  [faviconStorageKey, recentKey].forEach((key) => {
-    if (sourceData[key]) {
-      newData[key] = sourceData[key];
-    }
-  });
+  const keys = Object.keys(sourceData).filter((key) => key !== settingsStorageKey);
+  keys.forEach((key) => (newData[key] = sourceData[key]));
 
-  const groupUuidKeys = Object.keys(sourceData).filter((groupId: UUID) => isUuid(groupId)) as UUID[];
-  groupUuidKeys.forEach((key) => (newData[key] = sourceData[key]));
-
-  await source.remove([faviconStorageKey, recentKey, ...groupUuidKeys] as string[]);
+  await source.remove(keys);
   await target.set(newData);
 }

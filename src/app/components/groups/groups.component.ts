@@ -1,6 +1,6 @@
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, input, output, ViewEncapsulation } from '@angular/core';
+import { Component, inject, input, output, ViewEncapsulation } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -39,7 +39,6 @@ import { TabListComponent } from '../tab-list/tab-list.component';
   templateUrl: './groups.component.html',
   styleUrl: './groups.component.scss',
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     AsyncPipe,
     CdkDrag,

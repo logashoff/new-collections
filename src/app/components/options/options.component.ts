@@ -1,15 +1,15 @@
-import { DecimalPipe } from '@angular/common';
+import { PercentPipe } from '@angular/common';
 import {
-  ChangeDetectionStrategy,
   Component,
   computed,
   effect,
   inject,
   OnInit,
   signal,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { form, FormField } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,7 +19,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { take } from 'rxjs';
-import { FormField, form } from '@angular/forms/signals';
 
 import { TranslatePipe } from '../../pipes';
 import { CollectionsService, SettingsService } from '../../services';
@@ -59,10 +58,8 @@ interface OptionsModel {
   selector: 'nc-options',
   templateUrl: './options.component.html',
   styleUrl: './options.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   imports: [
-    DecimalPipe,
     FormField,
     MatButtonModule,
     MatCardModule,
@@ -72,6 +69,7 @@ interface OptionsModel {
     MatProgressBarModule,
     MatSlideToggleModule,
     MatTooltipModule,
+    PercentPipe,
     ReactiveFormsModule,
     TranslatePipe,
   ],
@@ -99,12 +97,16 @@ export class OptionsComponent implements OnInit {
   /**
    * Sync storage used
    */
-  readonly #storageUsageSource = signal<number>(0);
+  readonly #usagePerItem = signal<number>(0);
+
+  readonly #totalUsage = signal<number>(0)
 
   /**
    * Chrome sync storage has limited quota (~100KB), this will show how much storage is currently inuse.
    */
-  readonly storageUsage = computed<number>(() => (this.#storageUsageSource() / chrome.storage.sync.QUOTA_BYTES) * 100);
+  readonly usagePerItem = computed<number>(() => (this.#usagePerItem() / chrome.storage.sync.QUOTA_BYTES_PER_ITEM));
+
+  readonly totalUsage = computed<number>(() => (this.#totalUsage() / chrome.storage.sync.QUOTA_BYTES));
 
   readonly optionsModel = signal<OptionsModel>({
     enableDevices: false,
@@ -119,13 +121,13 @@ export class OptionsComponent implements OnInit {
     effect(async () => {
       await this.#settings.update(this.optionsModel());
 
-      const storageBytes = await this.#settings.getUsageBytes();
-      this.#storageUsageSource.set(storageBytes);
+      this.#usagePerItem.set(await this.#settings.getTopUsage());
+      this.#totalUsage.set(await this.#settings.getUsageBytes());
     });
   }
 
   async ngOnInit() {
-    this.#storageUsageSource.set(await this.#settings.getUsageBytes());
+    this.#usagePerItem.set(await this.#settings.getUsageBytes());
 
     this.#settings.settings$.pipe(take(1)).subscribe((settings) => {
       if (settings) {

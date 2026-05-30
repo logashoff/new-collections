@@ -17,22 +17,17 @@ export type LocaleMessage = keyof typeof LocaleMessages;
 
 export type UUID = ReturnType<typeof uuid>;
 
-export type StorageKey = 'settings' | 'favicon' | 'recent' | UUID;
+export type StorageKey = `!extension::${'settings' | 'recent'}` | UUID;
 
 /**
  * Local storage key for saving app settings
  */
-export const settingsStorageKey: StorageKey = 'settings';
-
-/**
- * Storage key to store tabs favicon URLs by hostname in separate object
- */
-export const faviconStorageKey: StorageKey = 'favicon';
+export const settingsStorageKey: StorageKey = '!extension::settings';
 
 /**
  * Storage key to store tab ID maps to number of clicks
  */
-export const recentKey: StorageKey = 'recent';
+export const recentKey: StorageKey = '!extension::recent';
 
 /**
  * URLs to ignore when saving tabs.
@@ -68,12 +63,12 @@ export type Timeout = ReturnType<typeof setTimeout>;
 /**
  * Checks if group should be expanded by group ID
  */
-export type GroupExpanded = { [groupId: string]: boolean };
+export type GroupExpanded = Record<string, boolean>;
 
 /**
  * Checks if panel group is expanded by URL
  */
-export type ExpandedGroupsByUrl = { [url: string]: GroupExpanded };
+export type ExpandedGroupsByUrl = Record<string, GroupExpanded>;
 
 export type TabId = number;
 
@@ -102,55 +97,39 @@ export interface Settings {
 }
 
 /**
- * BrowserTab structure used in storing in sync storage
+ * BrowserTab structure used in storing in storage
  */
-export type SyncTab = [id: number, url: string, title: string];
-export type SyncTabs = SyncTab[];
+export type TabStore = [id: number, url: string, title: string];
+export type TabsStore = TabStore[];
 
 /**
- * Map hostname to icon's URL
+ * Settings data in storage
  */
-export type FaviconHost = Record<string, string>;
-
-/**
- * Favicon data in sync storage
- */
-export interface FaviconSync {
-  [faviconStorageKey]?: FaviconHost;
-}
-
-/**
- * Settings data in sync storage
- */
-export interface SettingsSync {
+export interface SettingsStore {
   [settingsStorageKey]?: Settings;
 }
 
 /**
- * Save recently used tabs in sync storage
+ * Save recently used tabs in storage
  */
-export interface RecentSync {
-  [recentKey]?: {
-    [tabId: TabId]: number;
-  };
-}
+export type RecentStore = Record<typeof recentKey, Record<TabId, number>>;
 
 /**
  * Map group ID to array containing group timestamp and tabs
  */
-export type GroupSync = {
-  [groupId: string]: [timestamp: number, tabs: SyncTabs];
-};
+export type GroupStore = Record<UUID, [timestamp: number, tabs: TabsStore]>;
+
+export type HostFavIcon = Record<string, string>;
 
 /**
- * Data used to store collections in sync storage
+ * Data used to store collections in storage
  */
-export type SyncData = SettingsSync & FaviconSync & GroupSync & RecentSync;
+export type StorageData = Partial<SettingsStore & GroupStore & RecentStore & HostFavIcon>;
 
 /**
  * Storage change event
  */
-export type StorageChanges = { [key: string]: chrome.storage.StorageChange };
+export type StorageChanges = Record<string, chrome.storage.StorageChange>;
 
 /**
  * Tab type.
@@ -160,7 +139,7 @@ export type BrowserTab = Pick<Tab, 'id' | 'url' | 'favIconUrl' | 'title'>;
 export type BrowserTabs = BrowserTab[];
 
 export interface Collection {
-  id: string;
+  id: UUID;
   timestamp: number;
   tabs: BrowserTabs;
 }
@@ -216,10 +195,10 @@ export class TabGroup implements Collection {
    * @param sync True if current tabs should be removed if not in new list.
    */
   mergeTabs(tabs: BrowserTabs, sync = false) {
-    const currTabsById: Map<number, BrowserTab> = new Map(this.tabs.map((tab) => [tab.id, tab]));
+    const currTabsById = new Map(this.tabs.map((tab) => [tab.id, tab]));
 
     if (sync) {
-      const newTabsById: Map<number, BrowserTab> = new Map(tabs.map((tab) => [tab.id, tab]));
+      const newTabsById = new Map(tabs.map((tab) => [tab.id, tab]));
       remove(this.tabs, ({ id }) => !newTabsById.has(id));
     }
 
@@ -282,9 +261,7 @@ export type HostnameGroup = BrowserTabs[];
 /**
  * Maps hostname groups to tab group ID.
  */
-export interface TabsByHostname {
-  [groupId: string]: HostnameGroup;
-}
+export type TabsByHostname = Record<string, HostnameGroup>;
 
 /**
  * Action icons.

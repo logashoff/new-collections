@@ -6,9 +6,9 @@
 
 # New Collections
 
-New Collections is a browser extension that allows to quickly save and restore open tabs without creating new bookmark entries. It doesn't use any online services or connections except Chrome's default storage sync service to optionally sync data between browsers. Import and export can be done by saving and loading generated JSON file.
+New Collections is a browser extension that allows you to quickly save and restore open tabs without creating new bookmark entries. It doesn't use any online services or connections except Chrome's default storage sync service to optionally sync data between browsers. Import and export can be done by saving and loading a generated JSON file.
 
-Extension can be used as a popup or New Tab page. New Tab page can optionally display top sites and open tabs from synced devices.
+The extension can be used as a popup or a New Tab page. The New Tab page can optionally display top sites and open tabs from synced devices.
 
 ### Features
 
@@ -22,9 +22,12 @@ Extension can be used as a popup or New Tab page. New Tab page can optionally di
 - [x] Display top sites on New Tab page
 - [x] Display synced tabs from other devices on New Tab page
 
+> [!WARNING]
+> Using Chrome's storage sync feature may result in data loss since storage per item is limited. It is recommended to disable collection sync in the extension options and use the export/import feature instead.
+
 ## Build
 
-Run `yarn build` or `yarn build:dev` to build the project. The build artifacts will be stored in the `dist/` directory. Github build artifacts are also available under [Actions](https://github.com/logashoff/new-collections/actions) per each run.
+Run `yarn build` or `yarn build:dev` to build the project. The build artifacts will be stored in the `dist/` directory. GitHub build artifacts are also available under [Actions](https://github.com/logashoff/new-collections/actions) for each run.
 
 ## Running unit tests
 

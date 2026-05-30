@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, ViewEncapsulation } from '@angular/core';
+import { Component, inject, input, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -16,7 +16,6 @@ import { Action, CollectionActions } from '../../utils';
   selector: 'nc-empty',
   templateUrl: './empty.component.html',
   styleUrl: './empty.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   imports: [DataTestIdDirective, HtmlPipe, MatButtonModule, MatIconModule],
 })

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
+import { Component, input, ViewEncapsulation } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { HostnameGroup } from '../../utils';
 
@@ -9,7 +9,6 @@ import { ChipComponent } from '../chip/chip.component';
   selector: 'nc-icons-container',
   templateUrl: './icons-container.component.html',
   styleUrl: './icons-container.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   imports: [ChipComponent, FaviconPipe, MatBadgeModule],
 })
