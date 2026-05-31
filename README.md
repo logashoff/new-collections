@@ -22,6 +22,9 @@ Extension can be used as a popup or New Tab page. New Tab page can optionally di
 - [x] Display top sites on New Tab page
 - [x] Display synced tabs from other devices on New Tab page
 
+> [!WARNING]
+> Using chrome's storage sync feature may result in data loss since storage per item is limited. Recommend disabling collection sync in extension options and use import/export feature instead.
+
 ## Build
 
 Run `yarn build` or `yarn build:dev` to build the project. The build artifacts will be stored in the `dist/` directory. Github build artifacts are also available under [Actions](https://github.com/logashoff/new-collections/actions) per each run.
