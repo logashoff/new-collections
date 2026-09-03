@@ -27,11 +27,11 @@ The extension can be used as a popup or a New Tab page. The New Tab page can opt
 
 ## Build
 
-Run `yarn build` or `yarn build:dev` to build the project. The build artifacts will be stored in the `dist/` directory. GitHub build artifacts are also available under [Actions](https://github.com/logashoff/new-collections/actions) for each run.
+Run `make build` or `make build:dev` to build the project. The build artifacts will be stored in the `dist/` directory. GitHub build artifacts are also available under [Actions](https://github.com/logashoff/new-collections/actions) for each run.
 
 ## Running unit tests
 
-Run `yarn test` to execute the unit tests.
+Run `make test` to execute the unit tests.
 
 ## Code scaffolding
 
@@ -39,4 +39,4 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Lint
 
-Run `yarn lint` to check for lint errors. Run `yarn fmt` to quickly format pending code changes and fix lint errors.
+Run `make lint` to check for lint errors. Run `make fmt` to quickly format pending code changes and fix lint errors.
