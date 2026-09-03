@@ -24,6 +24,7 @@ const browserTabMock: Tab = {
   width: 1188,
   windowId: 1,
   frozen: false,
+  lastAccessed: 0,
 };
 
 export const getBrowserTabMock = () => cloneDeep(browserTabMock);
@@ -52,6 +53,7 @@ const browserTabsMock: Tabs = [
     width: 1188,
     windowId: 1,
     frozen: false,
+    lastAccessed: 0,
   },
   {
     active: false,
@@ -76,6 +78,7 @@ const browserTabsMock: Tabs = [
     width: 1188,
     windowId: 1,
     frozen: false,
+    lastAccessed: 0,
   },
   {
     active: false,
@@ -100,6 +103,7 @@ const browserTabsMock: Tabs = [
     width: 1188,
     windowId: 1,
     frozen: false,
+    lastAccessed: 0,
   },
   {
     active: false,
@@ -124,6 +128,7 @@ const browserTabsMock: Tabs = [
     width: 1188,
     windowId: 1,
     frozen: false,
+    lastAccessed: 0,
   },
 ];
 

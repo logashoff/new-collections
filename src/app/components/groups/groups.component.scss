@@ -8,10 +8,8 @@ nc-groups {
 
   .mat-expansion-panel {
     &:only-child,
-    &.mat-expanded {
-      & > .ripple {
-        border-radius: $border-radius;
-      }
+    &.mat-expanded > .ripple {
+      border-radius: $border-radius;
     }
 
     &:not(:is(.mat-expanded, :only-child)) {
